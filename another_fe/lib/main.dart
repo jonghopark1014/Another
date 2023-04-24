@@ -1,5 +1,6 @@
 import 'package:another/constant/color.dart';
-import 'package:another/screen/home_screen.dart';
+import 'package:another/screens/home_screen.dart';
+import 'package:another/screens/running/running.dart';
 import 'package:flutter/material.dart';
 
 void main() {
