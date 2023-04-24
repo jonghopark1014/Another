@@ -59,20 +59,21 @@ flutter:
   uses-material-design: true
 
   assets:
-    - asset/img/
+    - assets/img/
+    - assets/img/logo_small.png
 
   fonts:
     - family: pretendard
       fonts:
-        - asset: asset/font/Pretendard-Black.ttf
-        - asset: asset/font/Pretendard-Bold.ttf
-        - asset: asset/font/Pretendard-ExtraBold.ttf
-        - asset: asset/font/Pretendard-ExtraLight.ttf
-        - asset: asset/font/Pretendard-Light.ttf
-        - asset: asset/font/Pretendard-Medium.ttf
-        - asset: asset/font/Pretendard-Regular.ttf
-        - asset: asset/font/Pretendard-SemiBold.ttf
-        - asset: asset/font/Pretendard-Thin.ttf
+        - asset: assets/font/Pretendard-Black.ttf
+        - asset: assets/font/Pretendard-Bold.ttf
+        - asset: assets/font/Pretendard-ExtraBold.ttf
+        - asset: assets/font/Pretendard-ExtraLight.ttf
+        - asset: assets/font/Pretendard-Light.ttf
+        - asset: assets/font/Pretendard-Medium.ttf
+        - asset: assets/font/Pretendard-Regular.ttf
+        - asset: assets/font/Pretendard-SemiBold.ttf
+        - asset: assets/font/Pretendard-Thin.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:
