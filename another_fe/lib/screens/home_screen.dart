@@ -1,4 +1,5 @@
-import 'package:another/screens/feed/Feed.dart';
+
+import 'package:another/screens/feed/feed.dart';
 import 'package:another/screens/record/Record.dart';
 import 'package:another/screens/running/Running.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _tabs = [
     RunningTab(), // 런닝 탭
     RecordTab(), // 기록 탭
-    FeedTab(),    // 피드 탭
+    FeedScreen(),    // 피드 탭
   ];
 
   void _onTabTapped(int index) {

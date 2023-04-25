@@ -6,17 +6,14 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(MaterialApp(
     theme: ThemeData(
-      fontFamily: 'pretendard',
-      textTheme: TextTheme(
-        headline1: TextStyle(
+        scaffoldBackgroundColor: BACKGROUND_COLOR,
+        fontFamily: 'Pretendard',
+        textTheme: TextTheme(
+            headline1: TextStyle(
           color: MAIN_COLOR,
-          fontFamily: 'pretendard',
-          fontSize: 50.0
-        )
-      )
-    ),
-    home: HomeScreen(
-
-    ),
+          fontFamily: 'Pretendard',
+          fontSize: 50.0,
+        ))),
+    home: HomeScreen(),
   ));
 }
