@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:another/screens/running/under_challenge.dart';
+import 'package:another/screens/running/under_challenge_end.dart';
 
 import '../../constant/color.dart';
 
@@ -49,14 +49,14 @@ class _TimerScreenState extends State<TimerScreen> {
     _timer = Timer.periodic(
       Duration(seconds: 1),
       (timer) {
-        if (_seconds != 0) {
+        if (_seconds != 1) {
           setState(() {
-            _seconds--;
+            _seconds -= 1;
           });
         } else {
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (_) => UnderChanllengeScreen(),
+                builder: (_) => UnderChallengeScreenEnd(),
               ),
               (route) => false);
         }

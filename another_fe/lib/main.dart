@@ -7,7 +7,7 @@ void main() {
   runApp(MaterialApp(
     theme: ThemeData(
         scaffoldBackgroundColor: BACKGROUND_COLOR,
-        fontFamily: 'Pretendard',
+        fontFamily: 'pretendard',
         textTheme: TextTheme(
             headline1: TextStyle(
           color: MAIN_COLOR,
