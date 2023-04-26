@@ -1,4 +1,6 @@
+import 'package:another/constant/color.dart';
 import 'package:another/screens/running/under_challenge_end.dart';
+import 'package:another/screens/running/widgets/distancebar.dart';
 import 'package:flutter/material.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
 import 'package:another/widgets/target.dart';
@@ -13,7 +15,7 @@ class UnderChallenge extends StatefulWidget {
 }
 
 class _UnderChallengeState extends State<UnderChallenge> {
-  double _currentSliderValue = 40.0;
+  double _currentSliderValue = 0.0;
   bool isStart = false;
 
   @override
@@ -26,24 +28,14 @@ class _UnderChallengeState extends State<UnderChallenge> {
             child: Column(
               children: [
                 Target(targetRecord: '목표기록'),
-                Slider(
-                    value: _currentSliderValue,
-                    min: 0,
-                    max: 100,
-                    onChanged: (double value) {
-                      setState(() {
-                        _currentSliderValue = value;
-                      });
-                    }),
-                Slider(
-                    value: _currentSliderValue,
-                    min: 0,
-                    max: 100,
-                    onChanged: (double value) {
-                      setState(() {
-                        _currentSliderValue = value;
-                      });
-                    }),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Column(
+                    children: [
+                      DistanceBar(name:'상대 페이스',),
+                      DistanceBar(name:'내 페이스',),
+                    ],
+                  )),
                 RecordResult(),
                 Expanded(
                   child: Row(
@@ -53,19 +45,19 @@ class _UnderChallengeState extends State<UnderChallenge> {
                       isStart
                           ? RunningCircleButton(
                               iconNamed: Icons.play_arrow,
+                              onPressed: onPause,
                             )
                           : RunningCircleButton(
                               iconNamed: Icons.pause,
+                              onPressed: onPause,
                             ),
                       RunningCircleButton(
                         iconNamed: Icons.stop,
+                        onPressed: onStop,
                       ),
-                      // RunningCircleButton(iconNamed: Icons.play_arrow,onPressed: ,),
-                      //RunningCircleButton(iconNamed: Icons.pause, onPressed: ,),
-                      //RunningCircleButton(iconNamed: Icons.stop,onPressed: ,),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -74,12 +66,17 @@ class _UnderChallengeState extends State<UnderChallenge> {
     );
   }
 
-  void onPause() => {
-    isStart = true
-  };
-  void onStop() => {
+  void onPause() {
+    isStart = !isStart;
+    setState(() {});
+  }
+
+  void onStop() {
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => UnderChallengeScreenEnd()),
-            (route) => false)
-      };
+            MaterialPageRoute(
+              builder: (_) => UnderChallengeScreenEnd(),
+            ),
+            (route) => false);
+      }
 }
+

@@ -5,25 +5,25 @@ import '../../../constant/color.dart';
 
 class RunningCircleButton extends StatelessWidget {
   final IconData iconNamed;
-  // final VoidCallback onPressed;
+  final VoidCallback onPressed;
 
   const RunningCircleButton({
     required this.iconNamed,
-    // required this.onPressed,
+    required this.onPressed,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(
-      // onPressed: onPressed,
-      onPressed: () {},
+      onPressed: onPressed,
+      // onPressed: () {},
       shape: CircleBorder(),
       elevation: 2.0,
       fillColor: MAIN_COLOR,
       child: Icon(
         iconNamed,
-        size: 80,
+        size: 60,
       ),
       padding: EdgeInsets.all(35.0),
     );

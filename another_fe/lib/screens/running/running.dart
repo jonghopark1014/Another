@@ -21,9 +21,9 @@ class RunningTab extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 RunningSettingButton(),
-                // RunningCircleButton(iconNamed: Icons.play_arrow, onPressed: onPressed()),
                 RunningCircleButton(
                   iconNamed: Icons.play_arrow,
+                  onPressed: onPressed,
                 ),
                 RunningMyHIstoryButton(),
               ],
@@ -35,8 +35,9 @@ class RunningTab extends StatelessWidget {
   }
 
   // 타이머 페이지로 context?
-  // void onPressed() {
-  //   Navigator.of(context).pushAndRemoveUntil(
-  //       MaterialPageRoute(builder: (_) => TimerScreen()), (route) => false);
-  // }
+  void onPressed() {
+
+    // Navigator.of(context).pushAndRemoveUntil(
+    //     MaterialPageRoute(builder: (_) => TimerScreen()), (route) => false);
+  }
 }

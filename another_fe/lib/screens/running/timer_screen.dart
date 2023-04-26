@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:another/screens/running/under_challenge.dart';
 import 'package:flutter/material.dart';
-import 'package:another/screens/running/under_challenge_end.dart';
 
 import '../../constant/color.dart';
 
@@ -31,7 +31,7 @@ class _TimerScreenState extends State<TimerScreen> {
             children: [
               Center(
                 child: Text(
-                  '${_seconds}',
+                  '$_seconds',
                   style: TextStyle(
                       fontSize: 100.0,
                       fontWeight: FontWeight.w700,
@@ -51,12 +51,12 @@ class _TimerScreenState extends State<TimerScreen> {
       (timer) {
         if (_seconds != 1) {
           setState(() {
-            _seconds -= 1;
+            _seconds--;
           });
         } else {
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (_) => UnderChallengeScreenEnd(),
+                builder: (_) => UnderChallenge(),
               ),
               (route) => false);
         }
