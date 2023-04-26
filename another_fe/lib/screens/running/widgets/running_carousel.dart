@@ -19,7 +19,7 @@ class RunningCarousel extends StatefulWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Image.asset('asset/img/10min_gold.png', height: 85, width: 85,),
+            Image.asset('assets/img/10min_gold.png', height: 85, width: 85,),
             Text(
               "첫 러닝을 시작해볼까요😀",
               style: TextStyle(

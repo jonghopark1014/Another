@@ -49,9 +49,9 @@ class _TimerScreenState extends State<TimerScreen> {
     _timer = Timer.periodic(
       Duration(seconds: 1),
       (timer) {
-        if (_seconds != 0) {
+        if (_seconds != 1) {
           setState(() {
-            _seconds--;
+            _seconds -= 1;
           });
         } else {
           Navigator.of(context).pushAndRemoveUntil(
