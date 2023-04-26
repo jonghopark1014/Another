@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:another/constant/color.dart';
+import 'signup_userinfo.dart';
 
 
 class CustomTextField extends StatelessWidget {
@@ -20,6 +21,7 @@ class CustomTextField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       validator: validator,
+      obscureText: obscureText,
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: TextStyle(
@@ -36,14 +38,12 @@ class CustomTextField extends StatelessWidget {
         ),
       ),
       style: TextStyle(color: SERVEONE_COLOR), // 원하는 입력 텍스트 색상으로 변경
-      obscureText: obscureText,
     );
   }
 }
 
 class CustomInputForm extends StatefulWidget {
   const CustomInputForm({Key? key}) : super(key: key);
-
   @override
   State<CustomInputForm> createState() => _CustomInputFormState();
 }
@@ -174,9 +174,12 @@ class _CustomInputFormState extends State<CustomInputForm> {
                     ],
 
                     isSelected: [isMaleSelected, !isMaleSelected],
-                    color: Colors.grey, // 선택되지 않은 버튼의 색
-                    selectedColor: Colors.purple, // 선택된 버튼의 색
-                    fillColor: Colors.white, // 선택된 버튼의 배경 색
+                    borderRadius: BorderRadius.circular(20), // 테두리 radius
+                    color: MAIN_COLOR, // 선택되지 않은 버튼의 색
+                    borderColor: MAIN_COLOR, // 선택되지 않은 버튼의 테두리 색
+                    selectedColor: Colors.black87, // 선택된 버튼의 글자색
+                    selectedBorderColor: MAIN_COLOR, // 선택된 버튼의 테두리 색
+                    fillColor: MAIN_COLOR, // 선택된 버튼의 배경 색
                     onPressed: (int index) {
                       setState(() {
                         isMaleSelected = index == 0 ? true : false;
@@ -187,20 +190,26 @@ class _CustomInputFormState extends State<CustomInputForm> {
               ),
             ],
           ),
-          SizedBox(height: 24),
+          SizedBox(height: 120),
           FractionallySizedBox(
             widthFactor: 1.0,
             child: ElevatedButton(
               onPressed: () {
                 // _submitForm();
                 if (_formKey.currentState!.validate()) {
+                  Navigator.push(
+                      context, MaterialPageRoute(
+                      builder: (context) => SignupUserInfoPage()
+                  ));
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Processing Data')),
                   );
+
                 }
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(MAIN_COLOR),
+                minimumSize: MaterialStateProperty.all<Size>(Size(double.infinity, 48.0))
               ),
               child: const Text('다음으로'),
             ),
