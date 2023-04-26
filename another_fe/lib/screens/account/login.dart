@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:another/constant/color.dart';
-import './signup.dart';
+import 'signup.dart';
+import '../../widgets/intro_header.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -39,28 +40,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              'assets/img/logo_small.png', // 이미지 파일 경로
-              height: 80.0, // 이미지 높이 설정
-            ),
-            Text(
-              '함께하는 즐거운 러닝',
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-                color: SERVEONE_COLOR,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            Text(
-              '몸을 움직이는 즐거움,시작해볼까요?',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-                color: SERVEONE_COLOR,
-              ),
-              textAlign: TextAlign.center,
-            ),
+            IntroHeader(),
             SizedBox(height: 40.0),
             TextField(
               focusNode: idFocusNode,
