@@ -1,9 +1,7 @@
-import 'package:another/screens/feed/feed.dart';
+import 'package:another/constant/color.dart';
+import 'package:another/screens/running/under_challenge_end_feed.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/material.dart';
-
-import '../../constant/color.dart';
-import '../feed/widgets/custom_image.dart';
 
 class UnderChallengeScreenEnd extends StatelessWidget {
   const UnderChallengeScreenEnd({Key? key}) : super(key: key);
@@ -11,84 +9,80 @@ class UnderChallengeScreenEnd extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: BACKGROUND_COLOR,
-        title: Text('로고'),
-      ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: SafeArea(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (_) => FeedScreen()),
-                      (route) => false);
-                },
-                child: Text('Pop'),
+              Target(targetRecord: '목표 기록'),
+              Target(targetRecord: '내 기록'),
+              Container(
+                height: 300.0,
+                color: WHITE_COLOR,
               ),
-              OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                      primary: MAIN_COLOR,
-                      side: BorderSide(
-                        color: MAIN_COLOR,
-                        width: 2.5,
-                      )),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => CustomImage(),
-                      ),
-                    );
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.photo_camera_outlined),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 8.0,
-                        ),
-                        child: Text(
-                          '사진 추가하기',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )),
-              Expanded(
-                child: Container(
-                  color: MAIN_COLOR,
-                ),
+              ButtonConponent(
+                onPressed: () => EndFeed(context),
               ),
-              Target(
-                targetRecord: '목표기록',
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 12.0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: MAIN_COLOR,
-                    elevation: 20.0,
-                  ),
-                  onPressed: () {},
-                  child: Text(
-                    '오운완 등록하기',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16.0,
-                    ),
-                  ),
-                ),
-              )
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void EndFeed(BuildContext context) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (_) => UnderChallengeScreenEndFeed(),
+            ),
+            (route) => false);
+    }
+}
+
+class ButtonConponent extends StatelessWidget {
+  final VoidCallback onPressed;
+  const ButtonConponent({
+    required this.onPressed,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 16),
+              primary: SERVETWO_COLOR,
+              elevation: 10.0,
+            ),
+            child: Text(
+              '다음에 할래요!',
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: onPressed,
+            style: ElevatedButton.styleFrom(
+              primary: MAIN_COLOR,
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 16),
+              elevation: 10.0,
+            ),
+            child: Text(
+              '오운완 등록하기',
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

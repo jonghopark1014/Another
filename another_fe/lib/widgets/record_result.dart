@@ -11,13 +11,13 @@ class RecordResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 16.0),
+      padding: const EdgeInsets.only(top: 8.0),
       child: Container(
         decoration: BoxDecoration(
           color: BLACK_COLOR,
           borderRadius: BorderRadius.circular(10),
         ),
-        height: 200.0,
+        height: 180.0,
         child: Column(
           children: [
             Flexible(

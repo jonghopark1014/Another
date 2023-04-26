@@ -19,7 +19,7 @@ class Target extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
-            '${targetRecord}',
+            targetRecord,
             style: TextStyle(
               color: WHITE_COLOR,
               fontSize: 20.0,

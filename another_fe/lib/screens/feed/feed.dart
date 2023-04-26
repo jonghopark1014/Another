@@ -9,35 +9,53 @@ class FeedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Text(
-              '3',
-              style: TextStyle(
-                color: MAIN_COLOR,
-                fontSize: 80.0,
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: BACKGROUND_COLOR,
+          title: Text('로고'),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    '전체피드',
+                    style: TextStyle(
+                      color: WHITE_COLOR,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  Text(
+                    '나의피드',
+                    style: TextStyle(
+                      color: WHITE_COLOR,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => TimerScreen()));
-            },
-            child: Text('Timer'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => UnderChallenge()));
-            },
-            child: Text('underChallenge'),
-          )
-        ],
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => TimerScreen()));
+              },
+              child: Text('Timer'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => UnderChallenge()));
+              },
+              child: Text('underChallenge'),
+            )
+          ],
+        ),
       ),
     );
   }

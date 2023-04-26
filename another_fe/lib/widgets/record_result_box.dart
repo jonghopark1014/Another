@@ -27,7 +27,7 @@ class RecordResultBox extends StatelessWidget {
               name,
               style: TextStyle(
                 color: recordColor,
-                fontSize: 28.0,
+                fontSize: 20.0,
                 fontWeight: FontWeight.w700,
               ),
               textAlign: TextAlign.center,
@@ -37,13 +37,12 @@ class RecordResultBox extends StatelessWidget {
                 data,
                 style: TextStyle(
                   color: textColor,
-                  fontSize: 32.0,
+                  fontSize: 30.0,
                   fontWeight: FontWeight.w700,
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
-
           ],
         ),
       ),
