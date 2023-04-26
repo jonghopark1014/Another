@@ -2,6 +2,8 @@ import 'package:another/constant/color.dart';
 import 'package:another/screens/running/timer_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../running/under_challenge.dart';
+
 class FeedScreen extends StatelessWidget {
   const FeedScreen({Key? key}) : super(key: key);
 
@@ -27,6 +29,13 @@ class FeedScreen extends StatelessWidget {
                   builder: (BuildContext context) => TimerScreen()));
             },
             child: Text('Timer'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => UnderChallenge()));
+            },
+            child: Text('underChallenge'),
           )
         ],
       ),

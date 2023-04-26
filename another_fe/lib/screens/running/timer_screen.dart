@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:another/screens/running/under_challenge.dart';
+import 'package:another/screens/running/under_challenge_end.dart';
 
 import '../../constant/color.dart';
 
@@ -56,7 +56,7 @@ class _TimerScreenState extends State<TimerScreen> {
         } else {
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (_) => UnderChanllengeScreen(),
+                builder: (_) => UnderChallengeScreenEnd(),
               ),
               (route) => false);
         }

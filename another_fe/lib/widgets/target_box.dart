@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../constant/color.dart';
-
 class TargetBox extends StatelessWidget {
   final String name;
+  final Color textColor;
+  final Color recordColor;
 
   const TargetBox({
     required this.name,
+    required this.textColor,
+    required this.recordColor,
     Key? key,
   }) : super(key: key);
 
@@ -20,7 +22,7 @@ class TargetBox extends StatelessWidget {
             child: Text(
               '기록',
               style: TextStyle(
-                color: MAIN_COLOR,
+                color: textColor,
                 fontSize: 20.0,
                 fontWeight: FontWeight.w700,
               ),
@@ -30,7 +32,7 @@ class TargetBox extends StatelessWidget {
           Text(
             '${name}',
             style: TextStyle(
-              color: SERVEONE_COLOR,
+              color: recordColor,
               fontSize: 14.0,
               fontWeight: FontWeight.w700,
             ),
