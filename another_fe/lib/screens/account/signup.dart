@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:another/constant/color.dart';
 import 'signup_userinfo.dart';
+import '../../widgets/intro_header.dart';
 
 
 class CustomTextField extends StatelessWidget {
@@ -228,34 +229,10 @@ class SignupPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        padding: EdgeInsets.symmetric(horizontal: 20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Image.asset(
-              'assets/img/logo_small.png',
-              height: 80.0,
-            ),
-            SizedBox(height: 16.0),
-            Text(
-              '함께하는 즐거운 러닝',
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-                color: SERVEONE_COLOR,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 8.0),
-            Text(
-              '몸을 움직이는 즐거움, 시작해볼까요?',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-                color: SERVEONE_COLOR,
-              ),
-              textAlign: TextAlign.center,
-            ),
+          children: [
+            IntroHeader(),
             SizedBox(height: 16),
             CustomInputForm(),
 
