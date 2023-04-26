@@ -21,7 +21,7 @@ class Target extends StatelessWidget {
           child: Text(
             '${targetRecord}',
             style: TextStyle(
-              color: Color(0xFFFFFFFF),
+              color: WHITE_COLOR,
               fontSize: 20.0,
               fontWeight: FontWeight.w400
             ),
@@ -30,7 +30,7 @@ class Target extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             color: BLACK_COLOR,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(10),
           ),
           constraints: BoxConstraints(
             minHeight: 80.0,
@@ -41,15 +41,23 @@ class Target extends StatelessWidget {
             children: [
               TargetBox(
                 name: 'km',
+                textColor: MAIN_COLOR,
+                recordColor: SERVEONE_COLOR,
               ),
               TargetBox(
                 name: '시간',
+                textColor: MAIN_COLOR,
+                recordColor: SERVEONE_COLOR,
               ),
               TargetBox(
                 name: 'kacl',
+                textColor: MAIN_COLOR,
+                recordColor: SERVEONE_COLOR,
               ),
               TargetBox(
                 name: '평균 페이스',
+                textColor: MAIN_COLOR,
+                recordColor: SERVEONE_COLOR      ,
               ),
             ],
           ),
