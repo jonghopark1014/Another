@@ -70,7 +70,6 @@ class _UnderChallengeState extends State<UnderChallenge> {
     isStart = !isStart;
     setState(() {});
   }
-
   void onStop() {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
