@@ -20,6 +20,8 @@ class _TimerScreenState extends State<TimerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+
     _start();
     return Scaffold(
       body: SafeArea(
