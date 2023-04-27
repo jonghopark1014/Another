@@ -16,7 +16,7 @@ class FeedSelect extends StatefulWidget {
 }
 
 class _FeedSelectState extends State<FeedSelect> {
-  bool isFeed = true;
+  bool isFeed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class _FeedSelectState extends State<FeedSelect> {
             child: Text(
               '전체 피드',
               style: TextStyle(
-                color: isFeed ? WHITE_COLOR : SERVETWO_COLOR,
+                color: isFeed ?  SERVETWO_COLOR : WHITE_COLOR,
                 fontSize: 20.0,
               ),
             ),
@@ -54,7 +54,7 @@ class _FeedSelectState extends State<FeedSelect> {
             child: Text(
               '나의피드',
               style: TextStyle(
-                color: isFeed ? SERVETWO_COLOR : WHITE_COLOR,
+                color: isFeed ?  WHITE_COLOR : SERVETWO_COLOR,
                 fontSize: 20.0,
               ),
             ),

@@ -52,7 +52,7 @@ class _FeedScreenState extends State<FeedScreen> {
                 // ),
               ];
             },
-            body: isFeed ?  MyFeedScreen() : AllFeedScreen(),
+            body: isFeed ?  AllFeedScreen(): MyFeedScreen() ,
           ),
         ),
       ),
