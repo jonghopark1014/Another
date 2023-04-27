@@ -1,4 +1,5 @@
 
+import 'package:another/constant/color.dart';
 import 'package:another/screens/feed/feed.dart';
 import 'package:another/screens/record/Record.dart';
 import 'package:another/screens/running/Running.dart';
@@ -12,15 +13,30 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
+  Map _runningColor = {
+    'background': SERVETWO_COLOR,
+    'text': WHITE_COLOR,
+  };
 
   final List<Widget> _tabs = [
-    RunningTab(), // 런닝 탭
     RecordTab(), // 기록 탭
+    RunningTab(), // 런닝 탭
     FeedScreen(),    // 피드 탭
   ];
 
+  void _onRunningTab(int index) {
+    if (index == 1){
+      _runningColor['background'] = SERVETWO_COLOR;
+      _runningColor['text'] = WHITE_COLOR;
+    } else {
+      _runningColor['background'] = MAIN_COLOR;
+      _runningColor['text'] = BLACK_COLOR;
+    }
+  }
+
   void _onTabTapped(int index) {
+    _onRunningTab(index);
     setState(() {
       _selectedIndex = index;
     });
@@ -32,23 +48,63 @@ class _HomeScreenState extends State<HomeScreen> {
     final textTheme = theme.textTheme;
     return Scaffold(
       body: Center(child: _tabs[_selectedIndex]),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onTabTapped,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.directions_run),
-            label: 'Running',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'Records',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.rss_feed),
-            label: 'Feed',
-          ),
-        ],
+      bottomNavigationBar: SizedBox(
+        height: 100,
+        child: BottomNavigationBar(
+          backgroundColor: CONTOUR_COLOR,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: SERVETWO_COLOR,
+          landscapeLayout: BottomNavigationBarLandscapeLayout.linear,
+          currentIndex: _selectedIndex,
+          onTap: _onTabTapped,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.insert_photo_outlined),
+              label: '오운완',
+            ),
+            BottomNavigationBarItem(
+              icon: Transform.scale(
+                scale: 3,
+                child: Transform.translate(
+                  offset: Offset(0, -2),
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.directions_run_rounded,
+                          color: _runningColor['text'],
+                          size: 12,
+                        ),
+                        Text(
+                          '러닝',
+                          style: TextStyle(
+                            color: _runningColor['text'],
+                            fontSize: 7,
+                          ),
+                        ),
+                    ]),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      border: Border.all(
+                        color: CONTOUR_COLOR,
+                        width: 2,
+                      ),
+                      color: _runningColor['background'],
+                    ),
+                  ),
+                ),
+              ),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.insert_chart_outlined_rounded),
+              label: 'My',
+            ),
+          ],
+        ),
       ),
     );
   }
