@@ -8,6 +8,8 @@ class UnderChallengeScreenEnd extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -15,10 +17,12 @@ class UnderChallengeScreenEnd extends StatelessWidget {
           child: Column(
             children: [
               Target(targetRecord: '목표 기록'),
-              Target(targetRecord: '내 기록'),
-              Container(
-                height: 300.0,
-                color: WHITE_COLOR,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Container(
+                  height: 350.0,
+                  color: WHITE_COLOR,
+                ),
               ),
               ButtonConponent(
                 onPressed: () => EndFeed(context),
