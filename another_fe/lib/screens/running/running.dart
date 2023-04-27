@@ -123,7 +123,14 @@ class _RunningTabState extends State<RunningTab> {
   // 타이머 페이지로 context
   void onPressed() {
 
-    // Navigator.of(context).pushAndRemoveUntil(
-    //     MaterialPageRoute(builder: (_) => TimerScreen()), (route) => false);
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+            builder: (_) => TimerScreen(),
+            settings: RouteSettings(
+              arguments: 'UnderRunning',
+            )
+        ),
+        (route) => false,
+    );
   }
 }

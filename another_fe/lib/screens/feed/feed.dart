@@ -43,7 +43,7 @@ class FeedScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => TimerScreen()));
+                    builder: (BuildContext context) => TimerScreen(), settings: RouteSettings(arguments: 'UnderChallenge')));
               },
               child: Text('Timer'),
             ),
