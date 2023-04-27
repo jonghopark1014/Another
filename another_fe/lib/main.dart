@@ -1,10 +1,13 @@
 import 'package:another/constant/color.dart';
 import 'package:another/screens/home_screen.dart';
 import 'package:another/screens/running/running.dart';
+import 'package:another/screens/running/under_challenge.dart';
+import 'package:another/screens/running/under_running.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(MaterialApp(
+    initialRoute: '/',
     theme: ThemeData(
         scaffoldBackgroundColor: BACKGROUND_COLOR,
         fontFamily: 'pretendard',
@@ -14,6 +17,10 @@ void main() {
           fontFamily: 'Pretendard',
           fontSize: 50.0,
         ))),
-    home: HomeScreen(),
+    routes: {
+      '/': (context) => HomeScreen(),
+      'UnderRunning': (context) => UnderRunning(),
+      'UnderChallenge': (context) => UnderChallenge(),
+    }
   ));
 }
