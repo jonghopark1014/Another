@@ -1,11 +1,15 @@
 
+import 'package:another/screens/feed/all_feed_screen.dart';
 import 'package:another/constant/color.dart';
 import 'package:another/screens/feed/feed.dart';
 import 'package:another/screens/record/Record.dart';
 import 'package:another/screens/running/Running.dart';
 import 'package:flutter/material.dart';
 
+import 'feed/feed_screen.dart';
+
 class HomeScreen extends StatefulWidget {
+
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -44,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     return Scaffold(

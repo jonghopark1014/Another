@@ -1,8 +1,9 @@
-import 'package:another/screens/feed/feed.dart';
+import 'package:another/screens/feed/all_feed_screen.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/material.dart';
 
 import '../../constant/color.dart';
+import '../feed/feed_screen.dart';
 import '../feed/widgets/custom_image.dart';
 
 class UnderChallengeScreenEndFeed extends StatelessWidget {
@@ -10,6 +11,8 @@ class UnderChallengeScreenEndFeed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: BACKGROUND_COLOR,
@@ -63,7 +66,7 @@ class UnderChallengeScreenEndFeed extends StatelessWidget {
                   )),
               Expanded(
                 child: Container(
-                  color: MAIN_COLOR,
+                  color: WHITE_COLOR,
                 ),
               ),
               Target(
