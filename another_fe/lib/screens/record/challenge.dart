@@ -277,6 +277,7 @@ class ChallengeItem extends StatelessWidget {
                       : Padding(
                       padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                       child: LinearProgressIndicator(
+
                         value: progress,
                         backgroundColor: Colors.grey,
                         valueColor: AlwaysStoppedAnimation<Color>(MAIN_COLOR),
