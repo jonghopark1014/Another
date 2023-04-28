@@ -91,20 +91,6 @@ class _HeightWeightPickerState extends State<HeightWeightPicker> {
                   color:Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.bold)),
-              IconButton(
-                icon: Icon(Icons.remove, color: Colors.white),
-                onPressed: () => setState(() {
-                  final newValue = _heightValue - 1;
-                  _heightValue = newValue.clamp(100, 200);
-                }),
-              ),
-              IconButton(
-                icon: Icon(Icons.add, color: Colors.white),
-                onPressed: () => setState(() {
-                  final newValue = _heightValue + 1;
-                  _heightValue = newValue.clamp(100, 200);
-                }),
-              ),
             ],
           ),
         ),
@@ -141,20 +127,6 @@ class _HeightWeightPickerState extends State<HeightWeightPicker> {
                   color:Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.bold)),
-              IconButton(
-                icon: Icon(Icons.remove, color: Colors.white),
-                onPressed: () => setState(() {
-                  final newValue = _weightValue - 1;
-                  _weightValue = newValue.clamp(30, 150);
-                }),
-              ),
-              IconButton(
-                icon: Icon(Icons.add, color: Colors.white),
-                onPressed: () => setState(() {
-                  final newValue = _weightValue + 1;
-                  _weightValue = newValue.clamp(30, 150);
-                }),
-              ),
             ],
           ),
         ),
