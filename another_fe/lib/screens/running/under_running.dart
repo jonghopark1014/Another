@@ -23,15 +23,12 @@ class _UnderRunningState extends State<UnderRunning> {
       37.523327, 126.921252
   );
   static CameraPosition initialPosition = CameraPosition(
-      target: userLatLng, zoom: 15
+      target: userLatLng, zoom: 30
   );
 
-  static late final List<Marker> markers = [Marker(
-    markerId: MarkerId('0'),
-    position: userLatLng,
-  )];
+  static late final List<Marker> markers = [];
 
-  static late final List<LatLng> polyPoints = [ userLatLng ];
+  static late final List<LatLng> polyPoints = [];
 
   @override
   Widget build(BuildContext context) {
@@ -84,12 +81,15 @@ class _UnderRunningState extends State<UnderRunning> {
                 return StreamBuilder<Position>(
                   stream: Geolocator.getPositionStream(),
                   builder: (context, snapshot) {
+                    print(snapshot.data);
                     if (snapshot.data != null && mapController != null) {
                       print('==========================================');
                       markers.add(Marker(
                         markerId: MarkerId(runningId.toString()),
                         position: LatLng(snapshot.data!.latitude, snapshot.data!.longitude),
+                        visible: false,
                       ));
+                          print(markers.length);
                       print(markers);
                       runningId += 1;
                       polyPoints.add(LatLng(snapshot.data!.latitude, snapshot.data!.longitude));
@@ -97,7 +97,7 @@ class _UnderRunningState extends State<UnderRunning> {
                           CameraPosition(
                               target: LatLng(
                                   snapshot.data!.latitude, snapshot.data!.longitude
-                              ), zoom: 40
+                              ), zoom: 20
                           )
                       ));
                     }
@@ -115,8 +115,8 @@ class _UnderRunningState extends State<UnderRunning> {
                         points: polyPoints,
                         color: MAIN_COLOR,
                         // jointType: JointType.round,
-
                       )]),
+
                     );
                   },
                 );

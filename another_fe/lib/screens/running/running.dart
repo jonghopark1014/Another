@@ -20,7 +20,7 @@ class _RunningTabState extends State<RunningTab> {
       37.523327, 126.921252
   );
   static CameraPosition initialPosition = CameraPosition(
-      target: userLatLng, zoom: 40
+      target: userLatLng, zoom: 30
   );
 
   @override

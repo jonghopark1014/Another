@@ -52,7 +52,6 @@ class RunningCarousel extends StatefulWidget {
 class _RunningCarouselState extends State<RunningCarousel> {
   int pageIndex = 0;
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -64,7 +63,6 @@ class _RunningCarouselState extends State<RunningCarousel> {
         color: BACKGROUND_COLOR,
       ),
       child: Stack(
-
         alignment: AlignmentDirectional.bottomCenter,
         children: [
           PageView(
