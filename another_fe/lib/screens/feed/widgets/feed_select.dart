@@ -28,7 +28,7 @@ class _FeedSelectState extends State<FeedSelect> {
           TextButton(
             onPressed: () {
               setState(() {
-                isFeed = !isFeed;
+                isFeed = false;
               });
               widget.onChanged(!isFeed);
             },
@@ -46,7 +46,7 @@ class _FeedSelectState extends State<FeedSelect> {
           TextButton(
             onPressed: () {
               setState(() {
-                isFeed = !isFeed;
+                isFeed = true;
               });
               widget.onChanged(!isFeed);
             },

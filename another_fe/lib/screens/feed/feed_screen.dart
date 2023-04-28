@@ -28,7 +28,7 @@ class _FeedScreenState extends State<FeedScreen> {
                 return <Widget>[
                   SliverAppBar(
                     title: Text('로고'),
-                    expandedHeight: 30.0,
+                    expandedHeight: 25.0,
                     backgroundColor: BACKGROUND_COLOR,
                     pinned: false, // true 처리 시 스크롤을 내려도 appbar가 작게 보임
                     floating: false, // true 처리 시 스크롤을 내릴때 appbar가 보임
