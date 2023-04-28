@@ -30,7 +30,7 @@ public class Running {
         LIVE, DELETE
     }
 
-    @OneToMany(mappedBy = "running")
+    @OneToMany(mappedBy = "running", cascade = CascadeType.ALL)
     private List<FeedPic> feedPic = new ArrayList<>();
 
     @OneToMany(mappedBy = "runningHost")
