@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import '../constant/color.dart';
 
 class Target extends StatelessWidget {
-  final String targetRecord;
+  final String targetname;
 
   const Target({
-    required this.targetRecord,
+    required this.targetname,
     Key? key,
   }) : super(key: key);
 
@@ -19,7 +19,7 @@ class Target extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
-            targetRecord,
+            targetname,
             style: TextStyle(
               color: WHITE_COLOR,
               fontSize: 20.0,

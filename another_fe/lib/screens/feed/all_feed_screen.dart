@@ -12,6 +12,7 @@ class AllFeedScreen extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+
           ImageBox(),
         ],
       ),

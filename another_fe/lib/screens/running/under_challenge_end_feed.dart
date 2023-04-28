@@ -70,7 +70,7 @@ class UnderChallengeScreenEndFeed extends StatelessWidget {
                 ),
               ),
               Target(
-                targetRecord: '내 기록',
+                targetname: '내 기록',
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 12.0),

@@ -1,6 +1,7 @@
 import 'package:another/screens/feed/all_feed_screen.dart';
 import 'package:another/screens/feed/my_feed_screen.dart';
 import 'package:another/screens/feed/widgets/feed_select.dart';
+import 'package:another/screens/feed/widgets/my_feed_result.dart';
 import 'package:flutter/material.dart';
 
 import '../../constant/color.dart';
@@ -22,38 +23,39 @@ class _FeedScreenState extends State<FeedScreen> {
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: NestedScrollView(
-            headerSliverBuilder:
-                (BuildContext context, bool innerBoxIsScrolled) {
-              return <Widget>[
-                SliverAppBar(
-                  title: Text('로고'),
-                  expandedHeight: 30.0,
-                  backgroundColor: BACKGROUND_COLOR,
-                  pinned: false, // true 처리 시 스크롤을 내려도 appbar가 작게 보임
-                  floating: false, // true 처리 시 스크롤을 내릴때 appbar가 보임
-                  snap:
-                      false, // true 처리 시 스크롤 내리면 appbar가 풀로 보임 (floating true조건)
+              headerSliverBuilder:
+                  (BuildContext context, bool innerBoxIsScrolled) {
+                return <Widget>[
+                  SliverAppBar(
+                    title: Text('로고'),
+                    expandedHeight: 30.0,
+                    backgroundColor: BACKGROUND_COLOR,
+                    pinned: false, // true 처리 시 스크롤을 내려도 appbar가 작게 보임
+                    floating: false, // true 처리 시 스크롤을 내릴때 appbar가 보임
+                    snap:
+                        false, // true 처리 시 스크롤 내리면 appbar가 풀로 보임 (floating true조건)
 
-                  flexibleSpace: FlexibleSpaceBar(
-                    centerTitle: true,
+                    flexibleSpace: FlexibleSpaceBar(
+                      centerTitle: true,
+                    ),
                   ),
-                ),
-                SliverToBoxAdapter(
-                  child: FeedSelect(
+                  SliverToBoxAdapter(
+                      child: isFeed ? Container() : MyRecordResult()
+                      ),
+                ];
+              },
+              body: Column(
+                children: [
+                  FeedSelect(
                     onChanged: (value) {
                       setState(() {
                         isFeed = value;
                       });
                     },
                   ),
-                ),
-                // SliverList(
-                //
-                // ),
-              ];
-            },
-            body: isFeed ?  AllFeedScreen(): MyFeedScreen() ,
-          ),
+                  Expanded(child: isFeed ? AllFeedScreen() : MyFeedScreen()),
+                ],
+              )),
         ),
       ),
     );

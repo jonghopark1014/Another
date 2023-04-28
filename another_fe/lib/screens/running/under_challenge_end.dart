@@ -16,7 +16,7 @@ class UnderChallengeScreenEnd extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              Target(targetRecord: '목표 기록'),
+              Target(targetname: '목표 기록'),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Container(
