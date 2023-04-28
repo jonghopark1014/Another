@@ -1,16 +1,19 @@
 package com.example.another_back.entity;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FeedPic {
 
-    @Column(name = "feedPic_id")
+    @Column(name = "feedpic_id")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
 
     private String feedPic;
 
