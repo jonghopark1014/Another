@@ -29,7 +29,7 @@ class _UnderChallengeState extends State<UnderChallenge> {
           child: Center(
             child: Column(
               children: [
-                Target(targetRecord: '목표기록'),
+                Target(targetname: '목표기록'),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: Column(

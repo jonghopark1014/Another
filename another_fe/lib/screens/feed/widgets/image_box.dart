@@ -1,3 +1,4 @@
+import 'package:another/screens/feed/detail_feed.dart';
 import 'package:flutter/material.dart';
 
 class ImageBox extends StatelessWidget {
@@ -14,11 +15,19 @@ class ImageBox extends StatelessWidget {
             crossAxisSpacing: 4.0),
         itemCount: 30,
         itemBuilder: (context, index) {
-          return _buildListItem(context, index);
+          return InkWell(
+            child: _buildListItem(context, index),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => DetailFeed(),
+              ));
+            },
+          );
         },
       ),
     );
   }
+
   Widget _buildListItem(BuildContext context, int index) {
     String img_src =
         'https://cdn.ggilbo.com/news/photo/201812/575659_429788_3144.jpg';
