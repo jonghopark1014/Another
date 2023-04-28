@@ -19,11 +19,8 @@ class _UnderRunningState extends State<UnderRunning> {
   double runningId = 1;
   // 지도에 위치 그리기
   GoogleMapController? mapController;
-  static final LatLng userLatLng = LatLng(
-      37.523327, 126.921252
-  );
   static CameraPosition initialPosition = CameraPosition(
-      target: userLatLng, zoom: 30
+      target: LatLng(37.523327, 126.921252), zoom: 30
   );
 
   static late final List<Marker> markers = [];
