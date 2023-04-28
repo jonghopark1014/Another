@@ -32,7 +32,7 @@ class _UnderRunningState extends State<UnderRunning> {
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.all(16.0),
             child: SafeArea(
               child: Center(
                 child: Column(

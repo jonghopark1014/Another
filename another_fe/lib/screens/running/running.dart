@@ -29,7 +29,7 @@ class _RunningTabState extends State<RunningTab> {
           children: [
             BeforeRunningMap(CameraPosition(
                 target: LatLng(37.523327, 126.921252), zoom: 30
-            )),
+            ),),
 
             Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

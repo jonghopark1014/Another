@@ -1,10 +1,10 @@
-import 'package:another/constant/color.dart';
 import 'package:flutter/material.dart';
 
 import 'package:another/screens/feed/widgets/image_profile.dart';
-import 'package:another/screens/feed/widgets/line_chart_custom.dart';
 import 'package:another/screens/feed/widgets/run_icon.dart';
 import 'package:another/widgets/target.dart';
+
+import '../../widgets/go_back_appbar_style.dart';
 
 class DetailFeed extends StatefulWidget {
   const DetailFeed({Key? key}) : super(key: key);
@@ -19,18 +19,7 @@ class _DetailFeedState extends State<DetailFeed> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: BACKGROUND_COLOR,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.navigate_before,
-            size: 40.0,
-          ),
-        ),
-      ),
+      appBar: GoBackAppBarStyle(),
       body: ListView(controller: _scrollController, children: [
         Column(
           children: [

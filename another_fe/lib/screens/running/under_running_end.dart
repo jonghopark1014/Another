@@ -10,7 +10,7 @@ class UnderRunningScreenEnd extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.all(16.0),
         child: SafeArea(
           child: Column(
             children: [
@@ -21,7 +21,7 @@ class UnderRunningScreenEnd extends StatelessWidget {
               ),
               SizedBox( height: 120, ),
               ButtonConponent(
-                onPressed: () => EndFeed(context),
+                onPressed: () => endFeed(context),
               ),
             ],
           ),
@@ -30,7 +30,7 @@ class UnderRunningScreenEnd extends StatelessWidget {
     );
   }
 
-  void EndFeed(BuildContext context) {
+  void endFeed(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (_) => UnderChallengeScreenEndFeed(),

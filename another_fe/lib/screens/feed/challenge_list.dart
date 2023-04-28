@@ -1,4 +1,5 @@
 import 'package:another/constant/color.dart';
+import 'package:another/widgets/go_back_appbar_style.dart';
 import 'package:flutter/material.dart';
 
 import 'widgets/image_profile.dart';
@@ -9,18 +10,7 @@ class ChallengeList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: BACKGROUND_COLOR,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.navigate_before,
-            size: 40.0,
-          ),
-        ),
-      ),
+      appBar: GoBackAppBarStyle(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

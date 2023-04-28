@@ -24,14 +24,6 @@ class UnderChallengeScreenEndFeed extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (_) => FeedScreen()),
-                      (route) => false);
-                },
-                child: Text('Pop'),
-              ),
               OutlinedButton(
                   style: OutlinedButton.styleFrom(
                       primary: MAIN_COLOR,
