@@ -1,3 +1,4 @@
+import 'package:another/widgets/go_back_appbar_style.dart';
 import 'package:flutter/material.dart';
 import 'package:another/constant/color.dart';
 
@@ -54,15 +55,7 @@ class ChallengePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black87,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context); //뒤로가기
-          },
-        ),
-      ),
+      appBar: GoBackAppBarStyle(),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
