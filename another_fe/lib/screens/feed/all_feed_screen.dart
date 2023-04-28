@@ -8,14 +8,14 @@ class AllFeedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-
-          ImageBox(),
-        ],
-      ),
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            ImageBox(),
+          ],
+        ),
     );
   }
 }

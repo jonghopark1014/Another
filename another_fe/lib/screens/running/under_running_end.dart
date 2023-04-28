@@ -14,7 +14,7 @@ class UnderRunningScreenEnd extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              Target(targetRecord: '내 기록'),
+              Target(targetname: '내 기록'),
               Container(
                 height: 300.0,
                 color: WHITE_COLOR,

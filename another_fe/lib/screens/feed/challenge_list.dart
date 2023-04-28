@@ -1,7 +1,7 @@
 import 'package:another/constant/color.dart';
 import 'package:flutter/material.dart';
 
-import 'image_profile.dart';
+import 'widgets/image_profile.dart';
 
 class ChallengeList extends StatelessWidget {
   const ChallengeList({Key? key}) : super(key: key);
@@ -11,6 +11,15 @@ class ChallengeList extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: BACKGROUND_COLOR,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.navigate_before,
+            size: 40.0,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
