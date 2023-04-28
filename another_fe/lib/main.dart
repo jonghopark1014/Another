@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(MaterialApp(
-    initialRoute: '/',
+    initialRoute: 'home',
     theme: ThemeData(
         scaffoldBackgroundColor: BACKGROUND_COLOR,
         fontFamily: 'pretendard',
@@ -18,7 +18,7 @@ void main() {
           fontSize: 50.0,
         ))),
     routes: {
-      '/': (context) => HomeScreen(),
+      'home': (context) => HomeScreen(),
       'UnderRunning': (context) => UnderRunning(),
       'UnderChallenge': (context) => UnderChallenge(),
     }

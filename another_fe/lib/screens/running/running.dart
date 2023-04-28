@@ -20,8 +20,9 @@ class _RunningTabState extends State<RunningTab> {
       37.523327, 126.921252
   );
   static CameraPosition initialPosition = CameraPosition(
-      target: userLatLng, zoom: 15
+      target: userLatLng, zoom: 40
   );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,9 +43,11 @@ class _RunningTabState extends State<RunningTab> {
                     if (snapshot.data != null && mapController != null) {
                       print(snapshot.data!.latitude);
                       print('==========================================');
-                      mapController!.animateCamera(CameraUpdate.newLatLng(
-                          LatLng(
-                              snapshot.data!.latitude, snapshot.data!.longitude
+                      mapController!.animateCamera(CameraUpdate.newCameraPosition(
+                          CameraPosition(
+                              target: LatLng(
+                                  snapshot.data!.latitude, snapshot.data!.longitude
+                              ), zoom: 40
                           )
                       ));
                     }
@@ -122,7 +125,6 @@ class _RunningTabState extends State<RunningTab> {
   }
   // 타이머 페이지로 context
   void onPressed() {
-
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
             builder: (_) => TimerScreen(),
@@ -134,3 +136,4 @@ class _RunningTabState extends State<RunningTab> {
     );
   }
 }
+
