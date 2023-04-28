@@ -33,6 +33,8 @@ public class VersusService {
             FileIO fileIO = new FileIO();
             // HDFS 파일 시스템 객체 생성
 
+            FileSystem fs = FileSystem.get(fileIO.getConf());
+
             // 파일 경로 설정
             Path filePath = new Path(fileIO.versusData(runningId));
 
