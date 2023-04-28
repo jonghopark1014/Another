@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -123,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                   // 로그인 버튼 클릭 시 로그인 로직 작성
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: MAIN_COLOR,
+                  backgroundColor: MAIN_COLOR,
                 ),
                 child: Text('로그인'),
               )

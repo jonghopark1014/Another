@@ -64,7 +64,7 @@ class RunIcon extends StatelessWidget {
           );
         },
         style: ElevatedButton.styleFrom(
-          primary: MAIN_COLOR,
+          backgroundColor: MAIN_COLOR,
         ),
         child: Text('기록에 도전하기'),
       ),
