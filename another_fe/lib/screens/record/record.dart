@@ -56,7 +56,7 @@ class RecordTab extends StatelessWidget {
       body:
       SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -272,7 +272,7 @@ class _MyRecordState extends State<MyRecord> {
               ? TableCalenderScreen()
               : Text('달력 없음', style: TextStyle(color: Colors.white)),
 
-
+// 나중에 Pageview 써봐라
           widget.selectedIndex == 0
             ? Text('인덱스 0임', style: TextStyle(color: Colors.white))
             : widget.selectedIndex == 1

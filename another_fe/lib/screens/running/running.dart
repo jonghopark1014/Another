@@ -23,35 +23,37 @@ class _RunningTabState extends State<RunningTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          BeforeRunningMap(CameraPosition(
-              target: LatLng(37.523327, 126.921252), zoom: 30
-          )),
-
-          Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
           children: [
-            RunningCarousel(),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 40, horizontal: 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  RunningSettingButton(),
-                // RunningCircleButton(iconNamed: Icons.play_arrow, onPressed: onPressed()),
-                RunningCircleButton(
-                  iconNamed: Icons.play_arrow,
-                  onPressed: onPressed,
+            BeforeRunningMap(CameraPosition(
+                target: LatLng(37.523327, 126.921252), zoom: 30
+            )),
+
+            Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              RunningCarousel(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 40, horizontal: 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    RunningSettingButton(),
+                  // RunningCircleButton(iconNamed: Icons.play_arrow, onPressed: onPressed()),
+                  RunningCircleButton(
+                    iconNamed: Icons.play_arrow,
+                    onPressed: onPressed,
+                  ),
+                  RunningMyHIstoryButton(),
+                  ],
                 ),
-                RunningMyHIstoryButton(),
-                ],
-              ),
-            )
-          ],
+              )
+            ],
+          ),
+          ]
         ),
-        ]
       ),
     );
   }

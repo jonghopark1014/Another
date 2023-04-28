@@ -8,7 +8,7 @@ class MyRecordResult extends StatelessWidget {
   const MyRecordResult({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context)  {
+  Widget build(BuildContext context) {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yyyy.MM.dd').format(now);
     print(now);
@@ -86,14 +86,11 @@ class MyRecordResult extends StatelessWidget {
   }
 }
 
-
-
 Widget ImageProfileSetting() {
   return Center(
     child: Stack(
       children: <Widget>[
         CircleAvatar(
-
           backgroundImage: AssetImage('assets/img/kazuha.jpg'),
           radius: 45,
         ),

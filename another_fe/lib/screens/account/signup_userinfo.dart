@@ -14,31 +14,28 @@ class _SignupUserInfoPageState extends State<SignupUserInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-          children: <Widget>[
-            IntroHeader(),
-            Expanded(
-                child: HeightWeightPicker(initialHeight: 170, initialWeight: 60)
-            ),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  PassButton(),
-                  CompleteButton()
-                ],
-            ),
-          ]
+      body: Column(children: <Widget>[
+        IntroHeader(),
+        Expanded(
+            child: HeightWeightPicker(
+          initialHeight: 170,
+          initialWeight: 60,
+        )),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [PassButton(), CompleteButton()],
         ),
+      ]),
     );
   }
 }
-
 
 class HeightWeightPicker extends StatefulWidget {
   final int initialHeight;
   final int initialWeight;
 
-  HeightWeightPicker({required this.initialHeight, required this.initialWeight});
+  HeightWeightPicker(
+      {required this.initialHeight, required this.initialWeight});
 
   @override
   _HeightWeightPickerState createState() => _HeightWeightPickerState();
@@ -65,10 +62,11 @@ class _HeightWeightPickerState extends State<HeightWeightPicker> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('　키　', style: TextStyle(
-                  color:Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold)),
+              Text('　키　',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
               NumberPicker(
                 value: _heightValue,
                 minValue: 100,
@@ -87,10 +85,11 @@ class _HeightWeightPickerState extends State<HeightWeightPicker> {
                 itemHeight: 30,
                 onChanged: (value) => setState(() => _heightValue = value),
               ),
-              Text('cm', style: TextStyle(
-                  color:Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold)),
+              Text('cm',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
             ],
           ),
         ),
@@ -100,10 +99,11 @@ class _HeightWeightPickerState extends State<HeightWeightPicker> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('몸무게', style: TextStyle(
-                  color:Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold)),
+              Text('몸무게',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
               NumberPicker(
                 value: _weightValue,
                 minValue: 30,
@@ -123,10 +123,11 @@ class _HeightWeightPickerState extends State<HeightWeightPicker> {
                 itemHeight: 30,
                 onChanged: (value) => setState(() => _weightValue = value),
               ),
-              Text('kg', style: TextStyle(
-                  color:Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold)),
+              Text('kg',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
             ],
           ),
         ),
@@ -144,27 +145,25 @@ class PassButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width:150,
-      height: 40,
-      margin: EdgeInsets.only(bottom: 20),
-      child: OutlinedButton (
-        onPressed: () {
-          // 여기 네비게이터 푸쉬로 해도 되나?
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => RunningTab()),
-          );
-        },
-        child: Text('건너뛰기', style: TextStyle(color: MAIN_COLOR)),
-        style: ButtonStyle(
-          side: MaterialStateProperty.resolveWith<BorderSide>(
-            (Set<MaterialState> states) {
-              return BorderSide(color: MAIN_COLOR, width: 2);
-            }
-          )
-        )
-      )
-    );
+        width: 150,
+        height: 40,
+        margin: EdgeInsets.only(bottom: 20),
+        child: OutlinedButton(
+            onPressed: () {
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (_) => RunningTab(),
+                  ),
+                  (route) => false);
+            },
+            style: ButtonStyle(
+              side: MaterialStateProperty.resolveWith<BorderSide>(
+                (Set<MaterialState> states) {
+                  return BorderSide(color: MAIN_COLOR, width: 2);
+                },
+              ),
+            ),
+            child: Text('건너뛰기', style: TextStyle(color: MAIN_COLOR))));
   }
 }
 
@@ -177,7 +176,7 @@ class CompleteButton extends StatelessWidget {
       width: 150,
       height: 40,
       margin: EdgeInsets.only(bottom: 20),
-      child: ElevatedButton (
+      child: ElevatedButton(
         onPressed: () {
           // 가입완료 버튼 클릭 시 로직
           // 키, 몸무게를 저장해서 데이터 보내주면 될 것 같음! (백으로 보내? store로 보내?)
