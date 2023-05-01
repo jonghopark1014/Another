@@ -1,9 +1,10 @@
 spring:
   profiles:
     group:
-      "local": "local, common"
-      "development": "development, common"
-    active: local
+      "local" : "local, common"
+      "development" : "development, common"
+    active: development
+
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -66,4 +67,3 @@ cloud:
 data:
   hdfs-url: ${HDFS_URL}
   hdfs-port: ${HDFS_PORT}
-
