@@ -4,8 +4,10 @@ import 'package:another/screens/running/running.dart';
 import 'package:another/screens/running/under_challenge.dart';
 import 'package:another/screens/running/under_running.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
-void main() {
+void main() async {
+  await initializeDateFormatting();
   runApp(MaterialApp(
     initialRoute: 'home',
     theme: ThemeData(
