@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-FutureBuilder<String> BeforeRunningMap(CameraPosition initialPosition) {
+FutureBuilder<String> beforeRunningMap(CameraPosition initialPosition) {
   GoogleMapController? mapController;
   onMapCreated(GoogleMapController controller) {
     mapController = controller;
