@@ -10,6 +10,8 @@ import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'widgets/category_title.dart';
 import './widgets/record_running_history.dart';
+import '../../main.dart';
+import 'package:provider/provider.dart';
 
 class RecordTab extends StatelessWidget {
   const RecordTab({Key? key}) : super(key: key);
@@ -18,45 +20,46 @@ class RecordTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.black87,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+        backgroundColor: Colors.black87,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context); // 뒤로가기
+          },
+        ),
+        actions: [
+          ElevatedButton(
             onPressed: () {
-              Navigator.pop(context); // 뒤로가기
+              // 로그인 페이지로 이동하는 로직을 작성
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );
             },
+            child: Text('로그인'),
           ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                // 로그인 페이지로 이동하는 로직을 작성
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-              },
-              child: Text('로그인'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // 로그인 페이지로 이동하는 로직을 작성
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SignupUserInfoPage()),
-                );
-              },
-              child: Text('키 몸무게'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // 로그인 페이지로 이동하는 로직을 작성
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ChallengePage()),
-                );
-              },
-              child: Text('챌린지'),
-            ),
-          ]),
+          ElevatedButton(
+            onPressed: () {
+              // 로그인 페이지로 이동하는 로직을 작성
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SignupUserInfoPage()),
+              );
+            },
+            child: Text('키 몸무게'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              // 로그인 페이지로 이동하는 로직을 작성
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ChallengePage()),
+              );
+            },
+            child: Text('챌린지'),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16),
@@ -68,29 +71,39 @@ class RecordTab extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('안녕하세요 왕현석님!\n오늘도 함께 달려볼까요?',
-                      style: TextStyle(color: Colors.white)),
+                  Text(
+                    '안녕하세요 ${context.watch<UserInfo>().nickname}님!\n오늘도 함께 달려볼까요?',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   Column(
                     children: [
-                      Text('Lv.1', style: TextStyle(color: Colors.white)),
+                      Text(
+                        'Lv.1',
+                        style: TextStyle(color: Colors.white),
+                      ),
                       CircularPercentIndicator(
                         radius: 40.0,
                         lineWidth: 10.0,
                         percent: 0.6,
                         header: Text("Icon header"),
                         center: CircleAvatar(
-                          backgroundImage: AssetImage('assets/img/kazuha.jpg'),
+                          backgroundImage: AssetImage(
+                              '${context.watch<UserInfo>().profileImg}'),
                           radius: 35,
                         ),
                         backgroundColor: Colors.grey,
                         progressColor: Colors.blue,
                       ),
                       IconButton(
-                        icon: Icon(Icons.edit, color: WHITE_COLOR,),
+                        icon: Icon(
+                          Icons.edit,
+                          color: WHITE_COLOR,
+                        ),
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => ProfileEditPage()),
+                            MaterialPageRoute(
+                                builder: (context) => ProfileEditPage()),
                           );
                         },
                       )
@@ -98,15 +111,17 @@ class RecordTab extends StatelessWidget {
                   )
                 ],
               ),
-              Row(children: [
-                CategoryTitle(title: 'MY 챌린지'),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.arrow_forward_ios_outlined),
-                  color: Colors.white,
-                  iconSize: 14,
-                )
-              ]),
+              Row(
+                children: [
+                  CategoryTitle(title: 'MY 챌린지'),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.arrow_forward_ios_outlined),
+                    color: Colors.white,
+                    iconSize: 14,
+                  )
+                ],
+              ),
               MyChallenge(), // 나의 챌린지
               CategoryTitle(title: '나의 활동 기록'),
               MyRecord(),
@@ -124,22 +139,26 @@ class MyChallenge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.all(10),
-        child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(children: [
-              Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
-              SizedBox(width: 5),
-              Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
-              SizedBox(width: 5),
-              Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
-              SizedBox(width: 5),
-              Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
-              SizedBox(width: 5),
-              Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
-              SizedBox(width: 5),
-              Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
-            ])));
+      padding: EdgeInsets.all(10),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
+            SizedBox(width: 5),
+            Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
+            SizedBox(width: 5),
+            Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
+            SizedBox(width: 5),
+            Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
+            SizedBox(width: 5),
+            Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
+            SizedBox(width: 5),
+            Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
+          ],
+        ),
+      ),
+    );
   }
 }
 

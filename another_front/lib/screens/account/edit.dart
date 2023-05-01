@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:another/constant/color.dart';
 import '../../widgets/intro_header.dart';
+import '../../main.dart';
+import 'package:provider/provider.dart';
+import './widgets/height_weight_picker.dart';
+import './widgets/pass_button.dart';
+import './widgets/complete_button.dart';
 
 class ProfileEditPage extends StatefulWidget {
   const ProfileEditPage({Key? key}) : super(key: key);
@@ -10,7 +15,20 @@ class ProfileEditPage extends StatefulWidget {
 }
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
-  TextEditingController _nicknameController = TextEditingController();
+  final TextEditingController _nicknameController = TextEditingController();
+  final TextEditingController _profileImgController = TextEditingController();
+  int _height = 0;
+  int _weight = 0;
+
+  @override
+  void initState() {
+    final userInfo = context.read<UserInfo>();
+    _nicknameController.text = userInfo.nickname;
+    _profileImgController.text = userInfo.profileImg;
+    _height = userInfo.height;
+    _weight = userInfo.weight;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +36,10 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       body: Column(
         children: [
           IntroHeader(),
+          SizedBox(height: 16),
           CircleAvatar(
             backgroundImage: AssetImage('assets/img/kazuha.jpg'),
-            radius: 35,
+            radius: 50,
           ),
           Expanded(
             child: Padding(
@@ -35,13 +54,16 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                     color: SERVEONE_COLOR, // 원하는 라벨 텍스트 색상으로 변경
                   ),
                   border: UnderlineInputBorder(
-                    borderSide: BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
+                    borderSide: BorderSide(
+                        color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
                   ),
                   focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
+                    borderSide: BorderSide(
+                        color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
                   ),
                   enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
+                    borderSide: BorderSide(
+                        color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
                   ),
                 ),
                 maxLines: null,
@@ -52,6 +74,23 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
               ),
             ),
           ),
+          HeightWeightPicker(
+            initialHeight: _height,
+            initialWeight: _weight,
+            onHeightChanged: (height) => setState(() => _height = height),
+            onWeightChanged: (weight) => setState(() => _weight = weight),
+          ),
+          Text(
+            'edit페이지 height는 ${_height} weight는 ${_weight}',
+            style: TextStyle(color: WHITE_COLOR),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              PassButton(text: '취소', onPressed:() {}),
+              CompleteButton(text: '수정 완료', onPressed: () {}),
+            ],
+          )
         ],
       ),
     );
