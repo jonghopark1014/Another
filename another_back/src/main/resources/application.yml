@@ -1,13 +1,13 @@
 spring:
   profiles:
     group:
-      "local" : "local, common"
-      "development" : "development, common"
+      "local": "local, common"
+      "development": "development, common"
     active: local
 
   mvc:
     pathmatch:
-      matching-strategy : ant_path_matcher
+      matching-strategy: ant_path_matcher
 ---
 spring:
   config:
@@ -60,8 +60,8 @@ spring:
 cloud:
   aws:
     credentials:
-      access-key: AKIAQPNAUGHN6JCC2MOL
-      secret-key: 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
+      access-key: ${ACCESS_KEY}
+      secret-key: ${SECRET_KEY}
 ---
 data:
   all-data: ${ALL_DATA}

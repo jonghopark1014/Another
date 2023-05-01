@@ -56,12 +56,14 @@ public class VersusService {
                     response.add(jsonObject);
                 }
                 br.close();
+                if(response.isEmpty())
+                    new IllegalArgumentException("해당 러닝기록이 비어있습니다.");
             }
         } catch (IOException e) {
-            new IllegalArgumentException("IO Exception이 발생했습니다.");
+            new IllegalArgumentException("러닝기록을 읽어오는 부분에서 에러가 발생했습니다.");
         }
         catch (ParseException e) {
-            new IllegalArgumentException("ParseException이 발생했습니다.");
+            new IllegalArgumentException("Json 변환 과정에서 에러가 발생했습니다.");
         }
         return response;
     }
