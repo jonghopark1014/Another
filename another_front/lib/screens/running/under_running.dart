@@ -2,9 +2,9 @@ import 'package:another/constant/color.dart';
 import 'package:another/screens/running/under_running_end.dart';
 import 'package:flutter/material.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
-import 'package:flutter_sensors/flutter_sensors.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:async';
 
 import '../../widgets/record_result.dart';
 
@@ -16,6 +16,11 @@ class UnderRunning extends StatefulWidget {
 }
 
 class _UnderRunningState extends State<UnderRunning> {
+  late Timer _timer;
+
+  int seconds = 0;
+  int minutes = 0;
+  int hours = 0;
   bool isStart = false;
   double runningId = 1;
   // 지도에 위치 그리기
@@ -27,7 +32,28 @@ class _UnderRunningState extends State<UnderRunning> {
 
   static late final List<LatLng> polyPoints = [];
 
+  @override
+  void initState() {
+    super.initState();
 
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        seconds++;
+        if (seconds == 60) {
+          minutes += 1;
+          seconds = 0;
+        } else if (minutes == 60) {
+          hours += 1;
+          minutes = 0;
+        }
+      });
+    });
+  }
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +130,8 @@ class _UnderRunningState extends State<UnderRunning> {
                       SizedBox(
                         height: 282,
                       ),
-                      RecordResult(),
+                      RecordResult(timer:
+                      '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}',),
                       Expanded(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -119,9 +146,14 @@ class _UnderRunningState extends State<UnderRunning> {
                               iconNamed: Icons.pause,
                               onPressed: onPause,
                             ),
-                            RunningCircleButton(
-                              iconNamed: Icons.stop,
-                              onPressed: onStop,
+                            GestureDetector(
+                              onLongPress: () {
+                                onStop();
+                              },
+                              child: RunningCircleButton(
+                                iconNamed: Icons.stop,
+                                onPressed: onChange,
+                              ),
                             ),
                           ],
                         ),
@@ -137,9 +169,27 @@ class _UnderRunningState extends State<UnderRunning> {
     );
   }
 
+  void onStart() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        isStart = false;
+        seconds++;
+        if (seconds == 60) {
+          minutes += 1;
+          seconds = 0;
+        } else if (minutes == 60) {
+          hours += 1;
+          minutes = 0;
+        }
+      });
+    });
+  }
+
   void onPause() {
-    isStart = !isStart;
-    setState(() {});
+    setState(() {
+      isStart = !isStart;
+    });
+    _timer?.cancel();
   }
 
   void onStop() {
@@ -148,6 +198,10 @@ class _UnderRunningState extends State<UnderRunning> {
           builder: (_) => UnderRunningScreenEnd(),
         ),
         (route) => false);
+  }
+
+  void onChange() {
+
   }
 
   onMapCreated(GoogleMapController controller) {

@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import '../constant/color.dart';
 
 class RecordResult extends StatelessWidget {
+  final String timer;
+
   const RecordResult({
+    required this.timer,
     Key? key,
   }) : super(key: key);
 
@@ -25,7 +28,7 @@ class RecordResult extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   RecordResultBox(
-                    data: '1:00:00',
+                    data: timer,
                     name: '시간',
                     textColor: YELLOW_COLOR,
                     recordColor: WHITE_COLOR,
@@ -63,4 +66,5 @@ class RecordResult extends StatelessWidget {
       ),
     );
   }
+
 }

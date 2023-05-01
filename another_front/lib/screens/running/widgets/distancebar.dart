@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 
 class DistanceBar extends StatefulWidget {
   final String name;
+  final double pace;
   const DistanceBar({
+    required this.pace,
     required this.name,
     Key? key,
   }) : super(key: key);
@@ -38,7 +40,7 @@ class _DistanceBarState extends State<DistanceBar> {
               valueIndicatorTextStyle: TextStyle(
                 color: Colors.white,
                 fontSize: 18,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w700,
               ),
               activeTrackColor: MAIN_COLOR,
               inactiveTrackColor: WHITE_COLOR,
@@ -50,15 +52,16 @@ class _DistanceBarState extends State<DistanceBar> {
               ),
             ),
             child: Slider(
-              value: _progress,
+              // 현재값에 지금 거리를 넣어주면 됨
+              value: widget.pace,
               min: 0,
+              // 거리 widget.distance 넣어주면 될듯 함 상대방의 거리
               max: 100,
               onChanged: (double value) {
                 setState(() {
                   _progress = value;
                 });
               },
-              label: '$_progress',
             ),
           ),
         ])
