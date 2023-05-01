@@ -1,4 +1,4 @@
-package com.example.another_back.dto;
+package com.example.another_back.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
