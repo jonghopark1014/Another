@@ -27,6 +27,8 @@ pipeline{
                     sh "sed -i 's/\${DB_DOMAIN}/${DB_DOMAIN}/' '${WORKSPACE}/another_back/src/main/resources/application.yml'"
                     sh "sed -i 's/\${SECRET_KEY}/${SECRET_KEY}/' '${WORKSPACE}/another_back/src/main/resources/application.yml'"
                     sh "sed -i 's/\${ACCESS_KEY}/${ACCESS_KEY}/' '${WORKSPACE}/another_back/src/main/resources/application.yml'"
+                    sh "sed -i 's/\${ALL_DATA}/${ALL_DATA}/' '${WORKSPACE}/another_back/src/main/resources/application.yml'"
+                    sh "sed -i 's/\${VERSUS_DATA}/${VERSUS_DATA}/' '${WORKSPACE}/another_back/src/main/resources/application.yml'"
                     sh "docker build -t ${BACK_NAME} ./another_back/."
                 }
             }

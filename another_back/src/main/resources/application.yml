@@ -15,9 +15,9 @@ spring:
       on-profile: "common"
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_DOMAIN}:${DB_PORT}/another?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:mysql://localhost:3306/anothertest?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: ssafy
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
@@ -60,5 +60,9 @@ spring:
 cloud:
   aws:
     credentials:
-      access-key: ${ACCESS_KEY}
-      secret-key: ${SECRET_KEY}
+      access-key: AKIAQPNAUGHN6JCC2MOL
+      secret-key: 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
+---
+data:
+  all-data: ${ALL_DATA}
+  versus-data: ${VERSUS_DATA}

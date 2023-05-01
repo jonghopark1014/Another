@@ -22,7 +22,7 @@ import java.io.InputStreamReader;
 public class VersusService {
 
     /**
-     * HDFS에서 경쟁 데이터 받아오기
+     * 경쟁 시작
      *
      * @param runningId
      * @return JSONArray
@@ -50,14 +50,13 @@ public class VersusService {
                 JSONObject jsonObject ;
 
                 while ((line = br.readLine()) != null) {
+                    if(line==null)break;
                     // json 형태로 변환
                     jsonObject = (JSONObject) parser.parse(line);
                     response.add(jsonObject);
                 }
                 br.close();
             }
-            // 파일 시스템 객체 닫기
-            fs.close();
         } catch (IOException e) {
             new IllegalArgumentException("IO Exception이 발생했습니다.");
         }
