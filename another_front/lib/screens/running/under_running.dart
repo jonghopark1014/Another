@@ -19,7 +19,7 @@ class UnderRunning extends StatelessWidget {
   
   @override
   void dispose() {
-    // 스크린샷 찍어서 넘겨야 함.. 라우팅도.. 여기서 해야할듯?
+    // 스크린샷 찍어서 넘겨야 함..
   }
 
   @override
