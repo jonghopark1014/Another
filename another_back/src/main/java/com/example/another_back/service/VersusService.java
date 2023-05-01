@@ -22,10 +22,10 @@ import java.io.InputStreamReader;
 @Slf4j
 public class VersusService {
 
-    @Value("${a.hdfs-url}")
+    @Value("${data.hdfs-url}")
     private String hdfsUrl;
 
-    @Value("${a.hdfs-port}")
+    @Value("${data.hdfs-port}")
     private String hdfsPort;
 
     /**
