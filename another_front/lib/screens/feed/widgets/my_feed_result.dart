@@ -9,9 +9,12 @@ class MyRecordResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
+    DateTime now = DateTime.now().toLocal();
+
+    int utcOffsetSeconds = now.timeZoneOffset.inSeconds;
+    now = now.add(Duration(seconds: utcOffsetSeconds + 9 * 3600));
     String formattedDate = DateFormat('yyyy.MM.dd').format(now);
-    print(now);
+
     return Padding(
       padding: const EdgeInsets.only(
         top: 8.0,
@@ -47,7 +50,7 @@ class MyRecordResult extends StatelessWidget {
                           ),
                           Text('걸음',
                               style:
-                                  TextStyle(color: MAIN_COLOR, fontSize: 20.0))
+                              TextStyle(color: MAIN_COLOR, fontSize: 20.0))
                         ],
                       ),
                     ],
