@@ -31,14 +31,20 @@ class _UnderChallengeState extends State<UnderChallenge> {
               children: [
                 Target(targetname: '목표기록'),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Column(
-                    children: [
-                      DistanceBar(name:'상대 페이스',),
-                      DistanceBar(name:'내 페이스',),
-                    ],
-                  )),
-                RecordResult(),
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Column(
+                      children: [
+                        DistanceBar(
+                          name: '상대 페이스',
+                        ),
+                        DistanceBar(
+                          name: '내 페이스',
+                        ),
+                      ],
+                    )),
+                RecordResult(
+                  distance: '0',
+                ),
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -72,12 +78,12 @@ class _UnderChallengeState extends State<UnderChallenge> {
     isStart = !isStart;
     setState(() {});
   }
-  void onStop() {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (_) => UnderChallengeScreenEnd(),
-            ),
-            (route) => false);
-      }
-}
 
+  void onStop() {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => UnderChallengeScreenEnd(),
+        ),
+        (route) => false);
+  }
+}

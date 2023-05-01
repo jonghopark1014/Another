@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:another/screens/running/running.dart';
 import 'package:another/screens/running/under_challenge.dart';
 import 'package:another/screens/running/under_running.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class _TimerScreenState extends State<TimerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final arguments = ModalRoute.of(context)!.settings.arguments;
+    final arguments = ModalRoute.of(context)!.settings.arguments as LocationArguments;
 
     if (first) {
       _start(arguments);
@@ -52,7 +53,7 @@ class _TimerScreenState extends State<TimerScreen> {
     );
   }
 
-  void _start(Object? arg) {
+  void _start(LocationArguments arg) {
     _timer = Timer.periodic(
       Duration(seconds: 1),
       (timer) {
@@ -68,7 +69,11 @@ class _TimerScreenState extends State<TimerScreen> {
           //       arguments: 'UnderRunning', <-- 요기
           //     )
           // )
-          Navigator.of(context).pushNamedAndRemoveUntil(arg.toString(), (route) => false);
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              arg.page,
+                  arguments: arg.initialPosition,
+                  (route) => false,
+          );
         }
       },
     );

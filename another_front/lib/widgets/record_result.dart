@@ -3,11 +3,18 @@ import 'package:flutter/material.dart';
 
 import '../constant/color.dart';
 
-class RecordResult extends StatelessWidget {
+class RecordResult extends StatefulWidget {
+  final String distance;
   const RecordResult({
+    required this.distance,
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<RecordResult> createState() => _RecordResultState();
+}
+
+class _RecordResultState extends State<RecordResult> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -31,7 +38,7 @@ class RecordResult extends StatelessWidget {
                     recordColor: WHITE_COLOR,
                   ),
                   RecordResultBox(
-                    data: '8000m',
+                    data: widget.distance,
                     name: '거리',
                     textColor: BLUE_COLOR,
                     recordColor: WHITE_COLOR,

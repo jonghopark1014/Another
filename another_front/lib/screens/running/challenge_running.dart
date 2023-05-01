@@ -1,4 +1,5 @@
 import 'package:another/constant/color.dart';
+import 'package:another/screens/running/running.dart';
 import 'package:another/screens/running/timer_screen.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
@@ -39,7 +40,7 @@ class ChallengeRunning extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (_) => TimerScreen(),
                           settings: RouteSettings(
-                            arguments: 'UnderChallenge',
+                            arguments: LocationArguments('UnderChallenge', CameraPosition(target: LatLng(37.523327, 126.921252), zoom: 20)),
                           ),
                         ),
                         (route) => false);

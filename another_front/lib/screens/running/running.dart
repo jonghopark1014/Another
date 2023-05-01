@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:another/screens/running/timer_screen.dart';
 import 'package:another/screens/running/widgets/before_running_map.dart';
 import 'package:another/screens/running/widgets/running_carousel.dart';
@@ -62,11 +64,18 @@ class _RunningTabState extends State<RunningTab> {
         MaterialPageRoute(
             builder: (_) => TimerScreen(),
             settings: RouteSettings(
-              arguments: 'UnderRunning',
+              arguments: LocationArguments('UnderRunning', initialPosition),
             )
         ),
         (route) => false,
     );
   }
+}
+
+class LocationArguments{
+  late final String page;
+  late final CameraPosition initialPosition;
+
+  LocationArguments(this.page, this.initialPosition);
 }
 
