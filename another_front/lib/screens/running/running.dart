@@ -5,7 +5,6 @@ import 'package:another/screens/running/widgets/running_my_history.dart';
 import 'package:another/screens/running/widgets/running_setting_button.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class RunningTab extends StatefulWidget {
@@ -27,7 +26,7 @@ class _RunningTabState extends State<RunningTab> {
       child: Scaffold(
         body: Stack(
           children: [
-            BeforeRunningMap(CameraPosition(
+            beforeRunningMap(CameraPosition(
                 target: LatLng(37.523327, 126.921252), zoom: 30
             ),),
 
