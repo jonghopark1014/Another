@@ -17,7 +17,7 @@ class ChallengeRunning extends StatelessWidget {
       appBar: GoBackAppBarStyle(),
       body: Stack(
         children: [
-          BeforeRunningMap(
+          beforeRunningMap(
             CameraPosition(target: LatLng(37.523327, 126.921252), zoom: 20),
           ),
           Padding(

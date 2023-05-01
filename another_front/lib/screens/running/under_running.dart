@@ -2,6 +2,7 @@ import 'package:another/constant/color.dart';
 import 'package:another/screens/running/under_running_end.dart';
 import 'package:flutter/material.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
+import 'package:flutter_sensors/flutter_sensors.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -26,47 +27,13 @@ class _UnderRunningState extends State<UnderRunning> {
 
   static late final List<LatLng> polyPoints = [];
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SafeArea(
-              child: Center(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 282,
-                    ),
-                    RecordResult(),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          // RunningCircleButton(iconNamed: Icons.play_arrow,onPressed: ,),
-                          isStart
-                              ? RunningCircleButton(
-                                  iconNamed: Icons.play_arrow,
-                                  onPressed: onPause,
-                                )
-                              : RunningCircleButton(
-                                  iconNamed: Icons.pause,
-                                  onPressed: onPause,
-                                ),
-                          RunningCircleButton(
-                            iconNamed: Icons.stop,
-                            onPressed: onStop,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
           FutureBuilder(
             future: checkPermission(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -79,15 +46,12 @@ class _UnderRunningState extends State<UnderRunning> {
                   builder: (context, snapshot) {
                     print(snapshot.data);
                     if (snapshot.data != null && mapController != null) {
-                      print('==========================================');
                       markers.add(Marker(
                         markerId: MarkerId(runningId.toString()),
                         position: LatLng(
                             snapshot.data!.latitude, snapshot.data!.longitude),
                         visible: false,
                       ));
-                      print(markers.length);
-                      print(markers);
                       runningId += 1;
                       polyPoints.add(LatLng(
                           snapshot.data!.latitude, snapshot.data!.longitude));
@@ -128,6 +92,45 @@ class _UnderRunningState extends State<UnderRunning> {
                 child: Text(snapshot.data),
               );
             },
+          ),
+          Container(
+            color: BACKGROUND_COLOR,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SafeArea(
+                child: Center(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 282,
+                      ),
+                      RecordResult(),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            // RunningCircleButton(iconNamed: Icons.play_arrow,onPressed: ,),
+                            isStart
+                                ? RunningCircleButton(
+                              iconNamed: Icons.play_arrow,
+                              onPressed: onPause,
+                            )
+                                : RunningCircleButton(
+                              iconNamed: Icons.pause,
+                              onPressed: onPause,
+                            ),
+                            RunningCircleButton(
+                              iconNamed: Icons.stop,
+                              onPressed: onStop,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),
