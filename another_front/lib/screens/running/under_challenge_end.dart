@@ -39,7 +39,7 @@ class UnderChallengeScreenEnd extends StatelessWidget {
             MaterialPageRoute(
               builder: (_) => UnderChallengeScreenEndFeed(),
             ),
-            (route) => false);
+            (route) => route.settings.name == '/');
     }
 }
 

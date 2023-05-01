@@ -39,12 +39,12 @@ class ChallengeRunning extends StatelessWidget {
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                           builder: (_) => TimerScreen(
-                            path: 'UnderChallenge',
+                            path: '/UnderChallenge',
                             // 수정 필요함
                             initialPosition: CameraPosition(target: LatLng(0, 0), zoom: 30),
                           ),
                         ),
-                        (route) => false);
+                        (route) => route.settings.name == '/');
                   },
                   iconNamed: Icons.play_arrow,
                 ),

@@ -1,3 +1,4 @@
+import 'package:another/screens/running/running_feed_complete.dart';
 import 'package:another/screens/running/under_challenge.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/material.dart';
@@ -72,8 +73,8 @@ class UnderChallengeScreenEndFeed extends StatelessWidget {
                   ),
                   onPressed: () {
                     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) =>
-                        UnderChallenge()
-                    ), (route) => false);
+                        RunningFeedComplete()
+                    ), (route) => route.settings.name == '/');
                   },
                   child: Text(
                     '오운완 등록하기',

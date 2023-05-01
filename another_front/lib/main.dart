@@ -9,7 +9,7 @@ import 'package:intl/date_symbol_data_local.dart';
 void main() async {
   await initializeDateFormatting();
   runApp(MaterialApp(
-    initialRoute: 'home',
+    initialRoute: '/',
     theme: ThemeData(
         scaffoldBackgroundColor: BACKGROUND_COLOR,
         fontFamily: 'pretendard',
@@ -20,9 +20,9 @@ void main() async {
           fontSize: 50.0,
         ))),
     routes: {
-      'home': (context) => HomeScreen(),
-      'UnderRunning': (context) => UnderRunning(),
-      'UnderChallenge': (context) => UnderChallenge(),
+      '/': (context) => HomeScreen(),
+      '/UnderRunning': (context) => UnderRunning(),
+      '/UnderChallenge': (context) => UnderChallenge(),
     }
   ));
 }

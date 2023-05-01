@@ -10,13 +10,26 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../widgets/record_result.dart';
 
-class UnderChallenge extends StatelessWidget {
+class UnderChallenge extends StatefulWidget {
   UnderChallenge({Key? key}) : super(key: key);
 
-  GoogleMapController? mapController;
   static late final List<Marker> markers = [];
   static late final List<LatLng> polyPoints = [];
+
+  @override
+  State<UnderChallenge> createState() => _UnderChallengeState();
+}
+
+class _UnderChallengeState extends State<UnderChallenge> {
+  GoogleMapController? mapController;
+
   double runningId = 1;
+
+  @override
+  void dispose() {
+    mapController!.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +51,7 @@ class UnderChallenge extends StatelessWidget {
                     // 위치가 변경되었을 때 실햏하는 로직
                     if (snapshot.data != null && mapController != null) {
                       // 마커 리스트에 추가
-                      markers.add(Marker(
+                      UnderChallenge.markers.add(Marker(
                         markerId: MarkerId(runningId.toString()),
                         position: LatLng(
                             snapshot.data!.latitude, snapshot.data!.longitude),
@@ -46,7 +59,7 @@ class UnderChallenge extends StatelessWidget {
                       ));
                       runningId += 1;
                       // polypoint(지도에 그리는 점)에 추가
-                      polyPoints.add(LatLng(
+                      UnderChallenge.polyPoints.add(LatLng(
                           snapshot.data!.latitude, snapshot.data!.longitude));
                       // 화면 이동
                       mapController!.animateCamera(
@@ -65,12 +78,12 @@ class UnderChallenge extends StatelessWidget {
                       myLocationEnabled: true,
                       myLocationButtonEnabled: false,
                       onMapCreated: onMapCreated,
-                      markers: Set.of(markers),
+                      markers: Set.of(UnderChallenge.markers),
                       polylines: Set.of(
                         [
                           Polyline(
                             polylineId: PolylineId('temp'),
-                            points: polyPoints,
+                            points: UnderChallenge.polyPoints,
                             color: MAIN_COLOR,
                             // jointType: JointType.round,
                           ),
@@ -91,10 +104,12 @@ class UnderChallenge extends StatelessWidget {
       ),
     );
   }
+
   // 맵컨트롤러 받기 => 지도 카메라 위치 조정시 필요
   onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
+
   // 사용자에게 위치 동의 구하기 단계별로
   Future<String> checkPermission() async {
     final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
@@ -280,7 +295,7 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
         MaterialPageRoute(
           builder: (_) => UnderChallengeScreenEnd(),
         ),
-            (route) => false);
+            (route) => route.settings.name == '/');
   }
   void onChange() {
 

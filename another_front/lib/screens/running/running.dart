@@ -46,6 +46,11 @@ class _RunningTabState extends State<RunningTab> {
   static CameraPosition userPosition = initialPosition;
 
   @override
+  void dispose() {
+    mapController!.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -128,11 +133,11 @@ class _RunningTabState extends State<RunningTab> {
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
             builder: (_) => TimerScreen(
-              path: 'UnderRunning',
+              path: '/UnderRunning',
               initialPosition: userPosition,
             ),
         ),
-        (route) => false,
+        (route) => route.settings.name == '/',
     );
   }
 }

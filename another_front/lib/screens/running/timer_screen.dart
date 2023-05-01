@@ -78,7 +78,7 @@ class _TimerScreenState extends State<TimerScreen> {
           Navigator.of(context).pushNamedAndRemoveUntil(
               path,
                   arguments: initialPosition,
-                  (route) => false,
+                  (route) => route.settings.name == '/',
           );
         }
       },
