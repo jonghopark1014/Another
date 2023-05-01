@@ -41,7 +41,7 @@ class _RunningTabState extends State<RunningTab> {
   }
 
   static CameraPosition initialPosition = CameraPosition(
-      target: LatLng(37.523327, 126.921252), zoom: 30
+      target: LatLng(37.523327, 126.921252), zoom: 20
   );
   static CameraPosition userPosition = initialPosition;
 
@@ -69,14 +69,14 @@ class _RunningTabState extends State<RunningTab> {
                         userPosition = CameraPosition(
                             target: LatLng(
                                 snapshot.data!.latitude, snapshot.data!.longitude
-                            ), zoom: 30
+                            ), zoom: 20
                         );
                         // 지도를 이동된 위치에 맞춤
                         mapController!.animateCamera(CameraUpdate.newCameraPosition(
                             CameraPosition(
                                 target: LatLng(
                                     snapshot.data!.latitude, snapshot.data!.longitude
-                                ), zoom: 30
+                                ), zoom: 20
                             )
                         ));
                       }
@@ -96,7 +96,7 @@ class _RunningTabState extends State<RunningTab> {
                 );
               },
             ),
-            // 러닝중 데이터 화면 =============================
+            // 러닝 전 화면 =============================
             Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

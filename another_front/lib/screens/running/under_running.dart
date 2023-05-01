@@ -9,21 +9,9 @@ import 'dart:async';
 
 import '../../widgets/record_result.dart';
 
-class UnderRunning extends StatefulWidget {
-  const UnderRunning({Key? key}) : super(key: key);
+class UnderRunning extends StatelessWidget {
+  UnderRunning({Key? key}) : super(key: key);
 
-  @override
-  State<UnderRunning> createState() => _UnderRunningState();
-}
-
-class _UnderRunningState extends State<UnderRunning> {
-  late Timer _timer;
-
-  int seconds = 0;
-  int minutes = 0;
-  int hours = 0;
-  bool isStart = false;
-  double runningId = 1;
   // 지도에 위치 그리기
   GoogleMapController? mapController;
   // static CameraPosition initialPosition =
@@ -33,9 +21,11 @@ class _UnderRunningState extends State<UnderRunning> {
   double runningDistance = 0;
   LatLng beforeLatLng = LatLng(36.3600, 127.3448);
   LatLng nowLatLng = LatLng(36.3600, 127.3448);
+  double runningId = 1;
 
   // 거리 계산하는 메서드
   void _distanceCal(LatLng start, LatLng end) {
+
     var p = 0.017453292519943295;
     var a = 0.5 -
         cos((end.latitude - start.latitude) * p) / 2 +
@@ -44,28 +34,6 @@ class _UnderRunningState extends State<UnderRunning> {
     runningDistance += (12742 * asin(sqrt(a))).round();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        seconds++;
-        if (seconds == 60) {
-          minutes += 1;
-          seconds = 0;
-        } else if (minutes == 60) {
-          hours += 1;
-          minutes = 0;
-        }
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,10 +57,8 @@ class _UnderRunningState extends State<UnderRunning> {
                       // 거리 계산
                       nowLatLng = LatLng(
                           snapshot.data!.latitude, snapshot.data!.longitude);
-                      setState(() {
-                        _distanceCal(beforeLatLng, nowLatLng);
-                        beforeLatLng = nowLatLng;
-                      });
+                      _distanceCal(beforeLatLng, nowLatLng);
+                      beforeLatLng = nowLatLng;
                       // 마커 리스트에 추가
                       markers.add(Marker(
                         markerId: MarkerId(runningId.toString()),
@@ -141,91 +107,14 @@ class _UnderRunningState extends State<UnderRunning> {
               );
             },
           ),
-          Container(
-            color: BACKGROUND_COLOR,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SafeArea(
-                child: Center(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 282,
-                      ),
-                      RecordResult(
-                        timer:
-                            '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}',
-                        distance: runningDistance.toString(),
-                      ),
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            // RunningCircleButton(iconNamed: Icons.play_arrow,onPressed: ,),
-                            isStart
-                                ? RunningCircleButton(
-                                    iconNamed: Icons.play_arrow,
-                                    onPressed: onStart,
-                                  )
-                                : RunningCircleButton(
-                                    iconNamed: Icons.pause,
-                                    onPressed: onPause,
-                                  ),
-                            GestureDetector(
-                              onLongPress: () {
-                                onStop();
-                              },
-                              child: RunningCircleButton(
-                                iconNamed: Icons.stop,
-                                onPressed: onChange,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
+          // 러닝 중 데이터 출력
+          UnderRunningStatus(initialPosition: initialPosition),
         ],
       ),
     );
   }
 
-  void onStart() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        isStart = false;
-        seconds++;
-        if (seconds == 60) {
-          minutes += 1;
-          seconds = 0;
-        } else if (minutes == 60) {
-          hours += 1;
-          minutes = 0;
-        }
-      });
-    });
-  }
 
-  void onPause() {
-    setState(() {
-      isStart = !isStart;
-    });
-    _timer?.cancel();
-  }
-
-  void onStop() {
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (_) => UnderRunningScreenEnd(),
-        ),
-        (route) => false);
-  }
-
-  void onChange() {}
 
   onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -254,4 +143,156 @@ class _UnderRunningState extends State<UnderRunning> {
 
     return '위치 권한이 허가 되었습니다.';
   }
+}
+// 지도를 매번 setState로 매초 다시 그리면 터짐
+// 그래서 따로 뺌
+class UnderRunningStatus extends StatefulWidget {
+  final CameraPosition initialPosition;
+  const UnderRunningStatus({
+    required this.initialPosition,
+    Key? key
+  }) : super(key: key);
+
+  @override
+  State<UnderRunningStatus> createState() => _UnderRunningStatusState();
+}
+
+class _UnderRunningStatusState extends State<UnderRunningStatus> {
+  // 거리
+  double runningDistance = 0;
+  late Position currentPosition;
+  late Position beforePosition = Position(
+    longitude: widget.initialPosition.target.longitude,
+    latitude: widget.initialPosition.target.latitude,
+    accuracy: 0, altitude: 0, heading: 0, speed: 0, speedAccuracy: 0, timestamp: DateTime(hours),
+  );
+  // 시간
+  late Timer _timer;
+
+  int seconds = 0;
+  int minutes = 0;
+  int hours = 0;
+  bool isStart = false;
+  // 비동기로 거리 받아서 계산
+  Future setDistance() async {
+    currentPosition = await Geolocator.getCurrentPosition();
+    if (isStart == false) {
+      runningDistance += Geolocator.distanceBetween(
+        beforePosition.latitude,
+        beforePosition.longitude,
+        currentPosition.latitude,
+        currentPosition.longitude,
+      ).round();
+    }
+    // 갱신
+    beforePosition = currentPosition;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        setDistance();
+        seconds++;
+        if (seconds == 60) {
+          minutes += 1;
+          seconds = 0;
+        } else if (minutes == 60) {
+          hours += 1;
+          minutes = 0;
+        }
+      });
+    });
+  }
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return // 달릴 때 데이터 표시
+      Container(
+        color: BACKGROUND_COLOR,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SafeArea(
+            child: Center(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 282,
+                  ),
+                  RecordResult(
+                    timer:
+                    '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}',
+                    distance: runningDistance.toString(),
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        // RunningCircleButton(iconNamed: Icons.play_arrow,onPressed: ,),
+                        isStart
+                            ? RunningCircleButton(
+                          iconNamed: Icons.play_arrow,
+                          onPressed: onStart,
+                        )
+                            : RunningCircleButton(
+                          iconNamed: Icons.pause,
+                          onPressed: onPause,
+                        ),
+                        GestureDetector(
+                          onLongPress: () {
+                            onStop();
+                          },
+                          child: RunningCircleButton(
+                            iconNamed: Icons.stop,
+                            onPressed: onChange,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+  }
+
+  void onStart() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        setDistance();
+        isStart = false;
+        seconds++;
+        if (seconds == 60) {
+          minutes += 1;
+          seconds = 0;
+        } else if (minutes == 60) {
+          hours += 1;
+          minutes = 0;
+        }
+      });
+    });
+  }
+
+  void onPause() {
+    setState(() {
+      isStart = !isStart;
+    });
+    _timer?.cancel();
+  }
+
+  void onStop() {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => UnderRunningScreenEnd(),
+        ),
+            (route) => false);
+  }
+  void onChange() {}
 }
