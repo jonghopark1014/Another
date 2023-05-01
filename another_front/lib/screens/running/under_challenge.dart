@@ -1,3 +1,4 @@
+import 'package:another/constant/color.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -5,16 +6,138 @@ import 'package:another/screens/running/under_challenge_end.dart';
 import 'package:another/screens/running/widgets/distancebar.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
 import 'package:another/widgets/target.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../widgets/record_result.dart';
 
-class UnderChallenge extends StatefulWidget {
-  const UnderChallenge({Key? key}) : super(key: key);
+class UnderChallenge extends StatelessWidget {
+  UnderChallenge({Key? key}) : super(key: key);
+
+  GoogleMapController? mapController;
+  static late final List<Marker> markers = [];
+  static late final List<LatLng> polyPoints = [];
+  double runningId = 1;
 
   @override
-  State<UnderChallenge> createState() => _UnderChallengeState();
+  Widget build(BuildContext context) {
+    final initialPosition = ModalRoute.of(context)!.settings.arguments as CameraPosition;
+
+    return Scaffold(
+      body: Stack(
+        children: [
+          FutureBuilder(
+            future: checkPermission(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.data == '위치 권한이 허가 되었습니다.') {
+                return StreamBuilder<Position>(
+                  stream: Geolocator.getPositionStream(),
+                  builder: (context, snapshot) {
+                    // 위치가 변경되었을 때 실햏하는 로직
+                    if (snapshot.data != null && mapController != null) {
+                      // 마커 리스트에 추가
+                      markers.add(Marker(
+                        markerId: MarkerId(runningId.toString()),
+                        position: LatLng(
+                            snapshot.data!.latitude, snapshot.data!.longitude),
+                        visible: false,
+                      ));
+                      runningId += 1;
+                      // polypoint(지도에 그리는 점)에 추가
+                      polyPoints.add(LatLng(
+                          snapshot.data!.latitude, snapshot.data!.longitude));
+                      // 화면 이동
+                      mapController!.animateCamera(
+                        CameraUpdate.newCameraPosition(
+                          CameraPosition(
+                              target: LatLng(snapshot.data!.latitude,
+                                  snapshot.data!.longitude),
+                              zoom: 20),
+                        ),
+                      );
+                    }
+                    return GoogleMap(
+                      initialCameraPosition: initialPosition,
+                      mapType: MapType.normal,
+                      zoomControlsEnabled: false,
+                      myLocationEnabled: true,
+                      myLocationButtonEnabled: false,
+                      onMapCreated: onMapCreated,
+                      markers: Set.of(markers),
+                      polylines: Set.of(
+                        [
+                          Polyline(
+                            polylineId: PolylineId('temp'),
+                            points: polyPoints,
+                            color: MAIN_COLOR,
+                            // jointType: JointType.round,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              }
+              return Center(
+                child: Text(snapshot.data),
+              );
+            },
+          ),
+          // 러닝 중 데이터 출력
+          UnderChallengeStatus(initialPosition: initialPosition),
+        ],
+      ),
+    );
+  }
+  // 맵컨트롤러 받기 => 지도 카메라 위치 조정시 필요
+  onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+  // 사용자에게 위치 동의 구하기 단계별로
+  Future<String> checkPermission() async {
+    final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!isLocationEnabled) {
+      return '위치 서비스를 활성화 해주세요';
+    }
+    LocationPermission checkedPermission = await Geolocator.checkPermission();
+    if (checkedPermission == LocationPermission.denied) {
+      checkedPermission = await Geolocator.requestPermission();
+      if (checkedPermission == LocationPermission.denied) {
+        return '위치 권한을 허가해주세요.';
+      }
+    }
+    if (checkedPermission == LocationPermission.deniedForever) {
+      return '앱의 위치 권한을 세팅에서 허가해주세요';
+    }
+    return '위치 권한이 허가 되었습니다.';
+  }
 }
 
-class _UnderChallengeState extends State<UnderChallenge> {
+
+
+class UnderChallengeStatus extends StatefulWidget {
+  final CameraPosition initialPosition;
+  const UnderChallengeStatus({
+    required this.initialPosition,
+    Key? key
+  }) : super(key: key);
+
+  @override
+  State<UnderChallengeStatus> createState() => _UnderChallengeStatusState();
+}
+
+class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
+  // 거리
+  double runningDistance = 0;
+  late Position currentPosition;
+  late Position beforePosition = Position(
+    longitude: widget.initialPosition.target.longitude,
+    latitude: widget.initialPosition.target.latitude,
+    accuracy: 0, altitude: 0, heading: 0, speed: 0, speedAccuracy: 0, timestamp: DateTime(hours),
+  );
+  // 시간
   late Timer _timer;
 
   int seconds = 0;
@@ -23,14 +146,28 @@ class _UnderChallengeState extends State<UnderChallenge> {
 
   // 여기에다가 변화는 값 만들어 줘야됨
   double _currentSliderValue = 80.0;
-  bool isStart = false;
-
+  late bool isStart;
+  // 비동기로 거리 받아서 계산
+  Future setDistance() async {
+    currentPosition = await Geolocator.getCurrentPosition();
+    if (isStart) {
+      runningDistance += Geolocator.distanceBetween(
+        beforePosition.latitude,
+        beforePosition.longitude,
+        currentPosition.latitude,
+        currentPosition.longitude,
+      ).round();
+    }
+    // 갱신
+    beforePosition = currentPosition;
+  }
   @override
   void initState() {
     super.initState();
-
+    isStart = true;
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
+        setDistance();
         seconds++;
         if (seconds == 60) {
           minutes += 1;
@@ -99,12 +236,12 @@ class _UnderChallengeState extends State<UnderChallenge> {
                       // RunningCircleButton(iconNamed: Icons.play_arrow,onPressed: ,),
                       isStart
                           ? RunningCircleButton(
-                        iconNamed: Icons.play_arrow,
-                        onPressed: onStart,
-                      )
-                          : RunningCircleButton(
                         iconNamed: Icons.pause,
                         onPressed: onPause,
+                      )
+                          : RunningCircleButton(
+                        iconNamed: Icons.play_arrow,
+                        onPressed: onStart,
                       ),
                       GestureDetector(
                         onLongPress: () {
@@ -127,18 +264,8 @@ class _UnderChallengeState extends State<UnderChallenge> {
   }
 
   void onStart() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        isStart = false;
-        seconds++;
-        if (seconds == 60) {
-          minutes += 1;
-          seconds = 0;
-        } else if (minutes == 60) {
-          hours += 1;
-          minutes = 0;
-        }
-      });
+    setState(() {
+      isStart = !isStart;
     });
   }
 
@@ -146,7 +273,6 @@ class _UnderChallengeState extends State<UnderChallenge> {
     setState(() {
       isStart = !isStart;
     });
-    _timer?.cancel();
   }
 
   void onStop() {

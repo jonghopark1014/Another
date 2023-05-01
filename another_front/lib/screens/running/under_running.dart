@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'dart:math';
 import 'dart:async';
 
 import '../../widgets/record_result.dart';
@@ -14,26 +13,14 @@ class UnderRunning extends StatelessWidget {
 
   // 지도에 위치 그리기
   GoogleMapController? mapController;
-  // static CameraPosition initialPosition =
-      // CameraPosition(target: LatLng(37.523327, 126.921252), zoom: 30);
   static late final List<Marker> markers = [];
   static late final List<LatLng> polyPoints = [];
-  double runningDistance = 0;
-  LatLng beforeLatLng = LatLng(36.3600, 127.3448);
-  LatLng nowLatLng = LatLng(36.3600, 127.3448);
   double runningId = 1;
-
-  // 거리 계산하는 메서드
-  void _distanceCal(LatLng start, LatLng end) {
-
-    var p = 0.017453292519943295;
-    var a = 0.5 -
-        cos((end.latitude - start.latitude) * p) / 2 +
-        cos(start.latitude * p) * cos(end.latitude * p) *
-            (1 - cos((end.longitude - start.longitude) * p))/2;
-    runningDistance += (12742 * asin(sqrt(a))).round();
+  
+  @override
+  void dispose() {
+    // 스크린샷 찍어서 넘겨야 함.. 라우팅도.. 여기서 해야할듯?
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +41,6 @@ class UnderRunning extends StatelessWidget {
                   builder: (context, snapshot) {
                     // 위치가 변경되었을 때 실햏하는 로직
                     if (snapshot.data != null && mapController != null) {
-                      // 거리 계산
-                      nowLatLng = LatLng(
-                          snapshot.data!.latitude, snapshot.data!.longitude);
-                      _distanceCal(beforeLatLng, nowLatLng);
-                      beforeLatLng = nowLatLng;
                       // 마커 리스트에 추가
                       markers.add(Marker(
                         markerId: MarkerId(runningId.toString()),
@@ -113,34 +95,26 @@ class UnderRunning extends StatelessWidget {
       ),
     );
   }
-
-
-
+  // 맵컨트롤러 받기 => 지도 카메라 위치 조정시 필요
   onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
-
+  // 사용자에게 위치 동의 구하기 단계별로
   Future<String> checkPermission() async {
     final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
-
     if (!isLocationEnabled) {
       return '위치 서비스를 활성화 해주세요';
     }
-
     LocationPermission checkedPermission = await Geolocator.checkPermission();
-
     if (checkedPermission == LocationPermission.denied) {
       checkedPermission = await Geolocator.requestPermission();
-
       if (checkedPermission == LocationPermission.denied) {
         return '위치 권한을 허가해주세요.';
       }
     }
-
     if (checkedPermission == LocationPermission.deniedForever) {
       return '앱의 위치 권한을 세팅에서 허가해주세요';
     }
-
     return '위치 권한이 허가 되었습니다.';
   }
 }
@@ -172,11 +146,11 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
   int seconds = 0;
   int minutes = 0;
   int hours = 0;
-  bool isStart = false;
+  late bool isStart;
   // 비동기로 거리 받아서 계산
   Future setDistance() async {
     currentPosition = await Geolocator.getCurrentPosition();
-    if (isStart == false) {
+    if (isStart) {
       runningDistance += Geolocator.distanceBetween(
         beforePosition.latitude,
         beforePosition.longitude,
@@ -187,21 +161,26 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
     // 갱신
     beforePosition = currentPosition;
   }
-
+  // 시간초는 거리 갱신할때도 쓰면 좋아서 그대로 흘러감 
+  // 대신 저장의 유무를 정지, 시작의 상태에 따라서 저장
   @override
   void initState() {
     super.initState();
+    isStart = true;
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         setDistance();
-        seconds++;
-        if (seconds == 60) {
-          minutes += 1;
-          seconds = 0;
-        } else if (minutes == 60) {
-          hours += 1;
-          minutes = 0;
+        if (isStart) {
+          seconds++;
+          if (seconds == 60) {
+            minutes += 1;
+            seconds = 0;
+          } else if (minutes == 60) {
+            hours += 1;
+            minutes = 0;
+          }
         }
+
       });
     });
   }
@@ -236,12 +215,12 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
                         // RunningCircleButton(iconNamed: Icons.play_arrow,onPressed: ,),
                         isStart
                             ? RunningCircleButton(
-                          iconNamed: Icons.play_arrow,
-                          onPressed: onStart,
-                        )
-                            : RunningCircleButton(
                           iconNamed: Icons.pause,
                           onPressed: onPause,
+                        )
+                            : RunningCircleButton(
+                          iconNamed: Icons.play_arrow,
+                          onPressed: onStart,
                         ),
                         GestureDetector(
                           onLongPress: () {
@@ -262,31 +241,20 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
         ),
       );
   }
-
+  // 시작 버튼을 누르면 동작 => 시간 갱신 시작
   void onStart() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        setDistance();
-        isStart = false;
-        seconds++;
-        if (seconds == 60) {
-          minutes += 1;
-          seconds = 0;
-        } else if (minutes == 60) {
-          hours += 1;
-          minutes = 0;
-        }
-      });
+    setState(() {
+      isStart = !isStart;
     });
   }
-
+  // 정지 버튼을 누르면 동작 => 시간 갱신 정지
   void onPause() {
     setState(() {
       isStart = !isStart;
     });
-    _timer?.cancel();
+    // _timer?.cancel();
   }
-
+  // 러닝 종료 시 동작
   void onStop() {
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
