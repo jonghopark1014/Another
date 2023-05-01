@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:another/screens/running/timer_screen.dart';
 import 'package:another/screens/running/widgets/before_running_map.dart';
 import 'package:another/screens/running/widgets/running_carousel.dart';
@@ -7,6 +5,7 @@ import 'package:another/screens/running/widgets/running_my_history.dart';
 import 'package:another/screens/running/widgets/running_setting_button.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class RunningTab extends StatefulWidget {
@@ -17,10 +16,34 @@ class RunningTab extends StatefulWidget {
 }
 
 class _RunningTabState extends State<RunningTab> {
+  // 지도관련
+  GoogleMapController? mapController;
+  onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+  Future<String> checkPermission() async {
+    final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+    if(!isLocationEnabled) {
+      return '위치 서비스를 활성화 해주세요';
+    }
+    LocationPermission checkedPermission = await Geolocator.checkPermission();
+    if(checkedPermission == LocationPermission.denied){
+      checkedPermission = await Geolocator.requestPermission();
+      if(checkedPermission == LocationPermission.denied) {
+        return '위치 권한을 허가해주세요.';
+      }
+    }
+    if(checkedPermission == LocationPermission.deniedForever) {
+      return '앱의 위치 권한을 세팅에서 허가해주세요';
+    }
+    // 위치 권한 완료
+    return '위치 권한이 허가 되었습니다.';
+  }
 
   static CameraPosition initialPosition = CameraPosition(
       target: LatLng(37.523327, 126.921252), zoom: 30
   );
+  static CameraPosition userPosition = initialPosition;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +51,52 @@ class _RunningTabState extends State<RunningTab> {
       child: Scaffold(
         body: Stack(
           children: [
-            beforeRunningMap(CameraPosition(
-                target: LatLng(37.523327, 126.921252), zoom: 30
-            ),),
-
+            // 러닝중 지도 ====================================================
+            FutureBuilder(
+              future: checkPermission(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if(snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                      child: CircularProgressIndicator()
+                  );
+                }
+                if(snapshot.data == '위치 권한이 허가 되었습니다.'){
+                  return StreamBuilder<Position>(
+                    stream: Geolocator.getPositionStream(),
+                    builder: (context, snapshot) {
+                      if (snapshot.data != null && mapController != null) {
+                        // 러닝중 초기 위치를 위해
+                        userPosition = CameraPosition(
+                            target: LatLng(
+                                snapshot.data!.latitude, snapshot.data!.longitude
+                            ), zoom: 30
+                        );
+                        // 지도를 이동된 위치에 맞춤
+                        mapController!.animateCamera(CameraUpdate.newCameraPosition(
+                            CameraPosition(
+                                target: LatLng(
+                                    snapshot.data!.latitude, snapshot.data!.longitude
+                                ), zoom: 30
+                            )
+                        ));
+                      }
+                      return GoogleMap(
+                        initialCameraPosition: initialPosition,
+                        mapType: MapType.normal,
+                        zoomControlsEnabled: false,
+                        myLocationEnabled: true,
+                        myLocationButtonEnabled: false,
+                        onMapCreated: onMapCreated,
+                      );
+                    },
+                  );
+                }
+                return Center(
+                  child: Text(snapshot.data),
+                );
+              },
+            ),
+            // 러닝중 데이터 화면 =============================
             Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -62,20 +127,13 @@ class _RunningTabState extends State<RunningTab> {
   void onPressed() {
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-            builder: (_) => TimerScreen(),
-            settings: RouteSettings(
-              arguments: LocationArguments('UnderRunning', initialPosition),
-            )
+            builder: (_) => TimerScreen(
+              path: 'UnderRunning',
+              initialPosition: userPosition,
+            ),
         ),
         (route) => false,
     );
   }
-}
-
-class LocationArguments{
-  late final String page;
-  late final CameraPosition initialPosition;
-
-  LocationArguments(this.page, this.initialPosition);
 }
 

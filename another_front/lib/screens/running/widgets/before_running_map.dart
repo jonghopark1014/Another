@@ -51,7 +51,7 @@ FutureBuilder<String> beforeRunningMap(CameraPosition initialPosition) {
                   CameraPosition(
                       target: LatLng(
                           snapshot.data!.latitude, snapshot.data!.longitude
-                      ), zoom: 20
+                      ), zoom: 30
                   )
               ));
             }

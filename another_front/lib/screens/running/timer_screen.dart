@@ -4,11 +4,18 @@ import 'package:another/screens/running/running.dart';
 import 'package:another/screens/running/under_challenge.dart';
 import 'package:another/screens/running/under_running.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../constant/color.dart';
 
 class TimerScreen extends StatefulWidget {
-  const TimerScreen({Key? key}) : super(key: key);
+  final String path;
+  final CameraPosition initialPosition;
+  const TimerScreen({
+    required this.path,
+    required this.initialPosition,
+    Key? key
+  }) : super(key: key);
 
   @override
   State<TimerScreen> createState() => _TimerScreenState();
@@ -23,10 +30,9 @@ class _TimerScreenState extends State<TimerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final arguments = ModalRoute.of(context)!.settings.arguments as LocationArguments;
 
     if (first) {
-      _start(arguments);
+      _start(widget.path, widget.initialPosition);
       first = false;
     }
     return Scaffold(
@@ -53,7 +59,7 @@ class _TimerScreenState extends State<TimerScreen> {
     );
   }
 
-  void _start(LocationArguments arg) {
+  void _start(String path, CameraPosition initialPosition) {
     _timer = Timer.periodic(
       Duration(seconds: 1),
       (timer) {
@@ -70,8 +76,8 @@ class _TimerScreenState extends State<TimerScreen> {
           //     )
           // )
           Navigator.of(context).pushNamedAndRemoveUntil(
-              arg.page,
-                  arguments: arg.initialPosition,
+              path,
+                  arguments: initialPosition,
                   (route) => false,
           );
         }

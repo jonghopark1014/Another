@@ -38,9 +38,10 @@ class ChallengeRunning extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
-                          builder: (_) => TimerScreen(),
-                          settings: RouteSettings(
-                            arguments: LocationArguments('UnderChallenge', CameraPosition(target: LatLng(37.523327, 126.921252), zoom: 20)),
+                          builder: (_) => TimerScreen(
+                            path: 'UnderChallenge',
+                            // 수정 필요함
+                            initialPosition: CameraPosition(target: LatLng(0, 0), zoom: 30),
                           ),
                         ),
                         (route) => false);

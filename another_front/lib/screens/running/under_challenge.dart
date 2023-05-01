@@ -90,6 +90,7 @@ class _UnderChallengeState extends State<UnderChallenge> {
                 RecordResult(
                   timer:
                   '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}',
+                  distance: '0',
                 ),
                 Expanded(
                   child: Row(

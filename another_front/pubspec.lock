@@ -244,10 +244,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: "4ffaf5372faee45e5df11989de0439c383b5d35e69a710b857aca689e98d6823"
+      sha256: "7d2b25e0aec884495d782bb60cd09f779a92370035374c5ec622d09782ac68fe"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.6+9"
+    version: "0.8.6+10"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -296,6 +296,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.7"
+  latlong2:
+    dependency: "direct main"
+    description:
+      name: latlong2
+      sha256: "408993a0e3f46e79ce1f129e4cb0386eef6d48dfa6394939ecacfbd7049154ec"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.1"
   lints:
     dependency: transitive
     description:
