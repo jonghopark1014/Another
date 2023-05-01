@@ -10,6 +10,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -21,8 +22,14 @@ import java.io.InputStreamReader;
 @Slf4j
 public class VersusService {
 
+    @Value("${data.hdfs-url}")
+    private String hdfsUrl;
+
+    @Value("${data.hdfs-port}")
+    private String hdfsPort;
+
     /**
-     * HDFS에서 경쟁 데이터 받아오기
+     * 경쟁 시작
      *
      * @param runningId
      * @return JSONArray
@@ -31,12 +38,12 @@ public class VersusService {
         JSONArray response = new JSONArray();
         try {
             FileIO fileIO = new FileIO();
-            // HDFS 파일 시스템 객체 생성
 
-            FileSystem fs = FileSystem.get(fileIO.getConf());
+            // HDFS 파일 시스템 객체 생성
+            FileSystem fs = FileSystem.get(fileIO.getConf(hdfsUrl, hdfsPort));
 
             // 파일 경로 설정
-            Path filePath = new Path(fileIO.versusData(runningId));
+            Path filePath = new Path(fileIO.versusData(runningId, hdfsUrl, hdfsPort));
 
             // 파일 목록 가져오기
             FileStatus[] fileStatuses = fs.globStatus(filePath);
@@ -47,23 +54,23 @@ public class VersusService {
                 // 파일 읽기 코드 작성
                 BufferedReader br = new BufferedReader(new InputStreamReader(fs.open(path)));
                 String line;
-                JSONObject jsonObject ;
+                JSONObject jsonObject;
 
                 while ((line = br.readLine()) != null) {
+                    if (line == null) break;
                     // json 형태로 변환
                     jsonObject = (JSONObject) parser.parse(line);
                     response.add(jsonObject);
                 }
                 br.close();
             }
-            // 파일 시스템 객체 닫기
-            fs.close();
         } catch (IOException e) {
-            new IllegalArgumentException("IO Exception이 발생했습니다.");
+            new IllegalArgumentException("러닝기록을 읽어오는 부분에서 에러가 발생했습니다.");
+        } catch (ParseException e) {
+            new IllegalArgumentException("Json 변환 과정에서 에러가 발생했습니다.");
         }
-        catch (ParseException e) {
-            new IllegalArgumentException("ParseException이 발생했습니다.");
-        }
+        if (response.isEmpty())
+            new IllegalArgumentException("해당 러닝기록이 비어있습니다.");
         return response;
     }
 }

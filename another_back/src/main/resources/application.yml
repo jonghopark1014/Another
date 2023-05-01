@@ -1,23 +1,12 @@
 spring:
   profiles:
     group:
-      "local" : "local, common"
-      "development" : "development, common"
+      "local": "local, common"
+      "development": "development, common"
     active: local
-
   mvc:
     pathmatch:
-      matching-strategy : ant_path_matcher
----
-spring:
-  config:
-    activate:
-      on-profile: "common"
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_DOMAIN}:${DB_PORT}/another?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+      matching-strategy: ant_path_matcher
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
@@ -26,6 +15,7 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+---
 logging:
   level:
     root: info
@@ -33,7 +23,7 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: error
-
+---
 cloud:
   aws:
     region:
@@ -57,8 +47,23 @@ spring:
       on-profile: "local"
   file-dir: /src/main/resources/static/
 ---
+spring:
+  config:
+    activate:
+      on-profile: "common"
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB_DOMAIN}:${DB_PORT}/another?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+---
 cloud:
   aws:
     credentials:
       access-key: ${ACCESS_KEY}
       secret-key: ${SECRET_KEY}
+---
+data:
+  hdfs-url: ${HDFS_URL}
+  hdfs-port: ${HDFS_PORT}
+
