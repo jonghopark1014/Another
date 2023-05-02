@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,21 +19,33 @@ public class UserService {
     private final S3UploaderService s3UploaderService;
     private final BCryptPasswordEncoder passwordEncoder;
 
+    /*
+    닉네임 중복 API만들기
+     */
+    public String checkDuplicatedNickname(String nickname) {
+        Optional<User> user = userRepository.findUserByNickname(nickname);
+        return user.map(User::getNickname).orElse(null);
+    }
+
+    /*
+    닉네임 2글자 ~ 8글자
+    비밀번호 8~16(영어,숫자,특수문자) 3개다 포함
+    이메일은 골뱅이다음 두글자이상. 두글자이상
+     */
     public Long join(UserJoinDto userJoinDto) throws IOException {
         checkDuplicatedUsername(userJoinDto.getUsername());
         String imageURL;
-        imageURL = s3UploaderService.upload(userJoinDto.getProfilePic(), "ssafy308-another", "image");
+//        imageURL = s3UploaderService.upload(userJoinDto.getProfilePic(), "ssafy308-another", "image");
 
         User user = User.builder()
                 .height(userJoinDto.getHeight())
                 .sex(userJoinDto.getSex())
-                .password(passwordEncoder.encode(userJoinDto.getPassword()))
                 .exp(0)
                 .level(1)
+                .password(passwordEncoder.encode(userJoinDto.getPassword()))
                 .weight(userJoinDto.getWeight())
                 .username(userJoinDto.getUsername())
                 .nickname(userJoinDto.getNickname())
-                .profilePic(imageURL)
                 .role(Role.USER)
                 .build();
         return userRepository.save(user).getId();
