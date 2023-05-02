@@ -9,8 +9,9 @@ pipeline{
             steps{
                 script {
                     try{
-                        sh "docker-compose down"
+                        sh "docker stop ${DATA_CONTAINER_NAME}"
                         sleep 1
+                        sh "docker rm ${DATA_CONTAINER_NAME}"
                     }catch(e){
                         sh 'exit 0'
                     }
@@ -27,7 +28,7 @@ pipeline{
         }
         stage('Deploy'){
             steps {
-                sh "docker-compose up -d"
+                sh "docker run -d --name=${BACK_CONTAINER_NAME} -p 8082:8082 ${BACK_NAME}"
                 sh "docker image prune --force"
             }
         }
