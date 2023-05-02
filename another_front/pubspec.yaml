@@ -47,6 +47,8 @@ dependencies:
   fl_chart: ^0.62.0
   flutter_sensors: ^1.0.1
   syncfusion_flutter_charts: ^21.1.41
+  provider: ^6.0.1
+
 
   percent_indicator: ^4.0.1
 
