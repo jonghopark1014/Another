@@ -67,3 +67,11 @@ cloud:
 data:
   hdfs-url: ${HDFS_URL}
   hdfs-port: ${HDFS_PORT}
+---
+springfox:
+  documentation:
+    swagger:
+      v2:
+        path : /api
+    swagger-ui:
+      base-url: /api
