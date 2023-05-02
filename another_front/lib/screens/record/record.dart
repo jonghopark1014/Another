@@ -1,4 +1,5 @@
 import 'package:another/constant/color.dart';
+import 'package:another/screens/account/edit.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../account/login.dart';
@@ -8,6 +9,9 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'widgets/category_title.dart';
+import './widgets/record_running_history.dart';
+import '../../main.dart';
+import 'package:provider/provider.dart';
 
 class RecordTab extends StatelessWidget {
   const RecordTab({Key? key}) : super(key: key);
@@ -16,45 +20,46 @@ class RecordTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.black87,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+        backgroundColor: Colors.black87,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context); // 뒤로가기
+          },
+        ),
+        actions: [
+          ElevatedButton(
             onPressed: () {
-              Navigator.pop(context); // 뒤로가기
+              // 로그인 페이지로 이동하는 로직을 작성
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );
             },
+            child: Text('로그인'),
           ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                // 로그인 페이지로 이동하는 로직을 작성
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-              },
-              child: Text('로그인'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // 로그인 페이지로 이동하는 로직을 작성
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SignupUserInfoPage()),
-                );
-              },
-              child: Text('키 몸무게'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // 로그인 페이지로 이동하는 로직을 작성
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ChallengePage()),
-                );
-              },
-              child: Text('챌린지'),
-            ),
-          ]),
+          ElevatedButton(
+            onPressed: () {
+              // 로그인 페이지로 이동하는 로직을 작성
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SignupUserInfoPage()),
+              );
+            },
+            child: Text('키 몸무게'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              // 로그인 페이지로 이동하는 로직을 작성
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ChallengePage()),
+              );
+            },
+            child: Text('챌린지'),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16),
@@ -66,36 +71,57 @@ class RecordTab extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('안녕하세요 왕현석님!\n오늘도 함께 달려볼까요?',
-                      style: TextStyle(color: Colors.white)),
+                  Text(
+                    '안녕하세요 ${context.watch<UserInfo>().nickname}님!\n오늘도 함께 달려볼까요?',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   Column(
                     children: [
-                      Text('Lv.1', style: TextStyle(color: Colors.white)),
+                      Text(
+                        'Lv.1',
+                        style: TextStyle(color: Colors.white),
+                      ),
                       CircularPercentIndicator(
                         radius: 40.0,
                         lineWidth: 10.0,
                         percent: 0.6,
                         header: Text("Icon header"),
                         center: CircleAvatar(
-                          backgroundImage: AssetImage('assets/img/kazuha.jpg'),
+                          backgroundImage: AssetImage(
+                              '${context.watch<UserInfo>().profileImg}'),
                           radius: 35,
                         ),
                         backgroundColor: Colors.grey,
                         progressColor: Colors.blue,
                       ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.edit,
+                          color: WHITE_COLOR,
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfileEditPage()),
+                          );
+                        },
+                      )
                     ],
                   )
                 ],
               ),
-              Row(children: [
-                CategoryTitle(title: 'MY 챌린지'),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.arrow_forward_ios_outlined),
-                  color: Colors.white,
-                  iconSize: 14,
-                )
-              ]),
+              Row(
+                children: [
+                  CategoryTitle(title: 'MY 챌린지'),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.arrow_forward_ios_outlined),
+                    color: Colors.white,
+                    iconSize: 14,
+                  )
+                ],
+              ),
               MyChallenge(), // 나의 챌린지
               CategoryTitle(title: '나의 활동 기록'),
               MyRecord(),
@@ -113,22 +139,26 @@ class MyChallenge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.all(10),
-        child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(children: [
-              Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
-              SizedBox(width: 5),
-              Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
-              SizedBox(width: 5),
-              Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
-              SizedBox(width: 5),
-              Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
-              SizedBox(width: 5),
-              Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
-              SizedBox(width: 5),
-              Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
-            ])));
+      padding: EdgeInsets.all(10),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
+            SizedBox(width: 5),
+            Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
+            SizedBox(width: 5),
+            Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
+            SizedBox(width: 5),
+            Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
+            SizedBox(width: 5),
+            Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
+            SizedBox(width: 5),
+            Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -268,13 +298,29 @@ class _MyRecordContentsState extends State<MyRecordContents> {
 
 // 나중에 Pageview 써봐라
         widget.selectedIndex == 0
-            ? Text('인덱스 0임', style: TextStyle(color: Colors.white))
+            ? Column(
+                children: [
+                  TodayRecord(),
+                ],
+              )
             : widget.selectedIndex == 1
-                ? Text('인덱스 1임', style: TextStyle(color: Colors.white))
+                ? Column(
+                    children: [
+                      ThisWeekRecord(),
+                    ],
+                  )
                 : widget.selectedIndex == 2
-                    ? Text('인덱스 2임', style: TextStyle(color: Colors.white))
+                    ? Column(
+                        children: [
+                          ThisMonthRecord(),
+                        ],
+                      )
                     : widget.selectedIndex == 3
-                        ? Text('인덱스 3임', style: TextStyle(color: Colors.white))
+                        ? Column(
+                            children: [
+                              AllRecord(),
+                            ],
+                          )
                         : widget.selectedIndex == 4
                             ? Text('인덱스 4임',
                                 style: TextStyle(color: Colors.white))
@@ -296,6 +342,7 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
     DateTime.now().month,
     DateTime.now().day,
   );
+
   DateTime focusedDay = DateTime.now();
 
   @override
@@ -310,18 +357,32 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
           titleTextFormatter: (date, locale) =>
               DateFormat.yMMMM(locale).format(date),
           formatButtonVisible: false,
-          titleTextStyle: TextStyle(fontSize: 16, color: Colors.white),
-          headerPadding: EdgeInsets.symmetric(vertical: 4.0),
+          titleTextStyle: TextStyle(fontSize: 20.0, color: Colors.white),
+          headerPadding: const EdgeInsets.symmetric(vertical: 4.0),
           leftChevronIcon:
-              Icon(Icons.arrow_left, size: 32, color: Colors.white),
+              Icon(Icons.arrow_left, size: 40.0, color: Colors.white),
           rightChevronIcon:
-              Icon(Icons.arrow_right, size: 32, color: Colors.white),
+              Icon(Icons.arrow_right, size: 40.0, color: Colors.white),
         ),
         calendarStyle: CalendarStyle(
-            canMarkersOverflow: false, // marker 여러개 일 때 cell 영역을 벗어날지 여부
-            markerSize: 10, // 마커 크기 조절
-            markerSizeScale: 10, // 마커 크기 비율 조절
-            markerMargin: EdgeInsets.symmetric(horizontal: 0.3), // 마커 margin 조절
+            canMarkersOverflow: false,
+            // marker 여러개 일 때 cell 영역을 벗어날지 여부
+            markersAutoAligned: true,
+            // 자동정렬 여부
+            markerSize: 10,
+            // 마커 크기 조절
+            markerSizeScale: 10,
+            // 마커 크기 비율 조절
+            markersAnchor: 0.7,
+            // 마커 기준점 조절
+            markerMargin: EdgeInsets.symmetric(horizontal: 0.3),
+            // 마커 margin 조절
+            markersAlignment: Alignment.bottomCenter,
+            // 마커 위치 조절
+            markersMaxCount: 3,
+            // 한줄에 보여지는 마커 개수
+            markersOffset: PositionedOffset(),
+            // 마커 모양 조절
             markerDecoration: BoxDecoration(
               color: Colors.white,
               shape: BoxShape.circle,
@@ -329,6 +390,8 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
             defaultTextStyle: TextStyle(
               color: Colors.white,
             ),
+            isTodayHighlighted: true,
+            // today 표시 여부
             // today 글자 스타일
             todayTextStyle: TextStyle(
               color: MAIN_COLOR,
@@ -340,8 +403,10 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
                 color: MAIN_COLOR,
               ),
             ),
+            // selectedDay 글자 조정
+            selectedTextStyle: const TextStyle(color: Colors.white),
             // selectedDay 모양 조정
-            selectedDecoration: BoxDecoration(
+            selectedDecoration: const BoxDecoration(
               color: MAIN_COLOR,
               shape: BoxShape.circle,
             ),
@@ -354,8 +419,6 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
           setState(() {
             this.selectedDay = selectedDay;
             this.focusedDay = focusedDay;
-            print('selectedDay는 $selectedDay');
-            print('focusedDay $focusedDay');
           });
 
           // 현재 선택된 달력의 월과 다른 경우, 해당 달력으로 이동
