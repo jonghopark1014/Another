@@ -163,6 +163,8 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
   int minutes = 0;
   int hours = 0;
 
+  String timeResult = '00:00:00';
+
   // 여기에다가 변화는 값 만들어 줘야됨
   double _currentSliderValue = 80.0;
   late bool isStart;
@@ -188,6 +190,10 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
     int paceSec = paceBase % 60;
     userPace = "${paceMin.toString()}'${paceSec.toString()}''";
   }
+  // 상대방
+  double _currentYouSliderValue = 60.0;
+  bool isStart = false;
+
   @override
   void initState() {
     super.initState();
@@ -206,6 +212,8 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
           }
           paceCal();
         }
+        timeResult =
+            '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}';
       });
     });
   }
@@ -219,7 +227,6 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -235,7 +242,7 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
                       children: [
                         DistanceBar(
                           name: '상대 페이스',
-                          pace: _currentSliderValue,
+                          pace: _currentYouSliderValue,
                         ),
                         DistanceBar(
                           name: '내 페이스',
@@ -309,12 +316,11 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
 
   void onStop() {
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
+      MaterialPageRoute(
           builder: (_) => UnderChallengeScreenEnd(),
         ),
             (route) => route.settings.name == '/');
   }
-  void onChange() {
 
-  }
 }
+
