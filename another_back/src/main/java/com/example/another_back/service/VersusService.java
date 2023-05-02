@@ -55,7 +55,6 @@ public class VersusService {
                 JSONObject jsonObject;
 
                 while ((line = br.readLine()) != null) {
-                    if (line == null) break;
                     // json 형태로 변환
                     jsonObject = (JSONObject) parser.parse(line);
                     response.add(jsonObject);

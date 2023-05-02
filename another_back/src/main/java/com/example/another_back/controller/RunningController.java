@@ -9,8 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/run")
@@ -23,8 +21,8 @@ public class RunningController {
      *
      * @param runningRequestDto
      * @param runningPic
-     * @return
-     * @throws IOException
+     *
+     * @return success
      */
     @PostMapping("/stop")
     public ResponseEntity addRunning(@RequestPart RunningRequestDto runningRequestDto, @RequestPart MultipartFile runningPic){

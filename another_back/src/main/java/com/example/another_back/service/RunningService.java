@@ -31,6 +31,8 @@ public class RunningService {
      * 러닝 종료
      *
      * @param runningRequestDto
+     * @param multipartFile
+     *
      * @return String
      */
     public String addRunning(RunningRequestDto runningRequestDto, MultipartFile multipartFile){
