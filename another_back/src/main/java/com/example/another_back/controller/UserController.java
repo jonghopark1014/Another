@@ -3,6 +3,7 @@ package com.example.another_back.controller;
 import com.example.another_back.dto.UserJoinDto;
 import com.example.another_back.dto.response.Response;
 import com.example.another_back.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,6 +31,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/duplicate/nickname/{nickname}")
+    @ApiOperation(value = "false : 이미 있음, true : 없음")
     public ResponseEntity checkDuplicatedNickname(@PathVariable("nickname") String nickname) {
         return Response.success(HttpStatus.OK,userService.checkDuplicatedNickname(nickname));
     }
