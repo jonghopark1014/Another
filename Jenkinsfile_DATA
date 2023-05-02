@@ -20,7 +20,7 @@ pipeline{
         stage('Build') {
             steps {
                 script{
-                    sh "sed -i 's/\${DATA_SERVER}/${DATA_SERVER}/' '${WORKSPACE}/another_data/confluent_config/kafka-rest.properties'"
+                    sh "sed -i 's/\${DATA_SERVER}/${DATA_SERVER}/' '${WORKSPACE}/confluent_config/kafka-rest.properties'"
                     sh "docker build -t pipeline-confluent-kafka-rest ./another_data/."
                 }
             }
