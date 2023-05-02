@@ -39,7 +39,7 @@ class ChallengeRunning extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (_) => TimerScreen(),
                           settings: RouteSettings(
-                            arguments: 'UnderChallenge',
+                            arguments: '/UnderChallenge',
                           ),
                         ),
                         (route) => false);

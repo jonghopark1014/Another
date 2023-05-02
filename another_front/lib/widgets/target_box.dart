@@ -31,7 +31,7 @@ class TargetBox extends StatelessWidget {
             ),
           ),
           Text(
-            '${name}',
+            '$name',
             style: TextStyle(
               color: recordColor,
               fontSize: 14.0,

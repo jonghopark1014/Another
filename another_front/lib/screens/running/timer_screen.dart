@@ -68,7 +68,7 @@ class _TimerScreenState extends State<TimerScreen> {
           //       arguments: 'UnderRunning', <-- 요기
           //     )
           // )
-          Navigator.of(context).pushNamedAndRemoveUntil(arg.toString(), (route) => false);
+          Navigator.of(context).pushReplacementNamed(arg.toString());
         }
       },
     );
