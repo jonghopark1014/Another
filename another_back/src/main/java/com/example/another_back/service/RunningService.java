@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -31,11 +30,10 @@ public class RunningService {
      * 러닝 종료
      *
      * @param runningRequestDto
-     * @param multipartFile
      *
      * @return String
      */
-    public String addRunning(RunningRequestDto runningRequestDto, MultipartFile multipartFile){
+    public String addRunning(RunningRequestDto runningRequestDto){
         // 러닝 PK 유효성 검사
         checkDuplicatedRunning(runningRequestDto.getRunningId());
         // User 유효성 검사
@@ -44,7 +42,7 @@ public class RunningService {
         // 러닝 루트 S3 업로드
         String runningPic = null;
         try {
-            runningPic = s3UploaderService.upload(multipartFile, bucket, "/image");
+            runningPic = s3UploaderService.upload(runningRequestDto.getRunningPic(), bucket, "image");
         } catch (IOException e) {
             new IllegalArgumentException("S3 파일 업로드 중 에러가 발생했습니다.");
         }
