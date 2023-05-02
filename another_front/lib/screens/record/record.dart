@@ -1,7 +1,6 @@
 import 'package:another/constant/color.dart';
 import 'package:another/screens/account/edit.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../account/login.dart';
 import '../account/signup_userinfo.dart';
 import '../record/challenge.dart';
@@ -77,35 +76,53 @@ class RecordTab extends StatelessWidget {
                   ),
                   Column(
                     children: [
-                      Text(
-                        'Lv.1',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      CircularPercentIndicator(
-                        radius: 40.0,
-                        lineWidth: 10.0,
-                        percent: 0.6,
-                        header: Text("Icon header"),
-                        center: CircleAvatar(
-                          backgroundImage: AssetImage(
-                              '${context.watch<UserInfo>().profileImg}'),
-                          radius: 35,
-                        ),
-                        backgroundColor: Colors.grey,
-                        progressColor: Colors.blue,
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.edit,
-                          color: WHITE_COLOR,
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProfileEditPage()),
-                          );
-                        },
+                      Stack(
+                        children: [
+                          CircularPercentIndicator(
+                            radius: 50,
+                            lineWidth: 10,
+                            percent: 0.6,
+                            header: Text("Icon header"),
+                            center: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  '${context.watch<UserInfo>().profileImg}'),
+                              radius: 45,
+                            ),
+                            backgroundColor: Colors.grey,
+                            progressColor: Colors.blue,
+                          ),
+                          Positioned(
+                            right: 0,
+                            bottom: 0,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProfileEditPage(),
+                                  ),
+                                );
+                              },
+                              child: CircleAvatar(
+                                backgroundColor: MAIN_COLOR,
+                                radius: 15,
+                                child: Icon(
+                                  Icons.edit,
+                                  color: WHITE_COLOR,
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 36,
+                            top: 0,
+                            child: Text(
+                              'Lv.1',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          )
+                        ],
                       )
                     ],
                   )
@@ -115,7 +132,12 @@ class RecordTab extends StatelessWidget {
                 children: [
                   CategoryTitle(title: 'MY 챌린지'),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ChallengePage()),
+                      );
+                    },
                     icon: Icon(Icons.arrow_forward_ios_outlined),
                     color: Colors.white,
                     iconSize: 14,

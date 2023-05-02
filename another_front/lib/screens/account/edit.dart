@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:another/constant/color.dart';
 import '../../widgets/intro_header.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 import './widgets/height_weight_picker.dart';
 import './widgets/pass_button.dart';
 import './widgets/complete_button.dart';
+import './widgets/image_picker.dart';
 
 class ProfileEditPage extends StatefulWidget {
   const ProfileEditPage({Key? key}) : super(key: key);
@@ -16,18 +18,30 @@ class ProfileEditPage extends StatefulWidget {
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
   final TextEditingController _nicknameController = TextEditingController();
-  final TextEditingController _profileImgController = TextEditingController();
+  String _profileImgUrl = '';
   int _height = 0;
   int _weight = 0;
+  String? errorText;
 
   @override
   void initState() {
     final userInfo = context.read<UserInfo>();
     _nicknameController.text = userInfo.nickname;
-    _profileImgController.text = userInfo.profileImg;
+    _profileImgUrl = userInfo.profileImg;
     _height = userInfo.height;
     _weight = userInfo.weight;
     super.initState();
+  }
+
+  // 닉네임 유효성 검사 함수
+  String? _validateNickname(String? value) {
+    if (value == null || value.isEmpty) {
+      return '닉네임을 입력해주세요.';
+    }
+    if (value.length < 2 || value.length > 8) {
+      return '닉네임은 2~8자 이내로 입력해주세요.';
+    }
+    return null; // 유효성 검사 통과
   }
 
   @override
@@ -37,40 +51,43 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         children: [
           IntroHeader(),
           SizedBox(height: 16),
-          CircleAvatar(
-            backgroundImage: AssetImage('assets/img/kazuha.jpg'),
-            radius: 50,
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: TextFormField(
-                controller: _nicknameController,
-                decoration: InputDecoration(
-                  labelText: '닉네임',
-                  hintText: '새로운 닉네임을 입력해주세요.',
-                  hintStyle: TextStyle(color: SERVEONE_COLOR),
-                  labelStyle: TextStyle(
-                    color: SERVEONE_COLOR, // 원하는 라벨 텍스트 색상으로 변경
-                  ),
-                  border: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
-                  ),
+          ProfileImage(profileImg: _profileImgUrl),
+          Padding(
+            padding: EdgeInsets.all(25),
+            child: TextFormField(
+              controller: _nicknameController,
+              validator: _validateNickname,
+              onChanged: (value) {
+                setState(() {
+                  errorText = _validateNickname(value);
+                });
+              },
+              decoration: InputDecoration(
+                labelText: '닉네임',
+                hintText: '새로운 닉네임을 입력해주세요.',
+                hintStyle: TextStyle(color: SERVEONE_COLOR),
+                errorText: errorText,
+                labelStyle: TextStyle(
+                  color: SERVEONE_COLOR, // 원하는 라벨 텍스트 색상으로 변경
                 ),
-                maxLines: null,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: SERVEONE_COLOR,
+                border: UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
                 ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
+                ),
+              ),
+              maxLines: 1,
+              maxLength: 8,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: SERVEONE_COLOR,
               ),
             ),
           ),
@@ -80,15 +97,25 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             onHeightChanged: (height) => setState(() => _height = height),
             onWeightChanged: (weight) => setState(() => _weight = weight),
           ),
-          Text(
-            'edit페이지 height는 ${_height} weight는 ${_weight}',
-            style: TextStyle(color: WHITE_COLOR),
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              PassButton(text: '취소', onPressed:() {}),
-              CompleteButton(text: '수정 완료', onPressed: () {}),
+              PassButton(
+                text: '취소',
+                onPressed: () {
+                  Navigator.pop(context); // 뒤로가기
+                },
+              ),
+              CompleteButton(
+                text: '수정 완료',
+                onPressed: () {
+                  print(_height);
+                  print(_weight);
+                  print(_nicknameController.text);
+                  print(_profileImgUrl);
+                  Navigator.pop(context); // 뒤로가기
+                },
+              ),
             ],
           )
         ],
