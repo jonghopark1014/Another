@@ -26,6 +26,11 @@ class _TimerScreenState extends State<TimerScreen> {
   int _seconds = 3;
   bool first = true;
 
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
   // 3초부터 카운터 다운 시작
 
   @override

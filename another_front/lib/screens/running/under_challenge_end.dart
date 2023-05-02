@@ -48,6 +48,9 @@ class UnderChallengeScreenEnd extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 32.0),
                 child: RecordResult(
                   timer: timeResult,
+                  calories: '수정',
+                  distance: '수정',
+                  pace: '수정',
                 ),
               ),
               Container(

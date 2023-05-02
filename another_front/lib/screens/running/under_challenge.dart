@@ -192,7 +192,6 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
   }
   // 상대방
   double _currentYouSliderValue = 60.0;
-  bool isStart = false;
 
   @override
   void initState() {
@@ -321,6 +320,6 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
         ),
             (route) => route.settings.name == '/');
   }
-
+  void onChange() {}
 }
 
