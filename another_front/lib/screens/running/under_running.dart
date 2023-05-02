@@ -1,13 +1,14 @@
 import 'package:another/constant/color.dart';
+import 'package:another/main.dart';
 import 'package:another/screens/running/under_running_end.dart';
 import 'package:flutter/material.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'dart:async';
 
 import '../../widgets/record_result.dart';
-
 
 class UnderRunning extends StatefulWidget {
   UnderRunning({Key? key}) : super(key: key);
@@ -144,7 +145,10 @@ class UnderRunningStatus extends StatefulWidget {
 }
 
 class _UnderRunningStatusState extends State<UnderRunningStatus> {
+  int _userWeight = 0;
   final int timeInterval = 5;
+  // 칼로리
+  int userCalories = 0;
   // 페이스
   String userPace = "0'00''";
   // 시작 시간
@@ -178,10 +182,6 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
     // 갱신
     beforePosition = currentPosition;
   }
-  // 칼로리 계산
-  void caloriesCal() {
-
-  }
   // 페이스 계산 -> 1km을 도달하는 시간
   void paceCal() {
     double timeToSec = (hours * 3600 + minutes * 60 + seconds).toDouble();
@@ -198,9 +198,12 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
   @override
   void initState() {
     super.initState();
+    // 유저 정보 받아오기
+    // final userInfo = context.read<UserInfo>();
+    _userWeight = 70;
+    // 타이머 시작
     isStart = true;
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      print('????');
       setDistance();
       setState(() {
         if (isStart) {
@@ -240,7 +243,7 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
                     timer:
                     '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}',
                     distance: runningDistance.toString(),
-                    calories: '4',
+                    calories: (_userWeight * runningDistance * 1.036 ~/ 1).toString(),
                     pace: userPace,
                   ),
                   Expanded(
