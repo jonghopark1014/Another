@@ -1,5 +1,6 @@
 import 'package:another/constant/color.dart';
 import 'package:another/screens/home_screen.dart';
+import 'package:another/screens/running/challenge_running.dart';
 import 'package:another/screens/running/running.dart';
 import 'package:another/screens/running/under_challenge.dart';
 import 'package:another/screens/running/under_running.dart';
@@ -9,7 +10,7 @@ import 'package:intl/date_symbol_data_local.dart';
 void main() async {
   await initializeDateFormatting();
   runApp(MaterialApp(
-    initialRoute: 'home',
+    initialRoute: '/',
     theme: ThemeData(
         scaffoldBackgroundColor: BACKGROUND_COLOR,
         fontFamily: 'pretendard',
@@ -20,9 +21,10 @@ void main() async {
           fontSize: 50.0,
         ))),
     routes: {
-      'home': (context) => HomeScreen(),
-      'UnderRunning': (context) => UnderRunning(),
-      'UnderChallenge': (context) => UnderChallenge(),
+      '/': (context) => HomeScreen(),
+      '/Detail': (context) => ChallengeRunning(),
+      '/UnderRunning': (context) => UnderRunning(),
+      '/UnderChallenge': (context) => UnderChallenge(),
     }
   ));
 }

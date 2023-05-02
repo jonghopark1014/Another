@@ -62,7 +62,7 @@ class _RunningTabState extends State<RunningTab> {
         MaterialPageRoute(
             builder: (_) => TimerScreen(),
             settings: RouteSettings(
-              arguments: 'UnderRunning',
+              arguments: '/UnderRunning',
             )
         ),
         (route) => false,

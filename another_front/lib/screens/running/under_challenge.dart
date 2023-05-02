@@ -21,8 +21,12 @@ class _UnderChallengeState extends State<UnderChallenge> {
   int minutes = 0;
   int hours = 0;
 
+  String timeResult = '00:00:00';
+
   // 여기에다가 변화는 값 만들어 줘야됨
   double _currentSliderValue = 80.0;
+  // 상대방
+  double _currentYouSliderValue = 60.0;
   bool isStart = false;
 
   @override
@@ -39,6 +43,8 @@ class _UnderChallengeState extends State<UnderChallenge> {
           hours += 1;
           minutes = 0;
         }
+        timeResult =
+            '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}';
       });
     });
   }
@@ -52,7 +58,6 @@ class _UnderChallengeState extends State<UnderChallenge> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -68,7 +73,7 @@ class _UnderChallengeState extends State<UnderChallenge> {
                       children: [
                         DistanceBar(
                           name: '상대 페이스',
-                          pace: _currentSliderValue,
+                          pace: _currentYouSliderValue,
                         ),
                         DistanceBar(
                           name: '내 페이스',
@@ -88,8 +93,7 @@ class _UnderChallengeState extends State<UnderChallenge> {
                   ]),
                 ),
                 RecordResult(
-                  timer:
-                  '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}',
+                  timer: timeResult,
                 ),
                 Expanded(
                   child: Row(
@@ -98,13 +102,13 @@ class _UnderChallengeState extends State<UnderChallenge> {
                       // RunningCircleButton(iconNamed: Icons.play_arrow,onPressed: ,),
                       isStart
                           ? RunningCircleButton(
-                        iconNamed: Icons.play_arrow,
-                        onPressed: onStart,
-                      )
+                              iconNamed: Icons.play_arrow,
+                              onPressed: onStart,
+                            )
                           : RunningCircleButton(
-                        iconNamed: Icons.pause,
-                        onPressed: onPause,
-                      ),
+                              iconNamed: Icons.pause,
+                              onPressed: onPause,
+                            ),
                       GestureDetector(
                         onLongPress: () {
                           onStop();
@@ -137,6 +141,8 @@ class _UnderChallengeState extends State<UnderChallenge> {
           hours += 1;
           minutes = 0;
         }
+        timeResult =
+            '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}';
       });
     });
   }
@@ -150,12 +156,12 @@ class _UnderChallengeState extends State<UnderChallenge> {
 
   void onStop() {
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
+      MaterialPageRoute(
           builder: (_) => UnderChallengeScreenEnd(),
-        ),
-            (route) => false);
+          settings: RouteSettings(arguments: timeResult)),
+      (route) => false,
+    );
   }
-  void onChange() {
 
-  }
+  void onChange() {}
 }
