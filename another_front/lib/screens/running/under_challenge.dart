@@ -144,13 +144,17 @@ class UnderChallengeStatus extends StatefulWidget {
 }
 
 class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
+  // 페이스
+  String userPace = "0'00''";
+  // 시작 시간
+  DateTime startTime = DateTime.now();
   // 거리
   double runningDistance = 0;
   late Position currentPosition;
   late Position beforePosition = Position(
     longitude: widget.initialPosition.target.longitude,
     latitude: widget.initialPosition.target.latitude,
-    accuracy: 0, altitude: 0, heading: 0, speed: 0, speedAccuracy: 0, timestamp: DateTime(hours),
+    accuracy: 0, altitude: 0, heading: 0, speed: 0, speedAccuracy: 0, timestamp: startTime,
   );
   // 시간
   late Timer _timer;
@@ -176,20 +180,31 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
     // 갱신
     beforePosition = currentPosition;
   }
+  // 페이스 계산 -> 1km을 도달하는 시간
+  void paceCal() {
+    double timeToSec = (hours * 3600 + minutes * 60 + seconds).toDouble();
+    int paceBase = (timeToSec / runningDistance * 1000).toInt();
+    int paceMin = paceBase ~/ 60;
+    int paceSec = paceBase % 60;
+    userPace = "${paceMin.toString()}'${paceSec.toString()}''";
+  }
   @override
   void initState() {
     super.initState();
     isStart = true;
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setDistance();
       setState(() {
-        setDistance();
-        seconds++;
-        if (seconds == 60) {
-          minutes += 1;
-          seconds = 0;
-        } else if (minutes == 60) {
-          hours += 1;
-          minutes = 0;
+        if (isStart) {
+          seconds++;
+          if (seconds == 60) {
+            minutes += 1;
+            seconds = 0;
+          } else if (minutes == 60) {
+            hours += 1;
+            minutes = 0;
+          }
+          paceCal();
         }
       });
     });
@@ -243,6 +258,8 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
                   timer:
                   '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}',
                   distance: '0',
+                  calories: '0',
+                  pace: userPace,
                 ),
                 Expanded(
                   child: Row(

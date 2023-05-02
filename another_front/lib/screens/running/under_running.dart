@@ -8,6 +8,7 @@ import 'dart:async';
 
 import '../../widgets/record_result.dart';
 
+
 class UnderRunning extends StatefulWidget {
   UnderRunning({Key? key}) : super(key: key);
 
@@ -143,13 +144,18 @@ class UnderRunningStatus extends StatefulWidget {
 }
 
 class _UnderRunningStatusState extends State<UnderRunningStatus> {
+  final int timeInterval = 5;
+  // 페이스
+  String userPace = "0'00''";
+  // 시작 시간
+  DateTime startTime = DateTime.now();
   // 거리
   double runningDistance = 0;
   late Position currentPosition;
   late Position beforePosition = Position(
     longitude: widget.initialPosition.target.longitude,
     latitude: widget.initialPosition.target.latitude,
-    accuracy: 0, altitude: 0, heading: 0, speed: 0, speedAccuracy: 0, timestamp: DateTime(hours),
+    accuracy: 0, altitude: 0, heading: 0, speed: 0, speedAccuracy: 0, timestamp: startTime,
   );
   // 시간
   late Timer _timer;
@@ -172,6 +178,21 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
     // 갱신
     beforePosition = currentPosition;
   }
+  // 칼로리 계산
+  void caloriesCal() {
+
+  }
+  // 페이스 계산 -> 1km을 도달하는 시간
+  void paceCal() {
+    double timeToSec = (hours * 3600 + minutes * 60 + seconds).toDouble();
+    int paceBase = 0;
+    if (runningDistance != 0) {
+      paceBase = (timeToSec / runningDistance * 1000).toInt();
+    }
+    int paceMin = paceBase ~/ 60;
+    int paceSec = paceBase % 60;
+    userPace = "${paceMin.toString()}'${paceSec.toString()}''";
+  }
   // 시간초는 거리 갱신할때도 쓰면 좋아서 그대로 흘러감 
   // 대신 저장의 유무를 정지, 시작의 상태에 따라서 저장
   @override
@@ -179,8 +200,9 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
     super.initState();
     isStart = true;
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      print('????');
+      setDistance();
       setState(() {
-        setDistance();
         if (isStart) {
           seconds++;
           if (seconds == 60) {
@@ -190,8 +212,8 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
             hours += 1;
             minutes = 0;
           }
+          paceCal();
         }
-
       });
     });
   }
@@ -218,6 +240,8 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
                     timer:
                     '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}',
                     distance: runningDistance.toString(),
+                    calories: '4',
+                    pace: userPace,
                   ),
                   Expanded(
                     child: Row(
@@ -255,13 +279,13 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
   // 시작 버튼을 누르면 동작 => 시간 갱신 시작
   void onStart() {
     setState(() {
-      isStart = !isStart;
+      isStart = true;
     });
   }
   // 정지 버튼을 누르면 동작 => 시간 갱신 정지
   void onPause() {
     setState(() {
-      isStart = !isStart;
+      isStart = false;
     });
     // _timer?.cancel();
   }
