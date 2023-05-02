@@ -1,7 +1,6 @@
 package com.example.another_back.service;
 
 import com.example.another_back.hdfs.FileIO;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -18,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class VersusService {
 
@@ -57,7 +55,6 @@ public class VersusService {
                 JSONObject jsonObject;
 
                 while ((line = br.readLine()) != null) {
-                    if (line == null) break;
                     // json 형태로 변환
                     jsonObject = (JSONObject) parser.parse(line);
                     response.add(jsonObject);

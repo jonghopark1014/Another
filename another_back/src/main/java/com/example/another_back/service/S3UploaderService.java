@@ -48,7 +48,7 @@ public class S3UploaderService {
         return upload(uploadFile, buckect, dirName);
     }
 
-    private String upload(File uploadFile, String bucket, String dirName) {
+    public String upload(File uploadFile, String bucket, String dirName) {
         String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();
         String uploadImageUrl = putS3(uploadFile, bucket, fileName);
         removeNewFile(uploadFile);

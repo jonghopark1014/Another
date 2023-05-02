@@ -36,6 +36,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<UserChallenge> userChallengeList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Running> runningList = new ArrayList<>();
+
     @Builder
     public User(Long id, String username, String password, Integer height, Integer weight, String sex, Integer exp, Integer level, String nickname, Role role, String profilePic, List<UserChallenge> userChallengeList) {
         this.nickname = nickname;

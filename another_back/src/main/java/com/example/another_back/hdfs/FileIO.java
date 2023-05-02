@@ -18,12 +18,15 @@ public class FileIO {
     }
 
     /**
-     * 전체 데이터 반환
+     * 디테일 페이지 그래프
      *
      * @param runningId
-     * @return
+     * @param hdfsUrl
+     * @param hdfsPort
+     *
+     * @return String
      */
-    public String allData(String runningId, String hdfsUrl, String hdfsPort) {
+    public String originData(String runningId, String hdfsUrl, String hdfsPort) {
         String url = hdfsUrl + ":" + hdfsPort + "/another/origin/" + runningId + "/*";
         return url;
     }
@@ -32,6 +35,7 @@ public class FileIO {
      * 경쟁 시작
      *
      * @param runningId
+     *
      * @return String
      */
     public String versusData(String runningId, String hdfsUrl, String hdfsPort) {
