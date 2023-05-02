@@ -22,9 +22,9 @@ public class UserService {
     /*
     닉네임 중복 API만들기
      */
-    public String checkDuplicatedNickname(String nickname) {
+    public boolean checkDuplicatedNickname(String nickname) {
         Optional<User> user = userRepository.findUserByNickname(nickname);
-        return user.map(User::getNickname).orElse(null);
+        return user.isEmpty();
     }
 
     /*
