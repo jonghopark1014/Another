@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,13 +19,12 @@ public class RunningController {
      * 러닝 종료
      *
      * @param runningRequestDto
-     * @param runningPic
      *
      * @return success
      */
     @PostMapping("/stop")
-    public ResponseEntity addRunning(@RequestPart RunningRequestDto runningRequestDto, @RequestPart MultipartFile runningPic){
-        runningService.addRunning(runningRequestDto, runningPic);
+    public ResponseEntity addRunning(RunningRequestDto runningRequestDto){
+        runningService.addRunning(runningRequestDto);
         return Response.success(HttpStatus.OK);
     }
 }
