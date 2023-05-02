@@ -243,7 +243,7 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
                     timer:
                     '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}',
                     distance: runningDistance.toString(),
-                    calories: (_userWeight * runningDistance * 1.036 ~/ 1).toString(),
+                    calories: (_userWeight * runningDistance * 1.036 / 1000 ~/ 1).toString(),
                     pace: userPace,
                   ),
                   Expanded(
