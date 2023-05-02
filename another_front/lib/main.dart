@@ -12,7 +12,7 @@ class UserInfo extends ChangeNotifier {
   var nickname = '임범규';
   var height = 185;
   var weight = 70;
-  var profileImg = 'assets/img/kazuha.jpg';
+  String profileImg = 'https://cdn.ggilbo.com/news/photo/201812/575659_429788_3144.jpg';
   // 유저 정보를 수정하는 함수 여기에 작성
   // 정보 수정하고 바로 적용하려면 마지막에 notifyListers(); 코드 추가
 }

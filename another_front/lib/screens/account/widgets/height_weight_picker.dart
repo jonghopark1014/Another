@@ -8,15 +8,16 @@ class HeightWeightPicker extends StatefulWidget {
   final void Function(int height) onHeightChanged;
   final void Function(int weight) onWeightChanged;
 
-  HeightWeightPicker({
+  const HeightWeightPicker({
+    Key? key,
     required this.initialHeight,
     required this.initialWeight,
     required this.onHeightChanged,
     required this.onWeightChanged,
-  });
+  }) : super(key: key);
 
   @override
-  _HeightWeightPickerState createState() => _HeightWeightPickerState();
+  State<HeightWeightPicker> createState() => _HeightWeightPickerState();
 }
 
 class _HeightWeightPickerState extends State<HeightWeightPicker> {
