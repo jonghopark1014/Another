@@ -54,15 +54,15 @@ spring:
       on-profile: "common"
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/another?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: ssafy
-    password: 1234
+    url: jdbc:mysql://${DB_DOMAIN}:${DB_PORT}/another?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 ---
 cloud:
   aws:
     credentials:
-      access-key: AKIAQPNAUGHN6JCC2MOL
-      secret-key: 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
+      access-key: ${ACCESS_KEY}
+      secret-key: ${SECRET_KEY}
 ---
 data:
   hdfs-url: ${HDFS_URL}
