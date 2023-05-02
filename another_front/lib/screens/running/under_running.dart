@@ -1,62 +1,42 @@
 import 'package:another/constant/color.dart';
+import 'package:another/main.dart';
 import 'package:another/screens/running/under_running_end.dart';
 import 'package:flutter/material.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'dart:async';
 
 import '../../widgets/record_result.dart';
 
 class UnderRunning extends StatefulWidget {
-  const UnderRunning({Key? key}) : super(key: key);
+  UnderRunning({Key? key}) : super(key: key);
+
+  static late final List<Marker> markers = [];
+  static late final List<LatLng> polyPoints = [];
 
   @override
   State<UnderRunning> createState() => _UnderRunningState();
 }
 
 class _UnderRunningState extends State<UnderRunning> {
-  late Timer _timer;
-
-  int seconds = 0;
-  int minutes = 0;
-  int hours = 0;
-  bool isStart = false;
-  double runningId = 1;
   // 지도에 위치 그리기
   GoogleMapController? mapController;
-  static CameraPosition initialPosition =
-      CameraPosition(target: LatLng(37.523327, 126.921252), zoom: 30);
 
-  static late final List<Marker> markers = [];
+  double runningId = 1;
 
-  static late final List<LatLng> polyPoints = [];
-
-  @override
-  void initState() {
-    super.initState();
-
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        seconds++;
-        if (seconds == 60) {
-          minutes += 1;
-          seconds = 0;
-        } else if (minutes == 60) {
-          hours += 1;
-          minutes = 0;
-        }
-      });
-    });
-  }
   @override
   void dispose() {
-    _timer.cancel();
+    mapController!.dispose();
+    // 스크린샷 찍어서 넘겨야 함..
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final initialPosition = ModalRoute.of(context)!.settings.arguments as CameraPosition;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -70,17 +50,20 @@ class _UnderRunningState extends State<UnderRunning> {
                 return StreamBuilder<Position>(
                   stream: Geolocator.getPositionStream(),
                   builder: (context, snapshot) {
-                    print(snapshot.data);
+                    // 위치가 변경되었을 때 실햏하는 로직
                     if (snapshot.data != null && mapController != null) {
-                      markers.add(Marker(
+                      // 마커 리스트에 추가
+                      UnderRunning.markers.add(Marker(
                         markerId: MarkerId(runningId.toString()),
                         position: LatLng(
                             snapshot.data!.latitude, snapshot.data!.longitude),
                         visible: false,
                       ));
                       runningId += 1;
-                      polyPoints.add(LatLng(
+                      // polypoint(지도에 그리는 점)에 추가
+                      UnderRunning.polyPoints.add(LatLng(
                           snapshot.data!.latitude, snapshot.data!.longitude));
+                      // 화면 이동
                       mapController!.animateCamera(
                         CameraUpdate.newCameraPosition(
                           CameraPosition(
@@ -90,8 +73,6 @@ class _UnderRunningState extends State<UnderRunning> {
                         ),
                       );
                     }
-                    print(
-                        '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
                     return GoogleMap(
                       initialCameraPosition: initialPosition,
                       mapType: MapType.normal,
@@ -99,12 +80,12 @@ class _UnderRunningState extends State<UnderRunning> {
                       myLocationEnabled: true,
                       myLocationButtonEnabled: false,
                       onMapCreated: onMapCreated,
-                      markers: Set.of(markers),
+                      markers: Set.of(UnderRunning.markers),
                       polylines: Set.of(
                         [
                           Polyline(
                             polylineId: PolylineId('temp'),
-                            points: polyPoints,
+                            points: UnderRunning.polyPoints,
                             color: MAIN_COLOR,
                             // jointType: JointType.round,
                           ),
@@ -119,116 +100,205 @@ class _UnderRunningState extends State<UnderRunning> {
               );
             },
           ),
-          Container(
-            color: BACKGROUND_COLOR,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SafeArea(
-                child: Center(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 282,
-                      ),
-                      RecordResult(timer:
-                      '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}',),
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            // RunningCircleButton(iconNamed: Icons.play_arrow,onPressed: ,),
-                            isStart
-                                ? RunningCircleButton(
-                              iconNamed: Icons.play_arrow,
-                              onPressed: onPause,
-                            )
-                                : RunningCircleButton(
-                              iconNamed: Icons.pause,
-                              onPressed: onPause,
-                            ),
-                            GestureDetector(
-                              onLongPress: () {
-                                onStop();
-                              },
-                              child: RunningCircleButton(
-                                iconNamed: Icons.stop,
-                                onPressed: onChange,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
+          // 러닝 중 데이터 출력
+          UnderRunningStatus(initialPosition: initialPosition),
         ],
       ),
     );
   }
 
-  void onStart() {
+  // 맵컨트롤러 받기 => 지도 카메라 위치 조정시 필요
+  onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  // 사용자에게 위치 동의 구하기 단계별로
+  Future<String> checkPermission() async {
+    final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!isLocationEnabled) {
+      return '위치 서비스를 활성화 해주세요';
+    }
+    LocationPermission checkedPermission = await Geolocator.checkPermission();
+    if (checkedPermission == LocationPermission.denied) {
+      checkedPermission = await Geolocator.requestPermission();
+      if (checkedPermission == LocationPermission.denied) {
+        return '위치 권한을 허가해주세요.';
+      }
+    }
+    if (checkedPermission == LocationPermission.deniedForever) {
+      return '앱의 위치 권한을 세팅에서 허가해주세요';
+    }
+    return '위치 권한이 허가 되었습니다.';
+  }
+}
+// 지도를 매번 setState로 매초 다시 그리면 터짐
+// 그래서 따로 뺌
+class UnderRunningStatus extends StatefulWidget {
+  final CameraPosition initialPosition;
+  const UnderRunningStatus({
+    required this.initialPosition,
+    Key? key
+  }) : super(key: key);
+
+  @override
+  State<UnderRunningStatus> createState() => _UnderRunningStatusState();
+}
+
+class _UnderRunningStatusState extends State<UnderRunningStatus> {
+  int _userWeight = 0;
+  final int timeInterval = 5;
+  // 칼로리
+  int userCalories = 0;
+  // 페이스
+  String userPace = "0'00''";
+  // 시작 시간
+  DateTime startTime = DateTime.now();
+  // 거리
+  double runningDistance = 0;
+  late Position currentPosition;
+  late Position beforePosition = Position(
+    longitude: widget.initialPosition.target.longitude,
+    latitude: widget.initialPosition.target.latitude,
+    accuracy: 0, altitude: 0, heading: 0, speed: 0, speedAccuracy: 0, timestamp: startTime,
+  );
+  // 시간
+  late Timer _timer;
+
+  int seconds = 0;
+  int minutes = 0;
+  int hours = 0;
+  late bool isStart;
+  // 비동기로 거리 받아서 계산
+  Future setDistance() async {
+    currentPosition = await Geolocator.getCurrentPosition();
+    if (isStart) {
+      runningDistance += Geolocator.distanceBetween(
+        beforePosition.latitude,
+        beforePosition.longitude,
+        currentPosition.latitude,
+        currentPosition.longitude,
+      ).round();
+    }
+    // 갱신
+    beforePosition = currentPosition;
+  }
+  // 페이스 계산 -> 1km을 도달하는 시간
+  void paceCal() {
+    double timeToSec = (hours * 3600 + minutes * 60 + seconds).toDouble();
+    int paceBase = 0;
+    if (runningDistance != 0) {
+      paceBase = (timeToSec / runningDistance * 1000).toInt();
+    }
+    int paceMin = paceBase ~/ 60;
+    int paceSec = paceBase % 60;
+    userPace = "${paceMin.toString()}'${paceSec.toString()}''";
+  }
+  // 시간초는 거리 갱신할때도 쓰면 좋아서 그대로 흘러감 
+  // 대신 저장의 유무를 정지, 시작의 상태에 따라서 저장
+  @override
+  void initState() {
+    super.initState();
+    // 유저 정보 받아오기
+    // final userInfo = context.read<UserInfo>();
+    _userWeight = 70;
+    // 타이머 시작
+    isStart = true;
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setDistance();
       setState(() {
-        isStart = false;
-        seconds++;
-        if (seconds == 60) {
-          minutes += 1;
-          seconds = 0;
-        } else if (minutes == 60) {
-          hours += 1;
-          minutes = 0;
+        if (isStart) {
+          seconds++;
+          if (seconds == 60) {
+            minutes += 1;
+            seconds = 0;
+          } else if (minutes == 60) {
+            hours += 1;
+            minutes = 0;
+          }
+          paceCal();
         }
       });
     });
   }
-
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return // 달릴 때 데이터 표시
+      Container(
+        color: BACKGROUND_COLOR,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SafeArea(
+            child: Center(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 282,
+                  ),
+                  RecordResult(
+                    timer:
+                    '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}',
+                    distance: runningDistance.toString(),
+                    calories: (_userWeight * runningDistance * 1.036 / 1000 ~/ 1).toString(),
+                    pace: userPace,
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        // RunningCircleButton(iconNamed: Icons.play_arrow,onPressed: ,),
+                        isStart
+                            ? RunningCircleButton(
+                          iconNamed: Icons.pause,
+                          onPressed: onPause,
+                        )
+                            : RunningCircleButton(
+                          iconNamed: Icons.play_arrow,
+                          onPressed: onStart,
+                        ),
+                        GestureDetector(
+                          onLongPress: () {
+                            onStop();
+                          },
+                          child: RunningCircleButton(
+                            iconNamed: Icons.stop,
+                            onPressed: onChange,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+  }
+  // 시작 버튼을 누르면 동작 => 시간 갱신 시작
+  void onStart() {
+    setState(() {
+      isStart = true;
+    });
+  }
+  // 정지 버튼을 누르면 동작 => 시간 갱신 정지
   void onPause() {
     setState(() {
-      isStart = !isStart;
+      isStart = false;
     });
-    _timer?.cancel();
+    // _timer?.cancel();
   }
-
+  // 러닝 종료 시 동작
   void onStop() {
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (_) => UnderRunningScreenEnd(),
         ),
-        (route) => false);
+            (route) => route.settings.name == '/');
   }
-
-  void onChange() {
-
-  }
-
-  onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
-
-  Future<String> checkPermission() async {
-    final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
-
-    if (!isLocationEnabled) {
-      return '위치 서비스를 활성화 해주세요';
-    }
-
-    LocationPermission checkedPermission = await Geolocator.checkPermission();
-
-    if (checkedPermission == LocationPermission.denied) {
-      checkedPermission = await Geolocator.requestPermission();
-
-      if (checkedPermission == LocationPermission.denied) {
-        return '위치 권한을 허가해주세요.';
-      }
-    }
-
-    if (checkedPermission == LocationPermission.deniedForever) {
-      return '앱의 위치 권한을 세팅에서 허가해주세요';
-    }
-
-    return '위치 권한이 허가 되었습니다.';
-  }
+  void onChange() {}
 }

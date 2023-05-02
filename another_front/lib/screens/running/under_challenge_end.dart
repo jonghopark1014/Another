@@ -48,6 +48,9 @@ class UnderChallengeScreenEnd extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 32.0),
                 child: RecordResult(
                   timer: timeResult,
+                  calories: '수정',
+                  distance: '수정',
+                  pace: '수정',
                 ),
               ),
               Container(
@@ -69,15 +72,13 @@ class UnderChallengeScreenEnd extends StatelessWidget {
   }
 
   void endFeed(BuildContext context) {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (_) => UnderChallengeScreenEndFeed(),
-      ),
-      (route) => false,
-    );
-  }
-
-  void feedComplete(BuildContext context) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (_) => UnderChallengeScreenEndFeed(),
+            ),
+            (route) => route.settings.name == '/');
+    }
+    void feedComplete(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => RunningFeedComplete()),
     );

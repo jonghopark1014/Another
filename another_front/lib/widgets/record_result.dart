@@ -5,9 +5,15 @@ import '../constant/color.dart';
 
 class RecordResult extends StatelessWidget {
   final String timer;
+  final String distance;
+  final String calories;
+  final String pace;
 
   const RecordResult({
     required this.timer,
+    required this.distance,
+    required this.calories,
+    required this.pace,
     Key? key,
   }) : super(key: key);
 
@@ -34,7 +40,7 @@ class RecordResult extends StatelessWidget {
                     recordColor: WHITE_COLOR,
                   ),
                   RecordResultBox(
-                    data: '8000m',
+                    data: distance,
                     name: '거리',
                     textColor: BLUE_COLOR,
                     recordColor: WHITE_COLOR,
@@ -47,13 +53,13 @@ class RecordResult extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   RecordResultBox(
-                    data: '1500kcal',
+                    data: calories,
                     name: '총칼로리',
                     textColor: RED_COLOR,
                     recordColor: WHITE_COLOR,
                   ),
                   RecordResultBox(
-                    data: '15:6/km',
+                    data: pace,
                     name: '평균페이스',
                     textColor: GREEN_COLOR,
                     recordColor: WHITE_COLOR,
@@ -66,5 +72,4 @@ class RecordResult extends StatelessWidget {
       ),
     );
   }
-
 }

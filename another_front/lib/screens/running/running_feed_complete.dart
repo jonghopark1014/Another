@@ -56,7 +56,6 @@ class _RunningFeedCompleteState extends State<RunningFeedComplete> {
                           radius: 25.0,
                           profileFontSize: 14.0,
                         ),
-                        RunIcon(),
                       ],
                     ),
                     Target(targetname: '날짜'),
