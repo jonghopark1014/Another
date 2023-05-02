@@ -28,7 +28,7 @@ void main() async {
             headline1: TextStyle(
           color: MAIN_COLOR,
           fontFamily: 'Pretendard',
-          fontSize: 50.0,
+          fontSize: 16.0,
         ))),
     routes: {
       '/': (context) => HomeScreen(),
