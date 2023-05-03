@@ -1,5 +1,6 @@
 import 'package:another/constant/color.dart';
 import 'package:another/screens/account/edit.dart';
+import 'package:another/screens/record/widgets/period_total_record.dart';
 import 'package:flutter/material.dart';
 import '../account/login.dart';
 import '../account/signup_userinfo.dart';
