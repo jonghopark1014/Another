@@ -63,9 +63,7 @@ public class UserService {
     }
 
     private void checkDuplicatedUsername(String username) {
-        if (!userRepository.findUserByUsername(username).isEmpty()) {
-            String username1 = userRepository.findUserByUsername(username).get().getUsername();
-            throw new IllegalArgumentException("해당 유저가 이미 존재합니다. : "+username1);
-        }
+        userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 이미 존재합니다."));
     }
 }
