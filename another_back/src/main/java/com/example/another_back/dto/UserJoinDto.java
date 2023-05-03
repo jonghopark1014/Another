@@ -1,6 +1,5 @@
 package com.example.another_back.dto;
 
-import com.example.another_back.entity.enums.Role;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,13 +13,13 @@ public class UserJoinDto {
     private Integer weight;
     private String sex;
 
-    @Builder
-    public UserJoinDto(String username, String password, String nickname, Integer height, Integer weight, String sex, Role role) {
-        this.username = username;
-        this.password = password;
-        this.nickname = nickname;
-        this.height = height;
-        this.weight = weight;
-        this.sex = sex;
-    }
+//    @Builder
+//    public UserJoinDto(String username, String password, String nickname, Integer height, Integer weight, String sex) {
+//        this.username = username;
+//        this.password = password;
+//        this.nickname = nickname;
+//        this.height = height;
+//        this.weight = weight;
+//        this.sex = sex;
+//    }
 }
