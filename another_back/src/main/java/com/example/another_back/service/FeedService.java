@@ -43,8 +43,21 @@ public class FeedService {
      */
     public Page<FeedListResponseDto> getFeedList(Pageable pageable) {
         List<Running> feedList = runningRepository.findRunningWithFeedPics();
-        Page<FeedListResponseDto> runningResponseDtoList = new PageImpl<>(feedList.stream().map(FeedListResponseDto::new).collect(Collectors.toList()), pageable, feedList.size());
-        return runningResponseDtoList;
+        Page<FeedListResponseDto> feedListResponseDtos = new PageImpl<>(feedList.stream().map(FeedListResponseDto::new).collect(Collectors.toList()), pageable, feedList.size());
+        return feedListResponseDtos;
+    }
+
+    /**
+     * 내 피드만 가져오기
+     *
+     * @param userId
+     * @param pageable
+     * @return Page<FeedListResponseDto>
+     */
+    public Page<FeedListResponseDto> getMyFeedList(Long userId, Pageable pageable) {
+        List<Running> feedList = runningRepository.findRunningByUserIdWithFeedPics(userId);
+        Page<FeedListResponseDto> feedListResponseDtos = new PageImpl<>(feedList.stream().map(FeedListResponseDto::new).collect(Collectors.toList()), pageable, feedList.size());
+        return feedListResponseDtos;
     }
 
     /**

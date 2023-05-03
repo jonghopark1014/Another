@@ -4,7 +4,6 @@ import com.example.another_back.dto.FeedListResponseDto;
 import com.example.another_back.dto.response.Response;
 import com.example.another_back.service.FeedService;
 import lombok.RequiredArgsConstructor;
-import org.json.simple.JSONArray;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -31,15 +30,16 @@ public class FeedController {
     }
 
     /**
-     * 디테일 페이지 그래프에 사용할 데이터 반환
+     * 내 피드만 가져오기
      *
-     * @param runningId
-     * @return JSONArray
+     * @param userId
+     * @param pageable
+     * @return Page<FeedListResponseDto>
      */
-    @GetMapping("/{runningId}")
-    public ResponseEntity getOriginData(@PathVariable String runningId) {
-        JSONArray response = feedService.getOringinData(runningId);
-        return Response.success(HttpStatus.OK, response);
+    @GetMapping("/{userId}")
+    public ResponseEntity getMyFeedList(@PathVariable Long userId, Pageable pageable) {
+        Page<FeedListResponseDto> feedList = feedService.getMyFeedList(userId, pageable);
+        return Response.success(HttpStatus.OK, feedList);
     }
 
     /**

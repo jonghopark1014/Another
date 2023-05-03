@@ -10,6 +10,9 @@ public interface RunningRepository extends JpaRepository<Running, String> {
     @Query("select distinct r,fp from Running r left outer join fetch r.feedPic fp")
     List<Running> findRunningWithFeedPics();
 
+    @Query("select distinct r,fp from Running r left outer join fetch r.feedPic fp where r.user.id = :userId")
+    List<Running> findRunningByUserIdWithFeedPics(Long userId);
+
     List<Running> findByUserId(Long userId);
 
     List<Running> findByRunningDistanceBetweenAndRunningTimeBetweenAndUserIdNot(Float startDistance, Float endDistance, String startTime, String endTime, Long userId);
