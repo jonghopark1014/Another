@@ -72,6 +72,6 @@ springfox:
   documentation:
     swagger:
       v2:
-        path : /api
+        path: /api
     swagger-ui:
       base-url: /api
