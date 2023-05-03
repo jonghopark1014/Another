@@ -20,13 +20,13 @@ public class UserController {
     private final UserService userService;
     @PostMapping(value = "/join", consumes =
             {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity join(UserJoinDto userJoinDto) throws IOException {
+    public ResponseEntity join(@RequestBody UserJoinDto userJoinDto) throws IOException {
         Long userId = userService.join(userJoinDto);
 
         return Response.success(HttpStatus.OK);
     }
     @GetMapping(value = "/test")
-    public String test(UserJoinDto userJoinDto) throws IOException {
+    public String test(@RequestBody UserJoinDto userJoinDto) throws IOException {
         return "abcd";
     }
 
