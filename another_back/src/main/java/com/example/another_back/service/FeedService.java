@@ -36,9 +36,11 @@ public class FeedService {
     private final RunningRepository runningRepository;
 
     /**
-     * 피드 전체 목록
-     *
-     * @return
+     * 피드 리스트 기능
+     * 
+     * @param pageable
+     * 
+     * @return Page<RunningResponseDto>
      */
     public Page<RunningResponseDto> getFeedList(Pageable pageable){
         List<Running> feedList = runningRepository.findAll();
