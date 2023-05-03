@@ -35,7 +35,7 @@ public class FeedController {
     }
 
     /**
-     * 디테일 페이지 그래프
+     * 디테일 페이지 그래프에 사용할 데이터 반환
      *
      * @param runningId
      * @return JSONArray

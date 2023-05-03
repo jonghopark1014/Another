@@ -43,7 +43,7 @@ public class FeedService {
      * @return Page<RunningResponseDto>
      */
     public Page<RunningResponseDto> getFeedList(Pageable pageable){
-        List<Running> feedList = runningRepository.findAll();
+        List<Running> feedList = runningRepository.findRunningWithFeedPics();
         Page<RunningResponseDto> runningResponseDtoList = new PageImpl<>(feedList.stream().map(RunningResponseDto::new).collect(Collectors.toList()),pageable,feedList.size());
         return runningResponseDtoList;
     }
@@ -78,10 +78,13 @@ public class FeedService {
                 JSONObject jsonObject;
 
                 while ((line = br.readLine()) != null) {
-                    if (line == null) break;
                     // json 형태로 변환
                     jsonObject = (JSONObject) parser.parse(line);
-                    jsonArray.add(jsonObject);
+                    // distance와 speed 추출
+                    JSONObject select = new JSONObject();
+                    select.put("distance",jsonObject.get("distance"));
+                    select.put("speed",jsonObject.get("speed"));
+                    jsonArray.add(select);
                 }
                 br.close();
             }
