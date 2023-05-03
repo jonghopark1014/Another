@@ -1,0 +1,115 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.another_front_wear_os"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="23"
+8-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="33" />
+9-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml
+10
+11    <queries>
+11-->[:watch_connectivity] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\watch_connectivity\intermediates\merged_manifest\release\AndroidManifest.xml:9:5-12:15
+12        <package android:name="com.google.android.wearable.app" />
+12-->[:watch_connectivity] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\watch_connectivity\intermediates\merged_manifest\release\AndroidManifest.xml:10:9-67
+12-->[:watch_connectivity] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\watch_connectivity\intermediates\merged_manifest\release\AndroidManifest.xml:10:18-64
+13        <package android:name="com.samsung.android.app.watchmanager" />
+13-->[:watch_connectivity] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\watch_connectivity\intermediates\merged_manifest\release\AndroidManifest.xml:11:9-72
+13-->[:watch_connectivity] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\watch_connectivity\intermediates\merged_manifest\release\AndroidManifest.xml:11:18-69
+14    </queries>
+15
+16    <application
+17        android:name="android.app.Application"
+17-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:4:9-42
+18        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+18-->[androidx.core:core:1.6.0] C:\Users\SSAFY\.gradle\caches\transforms-3\7e9df2ac2213a6bd3cef0f2f27870d79\transformed\core-1.6.0\AndroidManifest.xml:24:18-86
+19        android:extractNativeLibs="false"
+20        android:icon="@mipmap/ic_launcher"
+20-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:5:9-43
+21        android:label="another_front_wear_os" >
+21-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:3:9-46
+22        <activity
+22-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:6:9-26:20
+23            android:name="com.example.another_front_wear_os.MainActivity"
+23-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:7:13-41
+24            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+24-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:11:13-163
+25            android:exported="true"
+25-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:8:13-36
+26            android:hardwareAccelerated="true"
+26-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:12:13-47
+27            android:launchMode="singleTop"
+27-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:9:13-43
+28            android:theme="@style/LaunchTheme"
+28-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:10:13-47
+29            android:windowSoftInputMode="adjustResize" >
+29-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:13:13-55
+30
+31            <!--
+32                 Specifies an Android theme to apply to this Activity as soon as
+33                 the Android process has started. This theme is visible to the user
+34                 while the Flutter UI initializes. After that, this theme continues
+35                 to determine the Window background behind the Flutter UI.
+36            -->
+37            <meta-data
+37-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:18:13-21:17
+38                android:name="io.flutter.embedding.android.NormalTheme"
+38-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:19:15-70
+39                android:resource="@style/NormalTheme" />
+39-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:20:15-52
+40
+41            <intent-filter>
+41-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:22:13-25:29
+42                <action android:name="android.intent.action.MAIN" />
+42-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:23:17-68
+42-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:23:25-66
+43
+44                <category android:name="android.intent.category.LAUNCHER" />
+44-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:24:17-76
+44-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:24:27-74
+45            </intent-filter>
+46        </activity>
+47        <!--
+48             Don't delete the meta-data below.
+49             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+50        -->
+51        <meta-data
+51-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:29:9-31:33
+52            android:name="flutterEmbedding"
+52-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:30:13-44
+53            android:value="2" />
+53-->C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:31:13-30
+54
+55        <uses-library
+55-->[androidx.window:window:1.0.0-beta04] C:\Users\SSAFY\.gradle\caches\transforms-3\25cee5f028ac2a6b79fd6278ff5b59e2\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:25:9-27:40
+56            android:name="androidx.window.extensions"
+56-->[androidx.window:window:1.0.0-beta04] C:\Users\SSAFY\.gradle\caches\transforms-3\25cee5f028ac2a6b79fd6278ff5b59e2\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:26:13-54
+57            android:required="false" />
+57-->[androidx.window:window:1.0.0-beta04] C:\Users\SSAFY\.gradle\caches\transforms-3\25cee5f028ac2a6b79fd6278ff5b59e2\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:27:13-37
+58        <uses-library
+58-->[androidx.window:window:1.0.0-beta04] C:\Users\SSAFY\.gradle\caches\transforms-3\25cee5f028ac2a6b79fd6278ff5b59e2\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:28:9-30:40
+59            android:name="androidx.window.sidecar"
+59-->[androidx.window:window:1.0.0-beta04] C:\Users\SSAFY\.gradle\caches\transforms-3\25cee5f028ac2a6b79fd6278ff5b59e2\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:29:13-51
+60            android:required="false" />
+60-->[androidx.window:window:1.0.0-beta04] C:\Users\SSAFY\.gradle\caches\transforms-3\25cee5f028ac2a6b79fd6278ff5b59e2\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:30:13-37
+61
+62        <activity
+62-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\SSAFY\.gradle\caches\transforms-3\aba8f806953ea3dd8f794da3aeb78a12\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:20:9-22:45
+63            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+63-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\SSAFY\.gradle\caches\transforms-3\aba8f806953ea3dd8f794da3aeb78a12\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:20:19-85
+64            android:exported="false"
+64-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\SSAFY\.gradle\caches\transforms-3\aba8f806953ea3dd8f794da3aeb78a12\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:22:19-43
+65            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+65-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\SSAFY\.gradle\caches\transforms-3\aba8f806953ea3dd8f794da3aeb78a12\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:21:19-78
+66
+67        <meta-data
+67-->[com.google.android.gms:play-services-basement:18.0.0] C:\Users\SSAFY\.gradle\caches\transforms-3\f64fba6e6efbe26a4b67f791bcfc957f\transformed\jetified-play-services-basement-18.0.0\AndroidManifest.xml:21:9-23:69
+68            android:name="com.google.android.gms.version"
+68-->[com.google.android.gms:play-services-basement:18.0.0] C:\Users\SSAFY\.gradle\caches\transforms-3\f64fba6e6efbe26a4b67f791bcfc957f\transformed\jetified-play-services-basement-18.0.0\AndroidManifest.xml:22:13-58
+69            android:value="@integer/google_play_services_version" />
+69-->[com.google.android.gms:play-services-basement:18.0.0] C:\Users\SSAFY\.gradle\caches\transforms-3\f64fba6e6efbe26a4b67f791bcfc957f\transformed\jetified-play-services-basement-18.0.0\AndroidManifest.xml:23:13-66
+70    </application>
+71
+72</manifest>
