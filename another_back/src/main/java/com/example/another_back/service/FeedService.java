@@ -1,6 +1,6 @@
 package com.example.another_back.service;
 
-import com.example.another_back.dto.RunningResponseDto;
+import com.example.another_back.dto.FeedListResponseDto;
 import com.example.another_back.entity.Running;
 import com.example.another_back.hdfs.FileIO;
 import com.example.another_back.repository.RunningRepository;
@@ -42,9 +42,9 @@ public class FeedService {
      * 
      * @return Page<RunningResponseDto>
      */
-    public Page<RunningResponseDto> getFeedList(Pageable pageable){
+    public Page<FeedListResponseDto> getFeedList(Pageable pageable){
         List<Running> feedList = runningRepository.findRunningWithFeedPics();
-        Page<RunningResponseDto> runningResponseDtoList = new PageImpl<>(feedList.stream().map(RunningResponseDto::new).collect(Collectors.toList()),pageable,feedList.size());
+        Page<FeedListResponseDto> runningResponseDtoList = new PageImpl<>(feedList.stream().map(FeedListResponseDto::new).collect(Collectors.toList()),pageable,feedList.size());
         return runningResponseDtoList;
     }
 

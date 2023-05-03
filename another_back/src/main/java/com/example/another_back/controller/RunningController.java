@@ -27,4 +27,16 @@ public class RunningController {
         runningService.addRunning(runningRequestDto);
         return Response.success(HttpStatus.OK);
     }
+
+    /**
+     * 예외 발생 처리
+     *
+     * @param e
+     *
+     * @return error
+     */
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity illegalStateException(IllegalStateException e) {
+        return Response.fail(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
 }
