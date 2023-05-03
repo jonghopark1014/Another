@@ -1,6 +1,8 @@
 package com.example.another_back.service;
 
 import com.example.another_back.dto.RunningResponseDto;
+import com.example.another_back.dto.SearchRequestDto;
+import com.example.another_back.dto.SearchResponseDto;
 import com.example.another_back.entity.Running;
 import com.example.another_back.hdfs.FileIO;
 import com.example.another_back.repository.RunningRepository;
@@ -93,6 +95,24 @@ public class VersusService {
     public Page<RunningResponseDto> getMyRecord(Long userId, Pageable pageable) {
         List<Running> runningList = runningRepository.findByUserId(userId);
         Page<RunningResponseDto> response = new PageImpl<>(runningList.stream().map(RunningResponseDto::new).collect(Collectors.toList()), pageable, runningList.size());
+        return response;
+    }
+
+    /**
+     * 비슷한 목표 가져오기
+     *
+     * @param searchRequestDto
+     * @param pageable
+     * @return Page<SearchResponseDto>
+     */
+    public Page<SearchResponseDto> getSearchRecord(SearchRequestDto searchRequestDto, Pageable pageable) {
+        Float distance = searchRequestDto.getRunningDistance();
+        Float time = Float.parseFloat(searchRequestDto.getRunningTime());
+        Float distanceBoundary = distance / 10;
+        Float startTimeBoundary = time - time / 10;
+        Float endTimeBoundary = time + time / 10;
+        List<Running> runningList = runningRepository.findByRunningDistanceBetweenAndRunningTimeBetweenAndUserIdNot(distance - distanceBoundary, distance + distanceBoundary, startTimeBoundary.toString(), endTimeBoundary.toString(), searchRequestDto.getUserId());
+        Page<SearchResponseDto> response = new PageImpl<>(runningList.stream().map(SearchResponseDto::new).collect(Collectors.toList()), pageable, runningList.size());
         return response;
     }
 }

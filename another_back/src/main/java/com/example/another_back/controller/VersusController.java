@@ -1,6 +1,8 @@
 package com.example.another_back.controller;
 
 import com.example.another_back.dto.RunningResponseDto;
+import com.example.another_back.dto.SearchRequestDto;
+import com.example.another_back.dto.SearchResponseDto;
 import com.example.another_back.dto.response.Response;
 import com.example.another_back.service.VersusService;
 import lombok.RequiredArgsConstructor;
@@ -37,9 +39,22 @@ public class VersusController {
      * @param pageable
      * @return Page<RunningResponseDto>
      */
-    @PostMapping("/{userId}/myrecord")
+    @GetMapping("/record/{userId}/myrecord")
     public ResponseEntity getMyRecord(@PathVariable Long userId, Pageable pageable) {
         Page<RunningResponseDto> response = versusService.getMyRecord(userId, pageable);
+        return Response.success(HttpStatus.OK, response);
+    }
+
+    /**
+     * 비슷한 목표 가져오기
+     *
+     * @param searchRequestDto
+     * @param pageable
+     * @return Page<SearchResponseDto>
+     */
+    @PostMapping("/record/search")
+    public ResponseEntity getSearchRecord(@RequestBody SearchRequestDto searchRequestDto, Pageable pageable) {
+        Page<SearchResponseDto> response = versusService.getSearchRecord(searchRequestDto, pageable);
         return Response.success(HttpStatus.OK, response);
     }
 
