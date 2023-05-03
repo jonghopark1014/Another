@@ -22,6 +22,7 @@ class _RunningTabState extends State<RunningTab> {
     mapController = controller;
   }
   Future<String> checkPermission() async {
+    // 위치 정보 권한 요청
     final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
     if(!isLocationEnabled) {
       return '위치 서비스를 활성화 해주세요';

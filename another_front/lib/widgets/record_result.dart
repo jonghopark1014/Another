@@ -40,7 +40,7 @@ class RecordResult extends StatelessWidget {
                     recordColor: WHITE_COLOR,
                   ),
                   RecordResultBox(
-                    data: distance,
+                    data: '${distance}km',
                     name: '거리',
                     textColor: BLUE_COLOR,
                     recordColor: WHITE_COLOR,
@@ -53,7 +53,7 @@ class RecordResult extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   RecordResultBox(
-                    data: calories,
+                    data: '${calories}kcal',
                     name: '총칼로리',
                     textColor: RED_COLOR,
                     recordColor: WHITE_COLOR,

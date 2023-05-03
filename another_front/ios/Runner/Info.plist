@@ -53,6 +53,10 @@
     <string> 카메라 권한을 허가해주세요</string>
     <key>NSMicrophoneUsageDescription</key>
     <string> 마이크 권한을 허가해주세요</string>
+    <key>NSHealthShareUsageDescription</key>
+    <string> 건강 정보 권한을 허가해주세요</string>
+    <key>NSHealthUpdateUsageDescription</key>
+    <string> 건강 정보 권한을 허가해주세요</string>
 
 </dict>
 </plist>
