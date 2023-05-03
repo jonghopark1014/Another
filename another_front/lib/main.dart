@@ -8,6 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
+class RunningData extends ChangeNotifier {
+  String runningTime = '00:00:00';
+  double runningDistance = 0;
+  int userCalories = 0;
+  String userPace = "0'00''";
+
+  void setRunningData() {
+    
+  }
+}
+
 class UserInfo extends ChangeNotifier {
   var nickname = '임범규';
   var height = 185;

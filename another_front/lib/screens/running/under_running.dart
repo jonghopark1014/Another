@@ -1,12 +1,17 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:another/constant/color.dart';
 import 'package:another/main.dart';
 import 'package:another/screens/running/under_running_end.dart';
 import 'package:flutter/material.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
+import 'package:flutter/rendering.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
+import 'dart:ui' as ui;
 
 import '../../widgets/record_result.dart';
 
@@ -21,18 +26,24 @@ class UnderRunning extends StatefulWidget {
 }
 
 class _UnderRunningState extends State<UnderRunning> {
+  // 캡처를 위한 키
+  final GlobalKey _globalKey = GlobalKey();
   // 지도에 위치 그리기
   GoogleMapController? mapController;
-
   double runningId = 1;
-
   @override
   void dispose() {
+    _captureWidget();
     mapController!.dispose();
+    print("???????????????????????????");
     // 스크린샷 찍어서 넘겨야 함..
+    // ScreenshotController screenshotController = ScreenshotController();
+    // Screenshot(
+    //   controller: screenshotController,
+    //   child: ,
+    // );
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     final initialPosition = ModalRoute.of(context)!.settings.arguments as CameraPosition;
@@ -47,52 +58,55 @@ class _UnderRunningState extends State<UnderRunning> {
                 return Center(child: CircularProgressIndicator());
               }
               if (snapshot.data == '위치 권한이 허가 되었습니다.') {
-                return StreamBuilder<Position>(
-                  stream: Geolocator.getPositionStream(),
-                  builder: (context, snapshot) {
-                    // 위치가 변경되었을 때 실햏하는 로직
-                    if (snapshot.data != null && mapController != null) {
-                      // 마커 리스트에 추가
-                      UnderRunning.markers.add(Marker(
-                        markerId: MarkerId(runningId.toString()),
-                        position: LatLng(
-                            snapshot.data!.latitude, snapshot.data!.longitude),
-                        visible: false,
-                      ));
-                      runningId += 1;
-                      // polypoint(지도에 그리는 점)에 추가
-                      UnderRunning.polyPoints.add(LatLng(
-                          snapshot.data!.latitude, snapshot.data!.longitude));
-                      // 화면 이동
-                      mapController!.animateCamera(
-                        CameraUpdate.newCameraPosition(
-                          CameraPosition(
-                              target: LatLng(snapshot.data!.latitude,
-                                  snapshot.data!.longitude),
-                              zoom: 20),
+                return RepaintBoundary(
+                  key: _globalKey,
+                  child: StreamBuilder<Position>(
+                    stream: Geolocator.getPositionStream(),
+                    builder: (context, snapshot) {
+                      // 위치가 변경되었을 때 실햏하는 로직
+                      if (snapshot.data != null && mapController != null) {
+                        // 마커 리스트에 추가
+                        UnderRunning.markers.add(Marker(
+                          markerId: MarkerId(runningId.toString()),
+                          position: LatLng(
+                              snapshot.data!.latitude, snapshot.data!.longitude),
+                          visible: false,
+                        ));
+                        runningId += 1;
+                        // polypoint(지도에 그리는 점)에 추가
+                        UnderRunning.polyPoints.add(LatLng(
+                            snapshot.data!.latitude, snapshot.data!.longitude));
+                        // 화면 이동
+                        mapController!.animateCamera(
+                          CameraUpdate.newCameraPosition(
+                            CameraPosition(
+                                target: LatLng(snapshot.data!.latitude,
+                                    snapshot.data!.longitude),
+                                zoom: 20),
+                          ),
+                        );
+                      }
+                      return GoogleMap(
+                        initialCameraPosition: initialPosition,
+                        mapType: MapType.normal,
+                        zoomControlsEnabled: false,
+                        myLocationEnabled: true,
+                        myLocationButtonEnabled: false,
+                        onMapCreated: onMapCreated,
+                        markers: Set.of(UnderRunning.markers),
+                        polylines: Set.of(
+                          [
+                            Polyline(
+                              polylineId: PolylineId('temp'),
+                              points: UnderRunning.polyPoints,
+                              color: MAIN_COLOR,
+                              // jointType: JointType.round,
+                            ),
+                          ],
                         ),
                       );
-                    }
-                    return GoogleMap(
-                      initialCameraPosition: initialPosition,
-                      mapType: MapType.normal,
-                      zoomControlsEnabled: false,
-                      myLocationEnabled: true,
-                      myLocationButtonEnabled: false,
-                      onMapCreated: onMapCreated,
-                      markers: Set.of(UnderRunning.markers),
-                      polylines: Set.of(
-                        [
-                          Polyline(
-                            polylineId: PolylineId('temp'),
-                            points: UnderRunning.polyPoints,
-                            color: MAIN_COLOR,
-                            // jointType: JointType.round,
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                    },
+                  ),
                 );
               }
               return Center(
@@ -105,6 +119,25 @@ class _UnderRunningState extends State<UnderRunning> {
         ],
       ),
     );
+  }
+  // 캡처하기
+  void _captureWidget() async {
+    // try {
+    //   RenderRepaintBoundary? boundary =
+    //   _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    //   ui.Image image = await boundary.toImage(pixelRatio: 5.0); // 해상도
+    //   ByteData? byteData =
+    //   await image.toByteData(format: ui.ImageByteFormat.png);
+    //   final listBytes = byteData!.buffer.asUint8List();
+    //     // TODO: 캡처된 이미지를 저장 또는 사용합니다.
+    //   final file = File('example.png');
+    //   await file.writeAsBytes(listBytes);
+    // } catch (e) {
+    //   print(e);
+    // }
+    Uint8List imgByte = await mapController!.takeSnapshot() as Uint8List;
+    final file = File('example.png');
+    await file.writeAsBytes(imgByte);
   }
 
   // 맵컨트롤러 받기 => 지도 카메라 위치 조정시 필요
@@ -162,6 +195,7 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
     accuracy: 0, altitude: 0, heading: 0, speed: 0, speedAccuracy: 0, timestamp: startTime,
   );
   // 시간
+  String runningTime = '00:00:00';
   late Timer _timer;
 
   int seconds = 0;
@@ -192,6 +226,8 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
     int paceMin = paceBase ~/ 60;
     int paceSec = paceBase % 60;
     userPace = "${paceMin.toString()}'${paceSec.toString()}''";
+    userCalories = (_userWeight * runningDistance * 1.036 / 1000 ~/ 1);
+    runningTime = '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}';
   }
   // 시간초는 거리 갱신할때도 쓰면 좋아서 그대로 흘러감 
   // 대신 저장의 유무를 정지, 시작의 상태에 따라서 저장
@@ -199,8 +235,8 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
   void initState() {
     super.initState();
     // 유저 정보 받아오기
-    // final userInfo = context.read<UserInfo>();
-    _userWeight = 70;
+    final userInfo = context.read<UserInfo>();
+    _userWeight = userInfo.weight;
     // 타이머 시작
     isStart = true;
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -222,6 +258,7 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
   }
   @override
   void dispose() {
+    print('timer cancel=====================================');
     _timer.cancel();
     super.dispose();
   }
@@ -240,10 +277,9 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
                     height: 282,
                   ),
                   RecordResult(
-                    timer:
-                    '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}',
+                    timer: runningTime,
                     distance: runningDistance.toString(),
-                    calories: (_userWeight * runningDistance * 1.036 / 1000 ~/ 1).toString(),
+                    calories: userCalories.toString(),
                     pace: userPace,
                   ),
                   Expanded(
