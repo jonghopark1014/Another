@@ -5,17 +5,45 @@ import 'package:another/screens/running/running.dart';
 import 'package:another/screens/running/under_challenge.dart';
 import 'package:another/screens/running/under_running.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
 class RunningData extends ChangeNotifier {
+  List<dynamic> posNTime = [];
+  List<LatLng> locations = [];
   String runningTime = '00:00:00';
   double runningDistance = 0;
   int userCalories = 0;
   String userPace = "0'00''";
 
-  void setRunningData() {
-    
+  void setTime(String time) {
+    runningTime = time;
+    notifyListeners();
+  }
+  void setDistance(double dis) {
+    runningDistance = dis;
+    notifyListeners();
+  }
+  void setCalories(int cal) {
+    userCalories= cal;
+    notifyListeners();
+  }
+  void setPace(String pace) {
+    userPace = pace;
+    notifyListeners();
+  }
+  void addLocation(LatLng pos) {
+    locations.add(pos);
+  }
+  Map<String,dynamic> getData() {
+    return {
+      '좌표': locations[locations.length-1],
+      'runningTime': runningTime,
+      'runningDistance': runningDistance,
+      'userCalories': userCalories,
+      'userPace': userPace,
+    };
   }
 }
 
@@ -35,8 +63,11 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => UserInfo(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (c) => UserInfo()) ,
+        ChangeNotifierProvider(create: (c) => RunningData()) ,
+      ],
       child: MaterialApp(
         initialRoute: '/',
         theme: ThemeData(
