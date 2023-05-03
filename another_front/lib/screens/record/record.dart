@@ -309,7 +309,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
             ? TableCalendarScreen()
             : Text('달력 없음}', style: TextStyle(color: Colors.white)),
 
-        PeriodTotalRecord(), // 조회 기간 총 기록
+        PeriodTotalRecord(selectedIndex: widget.selectedIndex), // 조회 기간 총 기록
 
 // 나중에 Pageview 써봐라
         widget.selectedIndex == 0
