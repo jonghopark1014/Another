@@ -352,6 +352,7 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
       isStart = false;
     });
     // _timer?.cancel();
+    
   }
 
   // 러닝 종료 시 동작
