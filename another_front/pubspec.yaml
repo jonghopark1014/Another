@@ -48,6 +48,7 @@ dependencies:
   flutter_sensors: ^1.0.1
   syncfusion_flutter_charts: ^21.1.41
   provider: ^6.0.1
+  kakao_flutter_sdk_user: ^1.4.1
 
 
   percent_indicator: ^4.0.1

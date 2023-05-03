@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:another/constant/color.dart';
 import 'signup_userinfo.dart';
 import '../../widgets/intro_header.dart';
+import 'package:another/screens/account/api/signup_api.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
@@ -26,34 +27,31 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-        controller: widget.controller,
-        validator: widget.validator,
-        obscureText: widget.obscureText,
-        decoration: InputDecoration(
-          labelText: widget.labelText,
-          errorText: errorText,
-          labelStyle: TextStyle(
-            color: SERVEONE_COLOR, // 원하는 라벨 텍스트 색상으로 변경
-          ),
-          border: UnderlineInputBorder(
-            borderSide:
-                BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide:
-                BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide:
-                BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
-          ),
+      controller: widget.controller,
+      validator: widget.validator,
+      obscureText: widget.obscureText,
+      decoration: InputDecoration(
+        labelText: widget.labelText,
+        errorText: errorText,
+        labelStyle: TextStyle(
+          color: SERVEONE_COLOR, // 원하는 라벨 텍스트 색상으로 변경
         ),
-        style: TextStyle(color: SERVEONE_COLOR), // 원하는 입력 텍스트 색상으로 변경
-        onChanged: (value) {
-          setState(() {
-            errorText = widget.validator?.call(value);
-          });
-        },
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
+        ),
+      ),
+      style: TextStyle(color: SERVEONE_COLOR), // 원하는 입력 텍스트 색상으로 변경
+      onChanged: (value) {
+        setState(() {
+          errorText = widget.validator?.call(value);
+        });
+      },
     );
   }
 }
@@ -71,37 +69,6 @@ class _CustomInputFormState extends State<CustomInputForm> {
   TextEditingController pwCheckController = TextEditingController();
   TextEditingController nicknameController = TextEditingController();
   bool isMaleSelected = true;
-
-  // // 사용자가 입력한 값을 서버로 전송
-  // void _submitForm() async {
-  //   if(_formKey.currentState!.validate()){
-  //     // 사용자가 입력한 값을 가져옴
-  //     String email = emailController.text;
-  //     String password = pwController.text;
-  //     String nickname = nicknameController.text;
-  //
-  //     // HTTP POST 요청 보내기
-  //     var response = await http.post(
-  //         Uri.parse('https://example.com/register'), // 백엔드의 API 엔드포인트
-  //         body: json.encode({
-  //         'email': email,
-  //         'password': password,
-  //         'nickname': nickname,
-  //         }),
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     );
-  //     // 응답 처리
-  //     if (response.statusCode == 200) {
-  //       // 성공적으로 응답이 왔을 경우
-  //       print('회원가입 성공');
-  //     } else {
-  //       // 응답이 실패했을 경우
-  //       print('회원가입 실패: ${response.body}');
-  //     }
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -176,8 +143,12 @@ class _CustomInputFormState extends State<CustomInputForm> {
                 if (value.length < 2 || value.length > 8) {
                   return '2~8자 사이로 입력해주세요.';
                 }
+                // 닉네임 중복 검사
                 return null;
               }),
+          ElevatedButton(onPressed: () async{
+            // await checkNicknameApi.checkNickname(nickname: nicknameController.text);
+          }, child: Text('중복확인')),
           SizedBox(height: 24),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,9 +195,16 @@ class _CustomInputFormState extends State<CustomInputForm> {
                 // _submitForm();
                 if (_formKey.currentState!.validate()) {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SignupUserInfoPage()));
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => SignupUserInfoPage(
+                        email: emailController.text,
+                        password: pwController.text,
+                        nickname: nicknameController.text,
+                        isMale: isMaleSelected,
+                      ),
+                    ),
+                  );
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Processing Data')),
                   );
