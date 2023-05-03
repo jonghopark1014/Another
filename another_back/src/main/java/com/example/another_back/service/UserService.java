@@ -8,8 +8,12 @@ import com.example.another_back.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -43,11 +47,9 @@ public class UserService {
     비밀번호 8~16(영어,숫자,특수문자) 3개다 포함
     이메일은 골뱅이다음 두글자이상. 두글자이상
      */
-    public Long join(UserJoinDto userJoinDto) throws IOException {
-        System.out.println("userJoinDto : "+ userJoinDto);
+    public Long join(UserJoinDto userJoinDto){
+        System.out.println("userJoinDto : " + userJoinDto);
         checkDuplicatedUsername(userJoinDto.getUsername());
-        String imageURL;
-//        imageURL = s3UploaderService.upload(userJoinDto.getProfilePic(), "ssafy308-another", "image");
 
         User user = User.builder()
                 .height(userJoinDto.getHeight())
@@ -64,8 +66,20 @@ public class UserService {
     }
 
     private void checkDuplicatedUsername(String username) {
-        if(!userRepository.findUserByUsername(username).isEmpty()) {
+        if (!userRepository.findUserByUsername(username).isEmpty()) {
             throw new IllegalArgumentException("해당 유저가 이미 존재합니다.");
         }
+    }
+
+    /* 회원가입 시, 유효성 체크 */
+    @Transactional(readOnly = true)
+    public Map<String, String> validateHandling(Errors errors) {
+        Map<String, String> validatorResult = new HashMap<>();
+
+        /* 유효성 검사에 실패한 필드 목록을 받음 */
+        for (FieldError error : errors.getFieldErrors()) {
+            validatorResult.put(error.getField(), error.getDefaultMessage());
+        }
+        return validatorResult;
     }
 }
