@@ -10,7 +10,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
 class RunningData extends ChangeNotifier {
-  List<dynamic> posNTime = [];
+  List<Map> posNTime = [];
   List<LatLng> locations = [];
   String runningTime = '00:00:00';
   double runningDistance = 0;
@@ -35,10 +35,14 @@ class RunningData extends ChangeNotifier {
   }
   void addLocation(LatLng pos) {
     locations.add(pos);
+    posNTime.add({
+      "position": pos,
+      "time": runningTime,
+    });
   }
   Map<String,dynamic> getData() {
     return {
-      '좌표': locations[locations.length-1],
+      'posData': posNTime,
       'runningTime': runningTime,
       'runningDistance': runningDistance,
       'userCalories': userCalories,
