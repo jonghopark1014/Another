@@ -1,6 +1,9 @@
 package com.example.another_back.service;
 
+import com.example.another_back.dto.RunningResponseDto;
+import com.example.another_back.entity.Running;
 import com.example.another_back.hdfs.FileIO;
+import com.example.another_back.repository.RunningRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -10,11 +13,16 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +32,19 @@ public class FeedService {
 
     @Value("${data.hdfs-port}")
     private String hdfsPort;
+
+    private final RunningRepository runningRepository;
+
+    /**
+     * 피드 전체 목록
+     *
+     * @return
+     */
+    public Page<RunningResponseDto> getFeedList(Pageable pageable){
+        List<Running> feedList = runningRepository.findAll();
+        Page<RunningResponseDto> runningResponseDtoList = new PageImpl<>(feedList.stream().map(RunningResponseDto::new).collect(Collectors.toList()),pageable,feedList.size());
+        return runningResponseDtoList;
+    }
 
     /**
      * 디테일 페이지 그래프를 위한 OriginData JSONArray로 반환
