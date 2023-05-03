@@ -22,13 +22,12 @@ public class VersusController {
      * 경쟁 시작
      *
      * @param runningId
-     *
      * @return JSONArray
      */
     @GetMapping("/{runningId}")
-    public ResponseEntity getVersusData(@PathVariable String runningId){
+    public ResponseEntity getVersusData(@PathVariable String runningId) {
         JSONArray response = versusService.getVersusData(runningId);
-        return Response.success(HttpStatus.OK,response);
+        return Response.success(HttpStatus.OK, response);
     }
 
     /**
@@ -36,11 +35,10 @@ public class VersusController {
      *
      * @param userId
      * @param pageable
-     *
      * @return Page<RunningResponseDto>
      */
     @PostMapping("/{userId}/myrecord")
-    public ResponseEntity getMyRecord(@PathVariable Long userId, Pageable pageable){
+    public ResponseEntity getMyRecord(@PathVariable Long userId, Pageable pageable) {
         Page<RunningResponseDto> response = versusService.getMyRecord(userId, pageable);
         return Response.success(HttpStatus.OK, response);
     }
@@ -49,7 +47,6 @@ public class VersusController {
      * 예외 발생 처리
      *
      * @param e
-     *
      * @return error
      */
     @ExceptionHandler(IllegalStateException.class)

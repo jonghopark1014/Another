@@ -22,7 +22,6 @@ public class FeedController {
      * 피드 리스트 기능
      *
      * @param pageable
-     *
      * @return Page<RunningResponseDto>
      */
     @GetMapping
@@ -35,7 +34,6 @@ public class FeedController {
      * 디테일 페이지 그래프에 사용할 데이터 반환
      *
      * @param runningId
-     *
      * @return JSONArray
      */
     @GetMapping("/{runningId}")
@@ -48,7 +46,6 @@ public class FeedController {
      * 예외 발생 처리
      *
      * @param e
-     *
      * @return error
      */
     @ExceptionHandler(IllegalStateException.class)
