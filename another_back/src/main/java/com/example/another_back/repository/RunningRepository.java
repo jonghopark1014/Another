@@ -11,4 +11,6 @@ public interface RunningRepository extends JpaRepository<Running, String> {
     List<Running> findRunningWithFeedPics();
 
     List<Running> findByUserId(Long userId);
+
+    List<Running> findByRunningDistanceBetweenAndRunningTimeBetweenAndUserIdNot(Float startDistance, Float endDistance, String startTime, String endTime, Long userId);
 }
