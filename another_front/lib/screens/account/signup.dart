@@ -3,8 +3,7 @@ import 'package:another/constant/color.dart';
 import 'signup_userinfo.dart';
 import '../../widgets/intro_header.dart';
 
-
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
   final String? Function(String?)? validator;
@@ -18,27 +17,43 @@ class CustomTextField extends StatelessWidget {
   });
 
   @override
+  State<CustomTextField> createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  String? errorText;
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
-      validator: validator,
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        labelText: labelText,
-        labelStyle: TextStyle(
-          color: SERVEONE_COLOR, // 원하는 라벨 텍스트 색상으로 변경
+        controller: widget.controller,
+        validator: widget.validator,
+        obscureText: widget.obscureText,
+        decoration: InputDecoration(
+          labelText: widget.labelText,
+          errorText: errorText,
+          labelStyle: TextStyle(
+            color: SERVEONE_COLOR, // 원하는 라벨 텍스트 색상으로 변경
+          ),
+          border: UnderlineInputBorder(
+            borderSide:
+                BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide:
+                BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide:
+                BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
+          ),
         ),
-        border: UnderlineInputBorder(
-          borderSide: BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
-        ),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
-        ),
-      ),
-      style: TextStyle(color: SERVEONE_COLOR), // 원하는 입력 텍스트 색상으로 변경
+        style: TextStyle(color: SERVEONE_COLOR), // 원하는 입력 텍스트 색상으로 변경
+        onChanged: (value) {
+          setState(() {
+            errorText = widget.validator?.call(value);
+          });
+        },
     );
   }
 }
@@ -103,7 +118,8 @@ class _CustomInputFormState extends State<CustomInputForm> {
                 return '이메일을 입력해주세요.';
               }
               // 입력한 경우 이메일 형식 검사
-              String emailPattern = r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$'; // 이메일 정규식
+              String emailPattern =
+                  r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$'; // 이메일 정규식
               RegExp regex = RegExp(emailPattern);
               if (!regex.hasMatch(value)) {
                 return '잘못된 이메일 형식입니다.';
@@ -117,17 +133,17 @@ class _CustomInputFormState extends State<CustomInputForm> {
             controller: pwController,
             labelText: '비밀번호',
             validator: (value) {
-              if (value == null || value.isEmpty){
+              if (value == null || value.isEmpty) {
                 return '비밀번호를 입력해주세요.';
               }
               // 비밀번호 길이 검사
-              if (value.length < 8 || value.length > 16){
+              if (value.length < 8 || value.length > 16) {
                 return '8~16자 사이로 입력해주세요.';
               }
               // 특수문자 포함 여부 검사
               String pattern = r'^(?=.*?[!@#$%^&*(),.?":{}|<>])';
               RegExp regex = RegExp(pattern);
-              if (!regex.hasMatch(value)){
+              if (!regex.hasMatch(value)) {
                 return '특수문자를 포함하여 입력해주세요.';
               }
               // 잘 된 경우
@@ -140,7 +156,7 @@ class _CustomInputFormState extends State<CustomInputForm> {
             controller: pwCheckController,
             labelText: '비밀번호 확인',
             validator: (value) {
-              if (value != pwController.text){
+              if (value != pwController.text) {
                 return '비밀번호를 다시 입력해주세요.';
               }
               // 잘 된 경우
@@ -150,9 +166,18 @@ class _CustomInputFormState extends State<CustomInputForm> {
           ),
           SizedBox(height: 16),
           CustomTextField(
-            controller: nicknameController,
-            labelText: '닉네임',
-          ),
+              controller: nicknameController,
+              labelText: '닉네임',
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return '닉네임을 입력해주세요.';
+                }
+                // 닉네임 길이 검사
+                if (value.length < 2 || value.length > 8) {
+                  return '2~8자 사이로 입력해주세요.';
+                }
+                return null;
+              }),
           SizedBox(height: 24),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,19 +224,18 @@ class _CustomInputFormState extends State<CustomInputForm> {
                 // _submitForm();
                 if (_formKey.currentState!.validate()) {
                   Navigator.push(
-                      context, MaterialPageRoute(
-                      builder: (context) => SignupUserInfoPage()
-                  ));
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SignupUserInfoPage()));
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Processing Data')),
                   );
-
                 }
               },
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(MAIN_COLOR),
-                minimumSize: MaterialStateProperty.all<Size>(Size(double.infinity, 48.0))
-              ),
+                  backgroundColor: MaterialStateProperty.all<Color>(MAIN_COLOR),
+                  minimumSize: MaterialStateProperty.all<Size>(
+                      Size(double.infinity, 48.0))),
               child: const Text('다음으로'),
             ),
           ),
@@ -220,8 +244,6 @@ class _CustomInputFormState extends State<CustomInputForm> {
     );
   }
 }
-
-
 
 class SignupPage extends StatelessWidget {
   @override
@@ -235,7 +257,6 @@ class SignupPage extends StatelessWidget {
             IntroHeader(),
             SizedBox(height: 16),
             CustomInputForm(),
-
             Spacer(),
           ],
         ),
