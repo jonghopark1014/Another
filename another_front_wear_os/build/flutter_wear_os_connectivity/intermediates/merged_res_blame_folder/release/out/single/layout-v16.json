@@ -1,0 +1,6 @@
+[
+    {
+        "merged": "com.sstonn.flutter_wear_os_connectivity-merged_res-12:/layout-v16/notification_template_custom_big.xml",
+        "source": "com.sstonn.flutter_wear_os_connectivity-core-1.6.0-2:/layout-v16/notification_template_custom_big.xml"
+    }
+]
