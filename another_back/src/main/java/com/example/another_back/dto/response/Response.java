@@ -45,10 +45,10 @@ public class Response {
         return ResponseEntity.status(status).body(responseBody);
     }
 
-    public static ResponseEntity error(HttpStatus status, String message) {
+    public static <T> ResponseEntity error(HttpStatus status, T body) {
         ResponseDto<Object> responseBody = ResponseDto.builder()
                 .status(ERROR)
-                .data(message)
+                .data(body)
                 .build();
         return ResponseEntity.status(status).body(responseBody);
     }
