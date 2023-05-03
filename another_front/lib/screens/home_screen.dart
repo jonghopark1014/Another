@@ -4,6 +4,8 @@ import 'package:another/constant/color.dart';
 import 'package:another/screens/record/Record.dart';
 import 'package:another/screens/running/Running.dart';
 import 'package:flutter/material.dart';
+import '../../main.dart';
+import 'package:provider/provider.dart';
 
 import 'feed/feed_screen.dart';
 
@@ -32,7 +34,12 @@ class _HomeScreenState extends State<HomeScreen> {
     if (index == 1){
       _runningColor['background'] = SERVETWO_COLOR;
       _runningColor['text'] = WHITE_COLOR;
-    } else {
+    }
+    else {
+      if (index == 2) {
+        final forDate = Provider.of<ForDate>(context, listen: false);
+        forDate.changeValue(DateTime.now());
+      }
       _runningColor['background'] = MAIN_COLOR;
       _runningColor['text'] = BLACK_COLOR;
     }
