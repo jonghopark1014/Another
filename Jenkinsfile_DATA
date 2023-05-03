@@ -1,0 +1,36 @@
+pipeline{
+    agent any
+    environment {
+       DATA_CONTAINER_NAME="pipeline-confluent-kafka-rest"
+       DATA_NAME = "pipeline-confluent-kafka-rest"
+    }
+    stages {
+        stage('Clean'){
+            steps{
+                script {
+                    try{
+                        sh "docker stop ${DATA_CONTAINER_NAME}"
+                        sleep 1
+                        sh "docker rm ${DATA_CONTAINER_NAME}"
+                    }catch(e){
+                        sh 'exit 0'
+                    }
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                script{
+                    sh "sed -i 's/\${DATA_SERVER}/${DATA_SERVER}/' '${WORKSPACE}/another_data/confluent_config/kafka-rest.properties'"
+                    sh "docker build -t pipeline-confluent-kafka-rest ./another_data/."
+                }
+            }
+        }
+        stage('Deploy'){
+            steps {
+                sh "docker run -d --name=${DATA_CONTAINER_NAME} -p 8082:8082 ${DATA_NAME}"
+                sh "docker image prune --force"
+            }
+        }
+    }
+}
