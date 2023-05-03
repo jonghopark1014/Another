@@ -1,6 +1,10 @@
 package com.example.another_back.service;
 
+import com.example.another_back.dto.RunningResponseDto;
+import com.example.another_back.entity.Running;
 import com.example.another_back.hdfs.FileIO;
+import com.example.another_back.repository.RunningRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -10,13 +14,19 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class VersusService {
 
@@ -25,6 +35,8 @@ public class VersusService {
 
     @Value("${data.hdfs-port}")
     private String hdfsPort;
+
+    private final RunningRepository runningRepository;
 
     /**
      * 경쟁 시작
@@ -68,6 +80,19 @@ public class VersusService {
         }
         if (response.isEmpty())
             new IllegalArgumentException("해당 러닝기록이 비어있습니다.");
+        return response;
+    }
+
+    /**
+     * 내 기록 가져오기
+     *
+     * @param userId
+     * @param pageable
+     * @return Page<RunningResponseDto>
+     */
+    public Page<RunningResponseDto> getMyRecord(Long userId, Pageable pageable) {
+        List<Running> runningList = runningRepository.findByUserId(userId);
+        Page<RunningResponseDto> response = new PageImpl<>(runningList.stream().map(RunningResponseDto::new).collect(Collectors.toList()), pageable, runningList.size());
         return response;
     }
 }

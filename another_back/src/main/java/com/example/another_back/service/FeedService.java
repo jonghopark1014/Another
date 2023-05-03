@@ -1,6 +1,6 @@
 package com.example.another_back.service;
 
-import com.example.another_back.dto.RunningResponseDto;
+import com.example.another_back.dto.FeedListResponseDto;
 import com.example.another_back.entity.Running;
 import com.example.another_back.hdfs.FileIO;
 import com.example.another_back.repository.RunningRepository;
@@ -37,14 +37,13 @@ public class FeedService {
 
     /**
      * 피드 리스트 기능
-     * 
+     *
      * @param pageable
-     * 
      * @return Page<RunningResponseDto>
      */
-    public Page<RunningResponseDto> getFeedList(Pageable pageable){
+    public Page<FeedListResponseDto> getFeedList(Pageable pageable) {
         List<Running> feedList = runningRepository.findRunningWithFeedPics();
-        Page<RunningResponseDto> runningResponseDtoList = new PageImpl<>(feedList.stream().map(RunningResponseDto::new).collect(Collectors.toList()),pageable,feedList.size());
+        Page<FeedListResponseDto> runningResponseDtoList = new PageImpl<>(feedList.stream().map(FeedListResponseDto::new).collect(Collectors.toList()), pageable, feedList.size());
         return runningResponseDtoList;
     }
 
@@ -52,7 +51,6 @@ public class FeedService {
      * 디테일 페이지 그래프를 위한 OriginData JSONArray로 반환
      *
      * @param runningId
-     *
      * @return JSONArray
      */
     public JSONArray getOringinData(String runningId) {
@@ -82,8 +80,8 @@ public class FeedService {
                     jsonObject = (JSONObject) parser.parse(line);
                     // distance와 speed 추출
                     JSONObject select = new JSONObject();
-                    select.put("distance",jsonObject.get("distance"));
-                    select.put("speed",jsonObject.get("speed"));
+                    select.put("distance", jsonObject.get("distance"));
+                    select.put("speed", jsonObject.get("speed"));
                     jsonArray.add(select);
                 }
                 br.close();

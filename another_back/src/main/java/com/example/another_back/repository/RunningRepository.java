@@ -9,4 +9,6 @@ import java.util.List;
 public interface RunningRepository extends JpaRepository<Running, String> {
     @Query("select distinct r,fp from Running r left outer join fetch r.feedPic fp")
     List<Running> findRunningWithFeedPics();
+
+    List<Running> findByUserId(Long userId);
 }

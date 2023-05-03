@@ -1,8 +1,8 @@
 spring:
   profiles:
     group:
-      "local" : "local, common"
-      "development" : "development, common"
+      "local": "local, common"
+      "development": "development, common"
     active: development
 
   mvc:
@@ -72,6 +72,6 @@ springfox:
   documentation:
     swagger:
       v2:
-        path : /api
+        path: /api
     swagger-ui:
       base-url: /api
