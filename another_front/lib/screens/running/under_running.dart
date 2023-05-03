@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:another/constant/color.dart';
 import 'package:another/main.dart';
+import 'package:another/screens/running/api/under_running_api.dart';
 import 'package:another/screens/running/under_running_end.dart';
 import 'package:flutter/material.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
@@ -249,6 +250,7 @@ class _UnderRunningStatusState extends State<UnderRunningStatus> {
     runningTime =
         '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}';
     runningData.setTime(runningTime);
+    Kafka.sendTopic(latitude: 1, longitude: 1, runningId: '1', runningDistance: 1.1, runningTime: '1', userCalories: 13, userPace: '2');
   }
 
   // 시간초는 거리 갱신할때도 쓰면 좋아서 그대로 흘러감
