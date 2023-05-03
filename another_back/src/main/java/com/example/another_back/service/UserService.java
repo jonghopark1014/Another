@@ -44,6 +44,7 @@ public class UserService {
     이메일은 골뱅이다음 두글자이상. 두글자이상
      */
     public Long join(UserJoinDto userJoinDto) throws IOException {
+        System.out.println("userJoinDto : "+ userJoinDto);
         checkDuplicatedUsername(userJoinDto.getUsername());
         String imageURL;
 //        imageURL = s3UploaderService.upload(userJoinDto.getProfilePic(), "ssafy308-another", "image");
