@@ -1,6 +1,7 @@
 package com.example.another_back.service;
 
 import com.example.another_back.dto.UserJoinDto;
+import com.example.another_back.dto.UserLevelExpDto;
 import com.example.another_back.entity.User;
 import com.example.another_back.entity.enums.Role;
 import com.example.another_back.repository.UserRepository;
@@ -25,6 +26,16 @@ public class UserService {
     public boolean checkDuplicatedNickname(String nickname) {
         Optional<User> user = userRepository.findUserByNickname(nickname);
         return user.isEmpty();
+    }
+
+    //유저 Level, EXP 가져오기
+    public UserLevelExpDto getUserLevelExp(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+        return UserLevelExpDto.builder()
+                .level(user.getLevel())
+                .exp(user.getExp())
+                .build();
     }
 
     /*
@@ -53,6 +64,7 @@ public class UserService {
 
     private void checkDuplicatedUsername(String username) {
         if (!userRepository.findUserByUsername(username).isEmpty()) {
+            System.out.println(userRepository.findUserByUsername(username).get().getUsername());
             throw new IllegalArgumentException("해당 유저가 이미 존재합니다.");
         }
     }
