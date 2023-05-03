@@ -1,16 +1,17 @@
 import 'package:another/constant/color.dart';
 import 'package:another/screens/account/edit.dart';
+import 'package:another/screens/record/widgets/period_total_record.dart';
 import 'package:flutter/material.dart';
 import '../account/login.dart';
+import '../account/signup_userinfo.dart';
 import '../record/challenge.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'widgets/category_title.dart';
-import './widgets/period_record.dart';
+import './widgets/record_running_history.dart';
 import '../../main.dart';
 import 'package:provider/provider.dart';
-import 'package:another/screens/record/widgets/period_total_record.dart';
 
 class RecordTab extends StatelessWidget {
   const RecordTab({Key? key}) : super(key: key);
@@ -36,6 +37,16 @@ class RecordTab extends StatelessWidget {
               );
             },
             child: Text('로그인'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              // 로그인 페이지로 이동하는 로직을 작성
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SignupUserInfoPage()),
+              );
+            },
+            child: Text('키 몸무게'),
           ),
           ElevatedButton(
             onPressed: () {
@@ -279,9 +290,8 @@ class _MyRecordState extends State<MyRecord> {
                 )),
           ],
         ),
-        // PeriodTotalRecord(),
         MyRecordContents(
-            selectedIndex: _selectedIndex, isCalendarOpen: _isCalendarOpen),
+            selectedIndex: _selectedIndex, isCalendarOpen: _isCalendarOpen)
       ],
     );
   }
@@ -344,7 +354,6 @@ class _MyRecordContentsState extends State<MyRecordContents> {
     );
   }
 }
-
 
 class TableCalendarScreen extends StatefulWidget {
   const TableCalendarScreen({Key? key}) : super(key: key);

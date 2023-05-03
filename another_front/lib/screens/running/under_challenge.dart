@@ -144,6 +144,10 @@ class UnderChallengeStatus extends StatefulWidget {
 }
 
 class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
+  int _userWeight = 0;
+  final int timeInterval = 5;
+  // 칼로리
+  int userCalories = 0;
   // 페이스
   String userPace = "0'00''";
   // 시작 시간
@@ -196,6 +200,8 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
   @override
   void initState() {
     super.initState();
+    _userWeight = 70;
+    // 타이머 시작
     isStart = true;
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setDistance();
@@ -263,8 +269,8 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
                 RecordResult(
                   timer:
                   '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}',
-                  distance: '0',
-                  calories: '0',
+                  distance: runningDistance.toString(),
+                  calories: (_userWeight * runningDistance * 1.036 / 1000 ~/ 1).toString(),
                   pace: userPace,
                 ),
                 Expanded(

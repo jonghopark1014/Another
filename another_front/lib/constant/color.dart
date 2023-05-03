@@ -10,5 +10,5 @@ const Color RED_COLOR = Color(0xFFFF2626);
 const Color YELLOW_COLOR = Color(0xFFFFD335);
 const Color BLUE_COLOR = Color(0xFF35CFFF);
 const Color GREEN_COLOR = Color(0xFF00FF00);
-const Color BLACK_COLOR = Color(0xFF121212);
+const Color BLACK_COLOR = Color(0xFF29262C);
 const Color WHITE_COLOR = Color(0xFFFFFFFF);
