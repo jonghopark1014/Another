@@ -353,6 +353,7 @@ class TableCalendarScreen extends StatefulWidget {
 }
 
 class _TableCalendarScreenState extends State<TableCalendarScreen> {
+
   DateTime selectedDay = DateTime(
     DateTime.now().year,
     DateTime.now().month,
@@ -363,6 +364,18 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final forDate = Provider.of<ForDate>(context);
+
+    DateTime selectDay = DateTime(
+      forDate.forFocus.year,
+      forDate.forFocus.month,
+      forDate.forFocus.day,
+    );
+
+    selectedDay = selectDay;
+    focusedDay = forDate.forFocus;
+
     return TableCalendar(
         locale: 'ko_KR',
         firstDay: DateTime.utc(2021),
@@ -435,6 +448,7 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
           setState(() {
             this.selectedDay = selectedDay;
             this.focusedDay = focusedDay;
+            forDate.changeValue(selectedDay);
           });
 
           // 현재 선택된 달력의 월과 다른 경우, 해당 달력으로 이동
