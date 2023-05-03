@@ -5,6 +5,7 @@ import com.example.another_back.dto.response.Response;
 import com.example.another_back.service.RunningService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,8 @@ public class RunningController {
      * @param runningRequestDto
      * @return success
      */
-    @PostMapping("/stop")
+    @PostMapping(value = "/stop", consumes =
+            {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity addRunning(RunningRequestDto runningRequestDto) {
         runningService.addRunning(runningRequestDto);
         return Response.success(HttpStatus.OK);
