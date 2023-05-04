@@ -1,5 +1,6 @@
 package com.example.another_back.controller;
 
+import com.example.another_back.dto.FeedDetailResponseDto;
 import com.example.another_back.dto.FeedListResponseDto;
 import com.example.another_back.dto.response.Response;
 import com.example.another_back.service.FeedService;
@@ -40,6 +41,18 @@ public class FeedController {
     public ResponseEntity getMyFeedList(@PathVariable Long userId, Pageable pageable) {
         Page<FeedListResponseDto> feedList = feedService.getMyFeedList(userId, pageable);
         return Response.success(HttpStatus.OK, feedList);
+    }
+
+    /**
+     * 피드 디테일 가져오기
+     *
+     * @param runningId
+     * @return FeedDetailResponseDto
+     */
+    @GetMapping("/detail/{runningId}")
+    public ResponseEntity getFeedDetail(@PathVariable String runningId){
+        FeedDetailResponseDto feedDetail = feedService.getFeedDetail(runningId);
+        return Response.success(HttpStatus.OK, feedDetail);
     }
 
     /**
