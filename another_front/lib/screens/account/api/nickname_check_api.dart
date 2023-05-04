@@ -5,7 +5,8 @@ const String _baseUrl = 'https://k8b308.p.ssafy.io/api';
 
 class doubleCheckApi {
   static Future<String> doubleCheck({
-    required String nickname
+    required String nickname,
+    required Function nicknamePossible
   })
   async {
     var url = Uri.parse('${_baseUrl}/user/duplicate/nickname/${nickname}');
@@ -17,7 +18,7 @@ class doubleCheckApi {
       if (response.statusCode == 200) {
         var responseBody = jsonDecode(response.body);
         if (responseBody['data'] == true) {
-          print('사용 가능');
+          nicknamePossible();
           return '사용 가능';
         } else {
           print('이미 있음');
