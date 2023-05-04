@@ -51,95 +51,141 @@ class RecordTab extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.asset('assets/img/logo_small.png'),
-              SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '안녕하세요 ${context.watch<UserInfo>().nickname}님!\n오늘도 함께 달려볼까요?',
-                    style: TextStyle(color: Colors.white),
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xFF1C1A1E),
+                        Color(0xFF3D2F4A),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
                   ),
-                  Column(
+                ),
+                Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Stack(
+                      Image.asset('assets/img/logo_small.png'),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          CircularPercentIndicator(
-                            radius: 50,
-                            lineWidth: 10,
-                            percent: 0.6,
-                            header: Text("Icon header"),
-                            center: CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                  '${context.watch<UserInfo>().profileImg}'),
-                              radius: 45,
-                            ),
-                            backgroundColor: Colors.grey,
-                            progressColor: Colors.blue,
+                          Text(
+                            '안녕하세요 ${context.watch<UserInfo>().nickname}님!\n오늘도 함께 달려볼까요?',
+                            style: TextStyle(color: Colors.white),
                           ),
-                          Positioned(
-                            right: 0,
-                            bottom: 0,
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ProfileEditPage(),
+                          Column(
+                            children: [
+                              Stack(
+                                children: [
+                                  CircularPercentIndicator(
+                                    radius: 50,
+                                    lineWidth: 10,
+                                    percent: 0.6,
+                                    header: Text("Icon header"),
+                                    center: CircleAvatar(
+                                      backgroundImage: NetworkImage(
+                                          '${context.watch<UserInfo>().profileImg}'),
+                                      radius: 45,
+                                    ),
+                                    backgroundColor: Colors.grey,
+                                    progressColor: Colors.blue,
                                   ),
-                                );
-                              },
-                              child: CircleAvatar(
-                                backgroundColor: MAIN_COLOR,
-                                radius: 15,
-                                child: Icon(
-                                  Icons.edit,
-                                  color: WHITE_COLOR,
-                                  size: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            left: 36,
-                            top: 0,
-                            child: Text(
-                              'Lv.1',
-                              style: TextStyle(color: Colors.white),
-                            ),
+                                  Positioned(
+                                    right: 0,
+                                    bottom: 0,
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ProfileEditPage(),
+                                          ),
+                                        );
+                                      },
+                                      child: CircleAvatar(
+                                        backgroundColor: MAIN_COLOR,
+                                        radius: 15,
+                                        child: Icon(
+                                          Icons.edit,
+                                          color: WHITE_COLOR,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    left: 36,
+                                    top: 0,
+                                    child: Text(
+                                      'Lv.1',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
                           )
                         ],
-                      )
+                      ),
                     ],
-                  )
-                ],
-              ),
-              Row(
-                children: [
-                  CategoryTitle(title: 'MY 챌린지'),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ChallengePage()),
-                      );
-                    },
-                    icon: Icon(Icons.arrow_forward_ios_outlined),
-                    color: Colors.white,
-                    iconSize: 14,
-                  )
-                ],
-              ),
-              MyChallenge(), // 나의 챌린지
-              CategoryTitle(title: '나의 활동 기록'),
-              MyRecord(),
-            ],
-          ),
+                  ),
+                ),
+              ],
+            ),
+            Stack(
+              children: [
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10, left: 15, right: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          CategoryTitle(title: 'MY 챌린지'),
+                          IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ChallengePage()),
+                              );
+                            },
+                            icon: Icon(Icons.arrow_forward_ios_outlined),
+                            color: Colors.white,
+                            iconSize: 14,
+                          )
+                        ],
+                      ),
+                      MyChallenge(), // 나의 챌린지
+                      CategoryTitle(title: '나의 활동 기록'),
+                      MyRecord(),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -352,7 +398,6 @@ class TableCalendarScreen extends StatefulWidget {
 }
 
 class _TableCalendarScreenState extends State<TableCalendarScreen> {
-
   DateTime selectedDay = DateTime(
     DateTime.now().year,
     DateTime.now().month,
@@ -363,7 +408,6 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final forDate = Provider.of<ForDate>(context);
 
     DateTime selectDay = DateTime(
