@@ -1,5 +1,6 @@
 package com.example.another_back.service;
 
+import com.example.another_back.dto.FeedDetailResponseDto;
 import com.example.another_back.dto.FeedListResponseDto;
 import com.example.another_back.entity.Running;
 import com.example.another_back.hdfs.FileIO;
@@ -107,5 +108,19 @@ public class FeedService {
         if (jsonArray.isEmpty())
             new IllegalArgumentException("해당 러닝기록이 비어있습니다.");
         return jsonArray;
+    }
+
+    /**
+     * 피드 디테일 가져오기
+     *
+     * @param runningId
+     * @return FeedDetailResponseDto
+     */
+    public FeedDetailResponseDto getFeedDetail(String runningId) {
+        Running running = runningRepository.findRunningByIdWithFeedPics(runningId).orElseThrow(
+                () -> new IllegalArgumentException("해당하는 러닝 기록이 없습니다."));
+        FeedDetailResponseDto response = new FeedDetailResponseDto(running);
+        response.setSpeed(getOringinData(runningId));
+        return response;
     }
 }
