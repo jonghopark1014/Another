@@ -1,5 +1,6 @@
 package com.example.another_back.controller;
 
+import com.example.another_back.dto.MonthDistanceResponseDto;
 import com.example.another_back.dto.RunningRequestDto;
 import com.example.another_back.dto.response.Response;
 import com.example.another_back.service.RunningService;
@@ -7,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,6 +28,18 @@ public class RunningController {
     public ResponseEntity addRunning(RunningRequestDto runningRequestDto) {
         runningService.addRunning(runningRequestDto);
         return Response.success(HttpStatus.OK);
+    }
+
+    /**
+     * 저번달 vs 이번달 거리 데이터
+     *
+     * @param userId
+     * @return MonthDistanceResponseDto
+     */
+    @GetMapping("/compare/month/{userId}")
+    public ResponseEntity getMonthData(@PathVariable Long userId) {
+        MonthDistanceResponseDto response = runningService.getMonthData(userId);
+        return Response.success(HttpStatus.OK, response);
     }
 
     /**
