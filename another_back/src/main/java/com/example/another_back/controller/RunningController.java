@@ -1,5 +1,6 @@
 package com.example.another_back.controller;
 
+import com.example.another_back.dto.ChallengeResponseDto;
 import com.example.another_back.dto.MonthDistanceResponseDto;
 import com.example.another_back.dto.RunningRequestDto;
 import com.example.another_back.dto.response.Response;
@@ -39,6 +40,18 @@ public class RunningController {
     @GetMapping("/compare/month/{userId}")
     public ResponseEntity getMonthData(@PathVariable Long userId) {
         MonthDistanceResponseDto response = runningService.getMonthData(userId);
+        return Response.success(HttpStatus.OK, response);
+    }
+
+    /**
+     * 챌린지 추천
+     *
+     * @param userId
+     * @return ChallengeResponseDto
+     */
+    @GetMapping("/recommendChallenge/{userId}")
+    public ResponseEntity getRecommendChallenge(@PathVariable Long userId) {
+        ChallengeResponseDto response = runningService.getRecommendChallenge(userId);
         return Response.success(HttpStatus.OK, response);
     }
 
