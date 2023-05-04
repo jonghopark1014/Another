@@ -1,3 +1,4 @@
+import 'package:another/screens/account/api/nickname_check_api.dart';
 import 'package:flutter/material.dart';
 import 'package:another/constant/color.dart';
 import 'signup_userinfo.dart';
@@ -7,13 +8,11 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
   final String? Function(String?)? validator;
-  final Function(String)? onButtonPressed;
   final bool obscureText;
 
   CustomTextField({
     required this.controller,
     required this.labelText,
-    this.onButtonPressed,
     this.validator,
     this.obscureText = false,
   });
@@ -110,7 +109,7 @@ class _CustomInputFormState extends State<CustomInputForm> {
         children: [
           CustomTextField(
             controller: emailController,
-            labelText: '이메일',
+            labelText: '아이디(이메일)',
             validator: (value) {
               // 입력값이 없는 경우
               if (value == null || value.isEmpty) {
@@ -164,22 +163,37 @@ class _CustomInputFormState extends State<CustomInputForm> {
             obscureText: true,
           ),
           SizedBox(height: 16),
-          CustomTextField(
-              controller: nicknameController,
-              labelText: '닉네임',
-              onButtonPressed: (nickname) {
-                // 중복확인 로직
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return '닉네임을 입력해주세요.';
-                }
-                // 닉네임 길이 검사
-                if (value.length < 2 || value.length > 8) {
-                  return '2~8자 사이로 입력해주세요.';
-                }
-                return null;
-              }),
+          Stack(
+            children: [
+              CustomTextField(
+                  controller: nicknameController,
+                  labelText: '닉네임',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '닉네임을 입력해주세요.';
+                    }
+                    // 닉네임 길이 검사
+                    if (value.length < 2 || value.length > 8) {
+                      return '2~8자 사이로 입력해주세요.';
+                    }
+                    return null;
+                  }),
+              Positioned(
+                top: 15,
+                right: 10,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (await doubleCheckApi.doubleCheck(nickname: nicknameController.text) == '사용 가능'){
+                      print('사용 가능123');
+                    } else {
+                      print('사용 불가123');
+                    }
+                  },
+                  child: Text('중복확인'),
+                ),
+              )
+            ],
+          ),
           SizedBox(height: 24),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
