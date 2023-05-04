@@ -1,5 +1,6 @@
 package com.example.another_back.config;
 
+import com.example.another_back.entity.enums.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -13,7 +14,7 @@ import static com.example.another_back.filter.JwtProperties.*;
 
 @Configuration
 public class JwtProvider {
-    public String createAccessToken(String username, Enum role) {
+    public String createAccessToken(String username, Role role) {
         Map<String, Object> headers = new HashMap<>();
 
         //Header부분 설정
@@ -39,7 +40,7 @@ public class JwtProvider {
     }
 
 
-    public String createRefreshToken(String username, Enum role) {
+    public String createRefreshToken(String username, Role role) {
         Map<String, Object> headers = new HashMap<>();
 
         //Header부분 설정
