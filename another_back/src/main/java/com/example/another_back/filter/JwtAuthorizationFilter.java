@@ -21,8 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.example.another_back.filter.JwtProperties.HEADER_STRING;
-import static com.example.another_back.filter.JwtProperties.TOKEN_PREFIX;
+import static com.example.another_back.filter.JwtProperties.*;
 
 // 시큐리티가 filter 가지고 있는데 그 필터중에 BasicAuthenticationFilter라는 것이 있음.
 // 권한이나 인증이 필요한 특정 주소를 요청했을 때 위 필터를 무조건 거침
@@ -78,10 +77,17 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 chain.doFilter(request, response);
             }
         } catch (ExpiredJwtException e) {
-            log.info("Access Token이 만료되었습니다.");
+            try {
+                String jwtToken = request.getHeader(RT_HEADER_STRING).replace(TOKEN_PREFIX, "");
+                Claims claims = jwtProvider.getClaim(jwtToken);
 
-//            chain.doFilter(request, response);
-            throw new JwtException("Access Token이 만료되었습니다.");
+                response.setStatus(401);
+                response.setHeader("Authorization", jwtProvider.createAccessToken((String)claims.get("username"), (String)claims.get("role")));
+            } catch (ExpiredJwtException e1) {
+                throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "해당 토큰이 만료되었습니다.");
+            } catch (JwtException exception) {
+                throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "해당 토큰은 사용 불가합니다.");
+            }
         } catch (SignatureException e) {
             log.info("인증이 실패되었습니다.");
             throw new JwtException("사용자 인증 실패");
