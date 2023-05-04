@@ -10,12 +10,24 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
 class RunningData extends ChangeNotifier {
-  List<Map> posNTime = [];
-  List<LatLng> locations = [];
+  List<LatLng> location = [];
+  LatLng preValue = LatLng(0, 0);
+  LatLng curValue = LatLng(0, 0);
   String runningTime = '00:00:00';
   double runningDistance = 0;
   int userCalories = 0;
   String userPace = "0'00''";
+
+  void reset() {
+    location = [];
+    preValue = LatLng(0, 0);
+    curValue = LatLng(0, 0);
+    runningTime = '00:00:00';
+    runningDistance = 0;
+    userCalories = 0;
+    userPace = "0'00''";
+    notifyListeners();
+  }
 
   void setTime(String time) {
     runningTime = time;
@@ -34,24 +46,23 @@ class RunningData extends ChangeNotifier {
     notifyListeners();
   }
   void addLocation(LatLng pos) {
-    locations.add(pos);
-    posNTime.add({
-      "position": pos,
-      "time": runningTime,
-    });
+    location.add(pos);
+    preValue = curValue;
+    curValue = pos;
   }
-  Map<String,dynamic> getData() {
-    return {
-      'posData': posNTime,
-      'runningTime': runningTime,
-      'runningDistance': runningDistance,
-      'userCalories': userCalories,
-      'userPace': userPace,
-    };
-  }
+  // LatLng callLoc() {
+  //   return location[location.length-1];
+  // }
+  // void changeLoc(LatLng pos) {
+  //   if (pos != curValue) {
+  //     preValue = curValue;
+  //     curValue = pos;
+  //   }
+  // }
 }
 
 class UserInfo extends ChangeNotifier {
+  var userId = 55;
   var nickname = '임범규';
   var height = 185;
   var weight = 70;
@@ -65,6 +76,7 @@ class ForDate extends ChangeNotifier {
 
   void changeValue(value) {
     forFocus = value;
+    notifyListeners();
   }
 }
 
