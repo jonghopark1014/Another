@@ -7,6 +7,9 @@ import 'package:another/screens/running/widgets/running_circle_button.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+
+import '../../main.dart';
 
 class RunningTab extends StatefulWidget {
   const RunningTab({Key? key}) : super(key: key);
@@ -131,6 +134,11 @@ class _RunningTabState extends State<RunningTab> {
   }
   // 타이머 페이지로 context
   void onPressed() {
+    final runningData = Provider.of<RunningData>(context, listen: false);
+    runningData.reset();
+    runningData.addLocation(userPosition.target);
+
+
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
             builder: (_) => TimerScreen(

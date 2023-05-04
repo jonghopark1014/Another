@@ -27,14 +27,11 @@ class Kafka {
       'longitude': longitude
     };
 
-    Map<String, dynamic> forTopic = {
-      'value': runData
-    };
-
     Map<String, dynamic> requestBody = {
-      'records': [forTopic]
+      'records': [
+        {'value' : runData}
+      ]
     };
-    print(json.encode(requestBody));
     // 요청
     var response = await http.post(
         url,
