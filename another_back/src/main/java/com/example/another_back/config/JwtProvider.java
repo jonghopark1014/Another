@@ -23,7 +23,7 @@ public class JwtProvider {
 
         //payload부분 설정
         Map<String, Object> payloads = new HashMap<>();
-        payloads.put("userId", username);
+        payloads.put("username", username);
         payloads.put("role", role);
 
         Date atExt = new Date(); // 토큰 만료 시간
@@ -40,7 +40,7 @@ public class JwtProvider {
     }
 
 
-    public String createRefreshToken(String userId, Role role) {
+    public String createRefreshToken(String username, Role role) {
         Map<String, Object> headers = new HashMap<>();
 
         //Header부분 설정
@@ -49,7 +49,7 @@ public class JwtProvider {
 
         //payload부분 설정
         Map<String, Object> payloads = new HashMap<>();
-        payloads.put("userId", userId);
+        payloads.put("username", username);
         payloads.put("role", role);
 
         Date atExt = new Date(); // 토큰 만료 시간
