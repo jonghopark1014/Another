@@ -2,23 +2,31 @@ package com.example.another_back.service;
 
 import com.example.another_back.dto.UserJoinDto;
 import com.example.another_back.dto.UserLevelExpDto;
+import com.example.another_back.dto.UserUpdateForm;
 import com.example.another_back.entity.User;
 import com.example.another_back.entity.enums.Role;
 import com.example.another_back.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService {
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
     private final UserRepository userRepository;
     private final S3UploaderService s3UploaderService;
@@ -40,6 +48,22 @@ public class UserService {
                 .level(user.getLevel())
                 .exp(user.getExp())
                 .build();
+    }
+
+    //프로필 사진 수정
+    public String updateProfileImage(MultipartFile file, Long userId) throws IOException {
+        String image = s3UploaderService.upload(file, bucket, "image");
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+        user.setProfilePic(image);
+        return image;
+    }
+
+    //프로필 수정
+    public void updateUser(Long userId, UserUpdateForm userUpdateForm) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+        user.updateUser(userUpdateForm);
     }
 
     /*

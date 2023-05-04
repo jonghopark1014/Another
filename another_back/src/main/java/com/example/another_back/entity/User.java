@@ -1,5 +1,6 @@
 package com.example.another_back.entity;
 
+import com.example.another_back.dto.UserUpdateForm;
 import com.example.another_back.entity.enums.Role;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -38,6 +39,16 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Running> runningList = new ArrayList<>();
+
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
+    }
+
+    public void updateUser(UserUpdateForm userUpdateForm) {
+        this.nickname = userUpdateForm.getNickname();
+        this.weight = userUpdateForm.getWeight();
+        this.height = userUpdateForm.getHeight();
+    }
 
     @Builder
     public User(Long id, String username, String password, Integer height, Integer weight, String sex, Integer exp, Integer level, String nickname, Role role, String profilePic, List<UserChallenge> userChallengeList) {
