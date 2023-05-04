@@ -5,6 +5,7 @@ import com.example.another_back.config.JwtProvider;
 import com.example.another_back.config.auth.PrincipalDetails;
 import com.example.another_back.dto.UserLoginDto;
 import com.example.another_back.entity.User;
+import com.example.another_back.entity.enums.Role;
 import com.example.another_back.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.example.another_back.filter.JwtProperties.*;
 
@@ -34,6 +32,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
+
     //login 요청을 하면 로그인 시도를 위해 실행
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -49,7 +48,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             UserLoginDto user = om.readValue(request.getInputStream(), UserLoginDto.class);
 
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword());
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 
             System.out.println("토큰 정보 : " + authenticationToken);
 
@@ -80,41 +79,25 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
         String username = principalDetails.getUser().getUsername();
-
-        Map<String, Object> headers = new HashMap<>();
-
-        //Header부분 설정
-        headers.put("typ", "JWT");
-        headers.put("alg", "HS256");
-
-        //payload부분 설정
-        Map<String, Object> payloads = new HashMap<>();
-        payloads.put("userId", principalDetails.getUser().getUsername());
-        payloads.put("role", principalDetails.getUser().getRole());
-
-        Date atExt =new Date(); // 토큰 만료 시간
-        atExt.setTime(atExt.getTime() + AT_EXPIRATION_TIME);
-
-        Date rtExt =new Date(); // 토큰 만료 시간
-        rtExt.setTime(rtExt.getTime() + RT_EXPIRATION_TIME);
-
+        Role role = principalDetails.getUser().getRole();
 
         //HS256 방식으로 암호화
-        String jwt = jwtProvider.createAccessToken(principalDetails.getUser().getUsername(),principalDetails.getUser().getRole());
+        String jwt = jwtProvider.createAccessToken(username, role.toString());
 
-        String rft = jwtProvider.createRefreshToken(principalDetails.getUser().getUsername(),principalDetails.getUser().getRole());
+        String rft = jwtProvider.createRefreshToken(username, role.toString());
 
         User user = userRepository.findUserByUsername(username)
-                .orElseThrow(()->new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
         /*
             refreshToken redis방식으로 저장 로직 구현하기
          */
         //user.setRefreshToken(rft);
 
-        userRepository.save(user);
+//        userRepository.save(user);
 
         //리스폰스 해더에 Authorization : "", Refresh : ""로 전달
-        response.addHeader(HEADER_STRING, TOKEN_PREFIX+jwt);
-        response.addHeader(RT_HEADER_STRING, TOKEN_PREFIX+rft);
+        response.addHeader(HEADER_STRING, TOKEN_PREFIX + jwt);
+        response.addHeader(RT_HEADER_STRING, TOKEN_PREFIX + rft);
+        response.setIntHeader("userId", Math.toIntExact(user.getId()));
     }
 }

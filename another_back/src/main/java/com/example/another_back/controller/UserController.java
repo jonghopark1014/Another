@@ -49,12 +49,6 @@ public class UserController {
         return Response.success(HttpStatus.OK);
     }
 
-    @GetMapping(value = "/test")
-    public String test(@RequestBody UserJoinDto userJoinDto) throws IOException {
-
-        return "abcd";
-    }
-
     @GetMapping(value = "/duplicate/nickname/{nickname}")
     @ApiOperation(value = "false : 이미 있음, true : 없음")
     public ResponseEntity checkDuplicatedNickname(@PathVariable("nickname") String nickname) {
