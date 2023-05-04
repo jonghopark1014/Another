@@ -1,5 +1,6 @@
 package com.example.another_back.service;
 
+import com.example.another_back.dto.MonthDistanceResponseDto;
 import com.example.another_back.dto.RunningRequestDto;
 import com.example.another_back.entity.Running;
 import com.example.another_back.entity.User;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.util.Calendar;
 
 @Service
 @RequiredArgsConstructor
@@ -30,10 +33,9 @@ public class RunningService {
      * 러닝 종료
      *
      * @param runningRequestDto
-     *
      * @return String
      */
-    public String addRunning(RunningRequestDto runningRequestDto){
+    public String addRunning(RunningRequestDto runningRequestDto) {
         // 러닝 PK 유효성 검사
         checkDuplicatedRunning(runningRequestDto.getRunningId());
         // User 유효성 검사
@@ -63,5 +65,35 @@ public class RunningService {
         if (!runningRepository.findById(runningId).isEmpty()) {
             throw new IllegalArgumentException("이미 러닝데이터가 등록되었습니다.");
         }
+    }
+
+    /**
+     * 저번달 vs 이번달 거리 데이터
+     *
+     * @param userId
+     * @return MonthDistanceResponseDto
+     */
+    public MonthDistanceResponseDto getMonthData(Long userId) {
+        Calendar curCal = Calendar.getInstance();
+
+        // 이번달
+        curCal.set(curCal.DAY_OF_MONTH, 1);
+        Date startDate = new Date(curCal.getTimeInMillis());
+        curCal.set(curCal.DAY_OF_MONTH, curCal.getActualMaximum(curCal.DAY_OF_MONTH));
+        Date endDate = new Date(curCal.getTimeInMillis());
+        Float thisMonthDistance = runningRepository.SumRunningDistanceByUserIdAndCreateDateBetween(userId, startDate, endDate)
+                .orElseThrow(() -> new IllegalArgumentException("이번달 기록을 가져오는데 실패했습니다."));
+
+        // 지난달
+        curCal.add(curCal.MONTH, -1);
+        curCal.set(curCal.DAY_OF_MONTH, 1);
+        startDate = new Date(curCal.getTimeInMillis());
+        curCal.set(curCal.DAY_OF_MONTH, curCal.getActualMaximum(curCal.DAY_OF_MONTH));
+        endDate = new Date(curCal.getTimeInMillis());
+        Float lastMonthDistance = runningRepository.SumRunningDistanceByUserIdAndCreateDateBetween(userId, startDate, endDate)
+                .orElseThrow(() -> new IllegalArgumentException("저번달 기록을 가져오는데 실패했습니다."));
+
+        MonthDistanceResponseDto response = new MonthDistanceResponseDto(thisMonthDistance, lastMonthDistance);
+        return response;
     }
 }
