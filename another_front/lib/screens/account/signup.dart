@@ -7,11 +7,13 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
   final String? Function(String?)? validator;
+  final Function(String)? onButtonPressed;
   final bool obscureText;
 
   CustomTextField({
     required this.controller,
     required this.labelText,
+    this.onButtonPressed,
     this.validator,
     this.obscureText = false,
   });
@@ -26,34 +28,31 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-        controller: widget.controller,
-        validator: widget.validator,
-        obscureText: widget.obscureText,
-        decoration: InputDecoration(
-          labelText: widget.labelText,
-          errorText: errorText,
-          labelStyle: TextStyle(
-            color: SERVEONE_COLOR, // 원하는 라벨 텍스트 색상으로 변경
-          ),
-          border: UnderlineInputBorder(
-            borderSide:
-                BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide:
-                BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide:
-                BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
-          ),
+      controller: widget.controller,
+      validator: widget.validator,
+      obscureText: widget.obscureText,
+      decoration: InputDecoration(
+        labelText: widget.labelText,
+        errorText: errorText,
+        labelStyle: TextStyle(
+          color: SERVEONE_COLOR, // 원하는 라벨 텍스트 색상으로 변경
         ),
-        style: TextStyle(color: SERVEONE_COLOR), // 원하는 입력 텍스트 색상으로 변경
-        onChanged: (value) {
-          setState(() {
-            errorText = widget.validator?.call(value);
-          });
-        },
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
+        ),
+      ),
+      style: TextStyle(color: SERVEONE_COLOR), // 원하는 입력 텍스트 색상으로 변경
+      onChanged: (value) {
+        setState(() {
+          errorText = widget.validator?.call(value);
+        });
+      },
     );
   }
 }
@@ -168,6 +167,9 @@ class _CustomInputFormState extends State<CustomInputForm> {
           CustomTextField(
               controller: nicknameController,
               labelText: '닉네임',
+              onButtonPressed: (nickname) {
+                // 중복확인 로직
+              },
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return '닉네임을 입력해주세요.';
@@ -226,7 +228,12 @@ class _CustomInputFormState extends State<CustomInputForm> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => SignupUserInfoPage()));
+                          builder: (context) => SignupUserInfoPage(
+                                email: emailController.text,
+                                password: pwController.text,
+                                nickname: nicknameController.text,
+                                isMale: isMaleSelected,
+                              )));
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Processing Data')),
                   );

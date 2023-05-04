@@ -43,16 +43,6 @@ class RecordTab extends StatelessWidget {
               // 로그인 페이지로 이동하는 로직을 작성
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SignupUserInfoPage()),
-              );
-            },
-            child: Text('키 몸무게'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // 로그인 페이지로 이동하는 로직을 작성
-              Navigator.push(
-                context,
                 MaterialPageRoute(builder: (context) => ChallengePage()),
               );
             },
