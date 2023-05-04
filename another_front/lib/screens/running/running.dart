@@ -234,6 +234,7 @@ class _RunningTabState extends State<RunningTab> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 5,),
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -278,7 +279,7 @@ class _RunningTabState extends State<RunningTab> {
     );
   }
 }
-
+// 내기록들 띄우는 위젯
 class MyHistory extends StatelessWidget {
   final List<dynamic> historyList;
   const MyHistory({
@@ -291,7 +292,15 @@ class MyHistory extends StatelessWidget {
     return ListView.builder(
       itemCount: historyList.length,
         itemBuilder: (BuildContext context, int index) {
-          return Target(targetname: '날짜');
+          return ElevatedButton(
+            // 눌렀을 때 하이라이트
+            onPressed: ()=>{},
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.all(2),
+              primary: BACKGROUND_COLOR,
+            ),
+              child: Target(targetname: '날짜'),
+          );
         }
     );
   }
