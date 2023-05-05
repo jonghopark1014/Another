@@ -14,7 +14,7 @@ import java.util.Date;
 public class RunningResponseDto {
     private Long userId;
     private String runningId;
-    private String runningTime;
+    private Integer runningTime;
     private Float runningDistance;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date createDate;
