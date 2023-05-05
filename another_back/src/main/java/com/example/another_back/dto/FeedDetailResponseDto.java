@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class FeedDetailResponseDto {
     private String runningId;
     private Long userId;
-    private String runningTime;
+    private Integer runningTime;
     private Float runningDistance;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date createDate;
