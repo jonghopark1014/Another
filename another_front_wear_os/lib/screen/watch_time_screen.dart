@@ -12,8 +12,6 @@ class WatchTimeScreen extends StatefulWidget {
   State<WatchTimeScreen> createState() => _WatchTimeScreenState();
 }
 
-
-
 class _WatchTimeScreenState extends State<WatchTimeScreen> {
   late Timer _timer;
   int _second = 3;
@@ -22,7 +20,7 @@ class _WatchTimeScreenState extends State<WatchTimeScreen> {
   void initState() {
     _timer = Timer.periodic(
       Duration(seconds: 1),
-          (timer) {
+      (timer) {
         if (_second != 1) {
           setState(() {
             _second--;
@@ -32,7 +30,7 @@ class _WatchTimeScreenState extends State<WatchTimeScreen> {
               MaterialPageRoute(
                 builder: (_) => WatchRunningRecord(),
               ),
-                  (route) => false);
+              (route) => false);
         }
       },
     );

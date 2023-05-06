@@ -1,11 +1,50 @@
+import 'package:another/screens/feed/api/feed_api.dart';
 import 'package:another/screens/feed/detail_feed.dart';
 import 'package:flutter/material.dart';
 
-class ImageBox extends StatelessWidget {
+class ImageBox extends StatefulWidget {
   const ImageBox({Key? key}) : super(key: key);
 
   @override
+  State<ImageBox> createState() => _ImageBoxState();
+}
+
+class _ImageBoxState extends State<ImageBox> {
+  List<String> _thumbnailUrls = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFeed();
+  }
+
+
+  Future<void> _loadFeed() async {
+    try {
+      final response = await FeedApi.getFeed();
+      print(response['feedId']);
+      print(response['runningTime']);
+      print(response['runningDistance']);
+      print(response['walkCount']);
+      print(response['thumbnail']);
+
+      setState(() {
+
+        _thumbnailUrls.add(response['thumbnail']);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+
+
+
+
+
+  @override
   Widget build(BuildContext context) {
+    print(_thumbnailUrls);
     return Expanded(
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
