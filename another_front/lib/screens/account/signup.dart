@@ -1,3 +1,4 @@
+import 'package:another/screens/account/api/nickname_check_api.dart';
 import 'package:flutter/material.dart';
 import 'package:another/constant/color.dart';
 import 'signup_userinfo.dart';
@@ -7,13 +8,11 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
   final String? Function(String?)? validator;
-  final Function(String)? onButtonPressed;
   final bool obscureText;
 
   CustomTextField({
     required this.controller,
     required this.labelText,
-    this.onButtonPressed,
     this.validator,
     this.obscureText = false,
   });
@@ -70,37 +69,129 @@ class _CustomInputFormState extends State<CustomInputForm> {
   TextEditingController pwCheckController = TextEditingController();
   TextEditingController nicknameController = TextEditingController();
   bool isMaleSelected = true;
+  bool isNicknameButtonActive = false;
+  bool isNicknamePossible = false;
+  bool isEmailPossible = false;
+  bool isPwPossible = false;
+  bool isPwCheckPossible = false;
 
-  // // 사용자가 입력한 값을 서버로 전송
-  // void _submitForm() async {
-  //   if(_formKey.currentState!.validate()){
-  //     // 사용자가 입력한 값을 가져옴
-  //     String email = emailController.text;
-  //     String password = pwController.text;
-  //     String nickname = nicknameController.text;
-  //
-  //     // HTTP POST 요청 보내기
-  //     var response = await http.post(
-  //         Uri.parse('https://example.com/register'), // 백엔드의 API 엔드포인트
-  //         body: json.encode({
-  //         'email': email,
-  //         'password': password,
-  //         'nickname': nickname,
-  //         }),
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     );
-  //     // 응답 처리
-  //     if (response.statusCode == 200) {
-  //       // 성공적으로 응답이 왔을 경우
-  //       print('회원가입 성공');
-  //     } else {
-  //       // 응답이 실패했을 경우
-  //       print('회원가입 실패: ${response.body}');
-  //     }
-  //   }
-  // }
+  @override
+  // 백엔드와 API 통신을 통해 사용 가능하다는 통신을 받으면 true로 변경 (nickname_check_api.dart)
+  void nicknamePossible() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('사용 가능한 닉네임입니다.')),
+    );
+    setState(() {
+      isNicknamePossible = true;
+    });
+  }
+
+  // 닉네임 수정했을 때 발동할 함수
+  Future<void> nicknameImpossible() async {
+    setState(() {
+      isNicknamePossible = false;
+    });
+  }
+
+  // 중복확인 버튼 활성화 여부를 판단하는 함수
+  @override
+  void initState() {
+    super.initState();
+    nicknameController.addListener(() async {
+      await nicknameImpossible();
+      setState(() {
+        isNicknameButtonActive = nicknameController.text.length >= 2 &&
+                nicknameController.text.length <= 8 &&
+                !isNicknamePossible
+            ? true
+            : false;
+      });
+    });
+  }
+
+  // 이메일 유효성 검사
+  String? _validateEmail(String? value) {
+    // 입력값이 없는 경우
+    if (value == null || value.isEmpty) {
+      setState(() {
+        isEmailPossible = false;
+      });
+      return '이메일을 입력해주세요.';
+    }
+    // 입력한 경우 이메일 형식 검사
+    String emailPattern =
+        r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$'; // 이메일 정규식
+    RegExp regex = RegExp(emailPattern);
+    if (!regex.hasMatch(value)) {
+      setState(() {
+        isEmailPossible = false;
+      });
+      return '잘못된 이메일 형식입니다.';
+    }
+    // 잘 된 경우
+    setState(() {
+      isEmailPossible = true;
+    });
+    return null;
+  }
+
+  // 비밀번호 유효성 검사
+  String? _validatePw(String? value) {
+    if (value == null || value.isEmpty) {
+      setState(() {
+        isPwPossible = false;
+      });
+      return '비밀번호를 입력해주세요.';
+    }
+    // 비밀번호 길이 검사
+    if (value.length < 8 || value.length > 16) {
+      setState(() {
+        isPwPossible = false;
+      });
+      return '8~16자 사이로 입력해주세요.';
+    }
+    // 특수문자 포함 여부 검사
+    String pattern = r'^(?=.*?[!@#$%^&*(),.?":{}|<>])';
+    RegExp regex = RegExp(pattern);
+    if (!regex.hasMatch(value)) {
+      setState(() {
+        isPwPossible = false;
+      });
+      return '특수문자를 포함하여 입력해주세요.';
+    }
+    // 잘 된 경우
+    setState(() {
+      isPwPossible = true;
+    });
+    return null;
+  }
+
+  // 비밀번호 확인 유효성 검사
+  String? _validatePwCheck(String? value) {
+    if (value != pwController.text) {
+      setState(() {
+        isPwCheckPossible = false;
+      });
+      return '비밀번호를 다시 입력해주세요.';
+    }
+    // 잘 된 경우
+    setState(() {
+      isPwCheckPossible = true;
+    });
+    return null;
+  }
+
+  // 닉네임 유효성 검사
+  String? _validateNickname(String? value) {
+    if (value == null || value.isEmpty) {
+      return '닉네임을 입력해주세요.';
+    }
+    // 닉네임 길이 검사
+    if (value.length < 2 || value.length > 8) {
+      return '2~8자 사이로 입력해주세요.';
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,76 +201,58 @@ class _CustomInputFormState extends State<CustomInputForm> {
         children: [
           CustomTextField(
             controller: emailController,
-            labelText: '이메일',
-            validator: (value) {
-              // 입력값이 없는 경우
-              if (value == null || value.isEmpty) {
-                return '이메일을 입력해주세요.';
-              }
-              // 입력한 경우 이메일 형식 검사
-              String emailPattern =
-                  r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$'; // 이메일 정규식
-              RegExp regex = RegExp(emailPattern);
-              if (!regex.hasMatch(value)) {
-                return '잘못된 이메일 형식입니다.';
-              }
-              // 잘 된 경우
-              return null;
-            },
+            labelText: '아이디(이메일)',
+            validator: _validateEmail,
           ),
           SizedBox(height: 16),
           CustomTextField(
             controller: pwController,
             labelText: '비밀번호',
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return '비밀번호를 입력해주세요.';
-              }
-              // 비밀번호 길이 검사
-              if (value.length < 8 || value.length > 16) {
-                return '8~16자 사이로 입력해주세요.';
-              }
-              // 특수문자 포함 여부 검사
-              String pattern = r'^(?=.*?[!@#$%^&*(),.?":{}|<>])';
-              RegExp regex = RegExp(pattern);
-              if (!regex.hasMatch(value)) {
-                return '특수문자를 포함하여 입력해주세요.';
-              }
-              // 잘 된 경우
-              return null;
-            },
+            validator: _validatePw,
             obscureText: true,
           ),
           SizedBox(height: 16),
           CustomTextField(
             controller: pwCheckController,
             labelText: '비밀번호 확인',
-            validator: (value) {
-              if (value != pwController.text) {
-                return '비밀번호를 다시 입력해주세요.';
-              }
-              // 잘 된 경우
-              return null;
-            },
+            validator: _validatePwCheck,
             obscureText: true,
           ),
           SizedBox(height: 16),
-          CustomTextField(
-              controller: nicknameController,
-              labelText: '닉네임',
-              onButtonPressed: (nickname) {
-                // 중복확인 로직
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return '닉네임을 입력해주세요.';
-                }
-                // 닉네임 길이 검사
-                if (value.length < 2 || value.length > 8) {
-                  return '2~8자 사이로 입력해주세요.';
-                }
-                return null;
-              }),
+          Stack(
+            children: [
+              CustomTextField(
+                controller: nicknameController,
+                labelText: '닉네임',
+                validator: _validateNickname,
+              ),
+              Positioned(
+                top: 15,
+                right: 10,
+                child: ElevatedButton(
+                  onPressed:
+                      isNicknameButtonActive && isNicknamePossible == false
+                          ? () async {
+                              if (await doubleCheckApi.doubleCheck(
+                                      nickname: nicknameController.text,
+                                      nicknamePossible: nicknamePossible) ==
+                                  '사용 가능') {
+                                isNicknamePossible = true;
+                                print('사용 가능123');
+                              } else {
+                                isNicknamePossible = false;
+                                print('사용 불가123');
+                              }
+                            }
+                          : null,
+                  style: ElevatedButton.styleFrom(
+                    onSurface: Colors.white,
+                  ),
+                  child: Text('중복확인'),
+                ),
+              )
+            ],
+          ),
           SizedBox(height: 24),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,32 +293,36 @@ class _CustomInputFormState extends State<CustomInputForm> {
           ),
           SizedBox(height: 120),
           FractionallySizedBox(
-            widthFactor: 1.0,
-            child: ElevatedButton(
-              onPressed: () {
-                // _submitForm();
-                if (_formKey.currentState!.validate()) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SignupUserInfoPage(
-                                email: emailController.text,
-                                password: pwController.text,
-                                nickname: nicknameController.text,
-                                isMale: isMaleSelected,
-                              )));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Processing Data')),
-                  );
-                }
-              },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(MAIN_COLOR),
-                  minimumSize: MaterialStateProperty.all<Size>(
-                      Size(double.infinity, 48.0))),
-              child: const Text('다음으로'),
-            ),
-          ),
+              widthFactor: 1.0,
+              child: ElevatedButton(
+                onPressed: isEmailPossible &&
+                        isPwPossible &&
+                        isPwCheckPossible &&
+                        isNicknamePossible
+                    ? () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SignupUserInfoPage(
+                              email: emailController.text,
+                              password: pwController.text,
+                              nickname: nicknameController.text,
+                              isMale: isMaleSelected,
+                            ),
+                          ),
+                        );
+                      }
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  onSurface: isEmailPossible &&
+                          isPwPossible &&
+                          isPwCheckPossible &&
+                          isNicknamePossible
+                      ? MAIN_COLOR
+                      : Colors.grey, // 비활성화 색상
+                ),
+                child: const Text('다음으로'),
+              )),
         ],
       ),
     );
