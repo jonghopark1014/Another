@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Setter
 public class FeedListResponseDto {
     private String runningId;
-    private String runningTime;
+    private Integer runningTime;
     private Float runningDistance;
     private Integer walkCount;
     private String runningPic;

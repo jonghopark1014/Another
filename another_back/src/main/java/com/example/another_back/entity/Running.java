@@ -20,7 +20,7 @@ public class Running {
     @Id
     private String id;
 
-    private String runningTime;
+    private Integer runningTime;
     private Float runningDistance;
     private Date createDate;
     private Integer walkCount;

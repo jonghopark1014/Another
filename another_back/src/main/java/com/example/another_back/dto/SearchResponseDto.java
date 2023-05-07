@@ -10,7 +10,7 @@ import java.sql.Date;
 public class SearchResponseDto {
     private Long userId;
     private String runningId;
-    private String runningTime;
+    private Integer runningTime;
     private Float runningDistance;
     private Date createDate;
     private Integer walkCount;
