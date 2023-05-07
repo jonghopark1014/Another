@@ -8,6 +8,8 @@ import './widgets/height_weight_picker.dart';
 import './widgets/pass_button.dart';
 import './widgets/complete_button.dart';
 import './widgets/image_picker.dart';
+import './api/userinfo_change_api.dart';
+import './api/profileimg_change_api.dart';
 
 class ProfileEditPage extends StatefulWidget {
   const ProfileEditPage({Key? key}) : super(key: key);
@@ -18,10 +20,12 @@ class ProfileEditPage extends StatefulWidget {
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
   final TextEditingController _nicknameController = TextEditingController();
+  final GlobalKey<ProfileImageState> _imagePickerKey = GlobalKey<ProfileImageState>();
   String _profileImgUrl = '';
   int _height = 0;
   int _weight = 0;
   String? errorText;
+  File? profileImg;
 
   @override
   void initState() {
@@ -51,7 +55,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         children: [
           IntroHeader(),
           SizedBox(height: 16),
-          ProfileImage(profileImg: _profileImgUrl),
+          ProfileImage(profileImg: _profileImgUrl, key: _imagePickerKey),
           Padding(
             padding: EdgeInsets.all(25),
             child: TextFormField(
@@ -109,6 +113,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
               CompleteButton(
                 text: '수정 완료',
                 onPressed: () {
+                  UserInfoChangeApi.userInfoChange(
+                      height: _height,
+                      weight: _weight,
+                      nickname: _nicknameController.text
+                  );
+                  // UserInfoChangeApi.profileImgChange(
+                  //     pickedFile: _profileImgUrl
+                  // );
                   print(_height);
                   print(_weight);
                   print(_nicknameController.text);

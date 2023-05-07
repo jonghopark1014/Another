@@ -9,12 +9,13 @@ class ProfileImage extends StatefulWidget {
   const ProfileImage({Key? key, required this.profileImg}) : super(key: key);
 
   @override
-  State<ProfileImage> createState() => _ProfileImageState();
+  State<ProfileImage> createState() => ProfileImageState();
 }
 
-class _ProfileImageState extends State<ProfileImage> {
+class ProfileImageState extends State<ProfileImage> {
   late var _profileImg;
   File? _pickedFile; // 사진 선택한 파일
+
 
   @override
   void initState() {
