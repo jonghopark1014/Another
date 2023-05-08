@@ -39,7 +39,7 @@ spring:
   config:
     activate:
       on-profile: "development"
-  file-dir: /home/ec2-user/
+  file-dir: /src/main/resources/static/
 ---
 spring:
   environment: "local"
