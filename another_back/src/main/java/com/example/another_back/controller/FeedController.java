@@ -3,6 +3,7 @@ package com.example.another_back.controller;
 import com.example.another_back.dto.AddFeedRequestDto;
 import com.example.another_back.dto.FeedDetailResponseDto;
 import com.example.another_back.dto.FeedListResponseDto;
+import com.example.another_back.dto.MyFeedListResponseDto;
 import com.example.another_back.dto.response.Response;
 import com.example.another_back.service.FeedService;
 import lombok.RequiredArgsConstructor;
@@ -53,11 +54,11 @@ public class FeedController {
      *
      * @param userId
      * @param pageable
-     * @return Page<FeedListResponseDto>
+     * @return MyFeedListResponseDto
      */
     @GetMapping("/{userId}")
     public ResponseEntity getMyFeedList(@PathVariable Long userId, Pageable pageable) {
-        Page<FeedListResponseDto> feedList = feedService.getMyFeedList(userId, pageable);
+        MyFeedListResponseDto feedList = feedService.getMyFeedList(userId, pageable);
         return Response.success(HttpStatus.OK, feedList);
     }
 

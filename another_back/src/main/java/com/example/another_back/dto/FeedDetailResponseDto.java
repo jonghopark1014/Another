@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class FeedDetailResponseDto {
     private String runningId;
     private Long userId;
+    private String profilePic;
     private Integer runningTime;
     private Float runningDistance;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
@@ -24,12 +25,13 @@ public class FeedDetailResponseDto {
     private String runningPic;
     private Float speed;
     private List<FeedPicResponsDto> feedPics;
-    private JSONArray grape;
+    private JSONArray graph;
 
     @Builder
     public FeedDetailResponseDto(Running running) {
         this.runningId = running.getId();
         this.userId = running.getUser().getId();
+        this.profilePic = running.getUser().getProfilePic();
         this.runningTime = running.getRunningTime();
         this.runningDistance = running.getRunningDistance();
         this.createDate = running.getCreateDate();
