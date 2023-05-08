@@ -1,14 +1,14 @@
 package com.example.another_back.service;
 
-import com.example.another_back.dto.AddFeedRequestDto;
-import com.example.another_back.dto.FeedDetailResponseDto;
-import com.example.another_back.dto.FeedListResponseDto;
+import com.example.another_back.dto.*;
 import com.example.another_back.entity.FeedPic;
 import com.example.another_back.entity.Running;
+import com.example.another_back.entity.User;
 import com.example.another_back.entity.enums.Status;
 import com.example.another_back.hdfs.FileIO;
 import com.example.another_back.repository.FeedPicRepository;
 import com.example.another_back.repository.RunningRepository;
+import com.example.another_back.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -41,6 +41,8 @@ public class FeedService {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+
+    private final UserRepository userRepository;
 
     private final RunningRepository runningRepository;
 
@@ -85,11 +87,13 @@ public class FeedService {
      *
      * @param userId
      * @param pageable
-     * @return Page<FeedListResponseDto>
+     * @return MyFeedListResponseDto
      */
-    public Page<FeedListResponseDto> getMyFeedList(Long userId, Pageable pageable) {
+    public MyFeedListResponseDto getMyFeedList(Long userId, Pageable pageable) {
+        User user = userRepository.findById(userId).orElseThrow((() -> new IllegalArgumentException("유저를 찾지 못하였습니다.")));
         List<Running> feedList = runningRepository.findRunningByUserIdAndStatusWithFeedPics(userId, Status.LIVE);
-        Page<FeedListResponseDto> feedListResponseDtos = new PageImpl<>(feedList.stream().map(FeedListResponseDto::new).collect(Collectors.toList()), pageable, feedList.size());
+        Page<MyFeedListDto> myFeedListDtos = new PageImpl<>(feedList.stream().map(MyFeedListDto::new).collect(Collectors.toList()), pageable, feedList.size());
+        MyFeedListResponseDto feedListResponseDtos = new MyFeedListResponseDto(user.getProfilePic(), myFeedListDtos);
         return feedListResponseDtos;
     }
 
@@ -152,7 +156,7 @@ public class FeedService {
         Running running = runningRepository.findRunningByIdWithFeedPics(runningId).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 러닝 기록이 없습니다."));
         FeedDetailResponseDto response = new FeedDetailResponseDto(running);
-        response.setGrape(getOringinData(runningId));
+        response.setGraph(getOringinData(runningId));
         return response;
     }
 }
