@@ -52,7 +52,7 @@ public class UserService {
 
     //프로필 사진 수정
     public String updateProfileImage(MultipartFile file, Long userId) throws IOException {
-        String image = s3UploaderService.upload(file, bucket, "image");
+        String image = s3UploaderService.upload(bucket, "image",file).get(0);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
         user.setProfilePic(image);
