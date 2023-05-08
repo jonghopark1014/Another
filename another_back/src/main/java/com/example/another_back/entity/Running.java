@@ -1,6 +1,7 @@
 package com.example.another_back.entity;
 
 import com.example.another_back.dto.RunningRequestDto;
+import com.example.another_back.entity.enums.Status;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,9 +27,9 @@ public class Running {
     private Integer kcal;
     private String runningPic;
     private Float speed;
-    private enum status{
-        LIVE, DELETE
-    }
+
+    @Enumerated(value = EnumType.STRING)
+    private Status status;
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
