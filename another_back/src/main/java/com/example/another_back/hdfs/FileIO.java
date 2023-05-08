@@ -26,7 +26,7 @@ public class FileIO {
      * @return String
      */
     public String originData(String runningId, String hdfsUrl, String hdfsPort) {
-        String url = hdfsUrl + ":" + hdfsPort + "/another/origin/" + runningId + "/*";
+        String url = "hdfs://" + hdfsUrl + ":" + hdfsPort + "/another/origin/" + runningId + "/*";
         return url;
     }
 
@@ -37,7 +37,7 @@ public class FileIO {
      * @return String
      */
     public String versusData(String runningId, String hdfsUrl, String hdfsPort) {
-        String url = hdfsUrl + ":" + hdfsPort + "/another/test1/" + runningId + "/*";
+        String url = "hdfs://" + hdfsUrl + ":" + hdfsPort + "/another/versus/" + runningId + "/*";
         return url;
     }
 }
