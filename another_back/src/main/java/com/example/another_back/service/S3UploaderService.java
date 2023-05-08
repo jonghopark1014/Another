@@ -43,14 +43,15 @@ public class S3UploaderService {
         }
     }
 
-    public List<String> upload(String buckect, String dirName, MultipartFile... multipartFile) throws IOException {
+    public List<String> upload(String bucket, String dirName, MultipartFile... multipartFile) throws IOException {
         ArrayList<File> list = new ArrayList<>();
+
         for (MultipartFile file : multipartFile) {
             list.add(convert(file)
                     .orElseThrow(()->new IllegalArgumentException("error : MultipartFile Convert 실패")));
         }
 
-        return upload(buckect, dirName, list);
+        return upload(bucket, dirName, list);
     }
 
     public List<String> upload(String bucket, String dirName, ArrayList<File> list) {
@@ -84,8 +85,20 @@ public class S3UploaderService {
         String originalFileName = multipartFile.getOriginalFilename();
         String storeFileName = createStoreFileName(originalFileName);
 
+        File folder = new File(fileDir);
+
+        if (!folder.exists()) {
+            try{
+                folder.mkdir(); //폴더 생성합니다.
+            }
+            catch(Exception e){
+                e.getStackTrace();
+            }
+        }
+
         //파일 업로드
         File file = new File(fileDir + storeFileName);
+
         multipartFile.transferTo(file);
 
         return Optional.of(file);
