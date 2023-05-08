@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @Setter
 public class FeedDetailResponseDto {
     private String runningId;
+    private Long withRunCount;
     private String nickname;
     private String profilePic;
     private Integer runningTime;
