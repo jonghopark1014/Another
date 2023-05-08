@@ -86,6 +86,15 @@ class _CustomInputFormState extends State<CustomInputForm> {
     });
   }
 
+  void nicknameDuplication() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('이미 사용중인 닉네임입니다')),
+    );
+    setState(() {
+      isNicknamePossible = false;
+    });
+  }
+
   // 닉네임 수정했을 때 발동할 함수
   Future<void> nicknameImpossible() async {
     setState(() {
@@ -230,21 +239,22 @@ class _CustomInputFormState extends State<CustomInputForm> {
                 top: 15,
                 right: 10,
                 child: ElevatedButton(
-                  onPressed:
-                      isNicknameButtonActive && isNicknamePossible == false
-                          ? () async {
-                              if (await doubleCheckApi.doubleCheck(
-                                      nickname: nicknameController.text,
-                                      nicknamePossible: nicknamePossible) ==
-                                  '사용 가능') {
-                                isNicknamePossible = true;
-                                print('사용 가능123');
-                              } else {
-                                isNicknamePossible = false;
-                                print('사용 불가123');
-                              }
-                            }
-                          : null,
+                  onPressed: isNicknameButtonActive &&
+                          isNicknamePossible == false
+                      ? () async {
+                          if (await doubleCheckApi.doubleCheck(
+                                  nickname: nicknameController.text,
+                                  nicknamePossible: nicknamePossible,
+                                  nicknameDuplication: nicknameDuplication) ==
+                              '사용 가능') {
+                            isNicknamePossible = true;
+                            print('사용 가능123');
+                          } else {
+                            isNicknamePossible = false;
+                            print('사용 불가123');
+                          }
+                        }
+                      : null,
                   style: ElevatedButton.styleFrom(
                     onSurface: Colors.white,
                   ),

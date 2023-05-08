@@ -2,11 +2,13 @@
 // 그래서 따로 뺌
 import 'dart:async';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:another/screens/running/widgets/running_circle_button.dart';
 import 'package:another/widgets/record_result.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +16,8 @@ import 'package:provider/provider.dart';
 import '../../../main.dart';
 import '../api/under_running_api.dart';
 import '../under_running_end.dart';
+import 'dart:ui' as ui;
+
 
 class RunningStatus extends StatefulWidget {
   const RunningStatus({Key? key})
@@ -24,6 +28,7 @@ class RunningStatus extends StatefulWidget {
 }
 
 class _RunningStatus extends State<RunningStatus> {
+  GlobalKey captureKey = GlobalKey();
   int _userWeight = 0;
   String runDataId = '0';
   final int timeInterval = 5;
@@ -47,7 +52,8 @@ class _RunningStatus extends State<RunningStatus> {
   // 페이스 계산 -> 1km을 도달하는 시간
   void setData() {
     final runningData = Provider.of<RunningData>(context, listen: false);
-
+    // 캡처 키 받기
+    captureKey = runningData.globalKey;
     // 거리 계산
     double nowDistance = runningData.runningDistance;
     LatLng past = runningData.preValue;
@@ -193,12 +199,23 @@ class _RunningStatus extends State<RunningStatus> {
   }
 
   // 러닝 종료 시 동작
-  void onStop() {
+  void onStop() async {
+    Uint8List? captureInfo = await captureWidget();
+
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (_) => UnderRunningScreenEnd(),
+          builder: (_) => UnderRunningScreenEnd(
+            captureInfo: captureInfo,
+          ),
         ),
             (route) => route.settings.name == '/');
+  }
+
+  // 캡처하기 위한 함수
+  Future<Uint8List?> captureWidget() async {
+    var mapController = Provider.of<RunningData>(context, listen: false).mapController;
+    final Uint8List? bytes = await mapController.takeSnapshot();
+    return bytes;
   }
 
   void onChange() {}
