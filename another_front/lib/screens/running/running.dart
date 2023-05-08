@@ -4,6 +4,7 @@ import 'package:another/constant/color.dart';
 import 'package:another/screens/running/api/my_history_api.dart';
 import 'package:another/screens/running/timer_screen.dart';
 import 'package:another/screens/running/widgets/before_running_map.dart';
+import 'package:another/screens/running/widgets/detail_setting.dart';
 import 'package:another/screens/running/widgets/running_carousel.dart';
 import 'package:another/screens/running/widgets/running_my_history.dart';
 import 'package:another/screens/running/widgets/running_small_button.dart';
@@ -12,6 +13,7 @@ import 'package:another/widgets/target.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 
 import '../../main.dart';
@@ -21,23 +23,18 @@ class RunningTab extends StatefulWidget {
   @override
   State<RunningTab> createState() => _RunningTabState();
 }
+
 class _RunningTabState extends State<RunningTab> {
   BeforeRunningMap beforeRunningMap = BeforeRunningMap();
   @override
   void initState() {
     super.initState();
   }
-  // @override
-  // void dispose() {
-  //   print('running dispose~!!!!!!=======================');
-  //   super.dispose();
-  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-      Stack(
-          children: [
+      body: Stack(children: [
         // 러닝중 지도 ====================================================
         BeforeRunningMap(),
         // 러닝 전 화면 =============================
@@ -94,10 +91,10 @@ class _RunningTabState extends State<RunningTab> {
                   Container(
                     height: 25,
                     decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(
-                        color: CONTOUR_COLOR,
-                      ))
-                    ),
+                        border: Border(
+                            bottom: BorderSide(
+                      color: CONTOUR_COLOR,
+                    ))),
                     child: Text(
                       '목표설정',
                       style: TextStyle(
@@ -105,23 +102,20 @@ class _RunningTabState extends State<RunningTab> {
                       ),
                     ),
                   ),
-                  Row(
-                    children: [
-                      SettingName(typeName: '거리(km)'),
-                      SettingContent(content: '거리 목표를 설정해주세요'),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SettingName(typeName: '시간(분)'),
-                      SettingContent(content: '시간을 설정해주세요'),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SettingName(typeName: '인터벌'),
-                      SettingContent(content: '러닝시간과 걷기 시간을 설정해주세요'),
-                    ],
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SettingName(typeName: '거리(km)'),
+                            SettingName(typeName: '시간(분)'),
+                            SettingName(typeName: '인터벌'),
+                          ],
+                        ),
+                        DetailSetting(),
+                      ],
+                    ),
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -129,10 +123,8 @@ class _RunningTabState extends State<RunningTab> {
                       primary: MAIN_COLOR,
                     ),
                     child: const Text(
-                        '러닝 시작!',
-                      style: TextStyle(
-                        fontSize: 18
-                      ),
+                      '러닝 시작!',
+                      style: TextStyle(fontSize: 18),
                     ),
                     // 나중에 수정해야함!!!!!!!!!!!!!!!!!!!!!!!!!!
                     onPressed: onPressed,
@@ -174,13 +166,15 @@ class _RunningTabState extends State<RunningTab> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 5,),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Expanded(
-                            child: MyHistory(),
+                          child: MyHistory(),
                         ),
                       ],
                     ),
@@ -194,9 +188,7 @@ class _RunningTabState extends State<RunningTab> {
                     onPressed: onPressed,
                     child: const Text(
                       '러닝 시작!',
-                      style: TextStyle(
-                          fontSize: 18
-                      ),
+                      style: TextStyle(fontSize: 18),
                     ),
                   ),
                 ],
@@ -219,19 +211,19 @@ class _RunningTabState extends State<RunningTab> {
           initialPosition: runningData.currentPosition,
         ),
       ),
-        (route) => false,
+      (route) => false,
     );
   }
 }
+
 // 내기록들 띄우는 위젯
 class MyHistory extends StatefulWidget {
-  const MyHistory({
-    Key? key
-  }) : super(key: key);
+  const MyHistory({Key? key}) : super(key: key);
 
   @override
   State<MyHistory> createState() => _MyHistoryState();
 }
+
 class _MyHistoryState extends State<MyHistory> {
   List<dynamic> historyList = ['1', '2', '3', '4', '5'];
   late final _userInfo;
@@ -241,50 +233,27 @@ class _MyHistoryState extends State<MyHistory> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _userInfo = Provider.of<UserInfo>(context, listen:false);
+    _userInfo = Provider.of<UserInfo>(context, listen: false);
     // _userId = _userInfo.userId;
     _userId = 1; // 더미========================================
     var data = myHistoryApi(_userId);
-
   }
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: historyList.length,
+        itemCount: historyList.length,
         itemBuilder: (BuildContext context, int index) {
           return ElevatedButton(
             // 눌렀을 때 하이라이트
-            onPressed: ()=>{},
+            onPressed: () => {},
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.all(2),
               primary: BACKGROUND_COLOR,
             ),
-              child: Target(targetname: '날짜'),
+            child: Target(targetname: '날짜'),
           );
-        }
-    );
-  }
-}
-
-
-// 세팅 내용 처리
-class SettingContent extends StatelessWidget {
-  final String content;
-  const SettingContent({
-    required this.content,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-        content,
-        style: TextStyle(
-          fontSize: 18,
-          color: SERVETWO_COLOR,
-        ),
-    );
+        });
   }
 }
 
@@ -301,7 +270,7 @@ class SettingName extends StatelessWidget {
     return SizedBox(
       width: 90,
       child: Text(
-          typeName,
+        typeName,
         style: TextStyle(
           color: SERVEONE_COLOR,
           fontSize: 18,
