@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Setter
 public class FeedDetailResponseDto {
     private String runningId;
-    private Long userId;
+    private String nickname;
     private String profilePic;
     private Integer runningTime;
     private Float runningDistance;
@@ -30,7 +30,7 @@ public class FeedDetailResponseDto {
     @Builder
     public FeedDetailResponseDto(Running running) {
         this.runningId = running.getId();
-        this.userId = running.getUser().getId();
+        this.nickname = running.getUser().getNickname();
         this.profilePic = running.getUser().getProfilePic();
         this.runningTime = running.getRunningTime();
         this.runningDistance = running.getRunningDistance();
