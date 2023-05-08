@@ -120,7 +120,7 @@ public class FeedService {
         Running running = runningRepository.findRunningByIdWithFeedPics(runningId).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 러닝 기록이 없습니다."));
         FeedDetailResponseDto response = new FeedDetailResponseDto(running);
-        response.setSpeed(getOringinData(runningId));
+        response.setGrape(getOringinData(runningId));
         return response;
     }
 }
