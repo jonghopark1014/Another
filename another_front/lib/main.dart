@@ -10,6 +10,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
 class RunningData extends ChangeNotifier {
+  late GoogleMapController mapController;
   CameraPosition currentPosition = CameraPosition(target: LatLng(0,0));
   GlobalKey globalKey = GlobalKey();
   List<LatLng> location = [];
@@ -57,6 +58,9 @@ class RunningData extends ChangeNotifier {
   }
   void setCurrentPosition(CameraPosition pos) {
     currentPosition = pos;
+  }
+  void setMapController(GoogleMapController con) {
+    mapController = con;
   }
 }
 

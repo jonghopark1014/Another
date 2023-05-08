@@ -25,6 +25,7 @@ class RunningMap extends StatefulWidget {
 }
 
 class _RunningMapState extends State<RunningMap> {
+  late Uint8List? img;
   late Timer _timer;
   // 지도에 위치 그리기
   GoogleMapController? mapController;
@@ -39,15 +40,12 @@ class _RunningMapState extends State<RunningMap> {
       getCurrentLocation();
     });
   }
-
   @override
   void dispose() async {
     mapController!.dispose();
     _timer.cancel();
-    print('맵바이바이');
     super.dispose();
   }
-
   // 캡처하기 위한 함수
   Future<Uint8List> captureWidget(GlobalKey globalKey) async {
     print(globalKey);
@@ -56,25 +54,27 @@ class _RunningMapState extends State<RunningMap> {
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     return byteData!.buffer.asUint8List();
   }
-
   @override
   Widget build(BuildContext context) {
-
-    return GoogleMap(
-      initialCameraPosition: currentPosition,
-      mapType: MapType.normal,
-      zoomControlsEnabled: false,
-      myLocationEnabled: true,
-      myLocationButtonEnabled: false,
-      onMapCreated: onMapCreated,
-      polylines: {
-        Polyline(
-          polylineId: PolylineId('temp'),
-          points: widget.runningData.location,
-          color: MAIN_COLOR,
-          // jointType: JointType.round,
-        ),
-      }
+    return Stack(
+      children: [
+        GoogleMap(
+        initialCameraPosition: currentPosition,
+        mapType: MapType.normal,
+        zoomControlsEnabled: false,
+        myLocationEnabled: true,
+        myLocationButtonEnabled: false,
+        onMapCreated: onMapCreated,
+        polylines: {
+          Polyline(
+            polylineId: PolylineId('temp'),
+            points: widget.runningData.location,
+            color: MAIN_COLOR,
+            // jointType: JointType.round,
+          ),
+        }
+      ),
+    ]
     );
   }
 
@@ -99,8 +99,9 @@ class _RunningMapState extends State<RunningMap> {
         desiredAccuracy: LocationAccuracy.high);
     setState(() {
       currentPosition = CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 17);
-      Provider.of<RunningData>(context, listen: false).setCurrentPosition(currentPosition);
-      Provider.of<RunningData>(context, listen: false).addLocation(currentPosition.target);
+      var runningData = Provider.of<RunningData>(context, listen: false);
+      runningData.setCurrentPosition(currentPosition);
+      runningData.addLocation(currentPosition.target);
       mapController!.animateCamera(
           CameraUpdate.newCameraPosition(currentPosition)
       );
@@ -108,19 +109,16 @@ class _RunningMapState extends State<RunningMap> {
     return ;
   }
 
-
   Future<Uint8List?> captureMap() async {
-    final Uint8List? bytes = await mapController!.takeSnapshot();
+    var mapController = Provider.of<RunningData>(context, listen: false).mapController;
+    final Uint8List? bytes = await mapController.takeSnapshot();
     return bytes;
   }
-
-
   // 맵컨트롤러 받기 => 지도 카메라 위치 조정시 필요
   onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    print(mapController);
+    Provider.of<RunningData>(context, listen: false).setMapController(mapController!);
   }
-
   // 사용자에게 위치 동의 구하기 단계별로
   Future<String> checkPermission() async {
     final isLocationEnabled = await Geolocator.isLocationServiceEnabled();

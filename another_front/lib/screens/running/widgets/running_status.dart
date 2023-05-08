@@ -169,7 +169,7 @@ class _RunningStatus extends State<RunningStatus> {
                 ),
                 GestureDetector(
                   onLongPress: () {
-                    onStop(captureKey);
+                    onStop();
                   },
                   child: RunningCircleButton(
                     iconNamed: Icons.stop,
@@ -199,22 +199,23 @@ class _RunningStatus extends State<RunningStatus> {
   }
 
   // 러닝 종료 시 동작
-  void onStop(GlobalKey captureKey) {
+  void onStop() async {
+    Uint8List? captureInfo = await captureWidget();
+
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (_) => UnderRunningScreenEnd(
+            captureInfo: captureInfo,
           ),
         ),
             (route) => route.settings.name == '/');
   }
 
   // 캡처하기 위한 함수
-  Future<Uint8List> captureWidget(GlobalKey globalKey) async {
-    print(globalKey);
-    RenderRepaintBoundary boundaryObject = globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-    ui.Image image = await boundaryObject.toImage();
-    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    return byteData!.buffer.asUint8List();
+  Future<Uint8List?> captureWidget() async {
+    var mapController = Provider.of<RunningData>(context, listen: false).mapController;
+    final Uint8List? bytes = await mapController.takeSnapshot();
+    return bytes;
   }
 
   void onChange() {}

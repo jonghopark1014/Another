@@ -6,7 +6,9 @@ import 'package:another/widgets/target.dart';
 import 'package:flutter/material.dart';
 
 class UnderRunningScreenEnd extends StatelessWidget {
+  final Uint8List? captureInfo;
   const UnderRunningScreenEnd({
+    required this.captureInfo,
     Key? key
   }) : super(key: key);
 
@@ -21,15 +23,8 @@ class UnderRunningScreenEnd extends StatelessWidget {
             children: [
               Target(targetname: '내 기록'),
               Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.red,
-                    width: 3,
-                  )
-                ),
                 height: 300.0,
-                child: SizedBox( height: 200,
-                  width: 200,),
+                child: Image.memory(captureInfo!),
 
               ),
               SizedBox( height: 120, ),
