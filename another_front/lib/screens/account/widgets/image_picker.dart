@@ -5,8 +5,9 @@ import 'package:another/constant/color.dart';
 
 class ProfileImage extends StatefulWidget {
   final String profileImg;
+  final void Function(File userPickedFile) onFileChanged;
 
-  const ProfileImage({Key? key, required this.profileImg}) : super(key: key);
+  const ProfileImage({Key? key, required this.profileImg, required this.onFileChanged}) : super(key: key);
 
   @override
   State<ProfileImage> createState() => ProfileImageState();
@@ -14,7 +15,7 @@ class ProfileImage extends StatefulWidget {
 
 class ProfileImageState extends State<ProfileImage> {
   late var _profileImg;
-  File? _pickedFile; // 사진 선택한 파일
+  File? userPickedFile; // 사진 선택한 파일
 
 
   @override
@@ -29,7 +30,9 @@ class ProfileImageState extends State<ProfileImage> {
         await ImagePicker().pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
       setState(() {
-        _pickedFile = File(pickedFile.path);
+        userPickedFile = File(pickedFile.path);
+        widget.onFileChanged(userPickedFile!);
+        print('사진찍기 : $userPickedFile'); // 잘됨
       });
     } else {
       print('이미지 선택안함');
@@ -42,8 +45,9 @@ class ProfileImageState extends State<ProfileImage> {
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        _pickedFile = File(pickedFile.path);
-        print(_pickedFile);
+        userPickedFile = File(pickedFile.path);
+        widget.onFileChanged(userPickedFile!);
+        print('갤러리에서 가져오기 : $userPickedFile'); // 잘됨
       });
     } else {
       print('이미지 선택 안 함');
@@ -116,9 +120,9 @@ class ProfileImageState extends State<ProfileImage> {
         Stack(
           children: [
             CircleAvatar(
-              backgroundImage: _pickedFile == null
+              backgroundImage: userPickedFile == null
                   ? _profileImg.image
-                  : FileImage(File(_pickedFile!.path)),
+                  : FileImage(File(userPickedFile!.path)),
               radius: 50,
             ),
             Container(

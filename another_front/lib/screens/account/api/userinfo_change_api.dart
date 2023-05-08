@@ -10,37 +10,27 @@ class UserInfoChangeApi {
     required int height,
     required int weight,
     required String nickname,
-  })
-  async {
+  }) async {
     int userId = 1;
     var url = Uri.parse('$_baseUrl/user/profile/$userId');
 
     // HTTP PATCH 요청 보내기
-    var request = http.MultipartRequest('PATCH', url);
-    var userUpdateForm = {
-      'height': height,
-      'weight': weight,
-      'nickname': nickname
-    };
-    request.fields.addAll({
-      'userUpdateForm': json.encode(userUpdateForm),
-    });
-
-    var response = await request.send();
+    var headers = {'Content-Type': 'application/json'};
+    var body =
+        json.encode({'height': height, 'weight': weight, 'nickname': nickname});
+    var response = await http.patch(url, headers: headers, body: body);
 
     // 응답 출력
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
+      print(await response.body);
+      print('키몸무게 변경 성공');
     } else {
       print('요청실패: ${response.statusCode}');
     }
   }
 
   // 프로필 사진 변경
-  static Future<void> profileImgChange({
-    required File pickedFile
-  })
-  async {
+  static Future<void> profileImgChange({File? pickedFile}) async {
     int userId = 1;
     var url = Uri.parse('$_baseUrl/user/profile/image/$userId');
 
@@ -48,16 +38,17 @@ class UserInfoChangeApi {
     var request = http.MultipartRequest('PATCH', url);
     request.files.add(await http.MultipartFile.fromPath(
       'profileImage',
-      pickedFile.path,
+      pickedFile!.path,
     ));
     var response = await request.send();
 
     // 응답 출력
+    print(response.statusCode);
     if (response.statusCode == 200) {
       print(await response.stream.bytesToString());
+      print('성공');
     } else {
       print('요청실패: ${response.statusCode}');
     }
   }
-
 }
