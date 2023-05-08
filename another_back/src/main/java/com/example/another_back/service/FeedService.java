@@ -9,6 +9,7 @@ import com.example.another_back.hdfs.FileIO;
 import com.example.another_back.repository.FeedPicRepository;
 import com.example.another_back.repository.RunningRepository;
 import com.example.another_back.repository.UserRepository;
+import com.example.another_back.repository.WithRunRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -48,6 +49,8 @@ public class FeedService {
     private final FeedPicRepository feedPicRepository;
 
     private final S3UploaderService s3UploaderService;
+
+    private final WithRunRepository withRunRepository;
 
     /**
      * 오운완 등록
@@ -156,6 +159,7 @@ public class FeedService {
                 () -> new IllegalArgumentException("해당하는 러닝 기록이 없습니다."));
         FeedDetailResponseDto response = new FeedDetailResponseDto(running);
         response.setGraph(getOringinData(runningId));
+        response.setWithRunCount(withRunRepository.countByRunningHostId(runningId));
         return response;
     }
 }
