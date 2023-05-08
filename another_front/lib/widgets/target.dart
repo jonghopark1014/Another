@@ -1,3 +1,4 @@
+import 'package:another/constant/text_style.dart';
 import 'package:another/widgets/target_box.dart';
 import 'package:flutter/material.dart';
 
@@ -20,11 +21,7 @@ class Target extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             targetname,
-            style: TextStyle(
-              color: WHITE_COLOR,
-              fontSize: 20.0,
-              fontWeight: FontWeight.w400
-            ),
+            style: MyTextStyle.twentyTextStyle,
           ),
         ),
         Container(
@@ -40,24 +37,28 @@ class Target extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TargetBox(
+                data: '',
                 name: 'km',
                 textColor: MAIN_COLOR,
                 recordColor: SERVEONE_COLOR,
               ),
               TargetBox(
+                data: '',
                 name: '시간',
                 textColor: MAIN_COLOR,
                 recordColor: SERVEONE_COLOR,
               ),
               TargetBox(
+                data: '',
                 name: 'kacl',
                 textColor: MAIN_COLOR,
                 recordColor: SERVEONE_COLOR,
               ),
               TargetBox(
+                data: '',
                 name: '평균 페이스',
                 textColor: MAIN_COLOR,
-                recordColor: SERVEONE_COLOR      ,
+                recordColor: SERVEONE_COLOR,
               ),
             ],
           ),

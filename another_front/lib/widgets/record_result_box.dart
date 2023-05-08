@@ -1,3 +1,4 @@
+import 'package:another/constant/text_style.dart';
 import 'package:flutter/material.dart';
 
 class RecordResultBox extends StatelessWidget {
@@ -25,21 +26,13 @@ class RecordResultBox extends StatelessWidget {
           children: [
             Text(
               name,
-              style: TextStyle(
-                color: recordColor,
-                fontSize: 20.0,
-                fontWeight: FontWeight.w700,
-              ),
+              style: MyTextStyle.twentyTextStyle.copyWith(color: recordColor),
               textAlign: TextAlign.center,
             ),
             SizedBox(
               child: Text(
                 data,
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: MyTextStyle.thirtyTextStyle.copyWith(color: textColor),
                 textAlign: TextAlign.center,
               ),
             ),

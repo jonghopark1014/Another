@@ -1,11 +1,9 @@
 import 'package:another/screens/feed/widgets/image_profile.dart';
-import 'package:another/screens/feed/widgets/run_icon.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:another/widgets/target_box.dart';
 import '../../../constant/color.dart';
 
 class RunningFeedComplete extends StatefulWidget {
