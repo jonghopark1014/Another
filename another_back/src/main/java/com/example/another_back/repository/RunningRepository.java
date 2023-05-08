@@ -4,6 +4,7 @@ import com.example.another_back.dto.RunningEachHistoryDto;
 import com.example.another_back.dto.RunningHistoryDto;
 import com.example.another_back.entity.Running;
 import com.example.another_back.entity.User;
+import com.example.another_back.entity.enums.Status;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,11 +15,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RunningRepository extends JpaRepository<Running, String> {
-    @Query("select distinct r,fp from Running r left outer join fetch r.feedPic fp")
-    List<Running> findRunningWithFeedPics();
+    @Query("select distinct r,fp from Running r left outer join fetch r.feedPic fp where r.status = :status")
+    List<Running> findRunningByStatusWithFeedPics(Status status);
 
-    @Query("select distinct r,fp from Running r left outer join fetch r.feedPic fp where r.user.id = :userId")
-    List<Running> findRunningByUserIdWithFeedPics(Long userId);
+    @Query("select distinct r,fp from Running r left outer join fetch r.feedPic fp where r.user.id = :userId and r.status = :status")
+    List<Running> findRunningByUserIdAndStatusWithFeedPics(Long userId, Status status);
 
     @Query("select distinct r,fp from Running r left outer join fetch r.feedPic fp where r.id = :runningId")
     Optional<Running> findRunningByIdWithFeedPics(String runningId);

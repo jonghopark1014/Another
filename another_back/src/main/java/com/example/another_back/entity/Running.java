@@ -2,10 +2,7 @@ package com.example.another_back.entity;
 
 import com.example.another_back.dto.RunningRequestDto;
 import com.example.another_back.entity.enums.Status;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -14,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Running {
 
@@ -53,5 +51,6 @@ public class Running {
         this.kcal = runningRequestDto.getKcal();
         this.runningPic = runningPic;
         this.speed = runningRequestDto.getSpeed();
+        this.status = Status.DELETE;
     }
 }
