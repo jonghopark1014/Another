@@ -14,7 +14,6 @@ public class RunningRequestDto {
     private Integer runningTime;
     private Float runningDistance;
     private Date createDate;
-    private Integer walkCount;
     private Integer kcal;
     private Float speed;
     private MultipartFile runningPic;

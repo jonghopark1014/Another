@@ -1,9 +1,11 @@
 package com.example.another_back.service;
 
 import com.example.another_back.dto.*;
+import com.example.another_back.entity.Challenge;
 import com.example.another_back.entity.Running;
 import com.example.another_back.entity.User;
 import com.example.another_back.repository.RunningRepository;
+import com.example.another_back.repository.UserChallengeRepository;
 import com.example.another_back.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,8 @@ public class RunningService {
     private final RunningRepository runningRepository;
 
     private final UserRepository userRepository;
+
+    private final UserChallengeRepository userChallengeRepository;
 
     private final S3UploaderService s3UploaderService;
 
@@ -96,7 +100,7 @@ public class RunningService {
             runData = runningRepository.findWithDateByUserId(user, startDate, endDate, pageable);
         }
         RunningHistoryDto runningHistoryDto =
-                runningRepository.findRunningHistoryDtoByUserId(user, startDate, endDate).orElse(new RunningHistoryDto(0L,0D,0L,0L,0L));
+                runningRepository.findRunningHistoryDtoByUserId(user, startDate, endDate).orElse(new RunningHistoryDto(0L,0D,0L,0L));
         long hour = 0;
         long minute = 0;
         long second = 0;
@@ -113,7 +117,6 @@ public class RunningService {
                 .dayOfRunning(runningHistoryDto.getDayOfRunning())
                 .runningTime(runningTime)
                 .runningDistance(runningHistoryDto.getRunningDistance())
-                .walkCount(runningHistoryDto.getWalkCount())
                 .kcal(runningHistoryDto.getKcal())
                 .runningData(runData)
                 .build();
@@ -140,23 +143,36 @@ public class RunningService {
         Calendar curCal = Calendar.getInstance();
 
         // 이번달
-        curCal.set(curCal.DAY_OF_MONTH, 1);
+        curCal.set(curCal.DATE, 1);
         Date startDate = new Date(curCal.getTimeInMillis());
-        curCal.set(curCal.DAY_OF_MONTH, curCal.getActualMaximum(curCal.DAY_OF_MONTH));
+        curCal.set(curCal.DATE, curCal.getActualMaximum(curCal.DATE));
         Date endDate = new Date(curCal.getTimeInMillis());
         Float thisMonthDistance = runningRepository.SumRunningDistanceByUserIdAndCreateDateBetween(userId, startDate, endDate)
                 .orElseThrow(() -> new IllegalArgumentException("이번달 기록을 가져오는데 실패했습니다."));
 
         // 지난달
         curCal.add(curCal.MONTH, -1);
-        curCal.set(curCal.DAY_OF_MONTH, 1);
+        curCal.set(curCal.DATE, 1);
         startDate = new Date(curCal.getTimeInMillis());
-        curCal.set(curCal.DAY_OF_MONTH, curCal.getActualMaximum(curCal.DAY_OF_MONTH));
+        curCal.set(curCal.DATE, curCal.getActualMaximum(curCal.DATE));
         endDate = new Date(curCal.getTimeInMillis());
         Float lastMonthDistance = runningRepository.SumRunningDistanceByUserIdAndCreateDateBetween(userId, startDate, endDate)
                 .orElseThrow(() -> new IllegalArgumentException("저번달 기록을 가져오는데 실패했습니다."));
 
         MonthDistanceResponseDto response = new MonthDistanceResponseDto(thisMonthDistance, lastMonthDistance);
+        return response;
+    }
+
+    /**
+     * 챌린지 추천
+     *
+     * @param userId
+     * @return ChallengeResponseDto
+     */
+    public ChallengeResponseDto getRecommendChallenge(Long userId) {
+        Challenge challenge = userChallengeRepository.findTop1ByUserAndStatusNotaAndWithChallenge(userId, "silver");
+        if (challenge == null) return null;
+        ChallengeResponseDto response = new ChallengeResponseDto(challenge);
         return response;
     }
 }

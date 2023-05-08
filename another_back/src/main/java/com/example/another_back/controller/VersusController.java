@@ -46,17 +46,17 @@ public class VersusController {
     }
 
     /**
-     * 비슷한 목표 가져오기
+     * 비슷한 목표 가져오기(안쓰는 기능)
      *
      * @param searchRequestDto
      * @param pageable
      * @return Page<SearchResponseDto>
      */
-    @PostMapping("/record/search")
-    public ResponseEntity getSearchRecord(@RequestBody SearchRequestDto searchRequestDto, Pageable pageable) {
-        Page<SearchResponseDto> response = versusService.getSearchRecord(searchRequestDto, pageable);
-        return Response.success(HttpStatus.OK, response);
-    }
+//    @PostMapping("/record/search")
+//    public ResponseEntity getSearchRecord(@RequestBody SearchRequestDto searchRequestDto, Pageable pageable) {
+//        Page<SearchResponseDto> response = versusService.getSearchRecord(searchRequestDto, pageable);
+//        return Response.success(HttpStatus.OK, response);
+//    }
 
     /**
      * 예외 발생 처리

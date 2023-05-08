@@ -18,7 +18,6 @@ public class RunningResponseDto {
     private Float runningDistance;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date createDate;
-    private Integer walkCount;
     private Integer kcal;
     private String runningPic;
     private Float speed;
@@ -30,7 +29,6 @@ public class RunningResponseDto {
         this.runningTime = running.getRunningTime();
         this.runningDistance = running.getRunningDistance();
         this.createDate = running.getCreateDate();
-        this.walkCount = running.getWalkCount();
         this.kcal = running.getKcal();
         this.runningPic = running.getRunningPic();
         this.speed = running.getSpeed()
