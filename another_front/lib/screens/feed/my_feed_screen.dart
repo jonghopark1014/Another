@@ -28,11 +28,11 @@ class MyFeedScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           ImageBox(
-            thumbnailUrls: thumbnailUrls,
-            runningIds: runningIds,
-            runningTimes: runningTimes,
-            runningDistances: runningDistances,
-            // walkCounts: walkCounts,
+            thumbnailUrls: thumbnailUrls.reversed.toList(),
+            runningIds: runningIds.reversed.toList(),
+            runningTimes: runningTimes.reversed.toList(),
+            runningDistances: runningDistances.reversed.toList(),
+            kcals: kcals.reversed.toList(),
           ),
         ],
       ),

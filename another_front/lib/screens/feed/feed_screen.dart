@@ -1,4 +1,5 @@
 import 'package:another/constant/main_layout.dart';
+import 'package:another/main.dart';
 import 'package:another/screens/feed/all_feed_screen.dart';
 import 'package:another/screens/feed/api/feed_api.dart';
 import 'package:another/screens/feed/api/my_feed_api.dart';
@@ -19,39 +20,48 @@ class FeedScreen extends StatefulWidget {
 
 class _FeedScreenState extends State<FeedScreen> {
   bool isFeed = true;
-  List<String> thumbnailUrls = [];
-  List<String> runningIds = [];
-  List<String> runningTimes = [];
-  List<String> runningDistances = [];
-  List<String> walkCounts = [];
-  List<String> kcals = [];
+  late List<String> thumbnailUrls = [];
+  late List<String> runningIds = [];
+  late List<String> runningTimes = [];
+  late List<String> runningDistances = [];
+  late List<String> walkCounts = [];
+  late List<String> kcals = [];
+  late var userInfo;
+  late int userId;
+  late String profile = '';
 
   @override
   void initState() {
     super.initState();
+    userInfo = Provider.of<UserInfo>(
+      context,
+      listen: false,
+    );
+    userId = userInfo.userId;
     _loadFeed();
   }
 
   Future<void> _loadFeed() async {
     try {
       final response = await FeedApi.getFeed();
+
       final contents = response['data']['content'];
       List<String> feedPicUrls = [];
       List<String> runningIdsList = [];
       List<String> runningTimeList = [];
       List<String> runningDistanceList = [];
-      List<String> walkCountList = [];
+      List<String> kcalList = [];
 
       for (var content in contents) {
         List<Map<String, dynamic>> feedPics =
-            List<Map<String, dynamic>>.from(content['feedPic']);
+            List<Map<String, dynamic>>.from(content['feedPics']);
 
         if (feedPics.isNotEmpty) {
           feedPicUrls.add(feedPics[0]['feedPic']);
           runningIdsList.add(content['runningId'].toString());
           runningTimeList.add(content['runningTime'].toString());
           runningDistanceList.add(content['runningDistance'].toString());
-          walkCountList.add(content['walkCount'].toString());
+          kcalList.add(content['kcal'].toString());
         }
       }
 
@@ -61,7 +71,7 @@ class _FeedScreenState extends State<FeedScreen> {
           runningIds = runningIdsList;
           runningTimes = runningTimeList;
           runningDistances = runningDistanceList;
-          walkCounts = walkCountList;
+          kcals = kcalList;
         },
       );
     } catch (e) {
@@ -71,19 +81,20 @@ class _FeedScreenState extends State<FeedScreen> {
 
   Future<void> _myFeed() async {
     try {
-      final response = await MyFeedApi.getFeed('1');
-      final contents = response['data']['content'];
+      final response = await MyFeedApi.getFeed('2');
+      final contents = response['data']['myFeedListDtos']['content'];
       List<String> feedPicUrls = [];
       List<String> runningIdsList = [];
       List<String> runningTimeList = [];
       List<String> runningDistanceList = [];
       List<String> walkCountList = [];
-      List<String> kcalList= [];
-      if (contents == []) {
+      List<String> kcalList = [];
+      String profilePic = '';
+
+      if (contents != []) {
         for (var content in contents) {
           List<Map<String, dynamic>> feedPics =
-          List<Map<String, dynamic>>.from(content['feedPic']);
-
+              List<Map<String, dynamic>>.from(content['feedPic']);
           if (feedPics.isNotEmpty) {
             feedPicUrls.add(feedPics[0]['feedPic']);
             runningIdsList.add(content['runningId'].toString());
@@ -102,15 +113,17 @@ class _FeedScreenState extends State<FeedScreen> {
       }
       setState(
         () {
+          profilePic = response['data']['profilePic'];
           thumbnailUrls = feedPicUrls;
           runningIds = runningIdsList;
           runningTimes = runningTimeList;
           runningDistances = runningDistanceList;
           walkCounts = walkCountList;
-          kcals =kcalList;
+          kcals = kcalList;
+          profile = profilePic;
         },
       );
-      // print(kcals);
+
     } catch (e) {
       print(e);
     }
@@ -128,12 +141,15 @@ class _FeedScreenState extends State<FeedScreen> {
               backgroundColor: BACKGROUND_COLOR,
             ),
             SliverToBoxAdapter(
-              child: isFeed ? Container() : MyRecordResult(
-                  walkCounts: walkCounts,
-                  kcals: kcals,
-                  runningTimes : runningTimes,
-                  runningDistances : runningDistances,
-              ),
+              child: isFeed
+                  ? Container()
+                  : MyRecordResult(
+                      walkCounts: walkCounts,
+                      kcals: kcals,
+                      runningTimes: runningTimes,
+                      runningDistances: runningDistances,
+                      profile : profile,
+                    ),
             ),
           ];
         },
@@ -160,7 +176,7 @@ class _FeedScreenState extends State<FeedScreen> {
                       runningIds: runningIds,
                       runningTimes: runningTimes,
                       runningDistances: runningDistances,
-                      walkCounts: walkCounts,
+                      kcals: kcals,
                     )
                   : MyFeedScreen(
                       thumbnailUrls: thumbnailUrls,
@@ -168,7 +184,7 @@ class _FeedScreenState extends State<FeedScreen> {
                       runningTimes: runningTimes,
                       runningDistances: runningDistances,
                       walkCounts: walkCounts,
-                      kcals: kcals
+                      kcals: kcals,
                     ),
             ),
           ],

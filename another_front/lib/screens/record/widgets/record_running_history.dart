@@ -7,7 +7,13 @@ class TodayRecord extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Target(targetname: '2023.05.02');
+    return Target(
+      targetname: '2023.05.02',
+      runningDistance: '',
+      kcal: '',
+      runningTime: '',
+      speed: '',
+    );
   }
 }
 
@@ -16,7 +22,13 @@ class ThisWeekRecord extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Target(targetname: '2023.05.03');
+    return Target(
+      targetname: '2023.05.03',
+      runningDistance: '',
+      kcal: '',
+      runningTime: '',
+      speed: '',
+    );
   }
 }
 
@@ -25,7 +37,13 @@ class ThisMonthRecord extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Target(targetname: '2023.05.04');
+    return Target(
+      targetname: '2023.05.04',
+      runningDistance: '',
+      kcal: '',
+      runningTime: '',
+      speed: '',
+    );
   }
 }
 
@@ -34,6 +52,12 @@ class AllRecord extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Target(targetname: '2023.05.05');
+    return Target(
+      targetname: '2023.05.05',
+      runningDistance: '',
+      kcal: '',
+      runningTime: '',
+      speed: '',
+    );
   }
 }
