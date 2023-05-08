@@ -13,7 +13,6 @@ public class SearchResponseDto {
     private Integer runningTime;
     private Float runningDistance;
     private Date createDate;
-    private Integer walkCount;
     private Integer kcal;
     private String runningPic;
     private Float speed;
@@ -25,7 +24,6 @@ public class SearchResponseDto {
         this.runningTime = running.getRunningTime();
         this.runningDistance = running.getRunningDistance();
         this.createDate = running.getCreateDate();
-        this.walkCount = running.getWalkCount();
         this.kcal = running.getKcal();
         this.runningPic = running.getRunningPic();
         this.speed = running.getSpeed();

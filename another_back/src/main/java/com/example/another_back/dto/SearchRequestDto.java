@@ -6,5 +6,5 @@ import lombok.Getter;
 public class SearchRequestDto {
     private Long userId;
     private Float runningDistance;
-    private String runningTime;
+    private Integer runningTime;
 }

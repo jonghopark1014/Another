@@ -23,7 +23,6 @@ public class Running {
     private Integer runningTime;
     private Float runningDistance;
     private Date createDate;
-    private Integer walkCount;
     private Integer kcal;
     private String runningPic;
     private Float speed;
@@ -50,7 +49,6 @@ public class Running {
         this.runningTime = runningRequestDto.getRunningTime();
         this.runningDistance = runningRequestDto.getRunningDistance();
         this.createDate = runningRequestDto.getCreateDate();
-        this.walkCount = runningRequestDto.getWalkCount();
         this.kcal = runningRequestDto.getKcal();
         this.runningPic = runningPic;
         this.speed = runningRequestDto.getSpeed();

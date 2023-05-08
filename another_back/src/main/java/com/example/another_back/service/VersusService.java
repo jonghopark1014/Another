@@ -106,13 +106,13 @@ public class VersusService {
      * @return Page<SearchResponseDto>
      */
     public Page<SearchResponseDto> getSearchRecord(SearchRequestDto searchRequestDto, Pageable pageable) {
-        Float distance = searchRequestDto.getRunningDistance();
-        Float time = Float.parseFloat(searchRequestDto.getRunningTime());
-        Float distanceBoundary = distance / 10;
-        Float startTimeBoundary = time - time / 10;
-        Float endTimeBoundary = time + time / 10;
-        List<Running> runningList = runningRepository.findByRunningDistanceBetweenAndRunningTimeBetweenAndUserIdNot(distance - distanceBoundary, distance + distanceBoundary, startTimeBoundary.toString(), endTimeBoundary.toString(), searchRequestDto.getUserId());
-        Page<SearchResponseDto> response = new PageImpl<>(runningList.stream().map(SearchResponseDto::new).collect(Collectors.toList()), pageable, runningList.size());
-        return response;
+//        Float distance = searchRequestDto.getRunningDistance();
+//        Float distanceBoundary = distance / 10;
+//        Integer time = searchRequestDto.getRunningTime();
+//        Float startTimeBoundary = time - time / 10;
+//        Float endTimeBoundary = time + time / 10;
+//        List<Running> runningList = runningRepository.findByRunningDistanceBetweenAndRunningTimeBetweenAndUserIdNot(distance - distanceBoundary, distance + distanceBoundary, startTimeBoundary.toString(), endTimeBoundary.toString(), searchRequestDto.getUserId());
+//        Page<SearchResponseDto> response = new PageImpl<>(runningList.stream().map(SearchResponseDto::new).collect(Collectors.toList()), pageable, runningList.size());
+        return null;
     }
 }

@@ -5,10 +5,12 @@ import com.example.another_back.entity.Challenge;
 import com.example.another_back.entity.Running;
 import com.example.another_back.entity.User;
 import com.example.another_back.repository.RunningRepository;
+import com.example.another_back.repository.UserChallengeRepository;
 import com.example.another_back.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,7 @@ public class RunningService {
 
     private final UserRepository userRepository;
 
+    private final UserChallengeRepository userChallengeRepository;
 
     private final S3UploaderService s3UploaderService;
 
@@ -97,7 +100,7 @@ public class RunningService {
             runData = runningRepository.findWithDateByUserId(user, startDate, endDate, pageable);
         }
         RunningHistoryDto runningHistoryDto =
-                runningRepository.findRunningHistoryDtoByUserId(user, startDate, endDate).orElse(new RunningHistoryDto(0L,0D,0L,0L,0L));
+                runningRepository.findRunningHistoryDtoByUserId(user, startDate, endDate).orElse(new RunningHistoryDto(0L,0D,0L,0L));
         long hour = 0;
         long minute = 0;
         long second = 0;
@@ -114,7 +117,6 @@ public class RunningService {
                 .dayOfRunning(runningHistoryDto.getDayOfRunning())
                 .runningTime(runningTime)
                 .runningDistance(runningHistoryDto.getRunningDistance())
-                .walkCount(runningHistoryDto.getWalkCount())
                 .kcal(runningHistoryDto.getKcal())
                 .runningData(runData)
                 .build();
