@@ -18,6 +18,7 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.Calendar;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -48,14 +49,14 @@ public class RunningService {
         User user = userRepository.findById(runningRequestDto.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("유저가 비어있습니다."));
         // 러닝 루트 S3 업로드
-        String runningPic = null;
+        List<String> runningPic = null;
         try {
-            runningPic = s3UploaderService.upload(runningRequestDto.getRunningPic(), bucket, "image");
+            runningPic = s3UploaderService.upload(bucket, "image",runningRequestDto.getRunningPic());
         } catch (IOException e) {
-            new IllegalArgumentException("S3 파일 업로드 중 에러가 발생했습니다.");
+            throw new IllegalArgumentException("S3 파일 업로드 중 에러가 발생했습니다.");
         }
         // 러닝 객체 생성
-        Running running = new Running(runningRequestDto, runningPic, user);
+        Running running = new Running(runningRequestDto, runningPic.get(0), user);
         // DB에 저장
         Running savedRunning = runningRepository.save(running);
         // Id 반환
