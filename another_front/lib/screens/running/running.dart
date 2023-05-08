@@ -1,4 +1,5 @@
 import 'package:another/constant/color.dart';
+import 'package:another/screens/running/api/my_history_api.dart';
 import 'package:another/screens/running/timer_screen.dart';
 import 'package:another/screens/running/widgets/before_running_map.dart';
 import 'package:another/screens/running/widgets/running_carousel.dart';
@@ -12,6 +13,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../main.dart';
+
 
 class RunningTab extends StatefulWidget {
   const RunningTab({Key? key}) : super(key: key);
@@ -237,12 +239,13 @@ class _RunningTabState extends State<RunningTab> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 5,),
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Expanded(
-                            child: MyHistory(historyList: ['1', '2'])
+                            child: MyHistory(),
                         ),
                       ],
                     ),
@@ -252,14 +255,14 @@ class _RunningTabState extends State<RunningTab> {
                       padding: EdgeInsets.all(10),
                       primary: MAIN_COLOR,
                     ),
+                    // 나중에 수정해야함!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    onPressed: onPressed,
                     child: const Text(
                       '러닝 시작!',
                       style: TextStyle(
                           fontSize: 18
                       ),
                     ),
-                    // 나중에 수정해야함!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    onPressed: onPressed,
                   ),
                 ],
               ),
@@ -286,20 +289,45 @@ class _RunningTabState extends State<RunningTab> {
     );
   }
 }
-
-class MyHistory extends StatelessWidget {
-  final List<dynamic> historyList;
+// 내기록들 띄우는 위젯
+class MyHistory extends StatefulWidget {
   const MyHistory({
-    required this.historyList,
     Key? key
   }) : super(key: key);
+
+  @override
+  State<MyHistory> createState() => _MyHistoryState();
+}
+class _MyHistoryState extends State<MyHistory> {
+  List<dynamic> historyList = ['1', '2', '3', '4', '5'];
+  late final _userInfo;
+  late final _userId;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _userInfo = Provider.of<UserInfo>(context, listen:false);
+    // _userId = _userInfo.userId;
+    _userId = 1; // 더미========================================
+    var data = myHistoryApi(_userId);
+
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: historyList.length,
         itemBuilder: (BuildContext context, int index) {
-          return Target(targetname: '날짜');
+          return ElevatedButton(
+            // 눌렀을 때 하이라이트
+            onPressed: ()=>{},
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.all(2),
+              primary: BACKGROUND_COLOR,
+            ),
+              child: Target(targetname: '날짜'),
+          );
         }
     );
   }
