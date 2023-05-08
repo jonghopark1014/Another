@@ -1,5 +1,4 @@
 import 'package:another/constant/color.dart';
-import 'package:another/screens/account/edit.dart';
 import 'package:another/screens/record/widgets/period_total_record.dart';
 import 'package:flutter/material.dart';
 import '../account/login.dart';
@@ -7,11 +6,11 @@ import '../account/signup_userinfo.dart';
 import '../record/challenge.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'widgets/category_title.dart';
 import './widgets/record_running_history.dart';
-import '../../main.dart';
+import 'package:another/main.dart';
 import 'package:provider/provider.dart';
+import 'package:another/screens/record/widgets/profile.dart';
 
 class RecordTab extends StatelessWidget {
   const RecordTab({Key? key}) : super(key: key);
@@ -50,140 +49,110 @@ class RecordTab extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
+      body: SafeArea(
         child: Column(
           children: [
-            Stack(
-              children: [
-                Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF1C1A1E),
-                        Color(0xFF3D2F4A),
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Image.asset('assets/img/logo_small.png'),
-                      SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '안녕하세요 ${context.watch<UserInfo>().nickname}님!\n오늘도 함께 달려볼까요?',
-                            style: TextStyle(color: Colors.white),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Stack(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Color(0xFF1C1A1E),
+                                  Color(0xFF3D2F4A),
+                                  Color(0xFF3D2F4A),
+                                  Color(0xFF3D2F4A),
+                                ],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                              ),
+                            ),
                           ),
-                          Column(
-                            children: [
-                              Stack(
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  CircularPercentIndicator(
-                                    radius: 50,
-                                    lineWidth: 10,
-                                    percent: 0.6,
-                                    header: Text("Icon header"),
-                                    center: CircleAvatar(
-                                      backgroundImage: NetworkImage(
-                                          '${context.watch<UserInfo>().profileImg}'),
-                                      radius: 45,
-                                    ),
-                                    backgroundColor: Colors.grey,
-                                    progressColor: Colors.blue,
+                                  Image.asset('assets/img/logo_small.png'),
+                                  SizedBox(height: 10),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        '안녕하세요 ${context.watch<UserInfo>().nickname}님!\n오늘도 함께 달려볼까요?',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      ProfileWidget(),
+                                    ],
                                   ),
-                                  Positioned(
-                                    right: 0,
-                                    bottom: 0,
-                                    child: InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                ProfileEditPage(),
-                                          ),
-                                        );
-                                      },
-                                      child: CircleAvatar(
-                                        backgroundColor: MAIN_COLOR,
-                                        radius: 15,
-                                        child: Icon(
-                                          Icons.edit,
-                                          color: WHITE_COLOR,
-                                          size: 20,
-                                        ),
+                                ],
+                              ),
+                            ),
+                            Stack(
+                              children: [
+                                Positioned.fill(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(30),
+                                        topRight: Radius.circular(30),
                                       ),
                                     ),
                                   ),
-                                  Positioned(
-                                    left: 36,
-                                    top: 0,
-                                    child: Text(
-                                      'Lv.1',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  )
-                                ],
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Stack(
-              children: [
-                Positioned.fill(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
-                      ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      top: 10, left: 15, right: 15),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          CategoryTitle(title: 'MY 챌린지'),
+                                          IconButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ChallengePage()),
+                                              );
+                                            },
+                                            icon: Icon(Icons
+                                                .arrow_forward_ios_outlined),
+                                            color: Colors.white,
+                                            iconSize: 14,
+                                          )
+                                        ],
+                                      ),
+                                      MyChallenge(), // 나의 챌린지
+                                      CategoryTitle(title: '나의 활동 기록'),
+                                      MyRecord(),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
+                  ],
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10, left: 15, right: 15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          CategoryTitle(title: 'MY 챌린지'),
-                          IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ChallengePage()),
-                              );
-                            },
-                            icon: Icon(Icons.arrow_forward_ios_outlined),
-                            color: Colors.white,
-                            iconSize: 14,
-                          )
-                        ],
-                      ),
-                      MyChallenge(), // 나의 챌린지
-                      CategoryTitle(title: '나의 활동 기록'),
-                      MyRecord(),
-                    ],
-                  ),
-                )
-              ],
+              ),
             ),
           ],
         ),
@@ -353,7 +322,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
       children: [
         widget.isCalendarOpen == true
             ? TableCalendarScreen()
-            : Text('달력 없음}', style: TextStyle(color: Colors.white)),
+            : Text('달력 없음', style: TextStyle(color: Colors.white)),
 
         PeriodTotalRecord(selectedIndex: widget.selectedIndex), // 조회 기간 총 기록
 
@@ -383,9 +352,12 @@ class _MyRecordContentsState extends State<MyRecordContents> {
                             ],
                           )
                         : widget.selectedIndex == 4
-                            ? Text('인덱스 4임',
-                                style: TextStyle(color: Colors.white))
-                            : Text('잘못된 인덱스')
+                            ? Column(
+                                children: [
+                                  AllRecord(),
+                                ],
+                              )
+                            : Text('hi')
       ],
     );
   }

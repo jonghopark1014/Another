@@ -31,12 +31,21 @@ Map<String, dynamic> dummyAll = {
   'runningTime': '26:30:50'
 };
 
+Map<String, dynamic> dummyCalendar = {
+  'Date': '선택된 날짜',
+  'walkCount': 0,
+  'kcal': 0,
+  'runningDistance': 0,
+  'runningTime': '00:00:00'
+};
+
 class PeriodTotalRecord extends StatelessWidget {
   const PeriodTotalRecord(
-      {Key? key, required this.selectedIndex})
+      {Key? key, required this.selectedIndex, this.selectedDay})
       : super(key: key);
 
   final int selectedIndex;
+  final selectedDay;
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +59,8 @@ class PeriodTotalRecord extends StatelessWidget {
       dummy = dummyMonth;
     } else if (selectedIndex == 3) {
       dummy = dummyAll;
+    } else if (selectedIndex == 4) {
+      dummy = dummyCalendar;
     } else {
       throw Exception('Invalid selectedIndex value: $selectedIndex');
     }
