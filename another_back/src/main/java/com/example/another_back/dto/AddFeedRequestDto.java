@@ -11,5 +11,5 @@ import java.util.List;
 public class AddFeedRequestDto {
     private Long userId;
     private String runningId;
-    private List<MultipartFile> feedPics;
+    private MultipartFile[] feedPics;
 }
