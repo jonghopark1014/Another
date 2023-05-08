@@ -35,6 +35,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   # 회전 관련
   wearable_rotary: ^2.0.0
+  # 워치랑 호환
   flutter_smart_watch: ^1.0.0
   # 워치간 수신 및 발신
   watch_connectivity: ^0.1.5
@@ -42,6 +43,8 @@ dependencies:
   is_wear: ^0.0.1+2
   # 캐러셀
   carousel_indicator: ^1.0.6
+  # 블루투스로 연결
+  flutter_blue_plus: ^1.4.0
 
   
 dev_dependencies:

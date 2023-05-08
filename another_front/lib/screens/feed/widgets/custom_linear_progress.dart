@@ -1,3 +1,4 @@
+import 'package:another/constant/text_style.dart';
 import 'package:flutter/material.dart';
 
 class DistanceBar extends StatelessWidget {
@@ -18,11 +19,7 @@ class DistanceBar extends StatelessWidget {
         Column(children: [
           Text(
             name,
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
-              fontSize: 14.0,
-            ),
+            style: MyTextStyle.fourteenTextStyle,
             textAlign: TextAlign.start,
           ),
           Stack(
@@ -44,7 +41,7 @@ class DistanceBar extends StatelessWidget {
             '${progress.toStringAsFixed(1)}%',
             style: TextStyle(
               color: Colors.white,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w700,
               fontSize: 18.0,
             ),
           ),

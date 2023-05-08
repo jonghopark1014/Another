@@ -235,72 +235,70 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SafeArea(
-          child: Center(
-            child: Column(
-              children: [
-                Target(targetname: '목표기록'),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Stack(children: [
-                    Column(
-                      children: [
-                        DistanceBar(
-                          name: '상대 페이스',
-                          pace: _currentYouSliderValue,
-                        ),
-                        DistanceBar(
-                          name: '내 페이스',
-                          pace: _currentSliderValue,
-                        ),
-                      ],
-                    ),
-                    Positioned(
-                      child: AbsorbPointer(
-                        absorbing: true,
-                        child: Container(
-                          width: 400,
-                          height: 150,
-                        ),
-                      ),
-                    ),
-                  ]),
-                ),
-                RecordResult(
-                  timer:
-                  '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}',
-                  distance: runningDistance.toString(),
-                  calories: (_userWeight * runningDistance * 1.036 / 1000 ~/ 1).toString(),
-                  pace: userPace,
-                ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        child: Center(
+          child: Column(
+            children: [
+              Target(targetname: '목표기록'),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Stack(children: [
+                  Column(
                     children: [
-                      // RunningCircleButton(iconNamed: Icons.play_arrow,onPressed: ,),
-                      isStart
-                          ? RunningCircleButton(
-                        iconNamed: Icons.pause,
-                        onPressed: onPause,
-                      )
-                          : RunningCircleButton(
-                        iconNamed: Icons.play_arrow,
-                        onPressed: onStart,
+                      DistanceBar(
+                        name: '상대 페이스',
+                        pace: _currentYouSliderValue,
                       ),
-                      GestureDetector(
-                        onLongPress: () {
-                          onStop();
-                        },
-                        child: RunningCircleButton(
-                          iconNamed: Icons.stop,
-                          onPressed: onChange,
-                        ),
+                      DistanceBar(
+                        name: '내 페이스',
+                        pace: _currentSliderValue,
                       ),
                     ],
                   ),
+                  Positioned(
+                    child: AbsorbPointer(
+                      absorbing: true,
+                      child: Container(
+                        width: 400,
+                        height: 150,
+                      ),
+                    ),
+                  ),
+                ]),
+              ),
+              RecordResult(
+                timer:
+                '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}',
+                distance: runningDistance.toString(),
+                calories: (_userWeight * runningDistance * 1.036 / 1000 ~/ 1).toString(),
+                pace: userPace,
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    // RunningCircleButton(iconNamed: Icons.play_arrow,onPressed: ,),
+                    isStart
+                        ? RunningCircleButton(
+                      iconNamed: Icons.pause,
+                      onPressed: onPause,
+                    )
+                        : RunningCircleButton(
+                      iconNamed: Icons.play_arrow,
+                      onPressed: onStart,
+                    ),
+                    GestureDetector(
+                      onLongPress: () {
+                        onStop();
+                      },
+                      child: RunningCircleButton(
+                        iconNamed: Icons.stop,
+                        onPressed: onChange,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
