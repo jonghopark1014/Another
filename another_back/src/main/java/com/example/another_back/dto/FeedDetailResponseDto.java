@@ -22,8 +22,9 @@ public class FeedDetailResponseDto {
     private Date createDate;
     private Integer kcal;
     private String runningPic;
+    private Float speed;
     private List<FeedPicResponsDto> feedPics;
-    private JSONArray speed;
+    private JSONArray grape;
 
     @Builder
     public FeedDetailResponseDto(Running running) {
@@ -34,6 +35,7 @@ public class FeedDetailResponseDto {
         this.createDate = running.getCreateDate();
         this.kcal = running.getKcal();
         this.runningPic = running.getRunningPic();
+        this.speed = running.getSpeed();
         this.feedPics = running.getFeedPic().stream().map(FeedPicResponsDto::new).collect(Collectors.toList());
     }
 }
