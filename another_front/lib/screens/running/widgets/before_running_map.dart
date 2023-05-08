@@ -29,13 +29,11 @@ class _BeforeRunningMapState extends State<BeforeRunningMap> {
     super.initState();
     _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
       getCurrentLocation();
-      print("beforerunning===============================");
     });
   }
   @override
   void dispose() {
     mapController!.dispose();
-    print("before dispose??====================================");
     _timer.cancel();
     super.dispose();
   }

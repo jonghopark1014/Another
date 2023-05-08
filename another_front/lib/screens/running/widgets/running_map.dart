@@ -25,6 +25,7 @@ class RunningMap extends StatefulWidget {
 }
 
 class _RunningMapState extends State<RunningMap> {
+  late Timer _timer;
   // 지도에 위치 그리기
   GoogleMapController? mapController;
   late CameraPosition currentPosition;
@@ -34,7 +35,7 @@ class _RunningMapState extends State<RunningMap> {
     // TODO: implement initState
     super.initState();
     currentPosition = widget.initialPosition;
-    Timer.periodic(Duration(seconds: 1), (timer) async {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
       getCurrentLocation();
     });
   }
@@ -42,6 +43,7 @@ class _RunningMapState extends State<RunningMap> {
   @override
   void dispose() async {
     mapController!.dispose();
+    _timer.cancel();
     print('맵바이바이');
     super.dispose();
   }

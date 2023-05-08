@@ -22,14 +22,16 @@ class RunningTab extends StatefulWidget {
   State<RunningTab> createState() => _RunningTabState();
 }
 class _RunningTabState extends State<RunningTab> {
+  BeforeRunningMap beforeRunningMap = BeforeRunningMap();
   @override
   void initState() {
     super.initState();
   }
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   print('running dispose~!!!!!!=======================');
+  //   super.dispose();
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -210,7 +212,6 @@ class _RunningTabState extends State<RunningTab> {
     runningData.reset();
     runningData.addLocation(runningData.currentPosition.target);
 
-
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (_) => TimerScreen(
@@ -218,7 +219,7 @@ class _RunningTabState extends State<RunningTab> {
           initialPosition: runningData.currentPosition,
         ),
       ),
-      (route) => route.settings.name == '/',
+        (route) => false,
     );
   }
 }
