@@ -94,10 +94,10 @@ class _RunningTabState extends State<RunningTab> {
                   Container(
                     height: 25,
                     decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(
-                        color: CONTOUR_COLOR,
-                      ))
-                    ),
+                        border: Border(
+                            bottom: BorderSide(
+                      color: CONTOUR_COLOR,
+                    ))),
                     child: Text(
                       '목표설정',
                       style: TextStyle(
@@ -129,10 +129,8 @@ class _RunningTabState extends State<RunningTab> {
                       primary: MAIN_COLOR,
                     ),
                     child: const Text(
-                        '러닝 시작!',
-                      style: TextStyle(
-                        fontSize: 18
-                      ),
+                      '러닝 시작!',
+                      style: TextStyle(fontSize: 18),
                     ),
                     // 나중에 수정해야함!!!!!!!!!!!!!!!!!!!!!!!!!!
                     onPressed: onPressed,
@@ -174,13 +172,15 @@ class _RunningTabState extends State<RunningTab> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 5,),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Expanded(
-                            child: MyHistory(),
+                          child: MyHistory(),
                         ),
                       ],
                     ),
@@ -194,9 +194,7 @@ class _RunningTabState extends State<RunningTab> {
                     onPressed: onPressed,
                     child: const Text(
                       '러닝 시작!',
-                      style: TextStyle(
-                          fontSize: 18
-                      ),
+                      style: TextStyle(fontSize: 18),
                     ),
                   ),
                 ],
@@ -223,15 +221,15 @@ class _RunningTabState extends State<RunningTab> {
     );
   }
 }
+
 // 내기록들 띄우는 위젯
 class MyHistory extends StatefulWidget {
-  const MyHistory({
-    Key? key
-  }) : super(key: key);
+  const MyHistory({Key? key}) : super(key: key);
 
   @override
   State<MyHistory> createState() => _MyHistoryState();
 }
+
 class _MyHistoryState extends State<MyHistory> {
   List<dynamic> historyList = ['1', '2', '3', '4', '5'];
   late final _userInfo;
@@ -241,32 +239,36 @@ class _MyHistoryState extends State<MyHistory> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _userInfo = Provider.of<UserInfo>(context, listen:false);
+    _userInfo = Provider.of<UserInfo>(context, listen: false);
     // _userId = _userInfo.userId;
     _userId = 1; // 더미========================================
     var data = myHistoryApi(_userId);
-
   }
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: historyList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return ElevatedButton(
-            // 눌렀을 때 하이라이트
-            onPressed: ()=>{},
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.all(2),
-              primary: BACKGROUND_COLOR,
-            ),
-              child: Target(targetname: '날짜'),
-          );
-        }
+      itemBuilder: (BuildContext context, int index) {
+        return ElevatedButton(
+          // 눌렀을 때 하이라이트
+          onPressed: () => {},
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.all(2),
+            primary: BACKGROUND_COLOR,
+          ),
+          child: Target(
+            targetname: '날짜',
+            runningDistance: '',
+            kcal: '',
+            runningTime: '',
+            speed: '',
+          ),
+        );
+      },
     );
   }
 }
-
 
 // 세팅 내용 처리
 class SettingContent extends StatelessWidget {
@@ -279,11 +281,11 @@ class SettingContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-        content,
-        style: TextStyle(
-          fontSize: 18,
-          color: SERVETWO_COLOR,
-        ),
+      content,
+      style: TextStyle(
+        fontSize: 18,
+        color: SERVETWO_COLOR,
+      ),
     );
   }
 }
@@ -301,7 +303,7 @@ class SettingName extends StatelessWidget {
     return SizedBox(
       width: 90,
       child: Text(
-          typeName,
+        typeName,
         style: TextStyle(
           color: SERVEONE_COLOR,
           fontSize: 18,

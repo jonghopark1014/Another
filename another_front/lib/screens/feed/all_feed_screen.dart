@@ -6,14 +6,14 @@ class AllFeedScreen extends StatelessWidget {
   List<String> runningIds = [];
   List<String> runningTimes = [];
   List<String> runningDistances = [];
-  List<String> walkCounts = [];
+  List<String> kcals = [];
 
   AllFeedScreen({
     required this.thumbnailUrls,
     required this.runningIds,
     required this.runningTimes,
     required this.runningDistances,
-    required this.walkCounts,
+    required this.kcals,
     Key? key,
   }) : super(key: key);
 
@@ -25,11 +25,11 @@ class AllFeedScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           ImageBox(
-            thumbnailUrls: thumbnailUrls,
-            runningIds: runningIds,
-            runningTimes: runningTimes,
-            runningDistances: runningDistances,
-            // walkCounts: walkCounts,
+            thumbnailUrls: thumbnailUrls.reversed.toList(),
+            runningIds: runningIds.reversed.toList(),
+            runningTimes: runningTimes.reversed.toList(),
+            runningDistances: runningDistances.reversed.toList(),
+            kcals: kcals.reversed.toList(),
           ),
         ],
       ),

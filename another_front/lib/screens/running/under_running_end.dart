@@ -21,13 +21,21 @@ class UnderRunningScreenEnd extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              Target(targetname: '내 기록'),
+              Target(
+                targetname: '내 기록',
+                runningDistance: '',
+                kcal: '',
+                runningTime: '',
+                speed: '',
+              ),
               Container(
                 height: 300.0,
                 child: Image.memory(captureInfo!),
 
               ),
-              SizedBox( height: 120, ),
+              SizedBox(
+                height: 120,
+              ),
               ButtonConponent(
                 onPressed: () => endFeed(context),
               ),
@@ -43,7 +51,7 @@ class UnderRunningScreenEnd extends StatelessWidget {
         MaterialPageRoute(
           builder: (_) => UnderChallengeScreenEndFeed(),
         ),
-            (route) => route.settings.name == '/');
+        (route) => route.settings.name == '/');
   }
 }
 
@@ -62,7 +70,10 @@ class ButtonConponent extends StatelessWidget {
         children: [
           ElevatedButton(
             onPressed: () {
-              Navigator.of(context).pushNamedAndRemoveUntil( '/', (route) => false, );
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                '/',
+                (route) => false,
+              );
             },
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 16),

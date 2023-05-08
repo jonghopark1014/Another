@@ -63,6 +63,10 @@ class UnderChallengeScreenEndFeed extends StatelessWidget {
               ),
               Target(
                 targetname: '내 기록',
+                runningDistance: '',
+                kcal: '',
+                runningTime: '',
+                speed: '',
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 12.0),
@@ -72,9 +76,10 @@ class UnderChallengeScreenEndFeed extends StatelessWidget {
                     elevation: 20.0,
                   ),
                   onPressed: () {
-                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) =>
-                        RunningFeedComplete()
-                    ), (route) => route.settings.name == '/');
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (_) => RunningFeedComplete()),
+                        (route) => route.settings.name == '/');
                   },
                   child: Text(
                     '오운완 등록하기',

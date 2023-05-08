@@ -5,7 +5,18 @@ import 'package:flutter/material.dart';
 import '../../running/challenge_running.dart';
 
 class RunIcon extends StatelessWidget {
-  const RunIcon({Key? key}) : super(key: key);
+  String runningTime;
+  String runningDistance;
+  String kcal;
+  String speed;
+
+  RunIcon(
+      {required this.runningTime,
+      required this.runningDistance,
+      required this.kcal,
+      required this.speed,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +70,12 @@ class RunIcon extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => ChallengeRunning(),
+              builder: (_) => ChallengeRunning(
+                runningDistance: runningDistance,
+                runningTime: runningTime,
+                kcal: kcal,
+                speed: speed,
+              ),
             ),
           );
         },

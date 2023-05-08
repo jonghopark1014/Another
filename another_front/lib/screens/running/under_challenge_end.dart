@@ -8,25 +8,7 @@ import 'package:flutter/material.dart';
 import '../feed/widgets/line_chart_custom.dart';
 
 class UnderChallengeScreenEnd extends StatelessWidget {
-  final List<PacesData> chartData = [
-    PacesData(0, 35),
-    PacesData(1, 28),
-    PacesData(2, 34),
-    PacesData(3, 32),
-    PacesData(4, 40),
-    PacesData(5, 45),
-    PacesData(6, 45),
-    PacesData(7, 45),
-    PacesData(8, 45),
-    PacesData(9, 45),
-    PacesData(10, 45),
-    PacesData(11, 45),
-    PacesData(12, 45),
-    PacesData(13, 45),
-    PacesData(14, 45),
-    PacesData(15, 45),
-    PacesData(16, 45),
-  ];
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -42,7 +24,13 @@ class UnderChallengeScreenEnd extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Target(targetname: '목표 기록'),
+                child: Target(
+                  targetname: '목표 기록',
+                  runningDistance: '',
+                  kcal: '',
+                  runningTime: '',
+                  speed: '',
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 32.0),
@@ -57,7 +45,7 @@ class UnderChallengeScreenEnd extends StatelessWidget {
                 width: 350.0,
                 height: 180.0,
                 child: Chart(
-                  chartData: chartData,
+                  chartData: [],
                 ),
               ),
               ButtonConponent(
@@ -72,13 +60,14 @@ class UnderChallengeScreenEnd extends StatelessWidget {
   }
 
   void endFeed(BuildContext context) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (_) => UnderChallengeScreenEndFeed(),
-            ),
-            (route) => route.settings.name == '/');
-    }
-    void feedComplete(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => UnderChallengeScreenEndFeed(),
+        ),
+        (route) => route.settings.name == '/');
+  }
+
+  void feedComplete(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => RunningFeedComplete()),
     );
@@ -136,5 +125,3 @@ class ButtonConponent extends StatelessWidget {
     );
   }
 }
-
-
