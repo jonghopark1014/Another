@@ -16,7 +16,7 @@ public class MyFeedListDto {
     private Float runningDistance;
     private Integer kcal;
     private String runningPic;
-    private List<FeedPicResponsDto> feedPic;
+    private List<FeedPicResponseDto> feedPic;
 
     @Builder
     public MyFeedListDto(Running running) {
@@ -25,6 +25,6 @@ public class MyFeedListDto {
         this.runningDistance = running.getRunningDistance();
         this.kcal = running.getKcal();
         this.runningPic = running.getRunningPic();
-        this.feedPic = running.getFeedPic().stream().map(FeedPicResponsDto::new).collect(Collectors.toList());
+        this.feedPic = running.getFeedPic().stream().map(FeedPicResponseDto::new).collect(Collectors.toList());
     }
 }

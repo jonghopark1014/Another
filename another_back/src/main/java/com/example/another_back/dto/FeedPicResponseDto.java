@@ -7,12 +7,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FeedPicResponsDto {
+public class FeedPicResponseDto {
     private Long feedPicId;
     private String feedPic;
 
     @Builder
-    public FeedPicResponsDto(FeedPic feedPic) {
+    public FeedPicResponseDto(FeedPic feedPic) {
         this.feedPicId = feedPic.getId();
         this.feedPic = feedPic.getFeedPic();
     }
