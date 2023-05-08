@@ -27,8 +27,8 @@ public class RunningController {
     @PostMapping(value = "/stop", consumes =
             {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity addRunning(RunningRequestDto runningRequestDto) {
-        runningService.addRunning(runningRequestDto);
-        return Response.success(HttpStatus.OK);
+        String response = runningService.addRunning(runningRequestDto);
+        return Response.success(HttpStatus.OK, response);
     }
 
     /**

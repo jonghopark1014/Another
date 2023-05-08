@@ -1,5 +1,6 @@
 package com.example.another_back.controller;
 
+import com.example.another_back.dto.AddFeedRequestDto;
 import com.example.another_back.dto.FeedDetailResponseDto;
 import com.example.another_back.dto.FeedListResponseDto;
 import com.example.another_back.dto.response.Response;
@@ -8,8 +9,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,6 +21,20 @@ import org.springframework.web.bind.annotation.*;
 public class FeedController {
 
     private final FeedService feedService;
+
+    /**
+     * 오운완 등록
+     *
+     * @param addFeedRequestDto
+     * @return String
+     * @throws IOException
+     */
+    @PostMapping(value = "/create", consumes =
+            {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity addFeed(AddFeedRequestDto addFeedRequestDto) throws IOException {
+        String response = feedService.addFeed(addFeedRequestDto);
+        return Response.success(HttpStatus.OK, response);
+    }
 
     /**
      * 피드 리스트 기능
@@ -50,7 +68,7 @@ public class FeedController {
      * @return FeedDetailResponseDto
      */
     @GetMapping("/detail/{runningId}")
-    public ResponseEntity getFeedDetail(@PathVariable String runningId){
+    public ResponseEntity getFeedDetail(@PathVariable String runningId) {
         FeedDetailResponseDto feedDetail = feedService.getFeedDetail(runningId);
         return Response.success(HttpStatus.OK, feedDetail);
     }

@@ -19,4 +19,9 @@ public class FeedPic {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Running running;
+
+    public FeedPic(String feedPic, Running running) {
+        this.feedPic = feedPic;
+        this.running = running;
+    }
 }

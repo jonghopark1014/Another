@@ -1,9 +1,13 @@
 package com.example.another_back.service;
 
+import com.example.another_back.dto.AddFeedRequestDto;
 import com.example.another_back.dto.FeedDetailResponseDto;
 import com.example.another_back.dto.FeedListResponseDto;
+import com.example.another_back.entity.FeedPic;
 import com.example.another_back.entity.Running;
+import com.example.another_back.entity.enums.Status;
 import com.example.another_back.hdfs.FileIO;
+import com.example.another_back.repository.FeedPicRepository;
 import com.example.another_back.repository.RunningRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.hadoop.fs.FileStatus;
@@ -18,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,7 +39,34 @@ public class FeedService {
     @Value("${data.hdfs-port}")
     private String hdfsPort;
 
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
     private final RunningRepository runningRepository;
+
+    private final FeedPicRepository feedPicRepository;
+
+    private final S3UploaderService s3UploaderService;
+
+    /**
+     * 오운완 등록
+     *
+     * @param addFeedRequestDto
+     * @return String
+     * @throws IOException
+     */
+    public String addFeed(AddFeedRequestDto addFeedRequestDto) throws IOException {
+        Running running = runningRepository.findById(addFeedRequestDto.getRunningId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 러닝기록을 찾지 못했습니다."));
+        running.setStatus(Status.LIVE);
+        for (MultipartFile multipartFile :
+                addFeedRequestDto.getFeedPics()) {
+            String url = s3UploaderService.upload(multipartFile, bucket, "image");
+            FeedPic feedPic = new FeedPic(url, running);
+            feedPicRepository.save(feedPic);
+        }
+        return running.getId();
+    }
 
     /**
      * 피드 리스트 기능
@@ -43,7 +75,7 @@ public class FeedService {
      * @return Page<RunningResponseDto>
      */
     public Page<FeedListResponseDto> getFeedList(Pageable pageable) {
-        List<Running> feedList = runningRepository.findRunningWithFeedPics();
+        List<Running> feedList = runningRepository.findRunningByStatusWithFeedPics(Status.LIVE);
         Page<FeedListResponseDto> feedListResponseDtos = new PageImpl<>(feedList.stream().map(FeedListResponseDto::new).collect(Collectors.toList()), pageable, feedList.size());
         return feedListResponseDtos;
     }
@@ -56,7 +88,7 @@ public class FeedService {
      * @return Page<FeedListResponseDto>
      */
     public Page<FeedListResponseDto> getMyFeedList(Long userId, Pageable pageable) {
-        List<Running> feedList = runningRepository.findRunningByUserIdWithFeedPics(userId);
+        List<Running> feedList = runningRepository.findRunningByUserIdAndStatusWithFeedPics(userId, Status.LIVE);
         Page<FeedListResponseDto> feedListResponseDtos = new PageImpl<>(feedList.stream().map(FeedListResponseDto::new).collect(Collectors.toList()), pageable, feedList.size());
         return feedListResponseDtos;
     }
