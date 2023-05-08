@@ -1,13 +1,20 @@
+import 'dart:typed_data';
+
 import 'package:another/constant/color.dart';
 import 'package:another/screens/running/under_challenge_end_feed.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/material.dart';
 
 class UnderRunningScreenEnd extends StatelessWidget {
-  const UnderRunningScreenEnd({Key? key}) : super(key: key);
+  final Uint8List? captureInfo;
+  const UnderRunningScreenEnd({
+    required this.captureInfo,
+    Key? key
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -17,7 +24,8 @@ class UnderRunningScreenEnd extends StatelessWidget {
               Target(targetname: '내 기록'),
               Container(
                 height: 300.0,
-                color: WHITE_COLOR,
+                child: Image.memory(captureInfo!),
+
               ),
               SizedBox( height: 120, ),
               ButtonConponent(
