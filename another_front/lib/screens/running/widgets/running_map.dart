@@ -1,10 +1,16 @@
+import 'dart:async';
+import 'dart:typed_data';
+
 import 'package:another/constant/color.dart';
 import 'package:another/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:ui' as ui;
 
+import 'package:provider/provider.dart';
 
 class RunningMap extends StatefulWidget {
   final RunningData runningData;
@@ -14,7 +20,6 @@ class RunningMap extends StatefulWidget {
     required this.initialPosition,
     Key? key
   }) : super(key: key);
-
   @override
   State<RunningMap> createState() => _RunningMapState();
 }
@@ -22,76 +27,96 @@ class RunningMap extends StatefulWidget {
 class _RunningMapState extends State<RunningMap> {
   // 지도에 위치 그리기
   GoogleMapController? mapController;
+  late CameraPosition currentPosition;
 // 캡처를 위한 키
-  final GlobalKey _globalKey = GlobalKey();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    currentPosition = widget.initialPosition;
+    Timer.periodic(Duration(seconds: 1), (timer) async {
+      getCurrentLocation();
+    });
+  }
 
   @override
-  void dispose() {
+  void dispose() async {
     mapController!.dispose();
+    print('맵바이바이');
     super.dispose();
   }
+
+  // 캡처하기 위한 함수
+  Future<Uint8List> captureWidget(GlobalKey globalKey) async {
+    print(globalKey);
+    RenderRepaintBoundary boundaryObject = globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    ui.Image image = await boundaryObject.toImage();
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    return byteData!.buffer.asUint8List();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: checkPermission(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.data == '위치 권한이 허가 되었습니다.') {
-          print("돌았다");
-          return RepaintBoundary(
-            key: _globalKey,
-            child: StreamBuilder<Position>(
-              stream: Geolocator.getPositionStream(),
-              builder: (context, snapshot) {
-                // 위치가 변경되었을 때 실햏하는 로직
-                if (snapshot.data != null && mapController != null) {
-                  if (snapshot.data!.latitude != widget.runningData.curValue.latitude && snapshot.data!.latitude != widget.runningData.curValue.longitude) {
-                    LatLng pos = LatLng(snapshot.data!.latitude, snapshot.data!.longitude);
-                    // polypoint(지도에 그리는 점)에 추가
-                    widget.runningData.addLocation(pos);
-                  }
-                  // 화면 이동
-                  mapController!.animateCamera(
-                    CameraUpdate.newCameraPosition(
-                      CameraPosition(
-                          target: LatLng(snapshot.data!.latitude,
-                              snapshot.data!.longitude),
-                          zoom: 18),
-                    ),
-                  );
-                }
-                return GoogleMap(
-                  initialCameraPosition: widget.initialPosition,
-                  mapType: MapType.normal,
-                  zoomControlsEnabled: false,
-                  myLocationEnabled: true,
-                  myLocationButtonEnabled: false,
-                  onMapCreated: onMapCreated,
-                  polylines: {
-                    Polyline(
-                      polylineId: PolylineId('temp'),
-                      points: widget.runningData.location,
-                      color: MAIN_COLOR,
-                      // jointType: JointType.round,
-                    ),
-                  },
-                );
-              },
-            ),
-          );
-        }
-        return Center(
-          child: Text(snapshot.data),
-        );
-      },
+
+    return GoogleMap(
+      initialCameraPosition: currentPosition,
+      mapType: MapType.normal,
+      zoomControlsEnabled: false,
+      myLocationEnabled: true,
+      myLocationButtonEnabled: false,
+      onMapCreated: onMapCreated,
+      polylines: {
+        Polyline(
+          polylineId: PolylineId('temp'),
+          points: widget.runningData.location,
+          color: MAIN_COLOR,
+          // jointType: JointType.round,
+        ),
+      }
     );
   }
+
+  void getCurrentLocation() async {
+    // 위치 정보 권한 요청
+    final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!isLocationEnabled) {
+      return ;
+    }
+    LocationPermission checkedPermission = await Geolocator.checkPermission();
+    if (checkedPermission == LocationPermission.denied) {
+      checkedPermission = await Geolocator.requestPermission();
+      if (checkedPermission == LocationPermission.denied) {
+        return ;
+      }
+    }
+    if (checkedPermission == LocationPermission.deniedForever) {
+      return ;
+    }
+    // 위치 권한 완료
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      currentPosition = CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 17);
+      Provider.of<RunningData>(context, listen: false).setCurrentPosition(currentPosition);
+      Provider.of<RunningData>(context, listen: false).addLocation(currentPosition.target);
+      mapController!.animateCamera(
+          CameraUpdate.newCameraPosition(currentPosition)
+      );
+    });
+    return ;
+  }
+
+
+  Future<Uint8List?> captureMap() async {
+    final Uint8List? bytes = await mapController!.takeSnapshot();
+    return bytes;
+  }
+
 
   // 맵컨트롤러 받기 => 지도 카메라 위치 조정시 필요
   onMapCreated(GoogleMapController controller) {
     mapController = controller;
+    print(mapController);
   }
 
   // 사용자에게 위치 동의 구하기 단계별로

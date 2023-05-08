@@ -53,7 +53,6 @@ class _UnderRunningState extends State<UnderRunning> {
   @override
   Widget build(BuildContext context) {
     final runningData = Provider.of<RunningData>(context, listen: false);
-
     final initialPosition =
         ModalRoute.of(context)!.settings.arguments as CameraPosition;
 
