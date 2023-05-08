@@ -4,6 +4,7 @@ import com.example.another_back.dto.*;
 import com.example.another_back.entity.FeedPic;
 import com.example.another_back.entity.Running;
 import com.example.another_back.entity.User;
+import com.example.another_back.entity.WithRun;
 import com.example.another_back.entity.enums.Status;
 import com.example.another_back.hdfs.FileIO;
 import com.example.another_back.repository.FeedPicRepository;
@@ -160,6 +161,18 @@ public class FeedService {
         FeedDetailResponseDto response = new FeedDetailResponseDto(running);
         response.setGraph(getOringinData(runningId));
         response.setWithRunCount(withRunRepository.countByRunningHostId(runningId));
+        return response;
+    }
+
+    /**
+     * WithRun 목록 가져오기
+     * 
+     * @param runningId
+     * @return List<WithRunResponseDto>
+     */
+    public List<WithRunResponseDto> getWithRunList(String runningId) {
+        List<WithRun> list = withRunRepository.findByRunningHostId(runningId);
+        List<WithRunResponseDto> response = list.stream().map(withRun -> new WithRunResponseDto(withRun)).collect(Collectors.toList());
         return response;
     }
 }
