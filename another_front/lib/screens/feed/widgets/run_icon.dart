@@ -1,11 +1,25 @@
 import 'package:another/constant/color.dart';
+import 'package:another/constant/text_style.dart';
 import 'package:another/screens/feed/challenge_list.dart';
 import 'package:flutter/material.dart';
 
 import '../../running/challenge_running.dart';
 
 class RunIcon extends StatelessWidget {
-  const RunIcon({Key? key}) : super(key: key);
+  String runningTime;
+  String runningDistance;
+  String kcal;
+  String speed;
+  String runCount;
+
+  RunIcon(
+      {required this.runningTime,
+      required this.runningDistance,
+      required this.kcal,
+      required this.speed,
+      required this.runCount,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +62,8 @@ class RunIcon extends StatelessWidget {
           );
         },
         child: Text(
-          '25',
-          style: TextStyle(color: WHITE_COLOR, fontSize: 16.0),
+          runCount,
+          style: MyTextStyle.sixteenTextStyle
         ),
       ),
       SizedBox(
@@ -59,7 +73,18 @@ class RunIcon extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => ChallengeRunning(),
+              builder: (_) => ChallengeRunning(
+
+
+              ),
+              settings: RouteSettings(
+                arguments: [
+                  runningDistance,
+                  runningTime ,
+                  kcal,
+                  speed,
+                ]
+              )
             ),
           );
         },

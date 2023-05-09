@@ -4,6 +4,7 @@ import 'package:another/screens/running/widgets/running_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class UnderRunning extends StatefulWidget {
@@ -15,9 +16,18 @@ class UnderRunning extends StatefulWidget {
 
 class _UnderRunningState extends State<UnderRunning> {
   double runningId = 1;
+  String runDataId = '';
   @override
   void initState() {
     super.initState();
+
+    final userInfo = context.read<UserInfo>();
+    // _userWeight = userInfo.weight;
+    String userId = userInfo.userId.toString();
+    String forRunId1 = DateFormat('yyMMddHHmmss').format(DateTime.now());
+    runDataId = userId + forRunId1;
+    var runningData = Provider.of<RunningData>(context, listen: false);
+    runningData.setRunningId(runDataId);
   }
 
   @override

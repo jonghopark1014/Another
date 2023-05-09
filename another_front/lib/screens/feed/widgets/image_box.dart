@@ -8,14 +8,14 @@ class ImageBox extends StatefulWidget {
   List<String> runningIds = [];
   List<String> runningTimes = [];
   List<String> runningDistances = [];
-  // List<String> walkCounts = [];
+  List<String> kcals = [];
 
   ImageBox({
     required this.thumbnailUrls,
     required this.runningIds,
     required this.runningTimes,
     required this.runningDistances,
-    // required this.walkCounts,
+    required this.kcals,
     Key? key,
   }) : super(key: key);
 
@@ -24,6 +24,7 @@ class ImageBox extends StatefulWidget {
 }
 
 class _ImageBoxState extends State<ImageBox> {
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -35,18 +36,24 @@ class _ImageBoxState extends State<ImageBox> {
             crossAxisSpacing: 4.0),
         itemCount: widget.thumbnailUrls.length,
         itemBuilder: (context, index) {
-          return InkWell(
-            child: _buildListItem(context, index),
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => DetailFeed(
-                    runningId: widget.runningIds[index],
+          if (widget.thumbnailUrls.isNotEmpty) {
+            return InkWell(
+              child: _buildListItem(context, index),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => DetailFeed(
+                      runningId: widget.runningIds[index],
+                    ),
                   ),
-                ),
-              );
-            },
-          );
+                );
+              },
+            );
+          } else{
+            return Container(
+              height: 180.0,
+            );
+          }
         },
       ),
     );
@@ -69,25 +76,19 @@ class _ImageBoxState extends State<ImageBox> {
               Text(
                 widget.runningDistances[index],
                 style: MyTextStyle.fourteenTextStyle.copyWith(
-                  color: MAIN_COLOR,
+                  color: WHITE_COLOR,
                 ),
               ),
-              // SizedBox(
-              //   width: 10.0,
-              // ),
-              // Text(
-              //   widget.walkCounts[index],
-              //   style: MyTextStyle.fourteenTextStyle.copyWith(
-              //     color: RED_COLOR,
-              //   ),
-              // ),
-              // SizedBox(
-              //   width: 10.0,
-              // ),
+              Text(
+                widget.kcals[index],
+                style: MyTextStyle.fourteenTextStyle.copyWith(
+                  color: WHITE_COLOR,
+                ),
+              ),
               Text(
                 widget.runningTimes[index],
                 style: MyTextStyle.fourteenTextStyle.copyWith(
-                  color: MAIN_COLOR,
+                  color: WHITE_COLOR,
                 ),
               ),
             ],

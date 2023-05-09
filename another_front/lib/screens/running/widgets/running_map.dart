@@ -36,7 +36,7 @@ class _RunningMapState extends State<RunningMap> {
     // TODO: implement initState
     super.initState();
     currentPosition = widget.initialPosition;
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
+    _timer = Timer.periodic(Duration(seconds: 3), (timer) async {
       getCurrentLocation();
     });
   }
@@ -100,11 +100,13 @@ class _RunningMapState extends State<RunningMap> {
     setState(() {
       currentPosition = CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 17);
       var runningData = Provider.of<RunningData>(context, listen: false);
-      runningData.setCurrentPosition(currentPosition);
-      runningData.addLocation(currentPosition.target);
-      mapController!.animateCamera(
-          CameraUpdate.newCameraPosition(currentPosition)
-      );
+      if (runningData.curValue != currentPosition.target) {
+        runningData.setCurrentPosition(currentPosition);
+        runningData.addLocation(currentPosition.target);
+        mapController!.animateCamera(
+            CameraUpdate.newCameraPosition(currentPosition)
+        );
+      }
     });
     return ;
   }
