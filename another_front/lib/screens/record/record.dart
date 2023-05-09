@@ -401,13 +401,13 @@ class _MyRecordContentsState extends State<MyRecordContents> {
                 runningDistance: widget.recordData['runningData']['content'][i]
                         ['runningDistance']
                     .toString(),
-                kcal: widget.recordData['runningData']['content'][i]
+                userCalorie: widget.recordData['runningData']['content'][i]
                         ['userCalories']
                     .toString(),
                 runningTime: widget.recordData['runningData']['content'][i]
                         ['runningTime']
                     .toString(),
-                speed: '',
+                userPace: '',
               )
           ],
         )

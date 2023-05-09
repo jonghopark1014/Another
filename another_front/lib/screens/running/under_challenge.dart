@@ -106,9 +106,9 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
               Target(
                 targetname: '목표기록',
                 runningDistance: '',
-                kcal: '',
+                userCalorie: '',
                 runningTime: '',
-                speed: '',
+                userPace: '',
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),

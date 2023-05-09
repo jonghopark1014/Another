@@ -25,7 +25,7 @@ class _FeedScreenState extends State<FeedScreen> {
   late List<String> runningTimes = [];
   late List<String> runningDistances = [];
   late List<String> walkCounts = [];
-  late List<String> kcals = [];
+  late List<String> userCalories = [];
   late var userInfo;
   late int userId;
   late String profile = '';
@@ -44,6 +44,7 @@ class _FeedScreenState extends State<FeedScreen> {
   Future<void> _loadFeed() async {
     try {
       final response = await FeedApi.getFeed();
+      print(response);
 
       final contents = response['data']['content'];
       List<String> feedPicUrls = [];
@@ -55,29 +56,28 @@ class _FeedScreenState extends State<FeedScreen> {
       for (var content in contents) {
         List<Map<String, dynamic>> feedPics =
             List<Map<String, dynamic>>.from(content['feedPics']);
-        print(content);
         if (feedPics.isNotEmpty) {
           feedPicUrls.add(feedPics[0]['feedPic']);
           runningIdsList.add(content['runningId'].toString());
           runningTimeList.add(content['runningTime'].toString());
           runningDistanceList.add(content['runningDistance'].toString());
-          kcalList.add(content['kcal'].toString());
+          kcalList.add(content['userCalories'].toString());
         } else {
           feedPicUrls.add(content['runningPic'].toString());
           runningIdsList.add(content['runningId'].toString());
           runningTimeList.add(content['runningTime'].toString());
           runningDistanceList.add(content['runningDistance'].toString());
-          kcalList.add(content['kcal'].toString());
+          kcalList.add(content['userCalories'].toString());
         }
       }
-
+      print(runningIdsList);
       setState(
         () {
           thumbnailUrls = feedPicUrls;
           runningIds = runningIdsList;
           runningTimes = runningTimeList;
           runningDistances = runningDistanceList;
-          kcals = kcalList;
+          userCalories = kcalList;
         },
       );
     } catch (e) {
@@ -87,7 +87,7 @@ class _FeedScreenState extends State<FeedScreen> {
 
   Future<void> _myFeed() async {
     try {
-      final response = await MyFeedApi.getFeed('1');
+      final response = await MyFeedApi.getFeed('$userId');
       final contents = response['data']['myFeedListDtos']['content'];
       List<String> feedPicUrls = [];
       List<String> runningIdsList = [];
@@ -96,7 +96,8 @@ class _FeedScreenState extends State<FeedScreen> {
       List<String> walkCountList = [];
       List<String> kcalList = [];
       String profilePic = '';
-      print(contents);
+      print(response);
+
       if (contents != []) {
         for (var content in contents) {
           List<Map<String, dynamic>> feedPics =
@@ -107,13 +108,13 @@ class _FeedScreenState extends State<FeedScreen> {
             runningTimeList.add(content['runningTime'].toString());
             runningDistanceList.add(content['runningDistance'].toString());
             walkCountList.add(content['walkCount'].toString());
-            kcalList.add(content['kcal'].toString());
+            kcalList.add(content['userCalories'].toString());
           } else {
             feedPicUrls.add(content['runningPic'].toString());
             runningIdsList.add(content['runningId'].toString());
             runningTimeList.add(content['runningTime'].toString());
             runningDistanceList.add(content['runningDistance'].toString());
-            kcalList.add(content['kcal'].toString());
+            kcalList.add(content['userCalories'].toString());
           }
         }
       } else {
@@ -132,11 +133,10 @@ class _FeedScreenState extends State<FeedScreen> {
           runningTimes = runningTimeList;
           runningDistances = runningDistanceList;
           walkCounts = walkCountList;
-          kcals = kcalList;
+          userCalories = kcalList;
           profile = profilePic;
         },
       );
-
     } catch (e) {
       print(e);
     }
@@ -158,10 +158,14 @@ class _FeedScreenState extends State<FeedScreen> {
                   ? Container()
                   : MyRecordResult(
                       walkCounts: walkCounts,
-                      kcals: kcals.isNotEmpty ? kcals : ['0'],
-                      runningTimes: runningTimes.isNotEmpty ? runningTimes : ['0'],
-                      runningDistances: runningDistances.isNotEmpty ? runningDistances : ['0'],
-                      profile : profile,
+                      userCalories:
+                          userCalories.isNotEmpty ? userCalories : ['0'],
+                      runningTimes:
+                          runningTimes.isNotEmpty ? runningTimes : ['0'],
+                      runningDistances: runningDistances.isNotEmpty
+                          ? runningDistances
+                          : ['0'],
+                      profile: profile,
                     ),
             ),
           ];
@@ -189,7 +193,7 @@ class _FeedScreenState extends State<FeedScreen> {
                       runningIds: runningIds,
                       runningTimes: runningTimes,
                       runningDistances: runningDistances,
-                      kcals: kcals,
+                      userCalories: userCalories,
                     )
                   : MyFeedScreen(
                       thumbnailUrls: thumbnailUrls,
@@ -197,7 +201,7 @@ class _FeedScreenState extends State<FeedScreen> {
                       runningTimes: runningTimes,
                       runningDistances: runningDistances,
                       // walkCounts: walkCounts,
-                      kcals: kcals,
+                      userCalories: userCalories,
                     ),
             ),
           ],
