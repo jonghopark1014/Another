@@ -9,6 +9,17 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
+class RunningSetting extends ChangeNotifier {
+  int distance = 0;
+  int min = 0;
+  List<int> interval = [0, 0];
+  void setData(distance, min, interval) {
+    distance = distance;
+    min = min;
+    interval = interval;
+  }
+}
+
 class RunningData extends ChangeNotifier {
   late GoogleMapController mapController;
   CameraPosition currentPosition = CameraPosition(target: LatLng(0,0));
@@ -97,6 +108,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (c) => UserInfo()) ,
         ChangeNotifierProvider(create: (c) => RunningData()) ,
         ChangeNotifierProvider(create: (c) => ForDate()) ,
+        ChangeNotifierProvider(create: (c) => RunningSetting()) ,
       ],
       child: MaterialApp(
         initialRoute: '/',
