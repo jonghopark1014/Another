@@ -166,7 +166,7 @@ public class FeedService {
                 () -> new IllegalArgumentException("해당하는 러닝 기록이 없습니다."));
         FeedDetailResponseDto response = new FeedDetailResponseDto(running);
         response.setGraph(getOringinData(runningId));
-        response.setWithRunCount(withRunRepository.countByRunningHostId(runningId));
+        response.setWithRunCount((long) running.getWithRun().getRunningSlaves().size());
         return response;
     }
 
