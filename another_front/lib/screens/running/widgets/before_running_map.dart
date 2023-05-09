@@ -39,7 +39,8 @@ class _BeforeRunningMapState extends State<BeforeRunningMap> {
   }
   @override
   Widget build(BuildContext context) {
-    return isLoading ? GoogleMap(
+    return
+      isLoading ? GoogleMap(
       initialCameraPosition: currentPosition,
       mapType: MapType.normal,
       zoomControlsEnabled: false,

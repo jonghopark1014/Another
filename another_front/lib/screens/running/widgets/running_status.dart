@@ -49,15 +49,19 @@ class _RunningStatus extends State<RunningStatus> {
   int hours = 0;
   late bool isStart;
 
+  double _toRadians(double degrees) {
+    return degrees * pi / 180;
+  }
+
   // 페이스 계산 -> 1km을 도달하는 시간
   void setData() {
     final runningData = Provider.of<RunningData>(context, listen: false);
-    // 캡처 키 받기
-    captureKey = runningData.globalKey;
+
     // 거리 계산
     double nowDistance = runningData.runningDistance;
     LatLng past = runningData.preValue;
     LatLng current = runningData.curValue;
+    int preLen = runningData.preLen;
 
     // 러닝 시간
     runningTime =
@@ -67,41 +71,57 @@ class _RunningStatus extends State<RunningStatus> {
     print(runningData.runningTime);
     print(runningData.location);
 
+    // 페이스 계산
+    double timeToSec = (hours * 3600 + minutes * 60 + seconds).toDouble();
+    int paceBase = 0;
+    if (runningDistance != 0) {
+      paceBase = (timeToSec ~/ runningDistance);
+    }
+    int paceMin = paceBase ~/ 60;
+    int paceSec = paceBase % 60;
+    userPace = "${paceMin.toString()}'${paceSec.toString()}''";
+    runningData.setPace(userPace);
 
-    if (runningData.location.length > 1) {
-      nowDistance += 2 *
-          6371 *
-          asin(sqrt(
-              pow(sin((current.latitude - past.latitude) / 2 * pi / 180), 2) +
-                  cos(past.latitude * pi / 180) *
-                      cos(current.latitude * pi / 180) *
-                      pow(
-                          sin((current.longitude - past.longitude) /
-                              2 *
-                              pi /
-                              180),
-                          2)));
+    if (runningData.location.length != preLen) {
+      // 거리 계산
+      // // 기준점 변경
+      runningData.changeLen(runningData.location.length);
+
+      // // 지구 반지름
+      double earth = 6371;
+
+      // // 기준점 2개(현재, 과거)에 대한 latRad, LonRad
+      double lat1Rad = _toRadians(past.latitude);
+      double lat2Rad = _toRadians(current.latitude);
+      double lon1Rad = _toRadians(past.longitude);
+      double lon2Rad = _toRadians(current.longitude);
+
+      // // 기준점 2개에 대한 delta값
+      double deltaLat = lat2Rad - lat1Rad;
+      double deltaLon = lon2Rad - lon1Rad;
+
+      // // 위도, 경도에 따른 거리 구하기
+      final a = pow(sin(deltaLat / 2), 2) +
+          cos(lat1Rad) *
+              cos(lat2Rad) *
+              pow(sin(deltaLon / 2), 2);
+      final c = 2 * atan2(sqrt(a), sqrt(1 - a));
+      final distance = earth * c;
+
+      // // 누적 거리에 더하기
+      nowDistance += distance;
+
+      // // 누적 거리 갱신
       runningData.setDistance(nowDistance);
-      runningDistance = double.parse(nowDistance.toStringAsFixed(1));
 
-
-      // 페이스 계산
-      double timeToSec = (hours * 3600 + minutes * 60 + seconds).toDouble();
-      int paceBase = 0;
-      if (runningDistance != 0) {
-        paceBase = (timeToSec ~/ runningDistance);
-      }
-      int paceMin = paceBase ~/ 60;
-      int paceSec = paceBase % 60;
-      userPace = "${paceMin.toString()}'${paceSec.toString()}''";
-      runningData.setPace(userPace);
+      // // 소숫점 3자리까지 반환
+      runningDistance = double.parse(nowDistance.toStringAsFixed(3));
 
       // 칼로리 계산
       userCalories = (_userWeight * runningDistance * 1.036 ~/ 1);
       runningData.setCalories(userCalories);
-
-      // Kafka.sendTopic(latitude: current.latitude, longitude: current.longitude, runningId: runDataId, runningDistance: runningDistance, runningTime: runningTime, userCalories: userCalories, userPace: userPace);
     }
+    Kafka.sendTopic(latitude: current.latitude, longitude: current.longitude, runningId: runDataId, runningDistance: runningDistance, runningTime: runningTime, userCalories: userCalories, userPace: userPace);
   }
 
   // 시간초는 거리 갱신할때도 쓰면 좋아서 그대로 흘러감
@@ -201,6 +221,14 @@ class _RunningStatus extends State<RunningStatus> {
   // 러닝 종료 시 동작
   void onStop() async {
     Uint8List? captureInfo = await captureWidget();
+    Provider.of<RunningData>(context, listen: false).setRunningPic(captureInfo);
+    var runningData = Provider.of<RunningData>(context, listen: false);
+    var userId = Provider.of<UserInfo>(context, listen: false).userId;
+    // api 요청
+    // // mySQL 저장
+    saveRunningTime.saveRunData(userId: userId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
+    // // hdfs 저장
+    saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
 
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
