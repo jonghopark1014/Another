@@ -242,18 +242,45 @@ class _MyHistoryState extends State<MyHistory> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: historyList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return ElevatedButton(
-            // 눌렀을 때 하이라이트
-            onPressed: () => {},
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.all(2),
-              primary: BACKGROUND_COLOR,
-            ),
-            child: Target(targetname: '날짜'),
-          );
-        });
+      itemCount: historyList.length,
+      itemBuilder: (BuildContext context, int index) {
+        return ElevatedButton(
+          // 눌렀을 때 하이라이트
+          onPressed: () => {},
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.all(2),
+            primary: BACKGROUND_COLOR,
+          ),
+          child: Target(
+            targetname: '날짜',
+            runningDistance: '',
+            kcal: '',
+            runningTime: '',
+            speed: '',
+          ),
+        );
+      },
+    );
+  }
+}
+
+// 세팅 내용 처리
+class SettingContent extends StatelessWidget {
+  final String content;
+  const SettingContent({
+    required this.content,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      content,
+      style: TextStyle(
+        fontSize: 18,
+        color: SERVETWO_COLOR,
+      ),
+    );
   }
 }
 

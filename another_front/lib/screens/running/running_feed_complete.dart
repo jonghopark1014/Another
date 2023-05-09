@@ -21,6 +21,7 @@ class _RunningFeedCompleteState extends State<RunningFeedComplete> {
       checked = false;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     final ScrollController _scrollController = ScrollController();
@@ -44,7 +45,7 @@ class _RunningFeedCompleteState extends State<RunningFeedComplete> {
               ),
               Padding(
                 padding:
-                const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+                    const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
                 child: Column(
                   children: [
                     Row(
@@ -52,11 +53,19 @@ class _RunningFeedCompleteState extends State<RunningFeedComplete> {
                       children: [
                         ImageProfile(
                           radius: 25.0,
+                          profilePic : '',
                           profileFontSize: 14.0,
+                          nickname: '',
                         ),
                       ],
                     ),
-                    Target(targetname: '날짜'),
+                    Target(
+                      targetname: '날짜',
+                      runningDistance: '',
+                      kcal: '',
+                      runningTime: '',
+                      speed: '',
+                    ),
                   ],
                 ),
               )

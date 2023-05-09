@@ -33,7 +33,8 @@ class _UnderChallengeState extends State<UnderChallenge> {
 
   @override
   Widget build(BuildContext context) {
-    final initialPosition = ModalRoute.of(context)!.settings.arguments as CameraPosition;
+    final initialPosition =
+        ModalRoute.of(context)!.settings.arguments as CameraPosition;
 
     return Scaffold(
       body: Stack(
@@ -130,14 +131,10 @@ class _UnderChallengeState extends State<UnderChallenge> {
   }
 }
 
-
-
 class UnderChallengeStatus extends StatefulWidget {
   final CameraPosition initialPosition;
-  const UnderChallengeStatus({
-    required this.initialPosition,
-    Key? key
-  }) : super(key: key);
+  const UnderChallengeStatus({required this.initialPosition, Key? key})
+      : super(key: key);
 
   @override
   State<UnderChallengeStatus> createState() => _UnderChallengeStatusState();
@@ -158,7 +155,12 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
   late Position beforePosition = Position(
     longitude: widget.initialPosition.target.longitude,
     latitude: widget.initialPosition.target.latitude,
-    accuracy: 0, altitude: 0, heading: 0, speed: 0, speedAccuracy: 0, timestamp: startTime,
+    accuracy: 0,
+    altitude: 0,
+    heading: 0,
+    speed: 0,
+    speedAccuracy: 0,
+    timestamp: startTime,
   );
   // 시간
   late Timer _timer;
@@ -186,6 +188,7 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
     // 갱신
     beforePosition = currentPosition;
   }
+
   // 페이스 계산 -> 1km을 도달하는 시간
   void paceCal() {
     double timeToSec = (hours * 3600 + minutes * 60 + seconds).toDouble();
@@ -194,6 +197,7 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
     int paceSec = paceBase % 60;
     userPace = "${paceMin.toString()}'${paceSec.toString()}''";
   }
+
   // 상대방
   double _currentYouSliderValue = 60.0;
 
@@ -238,7 +242,13 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
         child: Center(
           child: Column(
             children: [
-              Target(targetname: '목표기록'),
+              Target(
+                targetname: '목표기록',
+                runningDistance: '',
+                kcal: '',
+                runningTime: '',
+                speed: '',
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Stack(children: [
@@ -267,9 +277,10 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
               ),
               RecordResult(
                 timer:
-                '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}',
+                    '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}',
                 distance: runningDistance.toString(),
-                calories: (_userWeight * runningDistance * 1.036 / 1000 ~/ 1).toString(),
+                calories: (_userWeight * runningDistance * 1.036 / 1000 ~/ 1)
+                    .toString(),
                 pace: userPace,
               ),
               Expanded(
@@ -279,13 +290,13 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
                     // RunningCircleButton(iconNamed: Icons.play_arrow,onPressed: ,),
                     isStart
                         ? RunningCircleButton(
-                      iconNamed: Icons.pause,
-                      onPressed: onPause,
-                    )
+                            iconNamed: Icons.pause,
+                            onPressed: onPause,
+                          )
                         : RunningCircleButton(
-                      iconNamed: Icons.play_arrow,
-                      onPressed: onStart,
-                    ),
+                            iconNamed: Icons.play_arrow,
+                            onPressed: onStart,
+                          ),
                     GestureDetector(
                       onLongPress: () {
                         onStop();
@@ -319,11 +330,11 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
 
   void onStop() {
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
+        MaterialPageRoute(
           builder: (_) => UnderChallengeScreenEnd(),
         ),
-            (route) => route.settings.name == '/');
+        (route) => route.settings.name == '/');
   }
+
   void onChange() {}
 }
-

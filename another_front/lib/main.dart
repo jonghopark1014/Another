@@ -113,7 +113,12 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           '/': (context) => HomeScreen(),
-          '/Detail': (context) => ChallengeRunning(),
+          '/Detail': (context) => ChallengeRunning(
+            runningDistance: '',
+            runningTime: '',
+            speed: '',
+            kcal: '',
+          ),
           '/UnderRunning': (context) => UnderRunning(),
           '/UnderChallenge': (context) => UnderChallenge(),
         },

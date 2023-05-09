@@ -8,14 +8,14 @@ class ImageBox extends StatefulWidget {
   List<String> runningIds = [];
   List<String> runningTimes = [];
   List<String> runningDistances = [];
-  // List<String> walkCounts = [];
+  List<String> kcals = [];
 
   ImageBox({
     required this.thumbnailUrls,
     required this.runningIds,
     required this.runningTimes,
     required this.runningDistances,
-    // required this.walkCounts,
+    required this.kcals,
     Key? key,
   }) : super(key: key);
 
@@ -69,25 +69,19 @@ class _ImageBoxState extends State<ImageBox> {
               Text(
                 widget.runningDistances[index],
                 style: MyTextStyle.fourteenTextStyle.copyWith(
-                  color: MAIN_COLOR,
+                  color: WHITE_COLOR,
                 ),
               ),
-              // SizedBox(
-              //   width: 10.0,
-              // ),
-              // Text(
-              //   widget.walkCounts[index],
-              //   style: MyTextStyle.fourteenTextStyle.copyWith(
-              //     color: RED_COLOR,
-              //   ),
-              // ),
-              // SizedBox(
-              //   width: 10.0,
-              // ),
+              Text(
+                widget.kcals[index],
+                style: MyTextStyle.fourteenTextStyle.copyWith(
+                  color: WHITE_COLOR,
+                ),
+              ),
               Text(
                 widget.runningTimes[index],
                 style: MyTextStyle.fourteenTextStyle.copyWith(
-                  color: MAIN_COLOR,
+                  color: WHITE_COLOR,
                 ),
               ),
             ],
