@@ -26,11 +26,13 @@ class _DetailFeedState extends State<DetailFeed> {
   String runningTime = '0';
   String runningDistance = '0';
   String walkCount = '0';
-  String kcal = '0';
+  String userCalorie = '0';
   String createDate = '0';
-  String speed = '0';
+  String userPace = '0';
   String profilePic = '';
   String userNickname = '';
+  String runCount = '';
+  String runId ='';
 
   @override
   void initState() {
@@ -38,47 +40,54 @@ class _DetailFeedState extends State<DetailFeed> {
     _detailFeed();
   }
 
+  // 피드 가져오기
   Future<void> _detailFeed() async {
     try {
       final response = await DetailFeedApi.getFeed(widget.runningId);
+      print(widget.runningId);
+      print(response);
       List<String> feedPicUrls = [];
       List<dynamic> graphs = [];
       List<PacesData> chartData = [];
       String runningTimes = '';
       String runningDistances = '';
       String walkCounts = '';
-      String kcals = '';
+      String userCalories = '';
       String createDates = '';
-      String speeds = '';
+      String userPaces = '';
       String profile = '';
       String nickname = '';
-      print(response);
+      String withRunCount = '';
+      String runningId = '';
+
       if (response != null) {
         final contents = response['data'];
         runningTimes = contents['runningTime'].toString();
         runningDistances = contents['runningDistance'].toString();
         walkCounts = contents['walkCount'].toString();
-        kcals = contents['kcal'].toString();
+        userCalories = contents['userCalories'].toString();
         createDates = contents['createDate'].toString();
-        speeds = contents['speed'].toString();
+        userPaces = contents['userPace'].toString();
         profile = contents['profilePic'].toString();
         nickname = contents['nickname'].toString();
-
+        withRunCount = contents['withRunCount'].toString();
         List<dynamic> feedPics = contents['feedPics'];
+        runningId = contents['runningId'].toString();
+
         for (var feedPic in feedPics) {
           feedPicUrls.add(feedPic['feedPic']);
         }
+        feedPicUrls.add(contents['runningPic'].toString());
         graphs = contents['graph'];
         chartData = graphs.map(
           (data) {
-            double distance = 0.0;
-            double speed = 0.0;
-            print(data['distance']);
-            if (data['distance'] != null && data['speed'] != null) {
-              distance = double.parse(data['distance'] ?? '0.0');
-              speed = double.parse(data['speed'] ?? '0.0');
+            double runningDistance = 0.0;
+            double userPace = 0.0;
+            if (data['runningDistance'] != null && data['userPace'] != null) {
+              runningDistance = data['runningDistance'] ?? 0.0;
+              userPace = double.parse(data['userPace'].replaceAll("''", "").replaceAll("'", ".")) ?? 0.0;
             }
-            return PacesData(distance: distance, speed: speed);
+            return PacesData(runningDistance: runningDistance, userPace: userPace);
           },
         ).toList();
       }
@@ -88,13 +97,15 @@ class _DetailFeedState extends State<DetailFeed> {
           thumbnailUrls = feedPicUrls;
           runningTime = runningTimes;
           runningDistance = runningDistances;
-          kcal = kcals;
-          speed = speeds;
+          userCalorie = userCalories;
+          userPace = userPaces;
           walkCount = walkCounts;
           createDate = createDates;
           chartDataList = chartData;
           profilePic = profile;
           userNickname = nickname;
+          runCount = withRunCount;
+          runId = runningId;
         },
       );
     } catch (e) {
@@ -142,26 +153,30 @@ class _DetailFeedState extends State<DetailFeed> {
                         RunIcon(
                           runningTime: runningTime,
                           runningDistance: runningDistance,
-                          kcal: kcal,
-                          speed: speed,
+                          userCalorie: userCalorie,
+                          userPace: userPace,
+                          runCount: runCount,
+                            runningId: runId
                         ),
                       ],
                     ),
                     Target(
                       targetname: createDate,
                       runningDistance: runningDistance,
-                      kcal: kcal,
+                      userCalorie: userCalorie,
                       runningTime: runningTime,
-                      speed: speed,
+                      userPace: userPace,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: SizedBox(
-                        height: 250.0,
-                        child: Chart(
-                          chartData: chartDataList,
-                        ),
-                      ),
+                      child: chartDataList.isNotEmpty
+                          ? SizedBox(
+                              height: 250.0,
+                              child: Chart(
+                                chartData: chartDataList,
+                              ),
+                            )
+                          : Container(),
                     ),
                   ],
                 ),

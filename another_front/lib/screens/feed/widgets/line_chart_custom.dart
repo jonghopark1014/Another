@@ -1,3 +1,4 @@
+import 'package:another/constant/text_style.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ class Chart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double averagePaces =
-        chartData.map((e) => e.speed).reduce((a, b) => a + b) /
+        chartData.map((e) => e.userPace).reduce((a, b) => a + b) /
             chartData.length;
     return SfCartesianChart(
       // 범례
@@ -31,11 +32,7 @@ class Chart extends StatelessWidget {
         labelStyle: TextStyle(color: WHITE_COLOR),
         title: AxisTitle(
           text: '거리',
-          textStyle: TextStyle(
-            color: WHITE_COLOR,
-            fontSize: 20.0,
-            fontWeight: FontWeight.w700,
-          ),
+          textStyle: MyTextStyle.twentyTextStyle,
         ),
         tickPosition: TickPosition.inside,
         borderColor: MAIN_COLOR,
@@ -48,11 +45,7 @@ class Chart extends StatelessWidget {
       primaryYAxis: NumericAxis(
         title: AxisTitle(
           text: '페이스',
-          textStyle: TextStyle(
-            color: WHITE_COLOR,
-            fontSize: 20.0,
-            fontWeight: FontWeight.w700,
-          ),
+          textStyle: MyTextStyle.twentyTextStyle,
         ),
         // 구분선 없애기
         majorGridLines: MajorGridLines(width: 0),
@@ -71,8 +64,8 @@ class Chart extends StatelessWidget {
       series: <SplineSeries<PacesData, num>>[
         SplineSeries<PacesData, num>(
           dataSource: chartData,
-          xValueMapper: (PacesData paces, _) => paces.distance,
-          yValueMapper: (PacesData paces, _) => paces.speed,
+          xValueMapper: (PacesData paces, _) => paces.runningDistance,
+          yValueMapper: (PacesData paces, _) => paces.userPace,
           name: '페이스',
           pointColorMapper: _getPointColor,
           markerSettings: MarkerSettings(
@@ -101,7 +94,7 @@ class Chart extends StatelessWidget {
   }
 
   Color _getPointColor(PacesData pacesData, _) {
-    if (pacesData.speed > 35) {
+    if (pacesData.userPace > 13) {
       return RED_COLOR;
     } else {
       return WHITE_COLOR;
@@ -110,8 +103,8 @@ class Chart extends StatelessWidget {
 }
 
 class PacesData {
-  final double distance;
-  final double speed;
+  final double runningDistance;
+  final double userPace;
 
-  PacesData({required this.distance, required this.speed});
+  PacesData({required this.runningDistance, required this.userPace});
 }

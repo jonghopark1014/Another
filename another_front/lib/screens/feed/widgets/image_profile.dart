@@ -21,7 +21,9 @@ class ImageProfile extends StatelessWidget {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundImage: NetworkImage(profilePic),
+            backgroundImage: NetworkImage(
+              profilePic,
+            ),
             radius: radius,
           ),
           SizedBox(
@@ -29,7 +31,9 @@ class ImageProfile extends StatelessWidget {
           ),
           Text(
             nickname,
-            style: MyTextStyle.sixteenTextStyle.copyWith(fontSize: profileFontSize),
+            style: MyTextStyle.sixteenTextStyle.copyWith(
+              fontSize: profileFontSize,
+            ),
           ),
         ],
       ),

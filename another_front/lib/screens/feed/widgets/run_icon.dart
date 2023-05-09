@@ -1,4 +1,5 @@
 import 'package:another/constant/color.dart';
+import 'package:another/constant/text_style.dart';
 import 'package:another/screens/feed/challenge_list.dart';
 import 'package:flutter/material.dart';
 
@@ -7,14 +8,18 @@ import '../../running/challenge_running.dart';
 class RunIcon extends StatelessWidget {
   String runningTime;
   String runningDistance;
-  String kcal;
-  String speed;
+  String userCalorie;
+  String userPace;
+  String runCount;
+  String runningId;
 
   RunIcon(
       {required this.runningTime,
       required this.runningDistance,
-      required this.kcal,
-      required this.speed,
+      required this.userCalorie,
+      required this.userPace,
+      required this.runCount,
+      required this.runningId,
       Key? key})
       : super(key: key);
 
@@ -25,7 +30,7 @@ class RunIcon extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => ChallengeList(),
+              builder: (_) => ChallengeList(runningId: runningId),
             ),
           );
         },
@@ -54,14 +59,11 @@ class RunIcon extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => ChallengeList(),
+              builder: (_) => ChallengeList(runningId: runningId),
             ),
           );
         },
-        child: Text(
-          '25',
-          style: TextStyle(color: WHITE_COLOR, fontSize: 16.0),
-        ),
+        child: Text(runCount, style: MyTextStyle.sixteenTextStyle),
       ),
       SizedBox(
         width: 10.0,
@@ -70,11 +72,14 @@ class RunIcon extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => ChallengeRunning(
-                runningDistance: runningDistance,
-                runningTime: runningTime,
-                kcal: kcal,
-                speed: speed,
+              builder: (_) => ChallengeRunning(),
+              settings: RouteSettings(
+                arguments: [
+                  runningDistance,
+                  runningTime,
+                  userCalorie,
+                  userPace,
+                ],
               ),
             ),
           );

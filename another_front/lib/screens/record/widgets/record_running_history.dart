@@ -10,9 +10,9 @@ class TodayRecord extends StatelessWidget {
     return Target(
       targetname: '2023.05.02',
       runningDistance: '',
-      kcal: '',
+      userCalorie: '',
       runningTime: '',
-      speed: '',
+      userPace: '',
     );
   }
 }
@@ -25,9 +25,9 @@ class ThisWeekRecord extends StatelessWidget {
     return Target(
       targetname: '2023.05.03',
       runningDistance: '',
-      kcal: '',
+      userCalorie: '',
       runningTime: '',
-      speed: '',
+      userPace: '',
     );
   }
 }
@@ -40,9 +40,9 @@ class ThisMonthRecord extends StatelessWidget {
     return Target(
       targetname: '2023.05.04',
       runningDistance: '',
-      kcal: '',
+      userCalorie: '',
       runningTime: '',
-      speed: '',
+      userPace: '',
     );
   }
 }
@@ -55,9 +55,9 @@ class AllRecord extends StatelessWidget {
     return Target(
       targetname: '2023.05.05',
       runningDistance: '',
-      kcal: '',
+      userCalorie: '',
       runningTime: '',
-      speed: '',
+      userPace: '',
     );
   }
 }

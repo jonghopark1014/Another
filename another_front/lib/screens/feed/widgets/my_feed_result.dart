@@ -6,14 +6,14 @@ import '../../../constant/color.dart';
 
 class MyRecordResult extends StatelessWidget {
   final List<String> walkCounts;
-  final List<String> kcals;
+  final List<String> userCalories;
   final List<String> runningTimes;
   final List<String> runningDistances;
   final String profile;
 
   const MyRecordResult({
     required this.walkCounts,
-    required this.kcals,
+    required this.userCalories,
     required this.runningTimes,
     required this.runningDistances,
     required this.profile,
@@ -64,7 +64,7 @@ class MyRecordResult extends StatelessWidget {
                               recordColor: SERVEONE_COLOR,
                             ),
                             TargetBox(
-                              data: kcals[0],
+                              data: userCalories[0],
                               name: 'kcal',
                               textColor: WHITE_COLOR,
                               recordColor: SERVEONE_COLOR,
@@ -105,13 +105,12 @@ class MyRecordResult extends StatelessWidget {
 
 Widget ImageProfileSetting({required profile,}) {
 
-
   return Center(
     child: Stack(
       children: <Widget>[
         CircleAvatar(
           backgroundImage: NetworkImage(profile),
-          radius: 45,
+          radius: 38,
         ),
         Positioned(
           bottom: 0,

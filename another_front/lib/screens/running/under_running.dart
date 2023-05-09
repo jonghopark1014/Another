@@ -6,6 +6,7 @@ import 'package:another/screens/running/widgets/set_running_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class UnderRunning extends StatefulWidget {
@@ -19,13 +20,11 @@ class _UnderRunningState extends State<UnderRunning> {
   double runningId = 1;
 
   late bool isSet;
-
+  String runDataId = '';
   @override
   void initState() {
+    super.initState();
     final settingData = Provider.of<RunningSetting>(context, listen: false);
-    print(settingData.distance);
-    print(settingData.min);
-    print(settingData.interval);
     if (settingData.distance != 0 ||
         settingData.min != 0 ||
         settingData.interval[0] != 0) {
@@ -33,9 +32,13 @@ class _UnderRunningState extends State<UnderRunning> {
     } else {
       isSet = false;
     }
-    print('$isSet=====================================================');
-    // TODO: implement initState
-    super.initState();
+    final userInfo = context.read<UserInfo>();
+    // _userWeight = userInfo.weight;
+    String userId = userInfo.userId.toString();
+    String forRunId1 = DateFormat('yyMMddHHmmss').format(DateTime.now());
+    runDataId = userId + forRunId1;
+    var runningData = Provider.of<RunningData>(context, listen: false);
+    runningData.setRunningId(runDataId);
   }
 
   @override

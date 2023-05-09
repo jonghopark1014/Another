@@ -3,7 +3,13 @@ import 'package:flutter/material.dart';
 import '../constant/color.dart';
 
 class GoBackAppBarStyle extends StatelessWidget implements PreferredSizeWidget {
-  const GoBackAppBarStyle({Key? key}) : super(key: key);
+  String? runningId;
+  String? title;
+  GoBackAppBarStyle({
+    this.runningId,
+    this.title,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,13 +17,14 @@ class GoBackAppBarStyle extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: BACKGROUND_COLOR,
       leading: IconButton(
         onPressed: () {
-          Navigator.pop(context);
+          Navigator.of(context).pop(runningId ?? '');
         },
         icon: Icon(
           Icons.navigate_before,
           size: 40.0,
         ),
       ),
+      title: Text(title ?? ''),
     );
   }
 

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:another/constant/color.dart';
 import 'package:another/screens/home_screen.dart';
 import 'package:another/screens/running/challenge_running.dart';
@@ -23,8 +25,8 @@ class RunningSetting extends ChangeNotifier {
 
 class RunningData extends ChangeNotifier {
   late GoogleMapController mapController;
-  CameraPosition currentPosition = CameraPosition(target: LatLng(0,0));
-  GlobalKey globalKey = GlobalKey();
+  CameraPosition currentPosition = CameraPosition(target: LatLng(0,0), zoom: 25);
+  String runningId = '';
   List<LatLng> location = [];
   LatLng preValue = LatLng(0, 0);
   LatLng curValue = LatLng(0, 0);
@@ -32,6 +34,8 @@ class RunningData extends ChangeNotifier {
   double runningDistance = 0;
   int userCalories = 0;
   String userPace = "0'00''";
+  int preLen = 0;
+  var runningPic;
 
   void reset() {
     location = [];
@@ -41,6 +45,12 @@ class RunningData extends ChangeNotifier {
     runningDistance = 0;
     userCalories = 0;
     userPace = "0'00''";
+    preLen = 1;
+    notifyListeners();
+  }
+
+  void setRunningId(value) {
+    runningId = value;
     notifyListeners();
   }
 
@@ -60,13 +70,18 @@ class RunningData extends ChangeNotifier {
     userPace = pace;
     notifyListeners();
   }
+  void setRunningPic(value) {
+    runningPic = value;
+    notifyListeners();
+  }
   void addLocation(LatLng pos) {
     location.add(pos);
     preValue = curValue;
     curValue = pos;
   }
-  void setGlobalKey(GlobalKey key) {
-    globalKey = key;
+  void changeLen(value) {
+    preLen = value;
+    notifyListeners();
   }
   void setCurrentPosition(CameraPosition pos) {
     currentPosition = pos;
@@ -77,7 +92,7 @@ class RunningData extends ChangeNotifier {
 }
 
 class UserInfo extends ChangeNotifier {
-  var userId = 55;
+  var userId = 1;
   var nickname = '임범규';
   var height = 185;
   var weight = 70;
@@ -127,10 +142,6 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => HomeScreen(),
           '/Detail': (context) => ChallengeRunning(
-            runningDistance: '',
-            runningTime: '',
-            speed: '',
-            kcal: '',
           ),
           '/UnderRunning': (context) => UnderRunning(),
           '/UnderChallenge': (context) => UnderChallenge(),

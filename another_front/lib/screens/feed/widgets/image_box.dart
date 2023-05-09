@@ -8,14 +8,14 @@ class ImageBox extends StatefulWidget {
   List<String> runningIds = [];
   List<String> runningTimes = [];
   List<String> runningDistances = [];
-  List<String> kcals = [];
+  List<String> userCalories = [];
 
   ImageBox({
     required this.thumbnailUrls,
     required this.runningIds,
     required this.runningTimes,
     required this.runningDistances,
-    required this.kcals,
+    required this.userCalories,
     Key? key,
   }) : super(key: key);
 
@@ -24,6 +24,7 @@ class ImageBox extends StatefulWidget {
 }
 
 class _ImageBoxState extends State<ImageBox> {
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -33,20 +34,26 @@ class _ImageBoxState extends State<ImageBox> {
             childAspectRatio: 1.0,
             mainAxisSpacing: 4.0,
             crossAxisSpacing: 4.0),
-        itemCount: widget.thumbnailUrls.length,
+        itemCount: widget.thumbnailUrls.isNotEmpty ? widget.thumbnailUrls.length : 1,
         itemBuilder: (context, index) {
-          return InkWell(
-            child: _buildListItem(context, index),
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => DetailFeed(
-                    runningId: widget.runningIds[index],
+          if (widget.thumbnailUrls.isNotEmpty) {
+            return InkWell(
+              child: _buildListItem(context, index),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => DetailFeed(
+                      runningId: widget.runningIds[index],
+                    ),
                   ),
-                ),
-              );
-            },
-          );
+                );
+              },
+            );
+          } else{
+            return Container(
+              height: 180.0,
+            );
+          }
         },
       ),
     );
@@ -57,8 +64,7 @@ class _ImageBoxState extends State<ImageBox> {
       children: [
         Image.network(
           widget.thumbnailUrls[index],
-          fit: BoxFit.contain,
-          alignment: Alignment.center,
+          fit: BoxFit.cover,
         ),
         Positioned(
           bottom: 8.0,
@@ -73,7 +79,7 @@ class _ImageBoxState extends State<ImageBox> {
                 ),
               ),
               Text(
-                widget.kcals[index],
+                widget.userCalories[index],
                 style: MyTextStyle.fourteenTextStyle.copyWith(
                   color: WHITE_COLOR,
                 ),
