@@ -264,26 +264,6 @@ class _MyHistoryState extends State<MyHistory> {
   }
 }
 
-// 세팅 내용 처리
-class SettingContent extends StatelessWidget {
-  final String content;
-  const SettingContent({
-    required this.content,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      content,
-      style: TextStyle(
-        fontSize: 18,
-        color: SERVETWO_COLOR,
-      ),
-    );
-  }
-}
-
 // 세팅 종류
 class SettingName extends StatelessWidget {
   final String typeName;
