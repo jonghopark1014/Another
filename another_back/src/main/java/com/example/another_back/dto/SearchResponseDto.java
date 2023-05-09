@@ -13,9 +13,9 @@ public class SearchResponseDto {
     private Integer runningTime;
     private Float runningDistance;
     private Date createDate;
-    private Integer kcal;
+    private Integer userCalories;
     private String runningPic;
-    private Float speed;
+    private Float userPace;
 
     @Builder
     public SearchResponseDto(Running running) {
@@ -24,8 +24,8 @@ public class SearchResponseDto {
         this.runningTime = running.getRunningTime();
         this.runningDistance = running.getRunningDistance();
         this.createDate = running.getCreateDate();
-        this.kcal = running.getKcal();
+        this.userCalories = running.getUserCalories();
         this.runningPic = running.getRunningPic();
-        this.speed = running.getSpeed();
+        this.userPace = running.getUserPace();
     }
 }

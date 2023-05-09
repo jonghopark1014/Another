@@ -131,10 +131,10 @@ public class FeedService {
                 while ((line = br.readLine()) != null) {
                     // json 형태로 변환
                     jsonObject = (JSONObject) parser.parse(line);
-                    // distance와 speed 추출
+                    // runningDistance와 userPace 추출
                     JSONObject select = new JSONObject();
-                    select.put("distance", jsonObject.get("distance"));
-                    select.put("speed", jsonObject.get("speed"));
+                    select.put("runningDistance", jsonObject.get("runningDistance"));
+                    select.put("userPace", jsonObject.get("userPace"));
                     jsonArray.add(select);
                 }
                 br.close();
@@ -166,7 +166,7 @@ public class FeedService {
 
     /**
      * WithRun 목록 가져오기
-     * 
+     *
      * @param runningId
      * @return List<WithRunResponseDto>
      */

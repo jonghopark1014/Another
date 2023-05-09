@@ -118,7 +118,7 @@ public class RunningService {
                 .dayOfRunning(runningHistoryDto.getDayOfRunning())
                 .runningTime(runningTime)
                 .runningDistance(runningHistoryDto.getRunningDistance())
-                .kcal(runningHistoryDto.getKcal())
+                .userCalories(runningHistoryDto.getUserCalories())
                 .runningData(runData)
                 .build();
     }

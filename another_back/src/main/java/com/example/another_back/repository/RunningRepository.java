@@ -26,10 +26,10 @@ public interface RunningRepository extends JpaRepository<Running, String> {
 
     List<Running> findByUserId(Long userId);
 
-    @Query(value = "select new com.example.another_back.dto.RunningEachHistoryDto(r.runningTime, r.runningDistance, r.createDate, r.kcal) from Running r where r.user = :user and r.createDate between :date1 and :date2")
+    @Query(value = "select new com.example.another_back.dto.RunningEachHistoryDto(r.runningTime, r.runningDistance, r.createDate, r.userCalories) from Running r where r.user = :user and r.createDate between :date1 and :date2")
     Page<RunningEachHistoryDto> findWithDateByUserId(User user, Date date1, Date date2, Pageable pageable);
 
-    @Query(value = "select new com.example.another_back.dto.RunningHistoryDto(sum(r.runningTime), sum(r.runningDistance), count(distinct r.createDate), sum(r.kcal)) from Running r where r.user = :user and r.createDate between :date1 and :date2 group by r.createDate")
+    @Query(value = "select new com.example.another_back.dto.RunningHistoryDto(sum(r.runningTime), sum(r.runningDistance), count(distinct r.createDate), sum(r.userCalories)) from Running r where r.user = :user and r.createDate between :date1 and :date2 group by r.createDate")
     Optional<RunningHistoryDto> findRunningHistoryDtoByUserId(User user, Date date1, Date date2);
 
     List<Running> findByRunningDistanceBetweenAndRunningTimeBetweenAndUserIdNot(Float startDistance, Float endDistance, String startTime, String endTime, Long userId);

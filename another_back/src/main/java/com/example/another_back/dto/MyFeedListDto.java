@@ -14,7 +14,7 @@ public class MyFeedListDto {
     private String runningId;
     private Integer runningTime;
     private Float runningDistance;
-    private Integer kcal;
+    private Integer userCalories;
     private String runningPic;
     private List<FeedPicResponseDto> feedPic;
 
@@ -23,7 +23,7 @@ public class MyFeedListDto {
         this.runningId = running.getId();
         this.runningTime = running.getRunningTime();
         this.runningDistance = running.getRunningDistance();
-        this.kcal = running.getKcal();
+        this.userCalories = running.getUserCalories();
         this.runningPic = running.getRunningPic();
         this.feedPic = running.getFeedPic().stream().map(FeedPicResponseDto::new).collect(Collectors.toList());
     }

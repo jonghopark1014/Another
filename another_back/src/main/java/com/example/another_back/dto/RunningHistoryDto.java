@@ -9,12 +9,12 @@ public class RunningHistoryDto {
     private Long runningTime;
     private Double runningDistance;
     private Long dayOfRunning;
-    private Long kcal;
+    private Long userCalories;
 
-    public RunningHistoryDto(Long runningTime, Double runningDistance, Long dayOfRunning, Long kcal) {
+    public RunningHistoryDto(Long runningTime, Double runningDistance, Long dayOfRunning, Long userCalories) {
         this.runningTime = runningTime;
         this.runningDistance = runningDistance;
         this.dayOfRunning = dayOfRunning;
-        this.kcal = kcal;
+        this.userCalories = userCalories;
     }
 }

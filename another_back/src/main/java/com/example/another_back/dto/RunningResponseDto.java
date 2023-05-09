@@ -18,9 +18,9 @@ public class RunningResponseDto {
     private Float runningDistance;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date createDate;
-    private Integer kcal;
+    private Integer userCalories;
     private String runningPic;
-    private Float speed;
+    private Float userPace;
 
     @Builder
     public RunningResponseDto(Running running) {
@@ -29,9 +29,9 @@ public class RunningResponseDto {
         this.runningTime = running.getRunningTime();
         this.runningDistance = running.getRunningDistance();
         this.createDate = running.getCreateDate();
-        this.kcal = running.getKcal();
+        this.userCalories = running.getUserCalories();
         this.runningPic = running.getRunningPic();
-        this.speed = running.getSpeed()
+        this.userPace = running.getUserPace()
         ;
     }
 }
