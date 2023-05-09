@@ -54,7 +54,7 @@ class _RunningTabState extends State<RunningTab> {
                   // RunningCircleButton(iconNamed: Icons.play_arrow, onPressed: onPressed()),
                   RunningCircleButton(
                     iconNamed: Icons.play_arrow,
-                    onPressed: onPressed,
+                    onPressed: () {onPressed('/UnderRunning');},
                   ),
                   RunningSmallButton(
                     iconNamed: Icons.list,
@@ -126,8 +126,7 @@ class _RunningTabState extends State<RunningTab> {
                       '러닝 시작!',
                       style: TextStyle(fontSize: 18),
                     ),
-                    // 나중에 수정해야함!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    onPressed: onPressed,
+                    onPressed: () {onPressed('/UnderRunning');},
                   ),
                 ],
               ),
@@ -184,8 +183,7 @@ class _RunningTabState extends State<RunningTab> {
                       padding: EdgeInsets.all(10),
                       primary: MAIN_COLOR,
                     ),
-                    // 나중에 수정해야함!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    onPressed: onPressed,
+                    onPressed: () {onPressed('/UnderChallenge');},
                     child: const Text(
                       '러닝 시작!',
                       style: TextStyle(fontSize: 18),
@@ -199,7 +197,7 @@ class _RunningTabState extends State<RunningTab> {
   }
 
   // 타이머 페이지로 context
-  void onPressed() {
+  void onPressed(String str) {
     final runningData = Provider.of<RunningData>(context, listen: false);
     runningData.reset();
     runningData.addLocation(runningData.currentPosition.target);
@@ -207,7 +205,7 @@ class _RunningTabState extends State<RunningTab> {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (_) => TimerScreen(
-          path: '/UnderRunning',
+          path: str,
           initialPosition: runningData.currentPosition,
         ),
       ),

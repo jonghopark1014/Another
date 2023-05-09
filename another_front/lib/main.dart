@@ -13,10 +13,11 @@ class RunningSetting extends ChangeNotifier {
   int distance = 0;
   int min = 0;
   List<int> interval = [0, 0];
-  void setData(distance, min, interval) {
-    distance = distance;
-    min = min;
-    interval = interval;
+  void setData(d, m, i) {
+    distance = d;
+    min = m;
+    interval = i;
+    notifyListeners();
   }
 }
 
