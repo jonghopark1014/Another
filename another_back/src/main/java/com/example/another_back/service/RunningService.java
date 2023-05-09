@@ -4,9 +4,11 @@ import com.example.another_back.dto.*;
 import com.example.another_back.entity.Challenge;
 import com.example.another_back.entity.Running;
 import com.example.another_back.entity.User;
+import com.example.another_back.entity.WithRun;
 import com.example.another_back.repository.RunningRepository;
 import com.example.another_back.repository.UserChallengeRepository;
 import com.example.another_back.repository.UserRepository;
+import com.example.another_back.repository.WithRunRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,6 +36,8 @@ public class RunningService {
 
     private final UserChallengeRepository userChallengeRepository;
 
+    private final WithRunRepository withRunRepository;
+
     private final S3UploaderService s3UploaderService;
 
     /**
@@ -57,6 +61,11 @@ public class RunningService {
         }
         // 러닝 객체 생성
         Running running = new Running(runningRequestDto, runningPic.get(0), user);
+        if(runningRequestDto.getHostRunningId()!=null){
+            WithRun withRun = withRunRepository.findByRunningHostId(runningRequestDto.getHostRunningId())
+                    .orElseThrow(()-> new IllegalArgumentException("With Run 을 가져오는 중 에러가 발생했습니다."));
+            withRun.getRunningSlaves().add(running);
+        }
         // DB에 저장
         Running savedRunning = runningRepository.save(running);
         // Id 반환

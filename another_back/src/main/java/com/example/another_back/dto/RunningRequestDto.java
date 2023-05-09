@@ -10,6 +10,7 @@ import java.sql.Date;
 @Setter
 public class RunningRequestDto {
     private Long userId;
+    private String hostRunningId;
     private String runningId;
     private Integer runningTime;
     private Float runningDistance;

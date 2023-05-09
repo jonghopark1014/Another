@@ -64,12 +64,18 @@ public class FeedService {
         Running running = runningRepository.findById(addFeedRequestDto.getRunningId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 러닝기록을 찾지 못했습니다."));
         running.setStatus(Status.LIVE);
-        List<String> list = s3UploaderService.upload(bucket, "image", addFeedRequestDto.getFeedPics());
-        for (String url :
-                list) {
-            FeedPic feedPic = new FeedPic(url, running);
-            feedPicRepository.save(feedPic);
+        if (addFeedRequestDto.getFeedPics().length != 0) {
+            List<String> list = s3UploaderService.upload(bucket, "image", addFeedRequestDto.getFeedPics());
+            for (String url :
+                    list) {
+                FeedPic feedPic = new FeedPic(url, running);
+                feedPicRepository.save(feedPic);
+            }
         }
+        WithRun withRun = new WithRun(running);
+        withRunRepository.save(withRun);
+        running.setWithRun(withRun);
+        runningRepository.save(running);
         return running.getId();
     }
 
@@ -171,8 +177,12 @@ public class FeedService {
      * @return List<WithRunResponseDto>
      */
     public List<WithRunResponseDto> getWithRunList(String runningId) {
-        List<WithRun> list = withRunRepository.findByRunningHostId(runningId);
-        List<WithRunResponseDto> response = list.stream().map(withRun -> new WithRunResponseDto(withRun)).collect(Collectors.toList());
+        List<WithRunResponseDto> response = null;
+        WithRun withRun = withRunRepository.findByRunningHostId(runningId).orElse(null);
+        if (withRun != null) {
+            List<Running> list = withRun.getRunningSlaves();
+            response = list.stream().map(running -> new WithRunResponseDto(running)).collect(Collectors.toList());
+        }
         return response;
     }
 }

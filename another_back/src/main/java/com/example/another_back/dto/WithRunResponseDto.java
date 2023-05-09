@@ -1,6 +1,6 @@
 package com.example.another_back.dto;
 
-import com.example.another_back.entity.WithRun;
+import com.example.another_back.entity.Running;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,9 +13,9 @@ public class WithRunResponseDto {
     private String profilePic;
 
     @Builder
-    public WithRunResponseDto(WithRun withRun) {
-        this.userId = withRun.getRunningHost().getUser().getId();
-        this.nickname = withRun.getRunningHost().getUser().getNickname();
-        this.profilePic = withRun.getRunningHost().getUser().getProfilePic();
+    public WithRunResponseDto(Running running) {
+        this.userId = running.getUser().getId();
+        this.nickname = running.getUser().getNickname();
+        this.profilePic = running.getUser().getProfilePic();
     }
 }
