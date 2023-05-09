@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:another/constant/color.dart';
 
-class PeriodTotalRecord extends StatefulWidget {
+class PeriodTotalRecord extends StatelessWidget {
   const PeriodTotalRecord(
       {Key? key,
       required this.selectedIndex,
@@ -13,11 +13,6 @@ class PeriodTotalRecord extends StatefulWidget {
   final selectedDay;
   final Map<String, dynamic> recordData;
 
-  @override
-  State<PeriodTotalRecord> createState() => _PeriodTotalRecordState();
-}
-
-class _PeriodTotalRecordState extends State<PeriodTotalRecord> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -38,7 +33,7 @@ class _PeriodTotalRecordState extends State<PeriodTotalRecord> {
               Padding(
                 padding: EdgeInsets.only(left: 20, top: 12, bottom: 4),
                 child: Text(
-                  widget.recordData['Date'] ?? '-',
+                  recordData['Date'] ?? '-',
                   style: TextStyle(color: SERVETWO_COLOR),
                 ),
               ),
@@ -48,24 +43,24 @@ class _PeriodTotalRecordState extends State<PeriodTotalRecord> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     BigTargetBox(
-                      data: (widget.recordData['runningDistance'] * 1000).round() / 1000 ?? '-',
+                      data: (recordData['runningDistance'] * 1000).round() / 1000 ?? '-',
                       unit: 'km',
                     ),
                     SizedBox(height: 15),
                     Row(
                       children: [
                         SmallTargetBox(
-                          data: widget.recordData['runningTime'] ?? '-',
+                          data: recordData['runningTime'] ?? '-',
                           unit: '시간',
                         ),
                         SizedBox(width: 40),
                         SmallTargetBox(
-                          data: (widget.recordData['userCalories'] * 1000).round() / 1000 ?? '-',
+                          data: (recordData['userCalories'] * 1000).round() / 1000 ?? '-',
                           unit: 'kcal',
                         ),
                         SizedBox(width: 40),
                         SmallTargetBox(
-                          data: (widget.recordData['runningDistance'] * 1000).round() / 1000 ?? '-',
+                          data: (recordData['runningDistance'] * 1000).round() / 1000 ?? '-',
                           unit: '페이스',
                         ),
                       ],

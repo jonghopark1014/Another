@@ -12,12 +12,12 @@ class GetRecord {
       var response = await http.get(url);
       if (response.statusCode == 200) {
         var responseBody = jsonDecode(response.body);
-        print('getTodayRecord');
-        print(responseBody['data']);
+        // print('getTodayRecord');
+        // print(responseBody['data']);
         return responseBody['data'];
       } else {
-        print('getTodayRecord오류');
-        print(response.statusCode);
+        // print('getTodayRecord오류');
+        // print(response.statusCode);
         return {};
       }
     } catch (error) {
@@ -35,12 +35,12 @@ class GetRecord {
       var response = await http.get(url);
       if (response.statusCode == 200) {
         var responseBody = jsonDecode(response.body);
-        print('getWeekRecord');
-        print(responseBody['data']);
+        // print('getWeekRecord');
+        // print(responseBody['data']);
         return responseBody['data'];
       } else {
-        print('getWeekRecord오류');
-        print(response.statusCode);
+        // print('getWeekRecord오류');
+        // print(response.statusCode);
         return {};
       }
     } catch (error) {
@@ -57,12 +57,12 @@ class GetRecord {
       var response = await http.get(url);
       if (response.statusCode == 200) {
         var responseBody = jsonDecode(response.body);
-        print('getMonthRecord');
-        print(responseBody['data']);
+        // print('getMonthRecord');
+        // print(responseBody['data']);
         return responseBody['data'];
       } else {
-        print('getMonthRecord오류');
-        print(response.statusCode);
+        // print('getMonthRecord오류');
+        // print(response.statusCode);
         return {};
       }
     } catch (error) {
@@ -79,12 +79,12 @@ class GetRecord {
       var response = await http.get(url);
       if (response.statusCode == 200) {
         var responseBody = jsonDecode(response.body);
-        print('getAllRecord');
-        print(responseBody['data']);
+        // print('getAllRecord');
+        // print(responseBody['data']);
         return responseBody['data'];
       } else {
-        print('getAllRecord오류');
-        print(response.statusCode);
+        // print('getAllRecord오류');
+        // print(response.statusCode);
         return {};
       }
     } catch (error) {
@@ -92,6 +92,4 @@ class GetRecord {
     }
     return {};
   }
-
-
 }
