@@ -15,6 +15,8 @@ class ChallengeList extends StatefulWidget {
 
 
 class _ChallengeListState extends State<ChallengeList> {
+  late List<String> profilePicList = [];
+  late List<String> nicknameList = [];
 
   @override
   void initState() {
@@ -24,8 +26,10 @@ class _ChallengeListState extends State<ChallengeList> {
 
   Future<void> _challengeListApi() async {
     try {
-      final response = await ChallengeListApi.getFeed();
-      print(response['data']);
+      final response = await ChallengeListApi.getFeed('1');
+      print(response);
+      final contents = response['data'];
+
       setState(
             () {
         },

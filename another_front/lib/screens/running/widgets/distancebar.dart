@@ -1,13 +1,18 @@
 import 'package:another/constant/color.dart';
+import 'package:another/constant/text_style.dart';
 import 'package:another/screens/running/widgets/distancebar_custom.dart';
 import 'package:flutter/material.dart';
 
 class DistanceBar extends StatefulWidget {
   final String name;
   final double pace;
-  const DistanceBar({
+  final double youDistance;
+  double? distance;
+  DistanceBar({
     required this.pace,
     required this.name,
+    required this.youDistance,
+    this.distance,
     Key? key,
   }) : super(key: key);
 
@@ -29,16 +34,13 @@ class _DistanceBarState extends State<DistanceBar> {
         Column(children: [
           Text(
             name,
-            style: TextStyle(
-                color: WHITE_COLOR,
-                fontWeight: FontWeight.w700,
-                fontSize: 14.0),
+            style: MyTextStyle.fourteenTextStyle,
             textAlign: TextAlign.start,
           ),
           SliderTheme(
             data: SliderThemeData(
               valueIndicatorTextStyle: TextStyle(
-                color: Colors.white,
+                color: WHITE_COLOR,
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
               ),
@@ -56,7 +58,7 @@ class _DistanceBarState extends State<DistanceBar> {
               value: widget.pace,
               min: 0,
               // 거리 widget.distance 넣어주면 될듯 함 상대방의 거리
-              max: 100,
+              max: widget.youDistance,
               onChanged: (double value) {
                 setState(() {
                   _progress = value;

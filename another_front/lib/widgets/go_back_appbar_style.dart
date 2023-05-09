@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import '../constant/color.dart';
 
 class GoBackAppBarStyle extends StatelessWidget implements PreferredSizeWidget {
-  const GoBackAppBarStyle({Key? key}) : super(key: key);
+  String? title;
+  GoBackAppBarStyle({
+    this.title,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +22,7 @@ class GoBackAppBarStyle extends StatelessWidget implements PreferredSizeWidget {
           size: 40.0,
         ),
       ),
+      title: Text(title ?? ''),
     );
   }
 
