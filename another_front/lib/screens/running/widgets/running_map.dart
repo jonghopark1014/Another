@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'dart:ui' as ui;
 
 import 'package:provider/provider.dart';
 
@@ -45,14 +44,6 @@ class _RunningMapState extends State<RunningMap> {
     mapController!.dispose();
     _timer.cancel();
     super.dispose();
-  }
-  // 캡처하기 위한 함수
-  Future<Uint8List> captureWidget(GlobalKey globalKey) async {
-    print(globalKey);
-    RenderRepaintBoundary boundaryObject = globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-    ui.Image image = await boundaryObject.toImage();
-    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    return byteData!.buffer.asUint8List();
   }
   @override
   Widget build(BuildContext context) {
@@ -98,23 +89,22 @@ class _RunningMapState extends State<RunningMap> {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     setState(() {
-      currentPosition = CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 17);
       var runningData = Provider.of<RunningData>(context, listen: false);
+      LatLngBounds bound = LatLngBounds(southwest: LatLng(runningData.minLat, runningData.minLng), northeast: LatLng(runningData.maxLat, runningData.maxLng));
+      // mapController.animateCamera();
+      currentPosition = CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 17);
       if (runningData.curValue != currentPosition.target) {
         runningData.setCurrentPosition(currentPosition);
         runningData.addLocation(currentPosition.target);
+        runningData.setLat(currentPosition.target.latitude);
+        runningData.setLng(currentPosition.target.longitude);
         mapController!.animateCamera(
-            CameraUpdate.newCameraPosition(currentPosition)
+            CameraUpdate.newLatLngBounds(bound, 17)
         );
+
       }
     });
     return ;
-  }
-
-  Future<Uint8List?> captureMap() async {
-    var mapController = Provider.of<RunningData>(context, listen: false).mapController;
-    final Uint8List? bytes = await mapController.takeSnapshot();
-    return bytes;
   }
   // 맵컨트롤러 받기 => 지도 카메라 위치 조정시 필요
   onMapCreated(GoogleMapController controller) {
