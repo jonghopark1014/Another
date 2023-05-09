@@ -7,16 +7,16 @@ import '../constant/color.dart';
 class Target extends StatelessWidget {
   final String targetname;
   final String runningDistance;
-  final String kcal;
+  final String userCalorie;
   final String runningTime;
-  final String speed;
+  final String userPace;
 
   const Target({
     required this.targetname,
     required this.runningTime,
-    required this.kcal,
+    required this.userCalorie,
     required this.runningDistance,
-    required this.speed,
+    required this.userPace,
 
     Key? key,
   }) : super(key: key);
@@ -63,13 +63,13 @@ class Target extends StatelessWidget {
                   recordColor: SERVEONE_COLOR,
                 ),
                 TargetBox(
-                  data: kcal,
+                  data: userCalorie,
                   name: 'kacl',
                   textColor: MAIN_COLOR,
                   recordColor: SERVEONE_COLOR,
                 ),
                 TargetBox(
-                  data: speed,
+                  data: userPace,
                   name: '평균 페이스',
                   textColor: MAIN_COLOR,
                   recordColor: SERVEONE_COLOR,

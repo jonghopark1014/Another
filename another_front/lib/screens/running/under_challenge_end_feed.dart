@@ -65,9 +65,9 @@ class UnderChallengeScreenEndFeed extends StatelessWidget {
               Target(
                 targetname: '내 기록',
                 runningDistance: '',
-                kcal: '',
+                userCalorie: '',
                 runningTime: '',
-                speed: '',
+                userPace: '',
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 12.0),
