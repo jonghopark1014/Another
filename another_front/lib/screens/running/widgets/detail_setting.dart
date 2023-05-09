@@ -18,6 +18,11 @@ class _DetailSettingState extends State<DetailSetting> {
   int _min = 0;
   List<int> _interval = [0, 0];
   bool _isSet = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -25,12 +30,12 @@ class _DetailSettingState extends State<DetailSetting> {
         padding: EdgeInsets.all(0),
         backgroundColor: BACKGROUND_COLOR,
       ),
-      onPressed: onPressed,
+      onPressed: getResult,
       child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _isSet
+            _distance != 0
                 ? Row(
                     children: [
                       Text(
@@ -56,7 +61,7 @@ class _DetailSettingState extends State<DetailSetting> {
                       color: SERVETWO_COLOR,
                     ),
                   ),
-            _isSet
+            _min != 0
                 ? Row(
                     children: [
                       Text(
@@ -82,7 +87,7 @@ class _DetailSettingState extends State<DetailSetting> {
                       color: SERVETWO_COLOR,
                     ),
                   ),
-            _isSet
+            _interval[0] != 0 && _interval[1] != 0
                 ? Row(
                     children: [
                       // Icons.directions_run_rounded,
@@ -127,10 +132,32 @@ class _DetailSettingState extends State<DetailSetting> {
           ]),
     );
   }
+  // 모달창에서 정보받기
+  void getResult() async {
+    final result = await showModalBottomSheet(
+        backgroundColor: BACKGROUND_COLOR.withOpacity(0.8),
+        useSafeArea: true,
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: MediaQuery.of(context).size.height,
+            padding: EdgeInsets.all(40),
+            child: DialData(),
+          );
+        });
+    if (result != null) {
+      print('$result======================================');
+      setState(() {
+        _distance = result[0];
+        _min = result[1];
+        _interval = result[2];
+      });
+    }
+  }
 
   // 러닝 세부 설정 모달창
-  Future<dynamic> onPressed() {
-    final height = MediaQuery.of(context).size.height;
+  Future<dynamic> detailSettingModal() {
     return showModalBottomSheet(
         backgroundColor: BACKGROUND_COLOR.withOpacity(0.8),
         useSafeArea: true,
@@ -138,7 +165,7 @@ class _DetailSettingState extends State<DetailSetting> {
         context: context,
         builder: (BuildContext context) {
           return Container(
-            height: height,
+            height: MediaQuery.of(context).size.height,
             padding: EdgeInsets.all(40),
             child: DialData(),
           );
