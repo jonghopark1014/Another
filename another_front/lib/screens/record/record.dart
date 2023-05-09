@@ -12,6 +12,7 @@ import 'package:another/main.dart';
 import 'package:provider/provider.dart';
 import 'package:another/screens/record/widgets/profile.dart';
 import 'package:another/screens/record/widgets/record_chart.dart';
+import 'package:another/screens/record/api/period_total_record_api.dart';
 
 class RecordTab extends StatelessWidget {
   const RecordTab({Key? key}) : super(key: key);
@@ -208,11 +209,39 @@ class MyRecord extends StatefulWidget {
 class _MyRecordState extends State<MyRecord> {
   int _selectedIndex = 0;
   bool _isCalendarOpen = false;
+  Map<String, dynamic> _recordData = {};
 
   void _updateContent(int index, bool isCalendarOpen) {
     setState(() {
       _selectedIndex = index;
       _isCalendarOpen = isCalendarOpen;
+    });
+  }
+
+  Future<void> getPeriodRecord() async {
+    Map<String, dynamic> data = {};
+    switch (_selectedIndex) {
+      case 0:
+        data = await GetRecord.getTodayRecord();
+        break;
+      case 1:
+        data = await GetRecord.getWeekRecord();
+        break;
+      case 2:
+        data = await GetRecord.getMonthRecord();
+        break;
+      case 3:
+        data = await GetRecord.getAllRecord();
+        break;
+      case 4:
+        data = await GetRecord.getAllRecord();
+        break;
+      default:
+        data = {};
+        break;
+    }
+    setState(() {
+      _recordData = data;
     });
   }
 
@@ -232,7 +261,10 @@ class _MyRecordState extends State<MyRecord> {
                     color: _selectedIndex == 0 ? MAIN_COLOR : SERVEONE_COLOR,
                     width: 2),
               ),
-              onPressed: () => _updateContent(0, false),
+              onPressed: () => {
+                _updateContent(0, false),
+                getPeriodRecord(),
+              },
               child: Text('오늘',
                   style: TextStyle(
                     fontSize: 12,
@@ -248,7 +280,10 @@ class _MyRecordState extends State<MyRecord> {
                     color: _selectedIndex == 1 ? MAIN_COLOR : SERVEONE_COLOR,
                     width: 2),
               ),
-              onPressed: () => _updateContent(1, false),
+              onPressed: () => {
+                _updateContent(1, false),
+                getPeriodRecord(),
+              },
               child: Text('이번 주',
                   style: TextStyle(
                     fontSize: 12,
@@ -304,7 +339,10 @@ class _MyRecordState extends State<MyRecord> {
           ],
         ),
         MyRecordContents(
-            selectedIndex: _selectedIndex, isCalendarOpen: _isCalendarOpen)
+            selectedIndex: _selectedIndex,
+            isCalendarOpen: _isCalendarOpen,
+            recordData: _recordData,
+        )
       ],
     );
   }
@@ -313,9 +351,12 @@ class _MyRecordState extends State<MyRecord> {
 class MyRecordContents extends StatefulWidget {
   final int selectedIndex;
   final bool isCalendarOpen;
-
+  final Map<String, dynamic> recordData;
   const MyRecordContents(
-      {Key? key, required this.selectedIndex, required this.isCalendarOpen})
+      {Key? key,
+      required this.selectedIndex,
+      required this.isCalendarOpen,
+      required this.recordData})
       : super(key: key);
 
   @override
@@ -332,7 +373,10 @@ class _MyRecordContentsState extends State<MyRecordContents> {
             ? TableCalendarScreen()
             : Text('달력 없음', style: TextStyle(color: Colors.white)),
 
-        PeriodTotalRecord(selectedIndex: widget.selectedIndex), // 조회 기간 총 기록
+        PeriodTotalRecord(
+          selectedIndex: widget.selectedIndex,
+          recordData: widget.recordData,
+        ), // 조회 기간 총 기록
 
 // 나중에 Pageview 써봐라
         widget.selectedIndex == 0
