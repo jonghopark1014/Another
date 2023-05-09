@@ -64,7 +64,7 @@ public class RunningService {
         if(runningRequestDto.getHostRunningId()!=null){
             WithRun withRun = withRunRepository.findByRunningHostId(runningRequestDto.getHostRunningId())
                     .orElseThrow(()-> new IllegalArgumentException("With Run 을 가져오는 중 에러가 발생했습니다."));
-            withRun.getRunningSlaves().add(running);
+            running.setWithRun(withRun);
         }
         // DB에 저장
         Running savedRunning = runningRepository.save(running);

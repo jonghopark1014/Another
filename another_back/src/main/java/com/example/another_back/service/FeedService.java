@@ -74,8 +74,6 @@ public class FeedService {
         }
         WithRun withRun = new WithRun(running);
         withRunRepository.save(withRun);
-        running.setWithRun(withRun);
-        runningRepository.save(running);
         return running.getId();
     }
 
