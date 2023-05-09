@@ -197,15 +197,18 @@ class _RunningTabState extends State<RunningTab> {
     runningData.reset();
     runningData.addLocation(runningData.currentPosition.target);
 
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (_) => TimerScreen(
-          path: str,
-          initialPosition: runningData.currentPosition,
+    // currentposition 초기값 그대로이면 받아오기전으로 판단
+    if (runningData.currentPosition.target.longitude != 0 && runningData.currentPosition.target.latitude != 0 ) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => TimerScreen(
+            path: str,
+            initialPosition: runningData.currentPosition,
+          ),
         ),
-      ),
-      (route) => false,
-    );
+            (route) => false,
+      );
+    }
   }
 }
 

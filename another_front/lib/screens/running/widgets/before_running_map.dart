@@ -33,7 +33,6 @@ class _BeforeRunningMapState extends State<BeforeRunningMap> {
   }
   @override
   void dispose() {
-    mapController!.dispose();
     _timer.cancel();
     super.dispose();
   }
