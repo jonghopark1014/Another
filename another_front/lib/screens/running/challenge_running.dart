@@ -10,7 +10,18 @@ import '../../widgets/target.dart';
 import 'widgets/before_running_map.dart';
 
 class ChallengeRunning extends StatelessWidget {
-  const ChallengeRunning({Key? key}) : super(key: key);
+  String runningTime;
+  String runningDistance;
+  String kcal;
+  String speed;
+
+  ChallengeRunning({
+    required this.runningTime,
+    required this.runningDistance,
+    required this.kcal,
+    required this.speed,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +38,10 @@ class ChallengeRunning extends StatelessWidget {
                   color: BACKGROUND_COLOR,
                   child: Target(
                     targetname: '목표기록',
+                    runningDistance: runningDistance,
+                    kcal: kcal,
+                    runningTime: runningTime,
+                    speed: speed,
                   ),
                 ),
                 SizedBox(
@@ -39,7 +54,8 @@ class ChallengeRunning extends StatelessWidget {
                           builder: (_) => TimerScreen(
                             path: '/UnderChallenge',
                             // 수정 필요함
-                            initialPosition: CameraPosition(target: LatLng(0, 0), zoom: 30),
+                            initialPosition:
+                                CameraPosition(target: LatLng(0, 0), zoom: 30),
                           ),
                         ),
                         (route) => route.settings.name == '/');

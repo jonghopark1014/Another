@@ -36,7 +36,7 @@ class _RunningMapState extends State<RunningMap> {
     // TODO: implement initState
     super.initState();
     currentPosition = widget.initialPosition;
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
+    _timer = Timer.periodic(Duration(seconds: 3), (timer) async {
       getCurrentLocation();
     });
   }

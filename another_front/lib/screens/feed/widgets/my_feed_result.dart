@@ -9,14 +9,17 @@ class MyRecordResult extends StatelessWidget {
   final List<String> kcals;
   final List<String> runningTimes;
   final List<String> runningDistances;
+  final String profile;
 
   const MyRecordResult({
     required this.walkCounts,
     required this.kcals,
     required this.runningTimes,
     required this.runningDistances,
+    required this.profile,
     Key? key,
   }) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +92,7 @@ class MyRecordResult extends StatelessWidget {
                       // ),
                     ],
                   ),
-                  ImageProfileSetting()
+                  ImageProfileSetting(profile: profile,),
                 ],
               ),
             ],
@@ -100,12 +103,14 @@ class MyRecordResult extends StatelessWidget {
   }
 }
 
-Widget ImageProfileSetting() {
+Widget ImageProfileSetting({required profile,}) {
+
+
   return Center(
     child: Stack(
       children: <Widget>[
         CircleAvatar(
-          backgroundImage: AssetImage('assets/img/kazuha.jpg'),
+          backgroundImage: NetworkImage(profile),
           radius: 45,
         ),
         Positioned(

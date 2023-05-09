@@ -11,6 +11,7 @@ import './widgets/record_running_history.dart';
 import 'package:another/main.dart';
 import 'package:provider/provider.dart';
 import 'package:another/screens/record/widgets/profile.dart';
+import 'package:another/screens/record/widgets/record_chart.dart';
 
 class RecordTab extends StatelessWidget {
   const RecordTab({Key? key}) : super(key: key);
@@ -58,16 +59,15 @@ class RecordTab extends StatelessWidget {
                   children: [
                     Stack(
                       children: [
-                        Expanded(
+                        Positioned.fill(
                           child: Container(
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
                                   Color(0xFF1C1A1E),
                                   Color(0xFF3D2F4A),
-                                  Color(0xFF3D2F4A),
-                                  Color(0xFF3D2F4A),
                                 ],
+                                stops: [0.1, 0.2],
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
                               ),
@@ -141,6 +141,14 @@ class RecordTab extends StatelessWidget {
                                       MyChallenge(), // 나의 챌린지
                                       CategoryTitle(title: '나의 활동 기록'),
                                       MyRecord(),
+                                      Row(
+                                        children: [
+                                          Expanded(child: RecordChart()),
+                                          Expanded(child: RecordChart()),
+                                          Expanded(child: RecordChart()),
+                                          Expanded(child: RecordChart())
+                                        ],
+                                      )
                                     ],
                                   ),
                                 )

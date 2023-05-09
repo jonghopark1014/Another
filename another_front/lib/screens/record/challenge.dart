@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:another/constant/color.dart';
 import './widgets/category_title.dart';
 import './widgets/challenge_item.dart';
+import 'package:another/screens/record/widgets/record_chart.dart';
 
 class ChallengePage extends StatelessWidget {
   ChallengePage({Key? key}) : super(key: key);
@@ -65,12 +66,10 @@ class ChallengePage extends StatelessWidget {
             children: [
               ChallengeHeader(exp: 12000),
               // 월간 시간 챌린지
-              Row(
-                children: [
-                  CategoryTitle(title: '월간 시간 챌린지'),
-                  Spacer(), // 다른 자식 위젯들을 오른쪽으로 밀어내기 위해 추가
-                ]
-              ),
+              Row(children: [
+                CategoryTitle(title: '월간 시간 챌린지'),
+                Spacer(), // 다른 자식 위젯들을 오른쪽으로 밀어내기 위해 추가
+              ]),
               GridView.count(
                 crossAxisCount: 2, //한 행에 두 개의 아이템 배치
                 mainAxisSpacing: 0,
@@ -79,24 +78,21 @@ class ChallengePage extends StatelessWidget {
                 shrinkWrap: true,
                 children: List.generate(
                   monthChallenges.length,
-                      (index) {
+                  (index) {
                     final challenge = monthChallenges[index];
                     return ChallengeItem(
                         title: challenge['title'],
                         progress: challenge['progress'],
                         goldBadge: challenge['goldBadge'],
-                        silverBadge: challenge['silverBadge']
-                    );
+                        silverBadge: challenge['silverBadge']);
                   },
                 ),
               ),
               // 캠퍼스 챌린지
-              Row(
-                  children: [
-                    CategoryTitle(title: '캠퍼스 챌린지'),
-                    Spacer(), // 다른 자식 위젯들을 오른쪽으로 밀어내기 위해 추가
-                  ]
-              ),
+              Row(children: [
+                CategoryTitle(title: '캠퍼스 챌린지'),
+                Spacer(), // 다른 자식 위젯들을 오른쪽으로 밀어내기 위해 추가
+              ]),
               GridView.count(
                 crossAxisCount: 2, //한 행에 두 개의 아이템 배치
                 mainAxisSpacing: 0,
@@ -105,14 +101,13 @@ class ChallengePage extends StatelessWidget {
                 shrinkWrap: true,
                 children: List.generate(
                   campusChallenges.length,
-                      (index) {
+                  (index) {
                     final challenge = campusChallenges[index];
                     return ChallengeItem(
                         title: challenge['title'],
                         progress: challenge['progress'],
                         goldBadge: challenge['goldBadge'],
-                        silverBadge: challenge['silverBadge']
-                    );
+                        silverBadge: challenge['silverBadge']);
                   },
                 ),
               ),
@@ -123,8 +118,6 @@ class ChallengePage extends StatelessWidget {
     );
   }
 }
-
-
 
 class ChallengeHeader extends StatelessWidget {
   final int exp; // 경험치를 담을 동적인 변수
