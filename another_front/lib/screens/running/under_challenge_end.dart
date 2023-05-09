@@ -27,9 +27,9 @@ class UnderChallengeScreenEnd extends StatelessWidget {
                 child: Target(
                   targetname: '목표 기록',
                   runningDistance: '',
-                  kcal: '',
+                  userCalorie: '',
                   runningTime: '',
-                  speed: '',
+                  userPace: '',
                 ),
               ),
               Padding(

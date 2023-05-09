@@ -236,8 +236,8 @@ class _RunningStatus extends State<RunningStatus> {
             captureInfo: captureInfo,
             runningTime: runningTime,
             runningDistance: runningDistance.toString(),
-            kcal: userCalories.toString(),
-            speed: userPace,
+            userCalorie: userCalories.toString(),
+            userPace: userPace,
 
           ),
         ),

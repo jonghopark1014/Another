@@ -8,16 +8,18 @@ import '../../running/challenge_running.dart';
 class RunIcon extends StatelessWidget {
   String runningTime;
   String runningDistance;
-  String kcal;
-  String speed;
+  String userCalorie;
+  String userPace;
   String runCount;
+  String runningId;
 
   RunIcon(
       {required this.runningTime,
       required this.runningDistance,
-      required this.kcal,
-      required this.speed,
+      required this.userCalorie,
+      required this.userPace,
       required this.runCount,
+      required this.runningId,
       Key? key})
       : super(key: key);
 
@@ -28,7 +30,7 @@ class RunIcon extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => ChallengeList(),
+              builder: (_) => ChallengeList(runningId: runningId),
             ),
           );
         },
@@ -57,14 +59,11 @@ class RunIcon extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => ChallengeList(),
+              builder: (_) => ChallengeList(runningId: runningId),
             ),
           );
         },
-        child: Text(
-          runCount,
-          style: MyTextStyle.sixteenTextStyle
-        ),
+        child: Text(runCount, style: MyTextStyle.sixteenTextStyle),
       ),
       SizedBox(
         width: 10.0,
@@ -73,18 +72,15 @@ class RunIcon extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => ChallengeRunning(
-
-
-              ),
+              builder: (_) => ChallengeRunning(),
               settings: RouteSettings(
                 arguments: [
                   runningDistance,
-                  runningTime ,
-                  kcal,
-                  speed,
-                ]
-              )
+                  runningTime,
+                  userCalorie,
+                  userPace,
+                ],
+              ),
             ),
           );
         },

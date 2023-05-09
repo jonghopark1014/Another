@@ -10,14 +10,14 @@ class UnderRunningScreenEnd extends StatelessWidget {
   final Uint8List? captureInfo;
   final String runningDistance;
   final String runningTime;
-  final String kcal;
-  final String speed;
+  final String userCalorie;
+  final String userPace;
   UnderRunningScreenEnd({
     required this.captureInfo,
     required this.runningDistance,
     required this.runningTime,
-    required this.kcal,
-    required this.speed,
+    required this.userCalorie,
+    required this.userPace,
     Key? key,
   }) : super(key: key);
 
@@ -31,8 +31,8 @@ class UnderRunningScreenEnd extends StatelessWidget {
             targetname: '내 기록',
             runningDistance: runningDistance,
             runningTime: runningTime,
-            kcal: kcal,
-            speed: speed,
+            userCalorie: userCalorie,
+            userPace: userPace,
           ),
           Padding(
             padding: const EdgeInsets.only(top: 24.0),
