@@ -64,7 +64,7 @@ public class FeedService {
         Running running = runningRepository.findById(addFeedRequestDto.getRunningId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 러닝기록을 찾지 못했습니다."));
         running.setStatus(Status.LIVE);
-        if (addFeedRequestDto.getFeedPics().length != 0) {
+        if (addFeedRequestDto.feedPicsLength() != 0) {
             List<String> list = s3UploaderService.upload(bucket, "image", addFeedRequestDto.getFeedPics());
             for (String url :
                     list) {
