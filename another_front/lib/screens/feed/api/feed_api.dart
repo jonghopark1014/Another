@@ -13,7 +13,7 @@ class FeedApi {
     );
     if (response.statusCode == 200) {
       print('최신 피드 가져오기 성공');
-      var responseBody = json.decode(response.body);
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
       return responseBody;
 
     } else {

@@ -23,8 +23,9 @@ class Target extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -33,43 +34,48 @@ class Target extends StatelessWidget {
             style: MyTextStyle.twentyTextStyle,
           ),
         ),
-        Container(
-          decoration: BoxDecoration(
-            color: BLACK_COLOR,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          constraints: BoxConstraints(
-            minHeight: 80.0,
-            minWidth: 320.0,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TargetBox(
-                data: runningDistance,
-                name: 'km',
-                textColor: MAIN_COLOR,
-                recordColor: SERVEONE_COLOR,
-              ),
-              TargetBox(
-                data: runningTime,
-                name: '시간',
-                textColor: MAIN_COLOR,
-                recordColor: SERVEONE_COLOR,
-              ),
-              TargetBox(
-                data: kcal,
-                name: 'kacl',
-                textColor: MAIN_COLOR,
-                recordColor: SERVEONE_COLOR,
-              ),
-              TargetBox(
-                data: speed,
-                name: '평균 페이스',
-                textColor: MAIN_COLOR,
-                recordColor: SERVEONE_COLOR,
-              ),
-            ],
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Container(
+            width: size.width * 0.95,
+            height: size.height * 0.1,
+            decoration: BoxDecoration(
+              color: BLACK_COLOR,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            constraints: BoxConstraints(
+              minHeight: 80.0,
+              minWidth: 240.0
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TargetBox(
+                  data: runningDistance,
+                  name: 'km',
+                  textColor: MAIN_COLOR,
+                  recordColor: SERVEONE_COLOR,
+                ),
+                TargetBox(
+                  data: runningTime,
+                  name: '시간',
+                  textColor: MAIN_COLOR,
+                  recordColor: SERVEONE_COLOR,
+                ),
+                TargetBox(
+                  data: kcal,
+                  name: 'kacl',
+                  textColor: MAIN_COLOR,
+                  recordColor: SERVEONE_COLOR,
+                ),
+                TargetBox(
+                  data: speed,
+                  name: '평균 페이스',
+                  textColor: MAIN_COLOR,
+                  recordColor: SERVEONE_COLOR,
+                ),
+              ],
+            ),
           ),
         )
       ],

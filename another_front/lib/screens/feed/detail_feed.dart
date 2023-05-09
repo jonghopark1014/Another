@@ -31,6 +31,7 @@ class _DetailFeedState extends State<DetailFeed> {
   String speed = '0';
   String profilePic = '';
   String userNickname = '';
+  String runCount = '';
 
   @override
   void initState() {
@@ -38,6 +39,7 @@ class _DetailFeedState extends State<DetailFeed> {
     _detailFeed();
   }
 
+  // 피드 가져오기
   Future<void> _detailFeed() async {
     try {
       final response = await DetailFeedApi.getFeed(widget.runningId);
@@ -52,7 +54,8 @@ class _DetailFeedState extends State<DetailFeed> {
       String speeds = '';
       String profile = '';
       String nickname = '';
-      print(response);
+      String withRunCount = '';
+
       if (response != null) {
         final contents = response['data'];
         runningTimes = contents['runningTime'].toString();
@@ -63,20 +66,22 @@ class _DetailFeedState extends State<DetailFeed> {
         speeds = contents['speed'].toString();
         profile = contents['profilePic'].toString();
         nickname = contents['nickname'].toString();
-
+        withRunCount = contents['withRunCount'].toString();
         List<dynamic> feedPics = contents['feedPics'];
+        print(contents);
+        print(nickname);
         for (var feedPic in feedPics) {
           feedPicUrls.add(feedPic['feedPic']);
         }
+        feedPicUrls.add(contents['runningPic'].toString());
         graphs = contents['graph'];
         chartData = graphs.map(
           (data) {
             double distance = 0.0;
             double speed = 0.0;
-            print(data['distance']);
             if (data['distance'] != null && data['speed'] != null) {
-              distance = double.parse(data['distance'] ?? '0.0');
-              speed = double.parse(data['speed'] ?? '0.0');
+              distance = data['distance'] ?? 0.0;
+              speed = data['speed'] ?? 0.0;
             }
             return PacesData(distance: distance, speed: speed);
           },
@@ -95,6 +100,7 @@ class _DetailFeedState extends State<DetailFeed> {
           chartDataList = chartData;
           profilePic = profile;
           userNickname = nickname;
+          runCount = withRunCount;
         },
       );
     } catch (e) {
@@ -144,6 +150,7 @@ class _DetailFeedState extends State<DetailFeed> {
                           runningDistance: runningDistance,
                           kcal: kcal,
                           speed: speed,
+                          runCount: runCount,
                         ),
                       ],
                     ),
@@ -156,12 +163,14 @@ class _DetailFeedState extends State<DetailFeed> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: SizedBox(
-                        height: 250.0,
-                        child: Chart(
-                          chartData: chartDataList,
-                        ),
-                      ),
+                      child: chartDataList.isNotEmpty
+                          ? SizedBox(
+                              height: 250.0,
+                              child: Chart(
+                                chartData: chartDataList,
+                              ),
+                            )
+                          : Container(),
                     ),
                   ],
                 ),

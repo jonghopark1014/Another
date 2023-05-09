@@ -18,19 +18,20 @@ class TargetBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-      width: 80.0,
+    return SizedBox(
+      width: 90.0,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
             child: Text(
-              '$data',
+              data,
               style: MyTextStyle.twentyTextStyle.copyWith(color: textColor),
               textAlign: TextAlign.center,
             ),
           ),
           Text(
-            '$name',
+            name,
             style: MyTextStyle.fourteenTextStyle.copyWith(color: recordColor),
           )
         ],

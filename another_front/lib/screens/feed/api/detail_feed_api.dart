@@ -14,8 +14,9 @@ class DetailFeedApi {
       headers: {"Content-Type": "application/json"},
     );
     if (response.statusCode == 200) {
+
       print('디데일 피드 가져오기 성공');
-      var responseBody = json.decode(response.body);
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
       return responseBody;
     } else {
       print('디데일 피드 가져오기 실패');

@@ -6,7 +6,7 @@ class MyFeedScreen extends StatelessWidget {
   List<String> runningIds = [];
   List<String> runningTimes = [];
   List<String> runningDistances = [];
-  List<String> walkCounts = [];
+  // List<String> walkCounts = [];
   List<String> kcals = [];
 
   MyFeedScreen({
@@ -14,7 +14,7 @@ class MyFeedScreen extends StatelessWidget {
     required this.runningIds,
     required this.runningTimes,
     required this.runningDistances,
-    required this.walkCounts,
+    // required this.walkCounts,
     required this.kcals,
     Key? key,
   }) : super(key: key);
