@@ -85,8 +85,8 @@ public class RunningService {
             endDate = new Date(calendar1.getTimeInMillis());
             runData = runningRepository.findWithDateByUserId(user, startDate, endDate, pageable);
         } else if (category == 2) {
-            calendar1.set(calendar1.DATE, calendar1.getFirstDayOfWeek());
-            calendar2.set(calendar1.DATE, calendar1.getFirstDayOfWeek() + 7);
+            calendar1.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            calendar2.add(calendar1.DATE,5);
 
             startDate = new Date(calendar1.getTimeInMillis());
             endDate = new Date(calendar2.getTimeInMillis());
