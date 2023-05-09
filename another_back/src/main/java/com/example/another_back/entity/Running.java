@@ -40,7 +40,6 @@ public class Running {
     @ManyToOne(fetch = FetchType.LAZY)
     private WithRun withRun;
 
-
     @Builder
     public Running(RunningRequestDto runningRequestDto, String runningPic, User user) {
         this.id = runningRequestDto.getRunningId();
