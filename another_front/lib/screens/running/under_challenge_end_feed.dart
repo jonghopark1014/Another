@@ -1,5 +1,5 @@
 import 'package:another/screens/running/running_feed_complete.dart';
-import 'package:another/screens/running/under_challenge.dart';
+import 'package:another/widgets/go_back_appbar_style.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/material.dart';
 
@@ -14,10 +14,7 @@ class UnderChallengeScreenEndFeed extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: BACKGROUND_COLOR,
-        title: Text('로고'),
-      ),
+      appBar: GoBackAppBarStyle(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: SafeArea(
@@ -25,39 +22,43 @@ class UnderChallengeScreenEndFeed extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                      primary: MAIN_COLOR,
-                      side: BorderSide(
-                        color: MAIN_COLOR,
-                        width: 2.5,
-                      )),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => CustomImage(),
+                style: OutlinedButton.styleFrom(
+                  primary: MAIN_COLOR,
+                  side: BorderSide(
+                    color: MAIN_COLOR,
+                    width: 2.5,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => CustomImage(),
+                    ),
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.photo_camera_outlined),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 12.0,
                       ),
-                    );
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.photo_camera_outlined),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 8.0,
-                        ),
-                        child: Text(
-                          '사진 추가하기',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16.0,
-                          ),
+                      child: Text(
+                        '사진 추가하기',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16.0,
                         ),
                       ),
-                    ],
-                  )),
-              Expanded(
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Container(
+                  height: 350.0,
                   color: WHITE_COLOR,
                 ),
               ),

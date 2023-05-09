@@ -206,6 +206,11 @@ class _RunningStatus extends State<RunningStatus> {
         MaterialPageRoute(
           builder: (_) => UnderRunningScreenEnd(
             captureInfo: captureInfo,
+            runningTime: runningTime,
+            runningDistance: runningDistance.toString(),
+            kcal: userCalories.toString(),
+            speed: userPace,
+
           ),
         ),
             (route) => route.settings.name == '/');

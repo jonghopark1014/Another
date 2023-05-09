@@ -1,3 +1,4 @@
+import 'package:another/constant/text_style.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter/material.dart';
 
@@ -31,11 +32,7 @@ class Chart extends StatelessWidget {
         labelStyle: TextStyle(color: WHITE_COLOR),
         title: AxisTitle(
           text: '거리',
-          textStyle: TextStyle(
-            color: WHITE_COLOR,
-            fontSize: 20.0,
-            fontWeight: FontWeight.w700,
-          ),
+          textStyle: MyTextStyle.twentyTextStyle,
         ),
         tickPosition: TickPosition.inside,
         borderColor: MAIN_COLOR,
@@ -48,11 +45,7 @@ class Chart extends StatelessWidget {
       primaryYAxis: NumericAxis(
         title: AxisTitle(
           text: '페이스',
-          textStyle: TextStyle(
-            color: WHITE_COLOR,
-            fontSize: 20.0,
-            fontWeight: FontWeight.w700,
-          ),
+          textStyle: MyTextStyle.twentyTextStyle,
         ),
         // 구분선 없애기
         majorGridLines: MajorGridLines(width: 0),
@@ -76,7 +69,7 @@ class Chart extends StatelessWidget {
           name: '페이스',
           pointColorMapper: _getPointColor,
           markerSettings: MarkerSettings(
-            isVisible: false,
+            isVisible: true,
             shape: DataMarkerType.circle,
             borderWidth: 2,
             color: MAIN_COLOR,
@@ -101,7 +94,7 @@ class Chart extends StatelessWidget {
   }
 
   Color _getPointColor(PacesData pacesData, _) {
-    if (pacesData.speed > 35) {
+    if (pacesData.speed > 13) {
       return RED_COLOR;
     } else {
       return WHITE_COLOR;

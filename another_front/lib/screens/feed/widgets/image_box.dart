@@ -24,6 +24,7 @@ class ImageBox extends StatefulWidget {
 }
 
 class _ImageBoxState extends State<ImageBox> {
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -35,18 +36,24 @@ class _ImageBoxState extends State<ImageBox> {
             crossAxisSpacing: 4.0),
         itemCount: widget.thumbnailUrls.length,
         itemBuilder: (context, index) {
-          return InkWell(
-            child: _buildListItem(context, index),
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => DetailFeed(
-                    runningId: widget.runningIds[index],
+          if (widget.thumbnailUrls.isNotEmpty) {
+            return InkWell(
+              child: _buildListItem(context, index),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => DetailFeed(
+                      runningId: widget.runningIds[index],
+                    ),
                   ),
-                ),
-              );
-            },
-          );
+                );
+              },
+            );
+          } else{
+            return Container(
+              height: 180.0,
+            );
+          }
         },
       ),
     );

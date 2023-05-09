@@ -105,13 +105,12 @@ class MyRecordResult extends StatelessWidget {
 
 Widget ImageProfileSetting({required profile,}) {
 
-
   return Center(
     child: Stack(
       children: <Widget>[
         CircleAvatar(
           backgroundImage: NetworkImage(profile),
-          radius: 45,
+          radius: 38,
         ),
         Positioned(
           bottom: 0,
