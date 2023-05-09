@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:another/constant/color.dart';
 import 'signup.dart';
 import '../../widgets/intro_header.dart';
+import 'package:another/screens/account/api/login_api.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -15,6 +16,8 @@ class _LoginPageState extends State<LoginPage> {
   FocusNode pwFocusNode = FocusNode(); // 비밀번호 입력 란이 포커스 되었는지 여부
   bool isFocusId = false;
   bool isFocusPw = false;
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController pwController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +46,7 @@ class _LoginPageState extends State<LoginPage> {
             IntroHeader(),
             SizedBox(height: 40.0),
             TextField(
+              controller: emailController,
               focusNode: idFocusNode,
               decoration: InputDecoration(
                 labelText: '아이디(이메일)',
@@ -61,9 +65,11 @@ class _LoginPageState extends State<LoginPage> {
                   borderSide: BorderSide(color: SERVEONE_COLOR),
                 ),
               ),
+              style: TextStyle(color: SERVEONE_COLOR),
             ),
             SizedBox(height: 16),
             TextField(
+              controller: pwController,
               focusNode: pwFocusNode,
               decoration: InputDecoration(
                 labelText: '비밀번호',
@@ -82,6 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                   borderSide: BorderSide(color: SERVEONE_COLOR),
                 ),
               ),
+              style: TextStyle(color: SERVEONE_COLOR),
               obscureText: true,
             ),
             SizedBox(height: 16),
@@ -119,8 +126,12 @@ class _LoginPageState extends State<LoginPage> {
             FractionallySizedBox(
               widthFactor: 1.0,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   // 로그인 버튼 클릭 시 로그인 로직 작성
+                  await loginApi.loginUser(
+                    email: emailController.text,
+                    password: pwController.text
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: MAIN_COLOR,
