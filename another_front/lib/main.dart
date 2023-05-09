@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 
 class RunningData extends ChangeNotifier {
   late GoogleMapController mapController;
-  CameraPosition currentPosition = CameraPosition(target: LatLng(0,0), zoom: 25);
+  CameraPosition currentPosition = CameraPosition(target: LatLng(0,0), zoom: 17);
   String runningId = '';
   List<LatLng> location = [];
   LatLng preValue = LatLng(0, 0);
@@ -24,6 +24,10 @@ class RunningData extends ChangeNotifier {
   String userPace = "0'00''";
   int preLen = 0;
   var runningPic;
+  double minLat = 24.5;
+  double minLng = -124.8;
+  double maxLat = 49.5;
+  double maxLng = -66.95;
 
   void reset() {
     location = [];
@@ -34,12 +38,10 @@ class RunningData extends ChangeNotifier {
     userCalories = 0;
     userPace = "0'00''";
     preLen = 1;
-    notifyListeners();
   }
 
   void setRunningId(value) {
     runningId = value;
-    notifyListeners();
   }
 
   void setTime(String time) {
@@ -76,6 +78,31 @@ class RunningData extends ChangeNotifier {
   }
   void setMapController(GoogleMapController con) {
     mapController = con;
+  }
+
+  void setLat(value) {
+    if (minLat > value) {
+      minLat = value;
+    }
+    else if (maxLat < value) {
+      maxLat = value;
+    }
+  }
+
+  void setLng(value) {
+    if (minLng > value) {
+      minLng = value;
+    }
+    else if (maxLng < value) {
+      maxLng = value;
+    }
+  }
+
+  void firstMinMax(LatLng value) {
+    minLat = value.latitude;
+    minLng= value.longitude;
+    maxLat = value.latitude;
+    maxLng = value.longitude;
   }
 }
 

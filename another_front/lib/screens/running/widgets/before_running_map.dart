@@ -19,13 +19,27 @@ class _BeforeRunningMapState extends State<BeforeRunningMap> {
   // 지도관련
   GoogleMapController? mapController;
   onMapCreated(GoogleMapController controller) {
+    print("지도 controller 및 onMapCreated");
     mapController = controller;
+    mapController?.setMapStyle(
+        '''[
+          {"featureType": "administrative.land_parcel", "elementType": "labels", "stylers": [{"visibility": "off"}]},
+          {"featureType": "poi", "elementType": "labels.text", "stylers": [{"visibility": "off"}]},
+          {"featureType": "poi", "elementType": "labels.icon", "stylers": [{"visibility": "off"}]},
+          {"featureType": "poi.business", "stylers": [{"visibility": "off"}]},
+          {"featureType": "road", "elementType": "labels.icon", "stylers": [{"visibility": "off"}]},
+          {"featureType": "road", "elementType": "labels", "stylers": [{"visibility": "off"}]},
+          {"featureType": "road.local", "elementType": "labels", "stylers": [{"visibility": "off"}]},
+          {"featureType": "transit", "stylers": [{"visibility": "off"}]},
+        ]'''
+    );
   }
   bool isLoading = false;
   static late CameraPosition currentPosition;
 
   @override
   void initState() {
+    print("initstate");
     super.initState();
     _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
       getCurrentLocation();
@@ -33,12 +47,14 @@ class _BeforeRunningMapState extends State<BeforeRunningMap> {
   }
   @override
   void dispose() {
+    print("dispose");
     mapController!.dispose();
     _timer.cancel();
     super.dispose();
   }
   @override
   Widget build(BuildContext context) {
+    print("build");
     return
       isLoading ? GoogleMap(
       initialCameraPosition: currentPosition,
@@ -69,6 +85,7 @@ class _BeforeRunningMapState extends State<BeforeRunningMap> {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     setState(() {
+      print("setState");
       currentPosition = CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 17);
       Provider.of<RunningData>(context, listen: false).setCurrentPosition(currentPosition);
       isLoading = true;

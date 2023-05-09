@@ -202,6 +202,7 @@ class _RunningTabState extends State<RunningTab> {
   void onPressed() {
     final runningData = Provider.of<RunningData>(context, listen: false);
     runningData.reset();
+    runningData.firstMinMax(runningData.currentPosition.target);
     runningData.addLocation(runningData.currentPosition.target);
 
     Navigator.of(context).pushAndRemoveUntil(

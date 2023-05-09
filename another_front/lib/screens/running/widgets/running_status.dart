@@ -246,7 +246,9 @@ class _RunningStatus extends State<RunningStatus> {
 
   // 캡처하기 위한 함수
   Future<Uint8List?> captureWidget() async {
-    var mapController = Provider.of<RunningData>(context, listen: false).mapController;
+    var data = Provider.of<RunningData>(context, listen: false);
+    var mapController = data.mapController;
+
     final Uint8List? bytes = await mapController.takeSnapshot();
     return bytes;
   }

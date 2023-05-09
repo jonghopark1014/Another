@@ -128,8 +128,8 @@ class saveRunningTime {
     request.fields['runningId'] = runningId;
     request.fields['runningTime'] = runningSec.toString();
     request.fields['runningDistance'] = double.parse(runningDistance.toStringAsFixed(3)).toString();
-    request.fields['kcal'] = userCalories.toString();
-    request.fields['speed'] = pace.toString();
+    request.fields['userCalories'] = userCalories.toString();
+    request.fields['userPace'] = pace.toString();
     request.fields['createDate'] = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
     print(request.fields);

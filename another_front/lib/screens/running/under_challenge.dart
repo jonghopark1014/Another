@@ -34,8 +34,12 @@ class _UnderChallengeState extends State<UnderChallenge> {
     return Scaffold(
       body: Stack(
         children: [
-          RunningMap(
-              runningData: runningData, initialPosition: initialPosition),
+          AspectRatio(
+            aspectRatio: 1/1,
+            child: SizedBox(
+                child: RunningMap(runningData: runningData, initialPosition: initialPosition)
+            ),
+          ),
           UnderChallengeStatus(initialPosition: initialPosition),
         ],
       ),
