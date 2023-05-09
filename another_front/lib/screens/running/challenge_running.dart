@@ -42,8 +42,8 @@ class _ChallengeRunningState extends State<ChallengeRunning> {
                     targetname: '목표기록',
                     runningDistance: arguments[0].toString(),
                     runningTime: arguments[1].toString(),
-                    kcal: arguments[2].toString(),
-                    speed: arguments[3].toString(),
+                    userCalorie: arguments[2].toString(),
+                    userPace: arguments[3].toString(),
                   ),
                 ),
                 SizedBox(

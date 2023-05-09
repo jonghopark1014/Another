@@ -7,14 +7,19 @@ import 'package:flutter/material.dart';
 import 'widgets/image_profile.dart';
 
 class ChallengeList extends StatefulWidget {
-  const ChallengeList({Key? key}) : super(key: key);
+  final String runningId;
+
+  ChallengeList({
+    required this.runningId,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ChallengeList> createState() => _ChallengeListState();
 }
 
-
 class _ChallengeListState extends State<ChallengeList> {
+  final ScrollController _scrollController = ScrollController();
   late List<String> profilePicList = [];
   late List<String> nicknameList = [];
 
@@ -27,11 +32,19 @@ class _ChallengeListState extends State<ChallengeList> {
   Future<void> _challengeListApi() async {
     try {
       final response = await ChallengeListApi.getFeed('1');
-      print(response);
       final contents = response['data'];
+      List<String> profilePics = [];
+      List<String> nicknames = [];
+      for (var content in contents) {
+
+        nicknames.add(content['nickname']);
+        profilePics.add(content['profilePic']);
+      }
 
       setState(
-            () {
+        () {
+          profilePicList = profilePics;
+          nicknameList = nicknames;
         },
       );
     } catch (e) {
@@ -42,8 +55,10 @@ class _ChallengeListState extends State<ChallengeList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: GoBackAppBarStyle(),
-      body: Padding(
+      appBar: GoBackAppBarStyle(
+        runningId: widget.runningId,
+      ),
+      body:Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
@@ -58,23 +73,31 @@ class _ChallengeListState extends State<ChallengeList> {
                   width: 8.0,
                 ),
                 Text(
-                  '25',
+                  '${profilePicList.length}',
                   style: MyTextStyle.twentyFiveTextStyle,
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: ImageProfile(
-                radius: 35.0,
-                profileFontSize: 20.0,
-                nickname: '',
-                profilePic: '',
+            Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                itemCount: profilePicList.length,
+                itemBuilder: (BuildContext context,int index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: ImageProfile(
+                      radius: 35.0,
+                      profileFontSize: 20.0,
+                      nickname: nicknameList[index],
+                      profilePic: profilePicList[index],
+                    ),
+                  );
+                },
               ),
             ),
           ],
         ),
-      ),
+      )
     );
   }
 }

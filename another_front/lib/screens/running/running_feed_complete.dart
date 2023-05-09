@@ -62,9 +62,9 @@ class _RunningFeedCompleteState extends State<RunningFeedComplete> {
                     Target(
                       targetname: '날짜',
                       runningDistance: '',
-                      kcal: '',
+                      userCalorie: '',
                       runningTime: '',
-                      speed: '',
+                      userPace: '',
                     ),
                   ],
                 ),
