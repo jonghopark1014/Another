@@ -59,16 +59,15 @@ class RecordTab extends StatelessWidget {
                   children: [
                     Stack(
                       children: [
-                        Expanded(
+                        Positioned.fill(
                           child: Container(
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
                                   Color(0xFF1C1A1E),
                                   Color(0xFF3D2F4A),
-                                  Color(0xFF3D2F4A),
-                                  Color(0xFF3D2F4A),
                                 ],
+                                stops: [0.1, 0.2],
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
                               ),
