@@ -45,16 +45,16 @@ class _SetRunningStatusState extends State<SetRunningStatus> {
     // 뛴 거리 등 받아오기
     final runningData = Provider.of<RunningData>(context);
     if (settingDistance != 0) {
-      double convertedDistance = runningData.runningDistance / settingDistance * 100;
-      if (convertedDistance <= 100) {
+      double convertedDistance = runningData.runningDistance;
+      if (convertedDistance <= settingDistance) {
         runningDistance = convertedDistance;
       }
     }
     String tempTime = runningData.runningTime;
     if (settingSec != 0 ){
-      double convertedTime = (int.parse(tempTime.substring(0,2)) * 3600 + int.parse(tempTime.substring(3,5)) * 60 + int.parse(tempTime.substring(6,8))) / settingSec * 100;
-      if (convertedTime <= 100) {
-        runningTime = (int.parse(tempTime.substring(0,2)) * 3600 + int.parse(tempTime.substring(3,5)) * 60 + int.parse(tempTime.substring(6,8))) / settingSec * 100;
+      double convertedTime = double.parse(tempTime.substring(0,2)) * 3600 + double.parse(tempTime.substring(3,5)) * 60 + double.parse(tempTime.substring(6,8));
+      if (convertedTime <= settingSec) {
+        runningTime = double.parse(tempTime.substring(0,2)) * 3600 + double.parse(tempTime.substring(3,5)) * 60 + double.parse(tempTime.substring(6,8));
       }
     }
     // 인터벌 로직
@@ -104,10 +104,12 @@ class _SetRunningStatusState extends State<SetRunningStatus> {
           SizedBox(),
           settingDistance != 0 ? DistanceBar(
             pace: runningDistance,
+            youDistance: settingDistance.toDouble(),
             name: '목표 거리 : ${settingDistance}km',
           ) : Container(),
           settingSec != 0 ? DistanceBar(
             pace: runningTime,
+            youDistance: settingSec.toDouble(),
             name: '목표 시간 : ${(settingSec ~/ 60)}분',
           ) : Container(),
         ],
