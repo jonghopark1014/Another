@@ -36,4 +36,10 @@ public interface RunningRepository extends JpaRepository<Running, String> {
 
     @Query("select coalesce(sum(r.runningDistance), 0) from Running r where r.user.id = :userId AND r.createDate between :startDate and :endDate")
     Optional<Float> SumRunningDistanceByUserIdAndCreateDateBetween(Long userId, Date startDate, Date endDate);
+
+    @Query("select coalesce(sum(r.runningDistance), 0) from Running r where r.user.id = :userId")
+    Optional<Double> SumRunningDistanceByUserId(Long userId);
+
+    @Query("select coalesce(sum(r.runningTime), 0) from Running r where r.user.id = :userId")
+    Optional<Long> SumRunningTimeByUserId(Long userId);
 }
