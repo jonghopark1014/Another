@@ -1,16 +1,20 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:another/main.dart';
+import 'package:provider/provider.dart';
 
 const String _baseUrl = 'https://k8b308.p.ssafy.io/api';
 
-class loginApi {
+class LoginApi {
 
   static Future<void> loginUser({
     required String email,
-    required String password
+    required String password,
+    required BuildContext context,
   })
   async {
-    var url = Uri.parse('${_baseUrl}/user/join');
+    var url = Uri.parse('${_baseUrl}/user/login');
     Map<String, dynamic> requestBody = {
       'username': email,
       'password': password,
@@ -24,17 +28,15 @@ class loginApi {
     print(response.statusCode);
     if (response.statusCode == 200) {
       print('로그인 성공');
-      // // 헤더에서 액세스 토큰, 리프레시 토큰, 사용자 ID 추출
-      // final Map<String, String> headers = {};
-      // response.headers.forEach((key, values) {
-      //   headers[key] = values.join(',');
-      // });
-      // final String accessToken = headers['Authorization']!;
-      // final String refreshToken = headers['Refresh']!;
-      // final String userId = headers['userId']!;
-      // print('accessToken: $accessToken');
-      // print('refreshToken: $refreshToken');
-      // print('userId: $userId');
+      print('userid: ${response.headers['userid']}');
+      print('authorization: ${response.headers['authorization']}');
+      print('refresh: ${response.headers['refresh']}');
+      final userInfo = context.read<UserInfo>();
+      final userId = response.headers['userid'];
+      final accessToken = response.headers['authorization'];
+      final refreshToken = response.headers['refresh'];
+      userInfo.updateUserInfo(userId!, accessToken!, refreshToken!);
+
     } else {
       print('로그인 실패');
     }

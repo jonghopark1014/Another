@@ -68,7 +68,7 @@ class _ImageBoxState extends State<ImageBox> {
         ),
         Positioned(
           bottom: 8.0,
-          width: 110.0,
+          width: 120.0,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

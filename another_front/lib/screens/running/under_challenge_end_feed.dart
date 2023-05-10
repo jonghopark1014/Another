@@ -1,18 +1,23 @@
+import 'package:another/main.dart';
 import 'package:another/screens/running/running_feed_complete.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
 import 'package:another/widgets/target.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../constant/color.dart';
 import '../feed/widgets/custom_image.dart';
 
 class UnderChallengeScreenEndFeed extends StatelessWidget {
-  const UnderChallengeScreenEndFeed({Key? key}) : super(key: key);
+  final Uint8List? captureInfo;
+  UnderChallengeScreenEndFeed({required this.captureInfo, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-
+    var runningData = Provider.of<RunningData>(context, listen: false);
     return Scaffold(
       appBar: GoBackAppBarStyle(),
       body: Padding(
@@ -57,17 +62,20 @@ class UnderChallengeScreenEndFeed extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Container(
+                child: SizedBox(
                   height: 350.0,
-                  color: WHITE_COLOR,
+                  child: Image.memory(
+                    captureInfo!,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Target(
                 targetname: '내 기록',
-                runningDistance: '',
-                userCalorie: '',
-                runningTime: '',
-                userPace: '',
+                runningDistance: runningData.runningDistance.toString(),
+                userCalorie: runningData.userCalories.toString(),
+                runningTime: runningData.runningTime,
+                userPace: runningData.userPace,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 12.0),

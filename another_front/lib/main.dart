@@ -1,9 +1,6 @@
-import 'dart:typed_data';
-
 import 'package:another/constant/color.dart';
 import 'package:another/screens/home_screen.dart';
 import 'package:another/screens/running/challenge_running.dart';
-import 'package:another/screens/running/running.dart';
 import 'package:another/screens/running/under_challenge.dart';
 import 'package:another/screens/running/under_running.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +8,22 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
+class RunningSetting extends ChangeNotifier {
+  int distance = 0;
+  int min = 0;
+  List<int> interval = [0, 0];
+  void setData(d, m, i) {
+    distance = d;
+    min = m;
+    interval = i;
+    notifyListeners();
+  }
+}
+
 class RunningData extends ChangeNotifier {
   late GoogleMapController mapController;
   CameraPosition currentPosition = CameraPosition(target: LatLng(0,0), zoom: 17);
   String runningId = '';
-  List<LatLng> location = [];
   LatLng preValue = LatLng(0, 0);
   LatLng curValue = LatLng(0, 0);
   String runningTime = '00:00:00';
@@ -24,13 +32,15 @@ class RunningData extends ChangeNotifier {
   String userPace = "0'00''";
   int preLen = 0;
   var runningPic;
-  double minLat = 24.5;
-  double minLng = -124.8;
-  double maxLat = 49.5;
-  double maxLng = -66.95;
+  double minLat = 90;
+  double minLng = 180;
+  double maxLat = -90;
+  double maxLng = -180;
+  int stopCount = 0;
+  List<Polyline> polyLine = [];
+  bool stopFlag = false;
 
   void reset() {
-    location = [];
     preValue = LatLng(0, 0);
     curValue = LatLng(0, 0);
     runningTime = '00:00:00';
@@ -38,12 +48,19 @@ class RunningData extends ChangeNotifier {
     userCalories = 0;
     userPace = "0'00''";
     preLen = 1;
+    stopCount = 0;
   }
-
+  void funcStopFlag() {
+    if (stopFlag == false) {
+      stopFlag = true;
+    }
+    else {
+      stopFlag = false;
+    }
+  }
   void setRunningId(value) {
     runningId = value;
   }
-
   void setTime(String time) {
     runningTime = time;
     notifyListeners();
@@ -64,14 +81,15 @@ class RunningData extends ChangeNotifier {
     runningPic = value;
     notifyListeners();
   }
-  void addLocation(LatLng pos) {
-    location.add(pos);
-    preValue = curValue;
-    curValue = pos;
-  }
-  void changeLen(value) {
-    preLen = value;
-    notifyListeners();
+  void addLocation(LatLng pos, int v) {
+    if (v == 0) {
+      preValue = curValue;
+      curValue = pos;
+    }
+    if (v == 1) {
+      preValue = pos;
+      curValue = pos;
+    }
   }
   void setCurrentPosition(CameraPosition pos) {
     currentPosition = pos;
@@ -79,7 +97,6 @@ class RunningData extends ChangeNotifier {
   void setMapController(GoogleMapController con) {
     mapController = con;
   }
-
   void setLat(value) {
     if (minLat > value) {
       minLat = value;
@@ -88,7 +105,6 @@ class RunningData extends ChangeNotifier {
       maxLat = value;
     }
   }
-
   void setLng(value) {
     if (minLng > value) {
       minLng = value;
@@ -97,17 +113,74 @@ class RunningData extends ChangeNotifier {
       maxLng = value;
     }
   }
-
   void firstMinMax(LatLng value) {
     minLat = value.latitude;
     minLng= value.longitude;
     maxLat = value.latitude;
     maxLng = value.longitude;
   }
+  void funcStop() {
+    stopCount = polyLine.length;
+  }
+  void addPolyLine(int value, LatLng latLng) {
+    polyLine[value].points.add(latLng);
+  }
+  void newPolyLine(LatLng latLng, int value) {
+    List<LatLng> forPoly = [];
+    forPoly.add(latLng);
+    Polyline newPoly = Polyline(
+      polylineId: PolylineId('poly$value'),
+      points: forPoly,
+      color: MAIN_COLOR,
+      // jointType: JointType.round,
+    );
+    polyLine.add(newPoly);
+  }
+}
+
+class ChallengeData extends ChangeNotifier {
+  String runningId = '';
+  String runningDistance = '';
+  String runningTime = '';
+  String userCalorie = '';
+  String userPace = '';
+  List<double> challengeDistanceList = [];
+
+
+  void setValues(String id, String distance, String time, String calorie, String pace) {
+    runningId = id;
+    runningDistance = distance;
+    runningTime = time;
+    userCalorie = calorie;
+    userPace = pace;
+    notifyListeners();
+  }
+  void setList(List<double> DistanceList){
+    challengeDistanceList = DistanceList;
+  }
+  void reset() {
+    runningId = '';
+    runningDistance = '';
+    runningTime = '';
+    userCalorie = '';
+    userPace = '';
+
+    notifyListeners();
+  }
 }
 
 class UserInfo extends ChangeNotifier {
-  var userId = 1;
+  int? userId;
+  String? accessToken;
+  String? refreshToken;
+
+  void updateUserInfo(String userId, String accessToken, String refreshToken) {
+    this.userId = int.parse(userId);
+    this.accessToken = accessToken;
+    this.refreshToken = refreshToken;
+    notifyListeners();
+  }
+  // var userId = 1;
   var nickname = '임범규';
   var height = 185;
   var weight = 70;
@@ -132,13 +205,21 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  final userInfo = UserInfo();
   @override
   Widget build(BuildContext context) {
+    if (userInfo.userId != null){
+      print('not null');
+    } else{
+      print('null');
+    }
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (c) => UserInfo()) ,
         ChangeNotifierProvider(create: (c) => RunningData()) ,
-        ChangeNotifierProvider(create: (c) => ForDate()) ,
+        ChangeNotifierProvider(create: (c) => ForDate()),
+        ChangeNotifierProvider(create: (c) => ChallengeData()),
+        ChangeNotifierProvider(create: (c) => RunningSetting()) ,
       ],
       child: MaterialApp(
         initialRoute: '/',

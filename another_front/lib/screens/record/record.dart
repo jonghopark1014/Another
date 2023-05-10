@@ -1,4 +1,5 @@
 import 'package:another/constant/color.dart';
+import 'package:another/screens/record/api/history_record_api.dart';
 import 'package:another/screens/record/widgets/period_total_record.dart';
 import 'package:flutter/material.dart';
 import '../account/login.dart';
@@ -13,6 +14,7 @@ import 'package:another/screens/record/widgets/profile.dart';
 import 'package:another/screens/record/widgets/record_chart.dart';
 import 'package:another/screens/record/api/period_total_record_api.dart';
 import 'package:another/widgets/target.dart';
+import 'package:another/screens/record/widgets/record_chart.dart';
 
 class RecordTab extends StatelessWidget {
   const RecordTab({Key? key}) : super(key: key);
@@ -68,7 +70,10 @@ class RecordTab extends StatelessWidget {
                                   Color(0xFF1C1A1E),
                                   Color(0xFF3D2F4A),
                                 ],
-                                stops: [0.1, 0.2],
+                                stops: [
+                                  0.0,
+                                  80 / MediaQuery.of(context).size.height
+                                ],
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
                               ),
@@ -142,14 +147,14 @@ class RecordTab extends StatelessWidget {
                                       MyChallenge(), // 나의 챌린지
                                       CategoryTitle(title: '나의 활동 기록'),
                                       MyRecord(),
-                                      Row(
-                                        children: [
-                                          Expanded(child: RecordChart()),
-                                          Expanded(child: RecordChart()),
-                                          Expanded(child: RecordChart()),
-                                          Expanded(child: RecordChart())
-                                        ],
-                                      )
+                                      // Row(
+                                      //   children: [
+                                      //     Expanded(child: RecordChart()),
+                                      //     Expanded(child: RecordChart()),
+                                      //     Expanded(child: RecordChart()),
+                                      //     Expanded(child: RecordChart())
+                                      //   ],
+                                      // )
                                     ],
                                   ),
                                 )
@@ -209,12 +214,13 @@ class MyRecord extends StatefulWidget {
 class _MyRecordState extends State<MyRecord> {
   int _selectedIndex = 0;
   bool _isCalendarOpen = false;
-  Map<String, dynamic> _recordData = {};
+  Map<String, dynamic> _periodData = {};
+  Map<String, dynamic> _historyData = {};
 
   @override
   void initState() {
     super.initState();
-    getPeriodRecord();
+    getRecord();
   }
 
   void _updateContent(int index, bool isCalendarOpen) {
@@ -224,30 +230,38 @@ class _MyRecordState extends State<MyRecord> {
     });
   }
 
-  Future<void> getPeriodRecord() async {
-    Map<String, dynamic> data = {};
+  Future<void> getRecord() async {
+    Map<String, dynamic> data1 = {};
+    Map<String, dynamic> data2 = {};
     switch (_selectedIndex) {
       case 0:
-        data = await GetRecord.getTodayRecord();
+        data1 = await GetPeriodRecord.getTodayPeriodRecord();
+        data2 = await GetHistoryRecord.getTodayHistoryRecord();
         break;
       case 1:
-        data = await GetRecord.getWeekRecord();
+        data1 = await GetPeriodRecord.getWeekPeriodRecord();
+        data2 = await GetHistoryRecord.getWeekHistoryRecord();
         break;
       case 2:
-        data = await GetRecord.getMonthRecord();
+        data1 = await GetPeriodRecord.getMonthPeriodRecord();
+        data2 = await GetHistoryRecord.getMonthHistoryRecord();
         break;
       case 3:
-        data = await GetRecord.getAllRecord();
+        data1 = await GetPeriodRecord.getMonthPeriodRecord();
+        data2 = await GetHistoryRecord.getMonthHistoryRecord();
         break;
       case 4:
-        data = await GetRecord.getAllRecord();
+        data1 = await GetPeriodRecord.getMonthPeriodRecord();
+        data2 = await GetHistoryRecord.getMonthHistoryRecord();
         break;
       default:
-        data = {};
+        data1 = {};
+        data2 = {};
         break;
     }
     setState(() {
-      _recordData = data;
+      _periodData = data1;
+      _historyData = data2;
     });
   }
 
@@ -269,7 +283,7 @@ class _MyRecordState extends State<MyRecord> {
               ),
               onPressed: () => {
                 _updateContent(0, false),
-                getPeriodRecord(),
+                getRecord(),
               },
               child: Text('오늘',
                   style: TextStyle(
@@ -288,7 +302,7 @@ class _MyRecordState extends State<MyRecord> {
               ),
               onPressed: () => {
                 _updateContent(1, false),
-                getPeriodRecord(),
+                getRecord(),
               },
               child: Text('이번 주',
                   style: TextStyle(
@@ -307,7 +321,7 @@ class _MyRecordState extends State<MyRecord> {
               ),
               onPressed: () => {
                 _updateContent(2, false),
-                getPeriodRecord(),
+                getRecord(),
               },
               child: Text('이번 달',
                   style: TextStyle(
@@ -326,7 +340,7 @@ class _MyRecordState extends State<MyRecord> {
               ),
               onPressed: () => {
                 _updateContent(3, false),
-                getPeriodRecord(),
+                getRecord(),
               },
               child: Text('전체',
                   style: TextStyle(
@@ -353,7 +367,8 @@ class _MyRecordState extends State<MyRecord> {
         MyRecordContents(
           selectedIndex: _selectedIndex,
           isCalendarOpen: _isCalendarOpen,
-          recordData: _recordData,
+          periodData: _periodData,
+          historyData: _historyData,
         )
       ],
     );
@@ -363,12 +378,14 @@ class _MyRecordState extends State<MyRecord> {
 class MyRecordContents extends StatefulWidget {
   final int selectedIndex;
   final bool isCalendarOpen;
-  final Map<String, dynamic> recordData;
+  final Map<String, dynamic> periodData;
+  final Map<String, dynamic> historyData;
   const MyRecordContents(
       {Key? key,
       required this.selectedIndex,
       required this.isCalendarOpen,
-      required this.recordData})
+      required this.periodData,
+      required this.historyData})
       : super(key: key);
 
   @override
@@ -387,28 +404,67 @@ class _MyRecordContentsState extends State<MyRecordContents> {
         SizedBox(height: 10),
         PeriodTotalRecord(
           selectedIndex: widget.selectedIndex,
-          recordData: widget.recordData,
+          recordData: widget.periodData,
         ), // 조회 기간 총 기록
         Column(
           children: [
-            for (int i = 0;
-                i < widget.recordData['runningData']['content'].length;
-                i++)
+            for (int i = widget.historyData['content'].length - 1; i >= 0; i--)
               Target(
-                targetname: widget.recordData['runningData']['content'][i]
-                        ['createDate']
-                    .toString(),
-                runningDistance: widget.recordData['runningData']['content'][i]
-                        ['runningDistance']
-                    .toString(),
-                userCalorie: widget.recordData['runningData']['content'][i]
-                        ['userCalories']
-                    .toString(),
-                runningTime: widget.recordData['runningData']['content'][i]
-                        ['runningTime']
-                    .toString(),
+                targetname:
+                    widget.historyData['content'][i]['createDate'].toString() ??
+                        '0',
+                runningDistance: widget.historyData['content'][i]
+                            ['runningDistance']
+                        .toString() ??
+                    '0',
+                userCalorie: widget.historyData['content'][i]['userCalories']
+                        .toString() ??
+                    '0',
+                runningTime: widget.historyData['content'][i]['runningTime']
+                        .toString() ??
+                    '0',
                 userPace: '',
               )
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: RecordChart(
+                '시간',
+                widget.periodData['prevAvg']['originalTime'].toDouble(),
+                widget.periodData['curAvg']['originalTime'].toDouble(),
+                widget.periodData['prevAvg']['avgTime'].toString(),
+                widget.periodData['curAvg']['avgTime'].toString(),
+              ),
+            ),
+            Expanded(
+              child: RecordChart(
+                '거리',
+                widget.periodData['prevAvg']['avgDistance'],
+                widget.periodData['curAvg']['avgDistance'],
+                widget.periodData['prevAvg']['avgDistance'].toString(),
+                widget.periodData['curAvg']['avgDistance'].toString(),
+              ),
+            ),
+            Expanded(
+              child: RecordChart(
+                'kcal',
+                widget.periodData['prevAvg']['avgKcal'],
+                widget.periodData['curAvg']['avgKcal'],
+                widget.periodData['prevAvg']['avgKcal'].toString(),
+                widget.periodData['curAvg']['avgKcal'].toString(),
+              ),
+            ),
+            Expanded(
+              child: RecordChart(
+                '페이스',
+                widget.periodData['curAvg']['originalPace'],
+                widget.periodData['prevAvg']['originalPace'],
+                widget.periodData['curAvg']['avgPace'].toString(),
+                widget.periodData['prevAvg']['avgPace'].toString(),
+              ),
+            ),
           ],
         )
       ],
@@ -461,6 +517,16 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
           rightChevronIcon:
               Icon(Icons.arrow_right, size: 40.0, color: Colors.white),
         ),
+        calendarBuilders:
+            CalendarBuilders(markerBuilder: (context, date, dynamic event) {
+          if (event.isNotEmpty) {
+            return Container(
+              width: 35,
+              decoration: BoxDecoration(
+                  color: Colors.blue.withOpacity(0.2), shape: BoxShape.circle),
+            );
+          }
+        }),
         calendarStyle: CalendarStyle(
             canMarkersOverflow: false,
             // marker 여러개 일 때 cell 영역을 벗어날지 여부

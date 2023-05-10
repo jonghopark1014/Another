@@ -64,7 +64,7 @@ class Target extends StatelessWidget {
                 ),
                 TargetBox(
                   data: userCalorie,
-                  name: 'kacl',
+                  name: 'kcal',
                   textColor: MAIN_COLOR,
                   recordColor: SERVEONE_COLOR,
                 ),

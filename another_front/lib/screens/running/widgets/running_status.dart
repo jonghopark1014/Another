@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:another/screens/running/under_challenge_end.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
 import 'package:another/widgets/record_result.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,11 +17,10 @@ import 'package:provider/provider.dart';
 import '../../../main.dart';
 import '../api/under_running_api.dart';
 import '../under_running_end.dart';
-import 'dart:ui' as ui;
-
 
 class RunningStatus extends StatefulWidget {
-  const RunningStatus({Key? key})
+  bool? isChallenge = false;
+  RunningStatus({this.isChallenge, Key? key,})
       : super(key: key);
 
   @override
@@ -61,15 +61,11 @@ class _RunningStatus extends State<RunningStatus> {
     double nowDistance = runningData.runningDistance;
     LatLng past = runningData.preValue;
     LatLng current = runningData.curValue;
-    int preLen = runningData.preLen;
 
     // 러닝 시간
     runningTime =
     '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}';
     runningData.setTime(runningTime);
-    print("======================================");
-    print(runningData.runningTime);
-    print(runningData.location);
 
     // 페이스 계산
     double timeToSec = (hours * 3600 + minutes * 60 + seconds).toDouble();
@@ -82,10 +78,11 @@ class _RunningStatus extends State<RunningStatus> {
     userPace = "${paceMin.toString()}'${paceSec.toString()}''";
     runningData.setPace(userPace);
 
-    if (runningData.location.length != preLen) {
+    if (runningData.currentPosition.target != past) {
+      print(past);
+      print(current);
       // 거리 계산
       // // 기준점 변경
-      runningData.changeLen(runningData.location.length);
 
       // // 지구 반지름
       double earth = 6371;
@@ -156,7 +153,6 @@ class _RunningStatus extends State<RunningStatus> {
 
   @override
   void dispose() {
-    print('timer cancel=====================================');
     _timer.cancel();
     super.dispose();
   }
@@ -205,6 +201,9 @@ class _RunningStatus extends State<RunningStatus> {
 
   // 시작 버튼을 누르면 동작 => 시간 갱신 시작
   void onStart() {
+    if (Provider.of<RunningData>(context, listen: false).stopFlag == true) {
+      Provider.of<RunningData>(context, listen: false).funcStopFlag();
+    }
     setState(() {
       isStart = true;
     });
@@ -212,6 +211,10 @@ class _RunningStatus extends State<RunningStatus> {
 
   // 정지 버튼을 누르면 동작 => 시간 갱신 정지
   void onPause() {
+    Provider.of<RunningData>(context, listen: false).funcStop();
+    if (Provider.of<RunningData>(context, listen: false).stopFlag == false) {
+      Provider.of<RunningData>(context, listen: false).funcStopFlag();
+    }
     setState(() {
       isStart = false;
     });
@@ -224,34 +227,56 @@ class _RunningStatus extends State<RunningStatus> {
     Provider.of<RunningData>(context, listen: false).setRunningPic(captureInfo);
     var runningData = Provider.of<RunningData>(context, listen: false);
     var userId = Provider.of<UserInfo>(context, listen: false).userId;
+    var challengeData = Provider.of<ChallengeData>(context, listen: false);
     // api 요청
-    // // mySQL 저장
-    saveRunningTime.saveRunData(userId: userId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
-    // // hdfs 저장
-    saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
-
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (_) => UnderRunningScreenEnd(
-            captureInfo: captureInfo,
-            runningTime: runningTime,
-            runningDistance: runningDistance.toString(),
-            userCalorie: userCalories.toString(),
-            userPace: userPace,
-
+    // 경쟁인지 아닌지 확인
+    if(widget.isChallenge == true) {
+      print('challengeeeeee');
+      // // mySQL 저장
+      saveRunningTime.saveRunData(userId: userId!, hostRunningId: challengeData.runningId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
+      // // hdfs 저장
+      saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (_) => UnderChallengeScreenEnd(
+              captureInfo: captureInfo,
+              runningTime: runningTime,
+              runningDistance: runningDistance.toString(),
+              userCalorie: userCalories.toString(),
+              userPace: userPace,
+            ),
           ),
-        ),
-            (route) => route.settings.name == '/');
+              (route) => route.settings.name == '/');
+    } else {
+      // // mySQL 저장
+      saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
+      // // hdfs 저장
+      saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
+
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (_) => UnderRunningScreenEnd(
+              captureInfo: captureInfo,
+              runningTime: runningTime,
+              runningDistance: runningDistance.toString(),
+              userCalorie: userCalories.toString(),
+              userPace: userPace,
+
+            ),
+          ),
+              (route) => route.settings.name == '/');
+    }
   }
 
   // 캡처하기 위한 함수
-  Future<Uint8List?> captureWidget() async {
-    var data = Provider.of<RunningData>(context, listen: false);
-    var mapController = data.mapController;
-
-    final Uint8List? bytes = await mapController.takeSnapshot();
-    return bytes;
-  }
+  // Future<Uint8List?> captureWidget() async {
+  //   var data = Provider.of<RunningData>(context, listen: false);
+  //   var mapController = data.mapController;
+  //   print(mapController);
+  //
+  //   final Uint8List? bytes = await mapController.takeSnapshot();
+  //   return bytes;
+  // }
 
   void onChange() {}
 }
