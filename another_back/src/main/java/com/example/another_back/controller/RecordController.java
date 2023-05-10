@@ -1,11 +1,12 @@
 package com.example.another_back.controller;
 
-import com.example.another_back.dto.DateIntervalDto;
+import com.example.another_back.dto.RunningEachHistoryDto;
 import com.example.another_back.dto.RunningHistoryResponseDto;
 import com.example.another_back.dto.response.Response;
 import com.example.another_back.service.RunningService;
 import com.example.another_back.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,28 +26,34 @@ public class RecordController {
     }
 
     @GetMapping("/{userId}/today")
-    public ResponseEntity getTodayRecord(@PathVariable("userId")Long userId, Pageable pageable){
-        RunningHistoryResponseDto record = runningService.getRecord(1, userId, null, null, pageable);
+    public ResponseEntity getTodayRecord(@PathVariable("userId")Long userId){
+        RunningHistoryResponseDto record = runningService.getRecord(1, userId);
+        return Response.success(HttpStatus.OK, record);
+    }
+    @GetMapping("/{userId}/history/today")
+    public ResponseEntity getTodayHisotry(@PathVariable("userId")Long userId, Pageable pageable){
+        Page<RunningEachHistoryDto> record = runningService.getHistory(1, userId, pageable);
         return Response.success(HttpStatus.OK, record);
     }
     @GetMapping("/{userId}/week")
-    public ResponseEntity getWeekRecord(@PathVariable("userId")Long userId, Pageable pageable){
-        RunningHistoryResponseDto record = runningService.getRecord(2, userId, null, null, pageable);
+    public ResponseEntity getWeekRecord(@PathVariable("userId")Long userId){
+        RunningHistoryResponseDto record = runningService.getRecord(2, userId);
+        return Response.success(HttpStatus.OK, record);
+    }
+    @GetMapping("/{userId}/history/week")
+    public ResponseEntity getWeekHisotry(@PathVariable("userId")Long userId, Pageable pageable){
+        Page<RunningEachHistoryDto> record = runningService.getHistory(2, userId, pageable);
         return Response.success(HttpStatus.OK, record);
     }
     @GetMapping("/{userId}/month")
-    public ResponseEntity getMonthRecord(@PathVariable("userId")Long userId, Pageable pageable){
-        RunningHistoryResponseDto record = runningService.getRecord(3, userId, null, null, pageable);
+    public ResponseEntity getMonthRecord(@PathVariable("userId")Long userId){
+        RunningHistoryResponseDto record = runningService.getRecord(3, userId);
         return Response.success(HttpStatus.OK, record);
     }
-    @GetMapping("/{userId}/all")
-    public ResponseEntity getTotalRecord(@PathVariable("userId")Long userId, Pageable pageable){
-        RunningHistoryResponseDto record = runningService.getRecord(4, userId, null, null, pageable);
-        return Response.success(HttpStatus.OK, record);
-    }
-    @GetMapping("/{userId}/interval")
-    public ResponseEntity getIntervalRecord(@PathVariable("userId")Long userId, @RequestBody DateIntervalDto dateIntervalDto, Pageable pageable){
-        RunningHistoryResponseDto record = runningService.getRecord(5, userId, dateIntervalDto.getStartDate(), dateIntervalDto.getEndDate(), pageable);
+
+    @GetMapping("/{userId}/history/month")
+    public ResponseEntity getMonthHisotry(@PathVariable("userId")Long userId, Pageable pageable){
+        Page<RunningEachHistoryDto> record = runningService.getHistory(3, userId, pageable);
         return Response.success(HttpStatus.OK, record);
     }
 }
