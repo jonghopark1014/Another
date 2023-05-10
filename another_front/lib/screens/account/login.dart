@@ -21,7 +21,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-
     idFocusNode.addListener(() {
       setState(() {
         isFocusId = true;
@@ -52,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
                 labelText: '아이디(이메일)',
                 labelStyle: TextStyle(color: SERVEONE_COLOR),
                 prefixIcon: Opacity(
-                  opacity: idFocusNode.hasFocus ? 1 : 0.5 ,
+                  opacity: idFocusNode.hasFocus ? 1 : 0.5,
                   child: Icon(Icons.email, color: SERVEONE_COLOR),
                 ),
                 border: UnderlineInputBorder(
@@ -75,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                 labelText: '비밀번호',
                 labelStyle: TextStyle(color: SERVEONE_COLOR),
                 prefixIcon: Opacity(
-                  opacity: pwFocusNode.hasFocus ? 1 : 0.5 ,
+                  opacity: pwFocusNode.hasFocus ? 1 : 0.5,
                   child: Icon(Icons.lock, color: SERVEONE_COLOR),
                 ),
                 border: UnderlineInputBorder(
@@ -92,53 +91,50 @@ class _LoginPageState extends State<LoginPage> {
               obscureText: true,
             ),
             SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    // 회원가입 페이지로 이동하는 로직 작성
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SignupPage()));
-                  },
-                  child: Text(
-                    '회원가입',
-                    style: TextStyle(
-                      color: SERVEONE_COLOR,
-                    ),
+            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+              TextButton(
+                onPressed: () {
+                  // 회원가입 페이지로 이동하는 로직 작성
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SignupPage()));
+                },
+                child: Text(
+                  '회원가입',
+                  style: TextStyle(
+                    color: SERVEONE_COLOR,
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    // 비밀번호 찾기 페이지로 이동하는 로직 작성
-                    // 예: Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordPage()));
-                  },
-                  child: Text(
-                    '비밀번호 찾기',
-                    style: TextStyle(
-                      color: SERVEONE_COLOR,
-                    ),
+              ),
+              TextButton(
+                onPressed: () {
+                  // 비밀번호 찾기 페이지로 이동하는 로직 작성
+                  // 예: Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordPage()));
+                },
+                child: Text(
+                  '비밀번호 찾기',
+                  style: TextStyle(
+                    color: SERVEONE_COLOR,
                   ),
                 ),
-
-              ]
-            ),
+              ),
+            ]),
             SizedBox(height: 16),
             FractionallySizedBox(
-              widthFactor: 1.0,
-              child: ElevatedButton(
-                onPressed: () async {
-                  // 로그인 버튼 클릭 시 로그인 로직 작성
-                  await loginApi.loginUser(
-                    email: emailController.text,
-                    password: pwController.text
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: MAIN_COLOR,
-                ),
-                child: Text('로그인'),
-              )
-            ),
+                widthFactor: 1.0,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    // 로그인 버튼 클릭 시 로그인 로직 작성
+                    await LoginApi.loginUser(
+                      email: emailController.text,
+                      password: pwController.text,
+                      context: context,
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: MAIN_COLOR,
+                  ),
+                  child: Text('로그인'),
+                )),
             SizedBox(height: 16),
             // ElevatedButton(
             //   onPressed: () {

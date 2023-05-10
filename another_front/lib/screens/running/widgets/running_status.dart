@@ -226,7 +226,7 @@ class _RunningStatus extends State<RunningStatus> {
     var userId = Provider.of<UserInfo>(context, listen: false).userId;
     // api 요청
     // // mySQL 저장
-    saveRunningTime.saveRunData(userId: userId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
+    saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
     // // hdfs 저장
     saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
 

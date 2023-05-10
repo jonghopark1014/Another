@@ -1,3 +1,4 @@
+import 'package:another/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:another/constant/color.dart';
 import '../../widgets/intro_header.dart';
@@ -60,7 +61,7 @@ class _SignupUserInfoPageState extends State<SignupUserInfoPage> {
                   );
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                      builder: (_) => RunningTab(),
+                      builder: (_) => HomeScreen(),
                     ),
                     (route) => false,
                   );
