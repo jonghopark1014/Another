@@ -168,19 +168,23 @@ public class RunningService {
         CurRunningDto curDto = CurRunningDto.builder()
                 .avgTime(time2)
                 .sumTime(time1)
-                .avgDistance(curRunningRecordDto.getAvgRunningDistance())
-                .sumDistance(curRunningRecordDto.getSumRunningDistance())
+                .avgDistance(convertDistance(curRunningRecordDto.getAvgRunningDistance()))
+                .sumDistance(convertDistance(curRunningRecordDto.getSumRunningDistance()))
                 .avgKcal(curRunningRecordDto.getAvgKcal())
                 .sumKcal(curRunningRecordDto.getSumKcal())
                 .avgPace(convertPace(curRunningRecordDto.getAvgPace()))
                 .startDate(startDate.toString())
                 .endDate(endDate.toString())
+                .originalPace(Math.round(curRunningRecordDto.getAvgPace()*1000)/1000.0)
+                .originalTime(curRunningRecordDto.getSumRunningTime())
                 .build();
         AvgRunningDto prevDto = AvgRunningDto.builder()
                 .avgTime(time3)
-                .avgDistance(prevRunningRecordDto.getAvgRunningDistance())
+                .avgDistance(convertDistance(prevRunningRecordDto.getAvgRunningDistance()))
                 .avgKcal(prevRunningRecordDto.getAvgKcal())
                 .avgPace(convertPace(prevRunningRecordDto.getAvgPace()))
+                .originalPace(Math.round(prevRunningRecordDto.getAvgPace()*1000)/1000.0)
+                .originalTime(prevRunningRecordDto.getSumRunningTime())
                 .build();
 
         return RunningHistoryResponseDto.builder()
@@ -228,6 +232,10 @@ public class RunningService {
                     .build();
         }
         return runningRecordDto;
+    }
+
+    private Double convertDistance(Double distance) {
+        return Math.round(distance*1000)/1000.0;
     }
 
     private String convertTime(Long time) {

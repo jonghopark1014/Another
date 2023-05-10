@@ -9,35 +9,36 @@ import java.util.Date;
 public class RunningEachHistoryDto {
     private String id;
     private String runningTime;
-    private Float runningDistance;
+    private Double runningDistance;
     private String userPace;
     private String createDate;
     private Integer userCalories;
 
     @Builder
-    public RunningEachHistoryDto(String id, Integer runningTime, Float runningDistance,Float userPace, Date createDate, Integer userCalories) {
-        String hour;
-        String minute;
-        String second;
-
-        hour = Integer.toString(runningTime / 3600);
-        runningTime %= 3600;
-        minute = Integer.toString(runningTime / 60);
-        second = Integer.toString(runningTime % 60);
-
-        if(hour.length()==1)hour = "0"+hour;
-        if(minute.length()==1)minute = "0"+minute;
-        if(second.length()==1)second = "0"+second;
-
+    public RunningEachHistoryDto(String id, Integer runningTime, Float runningDistance, Float userPace, Date createDate, Integer userCalories) {
         this.id = id;
-        this.runningTime = hour + ":" + minute + ":" + second;
-        this.runningDistance = runningDistance;
-
-        minute = Integer.toString(userPace.intValue()/60);
-        second = Integer.toString(userPace.intValue()%60);
-
-        this.userPace = minute+"'"+second+"''";
+        this.runningTime = convertTime(Long.valueOf(runningTime));
+        this.runningDistance = Math.round(runningDistance*1000)/1000.0;
+        this.userPace = convertPace(Double.valueOf(userPace));
         this.createDate = new java.sql.Date(createDate.getTime()).toString();
         this.userCalories = userCalories;
+    }
+    private String convertTime(Long time) {
+        String hour = Long.toString(time / 3600);
+        time %= 3600;
+        String minute = Long.toString(time / 60);
+        String second = Long.toString(time % 60);
+        if (hour.length() == 1) hour = "0" + hour;
+        if (minute.length() == 1) minute = "0" + minute;
+        if (second.length() == 1) second = "0" + second;
+
+
+        return hour + ":" + minute + ":" + second;
+    }
+
+    private String convertPace(Double pace) {
+        String minute = Integer.toString(pace.intValue() / 60);
+        String second = Integer.toString(pace.intValue() % 60);
+        return minute + "'" + second + "''";
     }
 }
