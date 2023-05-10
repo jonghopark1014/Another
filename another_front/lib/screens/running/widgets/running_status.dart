@@ -55,12 +55,14 @@ class _RunningStatus extends State<RunningStatus> {
 
   // 페이스 계산 -> 1km을 도달하는 시간
   void setData() {
+    print("=============================");
     final runningData = Provider.of<RunningData>(context, listen: false);
 
     // 거리 계산
     double nowDistance = runningData.runningDistance;
     LatLng past = runningData.preValue;
     LatLng current = runningData.curValue;
+    print(nowDistance);
 
     // 러닝 시간
     runningTime =
@@ -153,8 +155,8 @@ class _RunningStatus extends State<RunningStatus> {
 
   @override
   void dispose() {
-    _timer.cancel();
     super.dispose();
+    _timer.cancel();
   }
 
   @override
@@ -223,49 +225,17 @@ class _RunningStatus extends State<RunningStatus> {
 
   // 러닝 종료 시 동작
   void onStop() async {
-    Uint8List? captureInfo = await captureWidget();
-    Provider.of<RunningData>(context, listen: false).setRunningPic(captureInfo);
-    var runningData = Provider.of<RunningData>(context, listen: false);
-    var userId = Provider.of<UserInfo>(context, listen: false).userId;
-    var challengeData = Provider.of<ChallengeData>(context, listen: false);
     // api 요청
-    // 경쟁인지 아닌지 확인
-    if(widget.isChallenge == true) {
-      print('challengeeeeee');
-      // // mySQL 저장
-      saveRunningTime.saveRunData(userId: userId!, hostRunningId: challengeData.runningId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
-      // // hdfs 저장
-      saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (_) => UnderChallengeScreenEnd(
-              captureInfo: captureInfo,
-              runningTime: runningTime,
-              runningDistance: runningDistance.toString(),
-              userCalorie: userCalories.toString(),
-              userPace: userPace,
-            ),
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => UnderChallengeScreenEnd(
+            runningTime: runningTime,
+            runningDistance: runningDistance.toString(),
+            userCalorie: userCalories.toString(),
+            userPace: userPace,
           ),
-              (route) => route.settings.name == '/');
-    } else {
-      // // mySQL 저장
-      saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
-      // // hdfs 저장
-      saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
-
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (_) => UnderRunningScreenEnd(
-              captureInfo: captureInfo,
-              runningTime: runningTime,
-              runningDistance: runningDistance.toString(),
-              userCalorie: userCalories.toString(),
-              userPace: userPace,
-
-            ),
-          ),
-              (route) => route.settings.name == '/');
-    }
+        ),
+            (route) => route.settings.name == '/');
   }
 
   // 캡처하기 위한 함수

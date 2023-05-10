@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:another/constant/color.dart';
 import 'package:another/constant/main_layout.dart';
 import 'package:another/screens/running/under_challenge_end_feed.dart';
+import 'package:another/screens/running/widgets/ButtonComponent.dart';
 import 'package:another/screens/running/widgets/running_end.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/material.dart';
@@ -48,8 +49,12 @@ class UnderRunningScreenEnd extends StatelessWidget {
           SizedBox(
             height: 120,
           ),
-          ButtonConponent(
-            onPressed: () => endFeed(context),
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: ButtonConponent(
+              onPressed: () => endFeed(context),
+              feedComplete: () => feedComplete(context),
+            ),
           ),
         ],
       ),
@@ -59,76 +64,25 @@ class UnderRunningScreenEnd extends StatelessWidget {
   void endFeed(BuildContext context) {
     var runningData = Provider.of<RunningData>(context, listen: false);
     var userId = Provider.of<UserInfo>(context, listen: false).userId;
-    // api 요청
-    // // mySQL 저장
-    saveRunningTime.saveRunData(userId: userId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
+    saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
     // // hdfs 저장
     saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (_) => UnderChallengeScreenEndFeed(
-          ),
+          builder: (_) => UnderChallengeScreenEndFeed(captureInfo: Provider.of<RunningData>(context, listen: false).runningPic),
         ),
-        (route) => route.settings.name == '/');
+            (route) => route.settings.name == '/');
   }
-}
 
-class ButtonConponent extends StatelessWidget {
-  final VoidCallback onPressed;
-  const ButtonConponent({
-    required this.onPressed,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    return Expanded(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Container(
-            height: size.height * 0.08,
-            width: size.width * 0.4,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/',
-                  (route) => false,
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                primary: SERVETWO_COLOR,
-                elevation: 10.0,
-              ),
-              child: Text(
-                '다음에 할래요!',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ),
-          Container(
-            height: size.height * 0.08,
-            width: size.width * 0.4,
-            child: ElevatedButton(
-              onPressed: onPressed,
-              style: ElevatedButton.styleFrom(
-                primary: MAIN_COLOR,
-                elevation: 10.0,
-              ),
-              child: Text(
-                '오운완 등록하기',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          )
-        ],
+  void feedComplete(BuildContext context) {
+    var runningData = Provider.of<RunningData>(context, listen: false);
+    var userId = Provider.of<UserInfo>(context, listen: false).userId;
+    saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
+    // // hdfs 저장
+    saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => UnderChallengeScreenEndFeed(captureInfo: Provider.of<RunningData>(context, listen: false).runningPic),
       ),
     );
   }

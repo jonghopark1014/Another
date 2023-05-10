@@ -72,7 +72,7 @@ class UnderChallengeScreenEndFeed extends StatelessWidget {
               ),
               Target(
                 targetname: '내 기록',
-                runningDistance: runningData.runningDistance.toString(),
+                runningDistance: double.parse(runningData.runningDistance.toStringAsFixed(3)).toString(),
                 userCalorie: runningData.userCalories.toString(),
                 runningTime: runningData.runningTime,
                 userPace: runningData.userPace,

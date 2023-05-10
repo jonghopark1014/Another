@@ -89,7 +89,7 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
   @override
   Widget build(BuildContext context) {
     // 러닝 데이터 받기
-    runningData = Provider.of<RunningData>(context);
+    runningData = Provider.of<RunningData>(context, listen: false);
     time = runningData.runningTime;
     // 사용자 거리 업데이트
     currentRunningDistance = runningData.runningDistance;
@@ -131,14 +131,14 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
                         pace: challengeDistance,
                         //print();
                         // 수정 주석처리만 하고 밑에 있는 값 바꾸면 됨
-                        // youDistance: double.parse(targetRunningDistance),
-                        youDistance: 0.832,
+                        youDistance: double.parse(targetRunningDistance),
+                        // youDistance: 0.832,
                       ),
                       DistanceBar(
                         name: '내 페이스',
                         pace: currentRunningDistance,
-                        // youDistance: double.parse(targetRunningDistance),
-                        youDistance: 0.832,
+                        youDistance: double.parse(targetRunningDistance),
+                        // youDistance: 0.832,
                       ),
                     ],
                   ),

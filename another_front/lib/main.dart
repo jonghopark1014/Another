@@ -49,6 +49,8 @@ class RunningData extends ChangeNotifier {
     userPace = "0'00''";
     preLen = 1;
     stopCount = 0;
+    polyLine = [];
+    stopFlag = false;
   }
   void funcStopFlag() {
     if (stopFlag == false) {
@@ -144,11 +146,12 @@ class ChallengeData extends ChangeNotifier {
   String runningTime = '';
   String userCalorie = '';
   String userPace = '';
+  String hostRunningId = '';
   List<double> challengeDistanceList = [];
 
 
   void setValues(String id, String distance, String time, String calorie, String pace) {
-    runningId = id;
+    hostRunningId = id;
     runningDistance = distance;
     runningTime = time;
     userCalorie = calorie;
@@ -159,7 +162,7 @@ class ChallengeData extends ChangeNotifier {
     challengeDistanceList = DistanceList;
   }
   void reset() {
-    runningId = '';
+    hostRunningId = '';
     runningDistance = '';
     runningTime = '';
     userCalorie = '';
@@ -167,10 +170,13 @@ class ChallengeData extends ChangeNotifier {
 
     notifyListeners();
   }
+  void forRunId(v) {
+    runningId = v;
+  }
 }
 
 class UserInfo extends ChangeNotifier {
-  int? userId;
+  int userId = 1;
   String? accessToken;
   String? refreshToken;
 

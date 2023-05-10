@@ -62,9 +62,9 @@ class _RunningMapState extends State<RunningMap> {
   @override
   void dispose() async {
     print("내가바로 dispose!_map!");
+    super.dispose();
     _timer.cancel();
     mapController!.dispose();
-    super.dispose();
   }
   @override
   Widget build(BuildContext context) {

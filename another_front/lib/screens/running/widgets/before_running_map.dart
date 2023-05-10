@@ -42,19 +42,21 @@ class _BeforeRunningMapState extends State<BeforeRunningMap> {
   void initState() {
     print("initstate");
     super.initState();
-    if (mounted) {
-      _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
+      if (mounted) {
         getCurrentLocation();
         print("1초마다 돈다~");
-      });
-    }
+      }
+    });
+
   }
   @override
   void dispose() {
     print("dispose");
-    mapController!.dispose();
-    _timer.cancel();
     super.dispose();
+    _timer.cancel();
+    mapController!.dispose();
+
   }
   @override
   Widget build(BuildContext context) {

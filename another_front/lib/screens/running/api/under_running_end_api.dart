@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-
 class saveRunningTime {
 
   static const _baseUrl = "https://k8b308.p.ssafy.io";
@@ -54,6 +53,7 @@ class saveRunningTime {
     required int userCalories,
     required String userPace,
     required Uint8List? runningPic,
+    String? hostRunningId,
   })
   async {
     print("===================run/stop===============");
@@ -86,7 +86,7 @@ class saveRunningTime {
     request.fields['userCalories'] = userCalories.toString();
     request.fields['userPace'] = pace.toString();
     request.fields['createDate'] = DateFormat('yyyy-MM-dd').format(DateTime.now());
-
+    request.fields['hostRunningId'] = hostRunningId.toString();
     print(request.fields);
 
     //
