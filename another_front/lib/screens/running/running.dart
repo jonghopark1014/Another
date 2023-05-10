@@ -4,6 +4,7 @@ import 'package:another/screens/running/api/my_history_api.dart';
 import 'package:another/screens/running/timer_screen.dart';
 import 'package:another/screens/running/widgets/before_running_map.dart';
 import 'package:another/screens/running/widgets/detail_setting.dart';
+import 'package:another/screens/running/widgets/my_history.dart';
 import 'package:another/screens/running/widgets/running_carousel.dart';
 import 'package:another/screens/running/widgets/running_small_button.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
@@ -209,54 +210,6 @@ class _RunningTabState extends State<RunningTab> {
             (route) => false,
       );
     }
-  }
-}
-
-// 내기록들 띄우는 위젯
-class MyHistory extends StatefulWidget {
-  const MyHistory({Key? key}) : super(key: key);
-
-  @override
-  State<MyHistory> createState() => _MyHistoryState();
-}
-
-class _MyHistoryState extends State<MyHistory> {
-  List<dynamic> historyList = ['1', '2', '3', '4', '5'];
-  late final _userInfo;
-  late final _userId;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _userInfo = Provider.of<UserInfo>(context, listen: false);
-    // _userId = _userInfo.userId;
-    _userId = 1; // 더미========================================
-    var data = myHistoryApi(_userId);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: historyList.length,
-      itemBuilder: (BuildContext context, int index) {
-        return ElevatedButton(
-          // 눌렀을 때 하이라이트
-          onPressed: () => {},
-          style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.all(2),
-            primary: BACKGROUND_COLOR,
-          ),
-          child: Target(
-            targetname: '날짜',
-            runningDistance: '',
-            userCalorie: '',
-            runningTime: '',
-            userPace: '',
-          ),
-        );
-      },
-    );
   }
 }
 
