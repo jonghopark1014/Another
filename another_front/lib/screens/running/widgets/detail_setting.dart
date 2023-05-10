@@ -1,7 +1,9 @@
 // 러닝 세팅 세부
+import 'package:another/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constant/color.dart';
 
@@ -152,6 +154,7 @@ class _DetailSettingState extends State<DetailSetting> {
         _distance = result[0];
         _min = result[1];
         _interval = result[2];
+        Provider.of<RunningSetting>(context, listen: false).setData(_distance, _min, _interval);
       });
     }
   }
