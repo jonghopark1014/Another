@@ -74,34 +74,44 @@ public class RunningService {
         runningTime = Math.toIntExact(runningRepository.SumRunningTimeByUserId(user.getId()).orElse(0L) / 600);
         int exp = runningDistance + runningTime;
         // level 체크
-        user.setExp(exp);
         if (!(user.getExp() >= 166660)) {
             if (exp >= 166660) {
                 user.setLevel(10);
+                user.setExp(exp - 166660);
             } else if (exp >= 66660) {
                 user.setLevel(9);
+                user.setExp(exp - 66660);
             } else if (exp >= 16660) {
                 user.setLevel(8);
+                user.setExp(exp - 16660);
             } else if (exp >= 6660) {
                 user.setLevel(7);
+                user.setExp(exp - 6660);
             } else if (exp >= 1660) {
                 user.setLevel(6);
+                user.setExp(exp - 1660);
             } else if (exp >= 660) {
                 user.setLevel(5);
+                user.setExp(exp - 660);
             } else if (exp >= 160) {
                 user.setLevel(4);
+                user.setExp(exp - 160);
             } else if (exp >= 60) {
                 user.setLevel(3);
+                user.setExp(exp - 60);
             } else if (exp >= 10) {
                 user.setLevel(2);
+                user.setExp(exp - 10);
             } else if (exp >= 0) {
                 user.setLevel(1);
+                user.setExp(exp);
             }
         }
         userRepository.save(user);
         // Id 반환
         return savedRunning.getId();
     }
+
     public RunningHistoryResponseDto getRecord(int category, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
@@ -117,20 +127,20 @@ public class RunningService {
         } else if (category == 2) {
             calendar1.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
             startDate = new Date(calendar1.getTimeInMillis());
-            calendar1.add(calendar1.DATE,6);
+            calendar1.add(calendar1.DATE, 6);
             endDate = new Date(calendar1.getTimeInMillis());
 
-            calendar1.add(calendar1.DATE,-13);
+            calendar1.add(calendar1.DATE, -13);
             prevStartDate = new Date(calendar1.getTimeInMillis());
-            calendar1.add(calendar1.DATE,6);
+            calendar1.add(calendar1.DATE, 6);
             prevEndDate = new Date(calendar1.getTimeInMillis());
         } else {
             calendar1.set(calendar1.DATE, 1);
             startDate = new Date(calendar1.getTimeInMillis());
             calendar1.set(calendar1.DATE, calendar1.getActualMaximum(calendar1.DAY_OF_MONTH));
             endDate = new Date(calendar1.getTimeInMillis());
-            calendar1.add(calendar1.MONTH,-1);
-            calendar1.set(calendar1.DATE,1);
+            calendar1.add(calendar1.MONTH, -1);
+            calendar1.set(calendar1.DATE, 1);
             prevStartDate = new Date(calendar1.getTimeInMillis());
             calendar1.set(calendar1.DATE, calendar1.getActualMaximum(calendar1.DAY_OF_MONTH));
             prevEndDate = new Date(calendar1.getTimeInMillis());
@@ -184,11 +194,11 @@ public class RunningService {
         } else if (category == 2) {
             calendar1.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
             startDate = new Date(calendar1.getTimeInMillis());
-            calendar1.add(calendar1.DATE,6);
+            calendar1.add(calendar1.DATE, 6);
             endDate = new Date(calendar1.getTimeInMillis());
 
-            calendar1.add(calendar1.DATE,-13);
-            calendar1.add(calendar1.DATE,6);
+            calendar1.add(calendar1.DATE, -13);
+            calendar1.add(calendar1.DATE, 6);
 
 
         } else {
@@ -196,8 +206,8 @@ public class RunningService {
             startDate = new Date(calendar1.getTimeInMillis());
             calendar1.set(calendar1.DATE, calendar1.getActualMaximum(calendar1.DAY_OF_MONTH));
             endDate = new Date(calendar1.getTimeInMillis());
-            calendar1.add(calendar1.MONTH,-1);
-            calendar1.set(calendar1.DATE,1);
+            calendar1.add(calendar1.MONTH, -1);
+            calendar1.set(calendar1.DATE, 1);
             calendar1.set(calendar1.DATE, calendar1.getActualMaximum(calendar1.DAY_OF_MONTH));
         }
         return runningRepository.findWithDateByUserId(user, startDate, endDate, pageable);
@@ -224,12 +234,12 @@ public class RunningService {
         time %= 3600;
         String minute = Long.toString(time / 60);
         String second = Long.toString(time % 60);
-        if(hour.length()==1)hour = "0"+hour;
-        if(minute.length()==1)minute = "0"+minute;
-        if(second.length()==1)second = "0"+second;
+        if (hour.length() == 1) hour = "0" + hour;
+        if (minute.length() == 1) minute = "0" + minute;
+        if (second.length() == 1) second = "0" + second;
 
 
-        return hour+ ":" + minute + ":" + second;
+        return hour + ":" + minute + ":" + second;
     }
 
     /**
