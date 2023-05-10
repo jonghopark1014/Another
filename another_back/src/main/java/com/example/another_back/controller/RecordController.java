@@ -2,6 +2,7 @@ package com.example.another_back.controller;
 
 import com.example.another_back.dto.RunningEachHistoryDto;
 import com.example.another_back.dto.RunningHistoryResponseDto;
+import com.example.another_back.dto.SumRunningDto;
 import com.example.another_back.dto.response.Response;
 import com.example.another_back.service.RunningService;
 import com.example.another_back.service.UserService;
@@ -50,10 +51,19 @@ public class RecordController {
         RunningHistoryResponseDto record = runningService.getRecord(3, userId);
         return Response.success(HttpStatus.OK, record);
     }
-
     @GetMapping("/{userId}/history/month")
     public ResponseEntity getMonthHisotry(@PathVariable("userId")Long userId, Pageable pageable){
         Page<RunningEachHistoryDto> record = runningService.getHistory(3, userId, pageable);
+        return Response.success(HttpStatus.OK, record);
+    }
+    @GetMapping("/{userId}/all")
+    public ResponseEntity getAllRecord(@PathVariable("userId")Long userId){
+        SumRunningDto record = runningService.getAllRecord(userId);
+        return Response.success(HttpStatus.OK, record);
+    }
+    @GetMapping("/{userId}/history/all")
+    public ResponseEntity getAllHisotry(@PathVariable("userId")Long userId, Pageable pageable){
+        Page<RunningEachHistoryDto> record = runningService.getHistory(4, userId, pageable);
         return Response.success(HttpStatus.OK, record);
     }
 }

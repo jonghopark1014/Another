@@ -112,6 +112,13 @@ public class RunningService {
         return savedRunning.getId();
     }
 
+    public SumRunningDto getAllRecord(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+
+        return runningRepository.findAllRunningHistoryDtoByUserId(user).orElse(new SumRunningDto());
+    }
+
     public RunningHistoryResponseDto getRecord(int category, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
@@ -165,7 +172,7 @@ public class RunningService {
                 .sumDistance(curRunningRecordDto.getSumRunningDistance())
                 .avgKcal(curRunningRecordDto.getAvgKcal())
                 .sumKcal(curRunningRecordDto.getSumKcal())
-                .avgSpeed(curRunningRecordDto.getAvgPace())
+                .avgPace(convertPace(curRunningRecordDto.getAvgPace()))
                 .startDate(startDate.toString())
                 .endDate(endDate.toString())
                 .build();
@@ -173,7 +180,7 @@ public class RunningService {
                 .avgTime(time3)
                 .avgDistance(prevRunningRecordDto.getAvgRunningDistance())
                 .avgKcal(prevRunningRecordDto.getAvgKcal())
-                .avgSpeed(prevRunningRecordDto.getAvgPace())
+                .avgPace(convertPace(prevRunningRecordDto.getAvgPace()))
                 .build();
 
         return RunningHistoryResponseDto.builder()
@@ -194,21 +201,15 @@ public class RunningService {
         } else if (category == 2) {
             calendar1.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
             startDate = new Date(calendar1.getTimeInMillis());
-            calendar1.add(calendar1.DATE, 6);
-            endDate = new Date(calendar1.getTimeInMillis());
-
-            calendar1.add(calendar1.DATE, -13);
-            calendar1.add(calendar1.DATE, 6);
-
-
-        } else {
+            endDate = new Date(Calendar.getInstance().getTimeInMillis());
+        } else if (category == 3) {
             calendar1.set(calendar1.DATE, 1);
             startDate = new Date(calendar1.getTimeInMillis());
-            calendar1.set(calendar1.DATE, calendar1.getActualMaximum(calendar1.DAY_OF_MONTH));
-            endDate = new Date(calendar1.getTimeInMillis());
-            calendar1.add(calendar1.MONTH, -1);
-            calendar1.set(calendar1.DATE, 1);
-            calendar1.set(calendar1.DATE, calendar1.getActualMaximum(calendar1.DAY_OF_MONTH));
+            endDate = new Date(Calendar.getInstance().getTimeInMillis());
+        } else {
+            calendar1.set(0,1,1);
+            startDate = new Date(calendar1.getTimeInMillis());
+            endDate = new Date(Calendar.getInstance().getTimeInMillis());
         }
         return runningRepository.findWithDateByUserId(user, startDate, endDate, pageable);
     }
@@ -240,6 +241,12 @@ public class RunningService {
 
 
         return hour + ":" + minute + ":" + second;
+    }
+
+    private String convertPace(Double pace) {
+        String minute = Integer.toString(pace.intValue() / 60);
+        String second = Integer.toString(pace.intValue() % 60);
+        return minute+"'"+second+"''";
     }
 
     /**
