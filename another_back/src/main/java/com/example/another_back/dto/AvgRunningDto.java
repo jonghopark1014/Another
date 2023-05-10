@@ -8,7 +8,7 @@ import lombok.Data;
 public class AvgRunningDto {
 
     private String avgTime;
-    private Double avgSpeed;
+    private String avgPace;
     private Double avgKcal;
     private Double avgDistance;
 

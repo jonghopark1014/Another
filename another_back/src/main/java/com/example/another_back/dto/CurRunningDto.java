@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class CurRunningDto {
     private String avgTime;
-    private Double avgSpeed;
+    private String avgPace;
     private Double avgKcal;
     private Double avgDistance;
 

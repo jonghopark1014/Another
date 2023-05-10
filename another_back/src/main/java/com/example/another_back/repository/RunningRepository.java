@@ -2,6 +2,7 @@ package com.example.another_back.repository;
 
 import com.example.another_back.dto.RunningEachHistoryDto;
 import com.example.another_back.dto.RunningRecordDto;
+import com.example.another_back.dto.SumRunningDto;
 import com.example.another_back.entity.Running;
 import com.example.another_back.entity.User;
 import com.example.another_back.entity.enums.Status;
@@ -26,11 +27,14 @@ public interface RunningRepository extends JpaRepository<Running, String> {
 
     List<Running> findByUserId(Long userId);
 
-    @Query(value = "select new com.example.another_back.dto.RunningEachHistoryDto(r.id, r.runningTime, r.runningDistance, r.createDate, r.userCalories) from Running r where r.user = :user and r.createDate between :date1 and :date2")
+    @Query(value = "select new com.example.another_back.dto.RunningEachHistoryDto(r.id, r.runningTime, r.runningDistance,r.userPace, r.createDate, r.userCalories) from Running r where r.user = :user and r.createDate between :date1 and :date2")
     Page<RunningEachHistoryDto> findWithDateByUserId(User user, Date date1, Date date2, Pageable pageable);
 
     @Query(value = "select new com.example.another_back.dto.RunningRecordDto(avg(r.runningTime), avg(r.runningDistance), avg(r.userPace), avg(r.userCalories),sum(r.runningTime), sum(r.runningDistance), sum(r.userPace), sum(r.userCalories)) from Running r where r.user = :user and r.createDate between :date1 and :date2")
     Optional<RunningRecordDto> findRunningHistoryDtoByUserId(User user, Date date1, Date date2);
+
+    @Query(value = "select new com.example.another_back.dto.SumRunningDto(sum(r.runningTime), sum(r.userCalories), sum(r.runningDistance), avg(r.userPace), min(r.createDate), max(r.createDate)) from Running r where r.user = :user")
+    Optional<SumRunningDto> findAllRunningHistoryDtoByUserId(User user);
 
     List<Running> findByRunningDistanceBetweenAndRunningTimeBetweenAndUserIdNot(Float startDistance, Float endDistance, String startTime, String endTime, Long userId);
 
