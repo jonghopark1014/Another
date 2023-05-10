@@ -52,7 +52,6 @@ class UnderChallengeStatus extends StatefulWidget {
 }
 
 class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
-  // late Timer _timer;
   late String runningId;
   late String targetRunningDistance;
   late String targetRunningTime;
@@ -78,41 +77,13 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
     challengeDistanceList = challengeData.challengeDistanceList;
   }
 
-  // 상대방 목표 거리
-  // runningDistance
-
-  // 여기에다가 변화는 값 만들어 줘야됨 (시간을 넣어주면됨)
-  // double _currentSliderValue = 80.0;
-
-  // 상대방
-  // double _currentYouSliderValue = 0.0;
-
   @override
   void dispose() {
     super.dispose();
   }
-  //
-  // void pace() {
-  //   _timer = Timer.periodic(
-  //     Duration(seconds: 1),
-  //     (timer) {
-  //       if (challengeDistanceList.length - 1> second) {
-  //         setState(
-  //           () {
-  //             second++;
-  //           },
-  //         );
-  //       } else {
-  //         _timer.cancel();
-  //         print('타이머 종료');
-  //       }
-  //     },
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
-    print(challengeDistanceList);
     // 러닝 데이터 받기
     runningData = Provider.of<RunningData>(context);
     time = runningData.runningTime;
@@ -130,7 +101,6 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
           int.parse(time.substring(3, 5)) * 60 +
           int.parse(time.substring(6, 8));
     }
-
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
