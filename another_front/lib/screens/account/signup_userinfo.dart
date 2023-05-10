@@ -50,6 +50,7 @@ class _SignupUserInfoPageState extends State<SignupUserInfoPage> {
                 text: '건너뛰기',
                 onPressed: () {
                   SignupApi.joinUser(
+                    context,
                     email: widget.email,
                     password: widget.password,
                     nickname: widget.nickname,
@@ -67,10 +68,11 @@ class _SignupUserInfoPageState extends State<SignupUserInfoPage> {
               ),
               CompleteButton(
                 text: '회원가입',
-                onPressed: () {
+                onPressed: () async {
                   // 가입완료 버튼 클릭 시 로직
                   // 키, 몸무게를 저장해서 데이터 보내주면 될 것 같음! (백으로 보내? store로 보내?)
-                  SignupApi.joinUser(
+                  bool signup = await SignupApi.joinUser(
+                    context,
                     email: widget.email,
                     password: widget.password,
                     nickname: widget.nickname,
@@ -78,12 +80,23 @@ class _SignupUserInfoPageState extends State<SignupUserInfoPage> {
                     height: _height,
                     weight: _weight,
                   );
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (_) => RunningTab(),
-                    ),
-                        (route) => false,
-                  );
+                  if (signup) {
+                    // 회원가입 성공한 경우
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('회원가입이 완료되었습니다.')),
+                    );
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (_) => RunningTab(),
+                      ),
+                          (route) => false,
+                    );
+                  } else {
+                    // 회원가입 실패한 경우
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('회원가입에 실패했습니다.')),
+                    );
+                  }
                 },
               )
             ],

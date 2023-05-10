@@ -391,9 +391,9 @@ class _MyRecordContentsState extends State<MyRecordContents> {
         ), // 조회 기간 총 기록
         Column(
           children: [
-            for (int i = 0;
-                i < widget.recordData['runningData']['content'].length;
-                i++)
+            for (int i = widget.recordData['runningData']['content'].length;
+                i <= 1;
+                i--)
               Target(
                 targetname: widget.recordData['runningData']['content'][i]
                         ['createDate']
@@ -461,6 +461,16 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
           rightChevronIcon:
               Icon(Icons.arrow_right, size: 40.0, color: Colors.white),
         ),
+        calendarBuilders:
+            CalendarBuilders(markerBuilder: (context, date, dynamic event) {
+          if (event.isNotEmpty) {
+            return Container(
+              width: 35,
+              decoration: BoxDecoration(
+                  color: Colors.blue.withOpacity(0.2), shape: BoxShape.circle),
+            );
+          }
+        }),
         calendarStyle: CalendarStyle(
             canMarkersOverflow: false,
             // marker 여러개 일 때 cell 영역을 벗어날지 여부
