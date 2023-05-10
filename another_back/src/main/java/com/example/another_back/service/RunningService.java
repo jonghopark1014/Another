@@ -55,19 +55,51 @@ public class RunningService {
         // 러닝 루트 S3 업로드
         List<String> runningPic = null;
         try {
-            runningPic = s3UploaderService.upload(bucket, "image",runningRequestDto.getRunningPic());
+            runningPic = s3UploaderService.upload(bucket, "image", runningRequestDto.getRunningPic());
         } catch (IOException e) {
             throw new IllegalArgumentException("S3 파일 업로드 중 에러가 발생했습니다.");
         }
         // 러닝 객체 생성
         Running running = new Running(runningRequestDto, runningPic.get(0), user);
-        if(runningRequestDto.getHostRunningId()!=null){
+        if (runningRequestDto.getHostRunningId() != null) {
             WithRun withRun = withRunRepository.findByRunningHostId(runningRequestDto.getHostRunningId())
-                    .orElseThrow(()-> new IllegalArgumentException("With Run 을 가져오는 중 에러가 발생했습니다."));
+                    .orElseThrow(() -> new IllegalArgumentException("With Run 을 가져오는 중 에러가 발생했습니다."));
             running.setWithRun(withRun);
         }
         // DB에 저장
         Running savedRunning = runningRepository.save(running);
+        // 경험치 체크
+        int runningDistance = 0;
+        int runningTime = 0;
+        runningDistance = runningRepository.SumRunningDistanceByUserId(user.getId()).orElse(0D).intValue();
+        runningTime = Math.toIntExact(runningRepository.SumRunningTimeByUserId(user.getId()).orElse(0L) / 600);
+        int exp = runningDistance + runningTime;
+        // level 체크
+        user.setExp(exp);
+        if (!(user.getExp() >= 166660)) {
+            if (exp >= 166660) {
+                user.setLevel(10);
+            } else if (exp >= 66660) {
+                user.setLevel(9);
+            } else if (exp >= 16660) {
+                user.setLevel(8);
+            } else if (exp >= 6660) {
+                user.setLevel(7);
+            } else if (exp >= 1660) {
+                user.setLevel(6);
+            } else if (exp >= 660) {
+                user.setLevel(5);
+            } else if (exp >= 160) {
+                user.setLevel(4);
+            } else if (exp >= 60) {
+                user.setLevel(3);
+            } else if (exp >= 10) {
+                user.setLevel(2);
+            } else if (exp >= 0) {
+                user.setLevel(1);
+            }
+        }
+        userRepository.save(user);
         // Id 반환
         return savedRunning.getId();
     }
