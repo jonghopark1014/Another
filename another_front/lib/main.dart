@@ -106,7 +106,7 @@ class ChallengeData extends ChangeNotifier {
     runningTime = time;
     userCalorie = calorie;
     userPace = pace;
-
+    print(runningId);
     notifyListeners();
   }
   void setList(List<double> DistanceList){

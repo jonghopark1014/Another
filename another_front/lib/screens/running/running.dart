@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:another/constant/color.dart';
 import 'package:another/screens/running/api/my_history_api.dart';
+import 'package:another/screens/running/challenge_running.dart';
 import 'package:another/screens/running/timer_screen.dart';
 import 'package:another/screens/running/widgets/before_running_map.dart';
 import 'package:another/screens/running/widgets/detail_setting.dart';
@@ -50,7 +51,9 @@ class _RunningTabState extends State<RunningTab> {
                   // RunningCircleButton(iconNamed: Icons.play_arrow, onPressed: onPressed()),
                   RunningCircleButton(
                     iconNamed: Icons.play_arrow,
-                    onPressed: () {onPressed('/UnderRunning');},
+                    onPressed: () {
+                      onPressed('/UnderRunning');
+                    },
                   ),
                   RunningSmallButton(
                     iconNamed: Icons.list,
@@ -122,7 +125,9 @@ class _RunningTabState extends State<RunningTab> {
                       '러닝 시작!',
                       style: TextStyle(fontSize: 18),
                     ),
-                    onPressed: () {onPressed('/UnderRunning');},
+                    onPressed: () {
+                      onPressed('/UnderRunning');
+                    },
                   ),
                 ],
               ),
@@ -179,9 +184,13 @@ class _RunningTabState extends State<RunningTab> {
                       padding: EdgeInsets.all(10),
                       primary: MAIN_COLOR,
                     ),
-                    onPressed: () {onPressed('/UnderChallenge');},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => ChallengeRunning()),
+                          );
+                    },
                     child: const Text(
-                      '러닝 시작!',
+                      '선택 완료',
                       style: TextStyle(fontSize: 18),
                     ),
                   ),
@@ -199,7 +208,8 @@ class _RunningTabState extends State<RunningTab> {
     runningData.addLocation(runningData.currentPosition.target);
 
     // currentposition 초기값 그대로이면 받아오기전으로 판단
-    if (runningData.currentPosition.target.longitude != 0 && runningData.currentPosition.target.latitude != 0 ) {
+    if (runningData.currentPosition.target.longitude != 0 &&
+        runningData.currentPosition.target.latitude != 0) {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (_) => TimerScreen(
@@ -207,7 +217,7 @@ class _RunningTabState extends State<RunningTab> {
             initialPosition: runningData.currentPosition,
           ),
         ),
-            (route) => false,
+        (route) => false,
       );
     }
   }
