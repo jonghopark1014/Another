@@ -10,6 +10,8 @@ public class CurRunningDto {
     private String avgPace;
     private Double avgKcal;
     private Double avgDistance;
+    private Double originalPace;
+    private Long originalTime;
 
     private String sumTime;
     private Long sumKcal;
