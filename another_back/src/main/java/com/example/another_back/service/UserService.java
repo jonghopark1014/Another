@@ -3,8 +3,12 @@ package com.example.another_back.service;
 import com.example.another_back.dto.UserJoinDto;
 import com.example.another_back.dto.UserLevelExpDto;
 import com.example.another_back.dto.UserUpdateForm;
+import com.example.another_back.entity.Challenge;
 import com.example.another_back.entity.User;
+import com.example.another_back.entity.UserChallenge;
 import com.example.another_back.entity.enums.Role;
+import com.example.another_back.repository.ChallengeRepository;
+import com.example.another_back.repository.UserChallengeRepository;
 import com.example.another_back.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -31,6 +36,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final S3UploaderService s3UploaderService;
     private final BCryptPasswordEncoder passwordEncoder;
+
+    private final ChallengeRepository challengeRepository;
+    private final UserChallengeRepository userChallengeRepository;
 
     /*
     닉네임 중복 API만들기
@@ -52,7 +60,7 @@ public class UserService {
 
     //프로필 사진 수정
     public String updateProfileImage(MultipartFile file, Long userId) throws IOException {
-        String image = s3UploaderService.upload(bucket, "image",file).get(0);
+        String image = s3UploaderService.upload(bucket, "image", file).get(0);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
         user.setProfilePic(image);
@@ -71,7 +79,7 @@ public class UserService {
     비밀번호 8~16(영어,숫자,특수문자) 3개다 포함
     이메일은 골뱅이다음 두글자이상. 두글자이상
      */
-    public Long join(UserJoinDto userJoinDto){
+    public Long join(UserJoinDto userJoinDto) {
         System.out.println("userJoinDto : " + userJoinDto);
         checkDuplicatedUsername(userJoinDto.getUsername());
 
@@ -86,6 +94,15 @@ public class UserService {
                 .nickname(userJoinDto.getNickname())
                 .role(Role.USER)
                 .build();
+
+        // 유저 챌린지 생성
+        List<Challenge> challengeList = challengeRepository.findAll();
+        for (Challenge challenge :
+                challengeList) {
+            UserChallenge userChallenge = new UserChallenge(user, challenge);
+            userChallengeRepository.save(userChallenge);
+        }
+
         return userRepository.save(user).getId();
     }
 
