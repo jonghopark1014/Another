@@ -1,13 +1,18 @@
 import 'package:another/screens/feed/widgets/image_profile.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
 import 'package:another/widgets/target.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../constant/color.dart';
 
 class RunningFeedComplete extends StatefulWidget {
-  const RunningFeedComplete({Key? key}) : super(key: key);
+  // final Uint8List? captureInfo;
+
+  RunningFeedComplete({
+    // required this.captureInfo,
+    Key? key,}) : super(key: key);
 
   @override
   State<RunningFeedComplete> createState() => _RunningFeedCompleteState();
@@ -28,7 +33,7 @@ class _RunningFeedCompleteState extends State<RunningFeedComplete> {
 
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yyyy.MM.dd').format(now);
-    print(now);
+
     return Stack(children: [
       Scaffold(
         appBar: GoBackAppBarStyle(),

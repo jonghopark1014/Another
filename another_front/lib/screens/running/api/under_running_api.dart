@@ -16,7 +16,8 @@ class Kafka {
     required int userCalories,
     required String userPace,
     required double latitude,
-    required double longitude
+    required double longitude,
+    String? hostRunningId,
   })
   async {
     var url = Uri.parse('$_baseUrl/$runningId');
@@ -99,6 +100,7 @@ class saveRunningTime {
     required int userCalories,
     required String userPace,
     required Uint8List? runningPic,
+    String? hostRunningId,
   })
   async {
     print("===================run/stop===============");
@@ -131,7 +133,7 @@ class saveRunningTime {
     request.fields['kcal'] = userCalories.toString();
     request.fields['speed'] = pace.toString();
     request.fields['createDate'] = DateFormat('yyyy-MM-dd').format(DateTime.now());
-
+    request.fields['hostRunningId'] = hostRunningId.toString();
     print(request.fields);
 
     //

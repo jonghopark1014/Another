@@ -6,21 +6,10 @@ import 'package:flutter/material.dart';
 import '../../running/challenge_running.dart';
 
 class RunIcon extends StatelessWidget {
-  String runningTime;
-  String runningDistance;
-  String userCalorie;
-  String userPace;
   String runCount;
   String runningId;
 
-  RunIcon(
-      {required this.runningTime,
-      required this.runningDistance,
-      required this.userCalorie,
-      required this.userPace,
-      required this.runCount,
-      required this.runningId,
-      Key? key})
+  RunIcon({required this.runCount, required this.runningId, Key? key})
       : super(key: key);
 
   @override
@@ -63,7 +52,7 @@ class RunIcon extends StatelessWidget {
             ),
           );
         },
-        child: Text(runCount, style: MyTextStyle.sixteenTextStyle),
+        child: Text(runCount , style: MyTextStyle.sixteenTextStyle),
       ),
       SizedBox(
         width: 10.0,
@@ -73,14 +62,7 @@ class RunIcon extends StatelessWidget {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => ChallengeRunning(),
-              settings: RouteSettings(
-                arguments: [
-                  runningDistance,
-                  runningTime,
-                  userCalorie,
-                  userPace,
-                ],
-              ),
+              settings: RouteSettings(),
             ),
           );
         },
