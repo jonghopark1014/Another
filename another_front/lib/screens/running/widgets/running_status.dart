@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:another/screens/running/under_challenge_end.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
 import 'package:another/widgets/record_result.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,7 +21,8 @@ import 'dart:ui' as ui;
 
 
 class RunningStatus extends StatefulWidget {
-  const RunningStatus({Key? key})
+  bool? isChallenge = false;
+  RunningStatus({this.isChallenge, Key? key,})
       : super(key: key);
 
   @override
@@ -224,24 +226,53 @@ class _RunningStatus extends State<RunningStatus> {
     Provider.of<RunningData>(context, listen: false).setRunningPic(captureInfo);
     var runningData = Provider.of<RunningData>(context, listen: false);
     var userId = Provider.of<UserInfo>(context, listen: false).userId;
+    var challengeData = Provider.of<ChallengeData>(context, listen: false);
     // api 요청
-    // // mySQL 저장
-    saveRunningTime.saveRunData(userId: userId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
-    // // hdfs 저장
-    saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
+    // 경쟁인지 아닌지 확인
+    if(widget.isChallenge == true) {
+      print('challengeeeeee');
+      // // mySQL 저장
+      saveRunningTime.saveRunData(userId: userId, hostRunningId: challengeData.runningId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
+      // // hdfs 저장
+      saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
 
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (_) => UnderRunningScreenEnd(
-            captureInfo: captureInfo,
-            runningTime: runningTime,
-            runningDistance: runningDistance.toString(),
-            userCalorie: userCalories.toString(),
-            userPace: userPace,
-
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (_) => UnderChallengeScreenEnd(
+              captureInfo: captureInfo,
+              runningTime: runningTime,
+              runningDistance: runningDistance.toString(),
+              userCalorie: userCalories.toString(),
+              userPace: userPace,
+            ),
           ),
-        ),
-            (route) => route.settings.name == '/');
+              (route) => route.settings.name == '/');
+    } else {
+      // // mySQL 저장
+      saveRunningTime.saveRunData(userId: userId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
+      // // hdfs 저장
+      saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
+
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (_) => UnderRunningScreenEnd(
+              captureInfo: captureInfo,
+              runningTime: runningTime,
+              runningDistance: runningDistance.toString(),
+              userCalorie: userCalories.toString(),
+              userPace: userPace,
+
+            ),
+          ),
+              (route) => route.settings.name == '/');
+
+    }
+    // // mySQL 저장
+    // saveRunningTime.saveRunData(userId: userId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
+    // // hdfs 저장
+    // saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
+
+
   }
 
   // 캡처하기 위한 함수

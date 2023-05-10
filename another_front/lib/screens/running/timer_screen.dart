@@ -1,21 +1,19 @@
 import 'dart:async';
 
-import 'package:another/screens/running/running.dart';
-import 'package:another/screens/running/under_challenge.dart';
-import 'package:another/screens/running/under_running.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../constant/color.dart';
 
 class TimerScreen extends StatefulWidget {
+
   final String path;
   final CameraPosition initialPosition;
-  const TimerScreen({
-    required this.path,
-    required this.initialPosition,
-    Key? key
-  }) : super(key: key);
+  const TimerScreen(
+      {required this.path,
+      required this.initialPosition,
+      Key? key})
+      : super(key: key);
 
   @override
   State<TimerScreen> createState() => _TimerScreenState();
@@ -24,7 +22,12 @@ class TimerScreen extends StatefulWidget {
 class _TimerScreenState extends State<TimerScreen> {
   late Timer _timer;
   int _seconds = 3;
-  bool first = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _start(widget.path, widget.initialPosition);
+  }
 
   @override
   void dispose() {
@@ -35,11 +38,6 @@ class _TimerScreenState extends State<TimerScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    if (first) {
-      _start(widget.path, widget.initialPosition);
-      first = false;
-    }
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -81,9 +79,9 @@ class _TimerScreenState extends State<TimerScreen> {
           //     )
           // )
           Navigator.of(context).pushNamedAndRemoveUntil(
-              path,
-                  arguments: initialPosition,
-                  (route) => route.settings.name == '/',
+            path,
+            arguments: initialPosition,
+            (route) => route.settings.name == '/',
           );
         }
       },

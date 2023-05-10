@@ -1,21 +1,19 @@
+import 'package:another/main.dart';
+import 'package:another/screens/running/api/versus_api.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:another/constant/color.dart';
-import 'package:another/main.dart';
 import 'package:another/screens/running/timer_screen.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
-
 
 import '../../widgets/target.dart';
 import 'widgets/before_running_map.dart';
 
 class ChallengeRunning extends StatefulWidget {
-
-
   ChallengeRunning({
-
     Key? key,
   }) : super(key: key);
 
@@ -24,9 +22,54 @@ class ChallengeRunning extends StatefulWidget {
 }
 
 class _ChallengeRunningState extends State<ChallengeRunning> {
+  late String runningId;
+  late String runningDistance;
+  late String runningTime;
+  late String userCalorie;
+  late String userPace;
+  late List<double> challengeDistanceList = [];
+  String runDataId = '';
+  @override
+  void initState() {
+    super.initState();
+    _versusApi();
+    var challengeData = Provider.of<ChallengeData>(context, listen: false);
+      runningId = challengeData.runningId;
+      runningDistance = challengeData.runningDistance;
+      runningTime = challengeData.runningTime;
+      userCalorie = challengeData.userCalorie;
+      userPace = challengeData.userPace;
+
+      challengeData.setList(challengeDistanceList);
+
+      final userInfo = context.read<UserInfo>();
+      // _userWeight = userInfo.weight;
+      String userId = userInfo.userId.toString();
+      String forRunId1 = DateFormat('yyMMddHHmmss').format(DateTime.now());
+      runDataId = userId + forRunId1;
+      var runningData = Provider.of<RunningData>(context, listen: false);
+      runningData.setRunningId(runDataId);
+  }
+
+  Future<void> _versusApi() async {
+    try {
+      // 수정 주석처리만 하고 밑에 있는 값 바꾸면 됨
+      //print();
+      // final response = await VersusApi.getFeed(runningId);
+      final response = await VersusApi.getFeed('1230509055100');
+      final contents = response['data'];
+
+      for (var content in contents) {
+        challengeDistanceList.add(content['runningDistance']);
+      }
+
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final arguments = ModalRoute.of(context)!.settings.arguments as List<String>;
     return Scaffold(
       appBar: GoBackAppBarStyle(),
       body: Stack(
@@ -40,10 +83,10 @@ class _ChallengeRunningState extends State<ChallengeRunning> {
                   color: BACKGROUND_COLOR,
                   child: Target(
                     targetname: '목표기록',
-                    runningDistance: arguments[0].toString(),
-                    runningTime: arguments[1].toString(),
-                    userCalorie: arguments[2].toString(),
-                    userPace: arguments[3].toString(),
+                    runningDistance: runningDistance,
+                    runningTime: runningTime,
+                    userCalorie: userCalorie,
+                    userPace: userPace,
                   ),
                 ),
                 SizedBox(

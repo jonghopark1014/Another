@@ -59,7 +59,9 @@ class UnderRunningScreenEnd extends StatelessWidget {
   void endFeed(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (_) => UnderChallengeScreenEndFeed(),
+          builder: (_) => UnderChallengeScreenEndFeed(
+            captureInfo: captureInfo,
+          ),
         ),
         (route) => route.settings.name == '/');
   }
