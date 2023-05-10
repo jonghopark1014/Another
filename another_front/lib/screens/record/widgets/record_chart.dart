@@ -3,13 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class RecordChart extends StatelessWidget {
-  const RecordChart({Key? key}) : super(key: key);
+  final String x;
+  final double y1graph;
+  final double y2graph;
+  final String y1text;
+  final String y2text;
+  const RecordChart(this.x, this.y1graph, this.y2graph, this.y1text, this.y2text, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final List<ChartData> chartData = <ChartData>[
       // x축, 첫번째 값, 두번째 값
-      ChartData('거리', 4.5, 6.8),
+      ChartData(x, y1graph, y2graph, y1text, y2text),
     ];
 
     return Center(
@@ -39,23 +44,27 @@ class RecordChart extends StatelessWidget {
               spacing: 0.1,
               dataSource: chartData,
               xValueMapper: (ChartData data, _) => data.x,
-              yValueMapper: (ChartData data, _) => data.y1,
+              yValueMapper: (ChartData data, _) => data.y1graph,
+              dataLabelMapper: (ChartData data, _) => data.y1text,
               dataLabelSettings: DataLabelSettings(
-                  isVisible: true, textStyle: TextStyle(color: WHITE_COLOR)),
+                  isVisible: true, textStyle: TextStyle(color: WHITE_COLOR),
+              ),
             ),
             ColumnSeries<ChartData, String>(
               width: 0.9,
               spacing: 0.1,
               dataSource: chartData,
               xValueMapper: (ChartData data, _) => data.x,
-              yValueMapper: (ChartData data, _) => data.y2,
+              yValueMapper: (ChartData data, _) => data.y2graph,
+              dataLabelMapper: (ChartData data, _) => data.y2text,
               dataLabelSettings: DataLabelSettings(
-                  isVisible: true, textStyle: TextStyle(color: WHITE_COLOR)),
+                  isVisible: true, textStyle: TextStyle(color: WHITE_COLOR),
+              ),
             ),
             LineSeries<ChartData, String>(
               dataSource: chartData,
               xValueMapper: (ChartData data, _) => data.x,
-              yValueMapper: (ChartData data, _) => data.y2,
+              yValueMapper: (ChartData data, _) => data.y2graph,
               color: WHITE_COLOR,
             ),
           ],
@@ -66,8 +75,10 @@ class RecordChart extends StatelessWidget {
 }
 
 class ChartData {
-  ChartData(this.x, this.y1, this.y2);
+  ChartData(this.x, this.y1graph, this.y2graph, this.y1text, this.y2text);
   final String x;
-  final double? y1;
-  final double? y2;
+  final double y1graph;
+  final double y2graph;
+  final String y1text;
+  final String y2text;
 }

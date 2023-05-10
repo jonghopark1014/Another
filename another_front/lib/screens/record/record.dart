@@ -14,6 +14,7 @@ import 'package:another/screens/record/widgets/profile.dart';
 import 'package:another/screens/record/widgets/record_chart.dart';
 import 'package:another/screens/record/api/period_total_record_api.dart';
 import 'package:another/widgets/target.dart';
+import 'package:another/screens/record/widgets/record_chart.dart';
 
 class RecordTab extends StatelessWidget {
   const RecordTab({Key? key}) : super(key: key);
@@ -69,7 +70,10 @@ class RecordTab extends StatelessWidget {
                                   Color(0xFF1C1A1E),
                                   Color(0xFF3D2F4A),
                                 ],
-                                stops: [0.1, 0.2],
+                                stops: [
+                                  0.0,
+                                  80 / MediaQuery.of(context).size.height
+                                ],
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
                               ),
@@ -143,14 +147,14 @@ class RecordTab extends StatelessWidget {
                                       MyChallenge(), // 나의 챌린지
                                       CategoryTitle(title: '나의 활동 기록'),
                                       MyRecord(),
-                                      Row(
-                                        children: [
-                                          Expanded(child: RecordChart()),
-                                          Expanded(child: RecordChart()),
-                                          Expanded(child: RecordChart()),
-                                          Expanded(child: RecordChart())
-                                        ],
-                                      )
+                                      // Row(
+                                      //   children: [
+                                      //     Expanded(child: RecordChart()),
+                                      //     Expanded(child: RecordChart()),
+                                      //     Expanded(child: RecordChart()),
+                                      //     Expanded(child: RecordChart())
+                                      //   ],
+                                      // )
                                     ],
                                   ),
                                 )
@@ -216,7 +220,7 @@ class _MyRecordState extends State<MyRecord> {
   @override
   void initState() {
     super.initState();
-    getPeriodRecord();
+    getRecord();
   }
 
   void _updateContent(int index, bool isCalendarOpen) {
@@ -226,7 +230,7 @@ class _MyRecordState extends State<MyRecord> {
     });
   }
 
-  Future<void> getPeriodRecord() async {
+  Future<void> getRecord() async {
     Map<String, dynamic> data1 = {};
     Map<String, dynamic> data2 = {};
     switch (_selectedIndex) {
@@ -252,6 +256,7 @@ class _MyRecordState extends State<MyRecord> {
         break;
       default:
         data1 = {};
+        data2 = {};
         break;
     }
     setState(() {
@@ -278,7 +283,7 @@ class _MyRecordState extends State<MyRecord> {
               ),
               onPressed: () => {
                 _updateContent(0, false),
-                getPeriodRecord(),
+                getRecord(),
               },
               child: Text('오늘',
                   style: TextStyle(
@@ -297,7 +302,7 @@ class _MyRecordState extends State<MyRecord> {
               ),
               onPressed: () => {
                 _updateContent(1, false),
-                getPeriodRecord(),
+                getRecord(),
               },
               child: Text('이번 주',
                   style: TextStyle(
@@ -316,7 +321,7 @@ class _MyRecordState extends State<MyRecord> {
               ),
               onPressed: () => {
                 _updateContent(2, false),
-                getPeriodRecord(),
+                getRecord(),
               },
               child: Text('이번 달',
                   style: TextStyle(
@@ -335,7 +340,7 @@ class _MyRecordState extends State<MyRecord> {
               ),
               onPressed: () => {
                 _updateContent(3, false),
-                getPeriodRecord(),
+                getRecord(),
               },
               child: Text('전체',
                   style: TextStyle(
@@ -403,24 +408,63 @@ class _MyRecordContentsState extends State<MyRecordContents> {
         ), // 조회 기간 총 기록
         Column(
           children: [
-            for (int i = widget.historyData['content'].length;
-                i <= 1;
-                i--)
+            for (int i = widget.historyData['content'].length - 1; i >= 0; i--)
               Target(
-                targetname: widget.historyData['content'][i]
-                        ['createDate']
-                    .toString(),
+                targetname:
+                    widget.historyData['content'][i]['createDate'].toString() ??
+                        '0',
                 runningDistance: widget.historyData['content'][i]
-                        ['runningDistance']
-                    .toString(),
-                userCalorie: widget.historyData['content'][i]
-                        ['userCalories']
-                    .toString(),
-                runningTime: widget.historyData['content'][i]
-                        ['runningTime']
-                    .toString(),
+                            ['runningDistance']
+                        .toString() ??
+                    '0',
+                userCalorie: widget.historyData['content'][i]['userCalories']
+                        .toString() ??
+                    '0',
+                runningTime: widget.historyData['content'][i]['runningTime']
+                        .toString() ??
+                    '0',
                 userPace: '',
               )
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: RecordChart(
+                '시간',
+                widget.periodData['prevAvg']['originalTime'].toDouble(),
+                widget.periodData['curAvg']['originalTime'].toDouble(),
+                widget.periodData['prevAvg']['avgTime'].toString(),
+                widget.periodData['curAvg']['avgTime'].toString(),
+              ),
+            ),
+            Expanded(
+              child: RecordChart(
+                '거리',
+                widget.periodData['prevAvg']['avgDistance'],
+                widget.periodData['curAvg']['avgDistance'],
+                widget.periodData['prevAvg']['avgDistance'].toString(),
+                widget.periodData['curAvg']['avgDistance'].toString(),
+              ),
+            ),
+            Expanded(
+              child: RecordChart(
+                'kcal',
+                widget.periodData['prevAvg']['avgKcal'],
+                widget.periodData['curAvg']['avgKcal'],
+                widget.periodData['prevAvg']['avgKcal'].toString(),
+                widget.periodData['curAvg']['avgKcal'].toString(),
+              ),
+            ),
+            Expanded(
+              child: RecordChart(
+                '페이스',
+                widget.periodData['curAvg']['originalPace'],
+                widget.periodData['prevAvg']['originalPace'],
+                widget.periodData['curAvg']['avgPace'].toString(),
+                widget.periodData['prevAvg']['avgPace'].toString(),
+              ),
+            ),
           ],
         )
       ],

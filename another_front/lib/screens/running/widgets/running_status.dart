@@ -232,9 +232,10 @@ class _RunningStatus extends State<RunningStatus> {
     if(widget.isChallenge == true) {
       print('challengeeeeee');
       // // mySQL 저장
-      saveRunningTime.saveRunData(userId: userId, hostRunningId: challengeData.runningId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
+      saveRunningTime.saveRunData(userId: userId!, hostRunningId: challengeData.runningId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
       // // hdfs 저장
       saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
+
 
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
@@ -249,7 +250,7 @@ class _RunningStatus extends State<RunningStatus> {
               (route) => route.settings.name == '/');
     } else {
       // // mySQL 저장
-      saveRunningTime.saveRunData(userId: userId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
+      saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
       // // hdfs 저장
       saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
 
