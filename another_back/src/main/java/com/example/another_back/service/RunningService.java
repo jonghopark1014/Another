@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.Calendar;
@@ -103,65 +102,134 @@ public class RunningService {
         // Id 반환
         return savedRunning.getId();
     }
-
-    public RunningHistoryResponseDto getRecord(int category, Long userId, @Nullable Date date1, @Nullable Date date2, Pageable pageable) {
+    public RunningHistoryResponseDto getRecord(int category, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
         Calendar calendar1 = Calendar.getInstance();
-        Calendar calendar2 = Calendar.getInstance();
         Date startDate, endDate;
-        Page<RunningEachHistoryDto> runData;
+        Date prevStartDate, prevEndDate;
+
+        if (category == 1) {
+            startDate = new Date(calendar1.getTimeInMillis());
+            endDate = new Date(calendar1.getTimeInMillis());
+            prevStartDate = new Date(calendar1.getTimeInMillis());
+            prevEndDate = new Date(calendar1.getTimeInMillis());
+        } else if (category == 2) {
+            calendar1.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            startDate = new Date(calendar1.getTimeInMillis());
+            calendar1.add(calendar1.DATE,6);
+            endDate = new Date(calendar1.getTimeInMillis());
+
+            calendar1.add(calendar1.DATE,-13);
+            prevStartDate = new Date(calendar1.getTimeInMillis());
+            calendar1.add(calendar1.DATE,6);
+            prevEndDate = new Date(calendar1.getTimeInMillis());
+        } else {
+            calendar1.set(calendar1.DATE, 1);
+            startDate = new Date(calendar1.getTimeInMillis());
+            calendar1.set(calendar1.DATE, calendar1.getActualMaximum(calendar1.DAY_OF_MONTH));
+            endDate = new Date(calendar1.getTimeInMillis());
+            calendar1.add(calendar1.MONTH,-1);
+            calendar1.set(calendar1.DATE,1);
+            prevStartDate = new Date(calendar1.getTimeInMillis());
+            calendar1.set(calendar1.DATE, calendar1.getActualMaximum(calendar1.DAY_OF_MONTH));
+            prevEndDate = new Date(calendar1.getTimeInMillis());
+        }
+        RunningRecordDto prevRunningRecordDto = runningRepository.findRunningHistoryDtoByUserId(user, prevStartDate, prevEndDate).get();
+        RunningRecordDto curRunningRecordDto = runningRepository.findRunningHistoryDtoByUserId(user, startDate, endDate).get();
+        curRunningRecordDto = defaultRunningHistoryDto(curRunningRecordDto);
+        prevRunningRecordDto = defaultRunningHistoryDto(prevRunningRecordDto);
+
+        String time1 = convertTime(curRunningRecordDto.getSumRunningTime());
+        String time2 = convertTime(curRunningRecordDto.getAvgRunningTime().longValue());
+        String time3 = convertTime(prevRunningRecordDto.getAvgRunningTime().longValue());
+        /*
+        합 :  거리, 칼로리, 시간, 페이스, 조회 기간
+        평균 : 과거,현재 /시간, 페이스, 칼로리, 거리/
+        Page<Running>
+        */
+        CurRunningDto curDto = CurRunningDto.builder()
+                .avgTime(time2)
+                .sumTime(time1)
+                .avgDistance(curRunningRecordDto.getAvgRunningDistance())
+                .sumDistance(curRunningRecordDto.getSumRunningDistance())
+                .avgKcal(curRunningRecordDto.getAvgKcal())
+                .sumKcal(curRunningRecordDto.getSumKcal())
+                .avgSpeed(curRunningRecordDto.getAvgPace())
+                .startDate(startDate.toString())
+                .endDate(endDate.toString())
+                .build();
+        AvgRunningDto prevDto = AvgRunningDto.builder()
+                .avgTime(time3)
+                .avgDistance(prevRunningRecordDto.getAvgRunningDistance())
+                .avgKcal(prevRunningRecordDto.getAvgKcal())
+                .avgSpeed(prevRunningRecordDto.getAvgPace())
+                .build();
+
+        return RunningHistoryResponseDto.builder()
+                .prevAvg(prevDto)
+                .curAvg(curDto)
+                .build();
+    }
+
+    public Page<RunningEachHistoryDto> getHistory(int category, Long userId, Pageable pageable) {
+        Calendar calendar1 = Calendar.getInstance();
+        Date startDate, endDate;
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
         //오늘
         if (category == 1) {
             startDate = new Date(calendar1.getTimeInMillis());
             endDate = new Date(calendar1.getTimeInMillis());
-            runData = runningRepository.findWithDateByUserId(user, startDate, endDate, pageable);
         } else if (category == 2) {
             calendar1.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-            calendar2.add(calendar1.DATE,5);
-
             startDate = new Date(calendar1.getTimeInMillis());
-            endDate = new Date(calendar2.getTimeInMillis());
+            calendar1.add(calendar1.DATE,6);
+            endDate = new Date(calendar1.getTimeInMillis());
 
-            runData = runningRepository.findWithDateByUserId(user, startDate, endDate, pageable);
-        } else if (category == 3) {
-            calendar1.set(calendar1.DATE, 1);
-            calendar2.set(calendar1.DATE, calendar1.getActualMaximum(calendar1.DAY_OF_MONTH));
+            calendar1.add(calendar1.DATE,-13);
+            calendar1.add(calendar1.DATE,6);
 
-            startDate = new Date(calendar1.getTimeInMillis());
-            endDate = new Date(calendar2.getTimeInMillis());
 
-            runData = runningRepository.findWithDateByUserId(user, startDate, endDate, pageable);
-        } else if (category == 4) {
-            startDate = new Date(1,1,1);
-            endDate = new Date(System.currentTimeMillis());
-            runData = runningRepository.findWithDateByUserId(user, startDate, endDate, pageable);
         } else {
-            startDate = date1;
-            endDate = date2;
-            runData = runningRepository.findWithDateByUserId(user, startDate, endDate, pageable);
+            calendar1.set(calendar1.DATE, 1);
+            startDate = new Date(calendar1.getTimeInMillis());
+            calendar1.set(calendar1.DATE, calendar1.getActualMaximum(calendar1.DAY_OF_MONTH));
+            endDate = new Date(calendar1.getTimeInMillis());
+            calendar1.add(calendar1.MONTH,-1);
+            calendar1.set(calendar1.DATE,1);
+            calendar1.set(calendar1.DATE, calendar1.getActualMaximum(calendar1.DAY_OF_MONTH));
         }
-        RunningHistoryDto runningHistoryDto =
-                runningRepository.findRunningHistoryDtoByUserId(user, startDate, endDate).orElse(new RunningHistoryDto(0L,0D,0L,0L));
-        long hour = 0;
-        long minute = 0;
-        long second = 0;
+        return runningRepository.findWithDateByUserId(user, startDate, endDate, pageable);
+    }
 
-        Long time = runningHistoryDto.getRunningTime();
-        hour = time/3600;
-        time %=3600;
-        minute = time/60;
-        second = time%60;
+    private RunningRecordDto defaultRunningHistoryDto(RunningRecordDto runningRecordDto) {
+        if (runningRecordDto.getAvgRunningTime() == null) {
+            return RunningRecordDto.builder()
+                    .avgRunningDistance(0D)
+                    .sumRunningDistance(0D)
+                    .sumPace(0D)
+                    .avgPace(0D)
+                    .sumRunningTime(0L)
+                    .avgRunningTime(0D)
+                    .avgKcal(0D)
+                    .sumKcal(0L)
+                    .build();
+        }
+        return runningRecordDto;
+    }
 
-        String runningTime = Long.toString(hour)
-                + ":" + Long.toString(minute) + ":" + Long.toString(second);
-        return RunningHistoryResponseDto.builder()
-                .dayOfRunning(runningHistoryDto.getDayOfRunning())
-                .runningTime(runningTime)
-                .runningDistance(runningHistoryDto.getRunningDistance())
-                .userCalories(runningHistoryDto.getUserCalories())
-                .runningData(runData)
-                .build();
+    private String convertTime(Long time) {
+        String hour = Long.toString(time / 3600);
+        time %= 3600;
+        String minute = Long.toString(time / 60);
+        String second = Long.toString(time % 60);
+        if(hour.length()==1)hour = "0"+hour;
+        if(minute.length()==1)minute = "0"+minute;
+        if(second.length()==1)second = "0"+second;
+
+
+        return hour+ ":" + minute + ":" + second;
     }
 
     /**
