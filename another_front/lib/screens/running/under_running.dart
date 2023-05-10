@@ -54,24 +54,30 @@ class _UnderRunningState extends State<UnderRunning> {
         child: SafeArea(
           child: Column(
             children: [
-              AspectRatio(
-                aspectRatio: 1 / 1,
-                child: SizedBox(
-                  child: isSet
-                      ? Stack(
-                          children: [
-                            RunningMap(
-                              runningData: runningData,
-                              initialPosition: initialPosition,
-                            ),
-                            // Text('done?????'),
-                            SetRunningStatus(),
-                          ],
-                        )
-                      : RunningMap(
-                          runningData: runningData,
-                          initialPosition: initialPosition,
-                        ),
+              // 높이가 작은 폰에서 안깨지도록 추가함
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height / 9 * 4,
+                ),
+                child: AspectRatio(
+                  aspectRatio: 1 / 1,
+                  child: SizedBox(
+                    child: isSet
+                        ? Stack(
+                            children: [
+                              RunningMap(
+                                runningData: runningData,
+                                initialPosition: initialPosition,
+                              ),
+                              // Text('done?????'),
+                              SetRunningStatus(),
+                            ],
+                          )
+                        : RunningMap(
+                            runningData: runningData,
+                            initialPosition: initialPosition,
+                          ),
+                  ),
                 ),
               ),
               // 러닝 중 데이터 출력

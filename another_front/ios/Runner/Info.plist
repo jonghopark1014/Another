@@ -57,6 +57,10 @@
     <string> 건강 정보 권한을 허가해주세요</string>
     <key>NSHealthUpdateUsageDescription</key>
     <string> 건강 정보 권한을 허가해주세요</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string> 앱 사용시 위치 권한을 허용해주세요</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string> 백그라운드 위치 권한을 허용해주세요</string>
 
 </dict>
 </plist>
