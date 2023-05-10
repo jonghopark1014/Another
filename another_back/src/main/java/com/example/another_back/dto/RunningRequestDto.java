@@ -10,11 +10,12 @@ import java.sql.Date;
 @Setter
 public class RunningRequestDto {
     private Long userId;
+    private String hostRunningId;
     private String runningId;
     private Integer runningTime;
     private Float runningDistance;
     private Date createDate;
-    private Integer kcal;
-    private Float speed;
+    private Integer userCalories;
+    private Float userPace;
     private MultipartFile runningPic;
 }

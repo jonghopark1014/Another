@@ -18,7 +18,7 @@ public class FeedListResponseDto {
     private Float runningDistance;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date createDate;
-    private Integer kcal;
+    private Integer userCalories;
     private String runningPic;
     private List<FeedPicResponseDto> feedPics;
 
@@ -27,7 +27,7 @@ public class FeedListResponseDto {
         this.runningId = running.getId();
         this.runningTime = running.getRunningTime();
         this.runningDistance = running.getRunningDistance();
-        this.kcal = running.getKcal();
+        this.userCalories = running.getUserCalories();
         this.runningPic = running.getRunningPic();
         this.feedPics = running.getFeedPic().stream().map(FeedPicResponseDto::new).collect(Collectors.toList());
     }

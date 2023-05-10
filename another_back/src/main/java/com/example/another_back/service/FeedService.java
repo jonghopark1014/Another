@@ -64,12 +64,16 @@ public class FeedService {
         Running running = runningRepository.findById(addFeedRequestDto.getRunningId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 러닝기록을 찾지 못했습니다."));
         running.setStatus(Status.LIVE);
-        List<String> list = s3UploaderService.upload(bucket, "image", addFeedRequestDto.getFeedPics());
-        for (String url :
-                list) {
-            FeedPic feedPic = new FeedPic(url, running);
-            feedPicRepository.save(feedPic);
+        if (addFeedRequestDto.feedPicsLength() != 0) {
+            List<String> list = s3UploaderService.upload(bucket, "image", addFeedRequestDto.getFeedPics());
+            for (String url :
+                    list) {
+                FeedPic feedPic = new FeedPic(url, running);
+                feedPicRepository.save(feedPic);
+            }
         }
+        WithRun withRun = new WithRun(running);
+        withRunRepository.save(withRun);
         return running.getId();
     }
 
@@ -131,10 +135,10 @@ public class FeedService {
                 while ((line = br.readLine()) != null) {
                     // json 형태로 변환
                     jsonObject = (JSONObject) parser.parse(line);
-                    // distance와 speed 추출
+                    // runningDistance와 userPace 추출
                     JSONObject select = new JSONObject();
-                    select.put("distance", jsonObject.get("distance"));
-                    select.put("speed", jsonObject.get("speed"));
+                    select.put("runningDistance", jsonObject.get("runningDistance"));
+                    select.put("userPace", jsonObject.get("userPace"));
                     jsonArray.add(select);
                 }
                 br.close();
@@ -160,19 +164,25 @@ public class FeedService {
                 () -> new IllegalArgumentException("해당하는 러닝 기록이 없습니다."));
         FeedDetailResponseDto response = new FeedDetailResponseDto(running);
         response.setGraph(getOringinData(runningId));
-        response.setWithRunCount(withRunRepository.countByRunningHostId(runningId));
+        WithRun withRun = withRunRepository.findByRunningHostId(runningId).orElse(null);
+        if (withRun != null)
+            response.setWithRunCount((long) withRun.getRunningSlaves().size());
         return response;
     }
 
     /**
      * WithRun 목록 가져오기
-     * 
+     *
      * @param runningId
      * @return List<WithRunResponseDto>
      */
     public List<WithRunResponseDto> getWithRunList(String runningId) {
-        List<WithRun> list = withRunRepository.findByRunningHostId(runningId);
-        List<WithRunResponseDto> response = list.stream().map(withRun -> new WithRunResponseDto(withRun)).collect(Collectors.toList());
+        List<WithRunResponseDto> response = null;
+        WithRun withRun = withRunRepository.findByRunningHostId(runningId).orElse(null);
+        if (withRun != null) {
+            List<Running> list = withRun.getRunningSlaves();
+            response = list.stream().map(running -> new WithRunResponseDto(running)).collect(Collectors.toList());
+        }
         return response;
     }
 }

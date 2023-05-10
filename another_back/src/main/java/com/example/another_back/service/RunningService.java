@@ -4,9 +4,11 @@ import com.example.another_back.dto.*;
 import com.example.another_back.entity.Challenge;
 import com.example.another_back.entity.Running;
 import com.example.another_back.entity.User;
+import com.example.another_back.entity.WithRun;
 import com.example.another_back.repository.RunningRepository;
 import com.example.another_back.repository.UserChallengeRepository;
 import com.example.another_back.repository.UserRepository;
+import com.example.another_back.repository.WithRunRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,6 +36,8 @@ public class RunningService {
 
     private final UserChallengeRepository userChallengeRepository;
 
+    private final WithRunRepository withRunRepository;
+
     private final S3UploaderService s3UploaderService;
 
     /**
@@ -57,6 +61,11 @@ public class RunningService {
         }
         // 러닝 객체 생성
         Running running = new Running(runningRequestDto, runningPic.get(0), user);
+        if(runningRequestDto.getHostRunningId()!=null){
+            WithRun withRun = withRunRepository.findByRunningHostId(runningRequestDto.getHostRunningId())
+                    .orElseThrow(()-> new IllegalArgumentException("With Run 을 가져오는 중 에러가 발생했습니다."));
+            running.setWithRun(withRun);
+        }
         // DB에 저장
         Running savedRunning = runningRepository.save(running);
         // Id 반환
@@ -76,8 +85,8 @@ public class RunningService {
             endDate = new Date(calendar1.getTimeInMillis());
             runData = runningRepository.findWithDateByUserId(user, startDate, endDate, pageable);
         } else if (category == 2) {
-            calendar1.set(calendar1.DATE, calendar1.getFirstDayOfWeek());
-            calendar2.set(calendar1.DATE, calendar1.getFirstDayOfWeek() + 7);
+            calendar1.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            calendar2.add(calendar1.DATE,5);
 
             startDate = new Date(calendar1.getTimeInMillis());
             endDate = new Date(calendar2.getTimeInMillis());
@@ -118,7 +127,7 @@ public class RunningService {
                 .dayOfRunning(runningHistoryDto.getDayOfRunning())
                 .runningTime(runningTime)
                 .runningDistance(runningHistoryDto.getRunningDistance())
-                .kcal(runningHistoryDto.getKcal())
+                .userCalories(runningHistoryDto.getUserCalories())
                 .runningData(runData)
                 .build();
     }

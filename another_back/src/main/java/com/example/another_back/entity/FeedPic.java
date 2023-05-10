@@ -1,6 +1,7 @@
 package com.example.another_back.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +21,7 @@ public class FeedPic {
     @ManyToOne(fetch = FetchType.LAZY)
     private Running running;
 
+    @Builder
     public FeedPic(String feedPic, Running running) {
         this.feedPic = feedPic;
         this.running = running;

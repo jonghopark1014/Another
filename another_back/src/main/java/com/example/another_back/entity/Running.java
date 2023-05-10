@@ -15,16 +15,16 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Running {
 
-    @Column(name =  "running_id")
+    @Column(name = "running_id")
     @Id
     private String id;
 
     private Integer runningTime;
     private Float runningDistance;
     private Date createDate;
-    private Integer kcal;
+    private Integer userCalories;
     private String runningPic;
-    private Float speed;
+    private Float userPace;
 
     @Enumerated(value = EnumType.STRING)
     private Status status;
@@ -40,17 +40,16 @@ public class Running {
     @ManyToOne(fetch = FetchType.LAZY)
     private WithRun withRun;
 
-
     @Builder
-    public Running(RunningRequestDto runningRequestDto,String runningPic,User user) {
+    public Running(RunningRequestDto runningRequestDto, String runningPic, User user) {
         this.id = runningRequestDto.getRunningId();
         this.user = user;
         this.runningTime = runningRequestDto.getRunningTime();
         this.runningDistance = runningRequestDto.getRunningDistance();
         this.createDate = runningRequestDto.getCreateDate();
-        this.kcal = runningRequestDto.getKcal();
+        this.userCalories = runningRequestDto.getUserCalories();
         this.runningPic = runningPic;
-        this.speed = runningRequestDto.getSpeed();
+        this.userPace = runningRequestDto.getUserPace();
         this.status = Status.DELETE;
     }
 }
