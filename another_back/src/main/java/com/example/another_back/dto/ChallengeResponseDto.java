@@ -9,7 +9,6 @@ public class ChallengeResponseDto {
     private Long challengeId;
     private String challengeName;
     private Integer challengeTarget;
-    private String challengeDesc;
     private String challengeGold;
     private Integer challengeCategory;
 
@@ -18,7 +17,6 @@ public class ChallengeResponseDto {
         this.challengeId = challenge.getId();
         this.challengeName = challenge.getChallengeName();
         this.challengeTarget = challenge.getChallengeTarget();
-        this.challengeDesc = challenge.getChallengeDesc();
         this.challengeGold = challenge.getChallengeGold();
         this.challengeCategory = challenge.getChallengeCategory();
     }

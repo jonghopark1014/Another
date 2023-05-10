@@ -22,7 +22,6 @@ public class Challenge {
     private Integer challengeTarget;
     private String challengeSilver;
     private String challengeGold;
-    private String challengeDesc;
 
     @OneToMany(mappedBy = "challenge")
     private List<UserChallenge> userChallengeList = new ArrayList<>();
