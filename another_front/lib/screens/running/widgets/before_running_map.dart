@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class BeforeRunningMap extends StatefulWidget {
@@ -33,7 +34,6 @@ class _BeforeRunningMapState extends State<BeforeRunningMap> {
   }
   @override
   void dispose() {
-    mapController!.dispose();
     _timer.cancel();
     super.dispose();
   }
@@ -50,20 +50,36 @@ class _BeforeRunningMapState extends State<BeforeRunningMap> {
     ) : Center(child: CircularProgressIndicator());
   }
   void getCurrentLocation() async {
-    // 위치 정보 권한 요청
-    final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!isLocationEnabled) {
-      return ;
-    }
-    LocationPermission checkedPermission = await Geolocator.checkPermission();
-    if (checkedPermission == LocationPermission.denied) {
-      checkedPermission = await Geolocator.requestPermission();
-      if (checkedPermission == LocationPermission.denied) {
-        return ;
+    // // 위치 정보 권한 요청
+    // final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+    // if (!isLocationEnabled) {
+    //   return ;
+    // }
+    // LocationPermission checkedPermission = await Geolocator.checkPermission();
+    // if (checkedPermission == LocationPermission.denied) {
+    //   checkedPermission = await Geolocator.requestPermission();
+    //   if (checkedPermission == LocationPermission.denied) {
+    //     return ;
+    //   }
+    //   print('$checkedPermission================================');
+    // }
+    // if (checkedPermission == LocationPermission.deniedForever) {
+    //   return ;
+    // }
+
+    PermissionStatus backgroundStatus = await Permission.locationAlways.request();
+
+    PermissionStatus locationStatus = await Permission.location.request();
+
+    if (locationStatus == PermissionStatus.granted) {
+      // 위치 권한이 허용된 경우
+      // 백그라운드 위치 권한 요청
+      PermissionStatus backgroundStatus = await Permission.locationAlways.request();
+
+      if (backgroundStatus == PermissionStatus.granted) {
+        // 백그라운드 위치 권한이 허용된 경우
+        // 원하는 작업 수행
       }
-    }
-    if (checkedPermission == LocationPermission.deniedForever) {
-      return ;
     }
     // 위치 권한 완료
     Position position = await Geolocator.getCurrentPosition(

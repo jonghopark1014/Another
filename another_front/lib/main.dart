@@ -11,6 +11,18 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
+class RunningSetting extends ChangeNotifier {
+  int distance = 0;
+  int min = 0;
+  List<int> interval = [0, 0];
+  void setData(d, m, i) {
+    distance = d;
+    min = m;
+    interval = i;
+    notifyListeners();
+  }
+}
+
 class RunningData extends ChangeNotifier {
   late GoogleMapController mapController;
   CameraPosition currentPosition = CameraPosition(target: LatLng(0,0), zoom: 25);
@@ -79,6 +91,38 @@ class RunningData extends ChangeNotifier {
   }
 }
 
+class ChallengeData extends ChangeNotifier {
+  String runningId = '';
+  String runningDistance = '';
+  String runningTime = '';
+  String userCalorie = '';
+  String userPace = '';
+  List<double> challengeDistanceList = [];
+
+
+  void setValues(String id, String distance, String time, String calorie, String pace) {
+    runningId = id;
+    runningDistance = distance;
+    runningTime = time;
+    userCalorie = calorie;
+    userPace = pace;
+
+    notifyListeners();
+  }
+  void setList(List<double> DistanceList){
+    challengeDistanceList = DistanceList;
+  }
+  void reset() {
+    runningId = '';
+    runningDistance = '';
+    runningTime = '';
+    userCalorie = '';
+    userPace = '';
+
+    notifyListeners();
+  }
+}
+
 class UserInfo extends ChangeNotifier {
   int? userId;
   String? accessToken;
@@ -127,7 +171,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (c) => UserInfo()) ,
         ChangeNotifierProvider(create: (c) => RunningData()) ,
-        ChangeNotifierProvider(create: (c) => ForDate()) ,
+        ChangeNotifierProvider(create: (c) => ForDate()),
+        ChangeNotifierProvider(create: (c) => ChallengeData()),
+        ChangeNotifierProvider(create: (c) => RunningSetting()) ,
       ],
       child: MaterialApp(
         initialRoute: '/',

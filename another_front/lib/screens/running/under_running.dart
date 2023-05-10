@@ -1,6 +1,8 @@
+import 'package:another/constant/color.dart';
 import 'package:another/main.dart';
 import 'package:another/screens/running/widgets/running_map.dart';
 import 'package:another/screens/running/widgets/running_status.dart';
+import 'package:another/screens/running/widgets/set_running_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -16,11 +18,20 @@ class UnderRunning extends StatefulWidget {
 
 class _UnderRunningState extends State<UnderRunning> {
   double runningId = 1;
+
+  late bool isSet;
   String runDataId = '';
   @override
   void initState() {
     super.initState();
-
+    final settingData = Provider.of<RunningSetting>(context, listen: false);
+    if (settingData.distance != 0 ||
+        settingData.min != 0 ||
+        settingData.interval[0] != 0) {
+        isSet = true;
+    } else {
+      isSet = false;
+    }
     final userInfo = context.read<UserInfo>();
     // _userWeight = userInfo.weight;
     String userId = userInfo.userId.toString();
@@ -31,13 +42,9 @@ class _UnderRunningState extends State<UnderRunning> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final runningData = Provider.of<RunningData>(context, listen: false);
+
     final initialPosition =
         ModalRoute.of(context)!.settings.arguments as CameraPosition;
 
@@ -47,10 +54,30 @@ class _UnderRunningState extends State<UnderRunning> {
         child: SafeArea(
           child: Column(
             children: [
-              AspectRatio(
-                aspectRatio: 1/1,
-                child: SizedBox(
-                    child: RunningMap(runningData: runningData, initialPosition: initialPosition)
+              // 높이가 작은 폰에서 안깨지도록 추가함
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height / 9 * 4,
+                ),
+                child: AspectRatio(
+                  aspectRatio: 1 / 1,
+                  child: SizedBox(
+                    child: isSet
+                        ? Stack(
+                            children: [
+                              RunningMap(
+                                runningData: runningData,
+                                initialPosition: initialPosition,
+                              ),
+                              // Text('done?????'),
+                              SetRunningStatus(),
+                            ],
+                          )
+                        : RunningMap(
+                            runningData: runningData,
+                            initialPosition: initialPosition,
+                          ),
+                  ),
                 ),
               ),
               // 러닝 중 데이터 출력
@@ -61,5 +88,4 @@ class _UnderRunningState extends State<UnderRunning> {
       ),
     );
   }
-
 }

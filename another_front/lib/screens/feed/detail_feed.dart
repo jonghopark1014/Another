@@ -1,3 +1,4 @@
+import 'package:another/main.dart';
 import 'package:flutter/material.dart';
 import 'package:another/screens/feed/widgets/line_chart_custom.dart';
 
@@ -6,6 +7,7 @@ import 'package:another/screens/feed/widgets/run_icon.dart';
 import 'package:another/screens/feed/api/detail_feed_api.dart';
 
 import 'package:another/widgets/target.dart';
+import 'package:provider/provider.dart';
 import '../../widgets/go_back_appbar_style.dart';
 
 class DetailFeed extends StatefulWidget {
@@ -21,6 +23,7 @@ class DetailFeed extends StatefulWidget {
 
 class _DetailFeedState extends State<DetailFeed> {
   final ScrollController _scrollController = ScrollController();
+
   List<String> thumbnailUrls = [];
   List<PacesData> chartDataList = [];
   String runningTime = '0';
@@ -32,7 +35,7 @@ class _DetailFeedState extends State<DetailFeed> {
   String profilePic = '';
   String userNickname = '';
   String runCount = '';
-  String runId ='';
+  String runId = '';
 
   @override
   void initState() {
@@ -44,8 +47,8 @@ class _DetailFeedState extends State<DetailFeed> {
   Future<void> _detailFeed() async {
     try {
       final response = await DetailFeedApi.getFeed(widget.runningId);
-      print(widget.runningId);
-      print(response);
+
+
       List<String> feedPicUrls = [];
       List<dynamic> graphs = [];
       List<PacesData> chartData = [];
@@ -85,12 +88,18 @@ class _DetailFeedState extends State<DetailFeed> {
             double userPace = 0.0;
             if (data['runningDistance'] != null && data['userPace'] != null) {
               runningDistance = data['runningDistance'] ?? 0.0;
-              userPace = double.parse(data['userPace'].replaceAll("''", "").replaceAll("'", ".")) ?? 0.0;
+              userPace = double.parse(data['userPace']
+                      .replaceAll("''", "")
+                      .replaceAll("'", ".")) ??
+                  0.0;
             }
-            return PacesData(runningDistance: runningDistance, userPace: userPace);
+            return PacesData(
+                runningDistance: runningDistance, userPace: userPace);
           },
         ).toList();
       }
+
+
 
       setState(
         () {
@@ -106,6 +115,7 @@ class _DetailFeedState extends State<DetailFeed> {
           userNickname = nickname;
           runCount = withRunCount;
           runId = runningId;
+
         },
       );
     } catch (e) {
@@ -117,6 +127,11 @@ class _DetailFeedState extends State<DetailFeed> {
 
   @override
   Widget build(BuildContext context) {
+    final challengeData = Provider.of<ChallengeData>(context, listen: false);
+
+    challengeData.setValues(
+        runId, runningDistance, runningTime, userCalorie, userPace );
+
     return Scaffold(
       appBar: GoBackAppBarStyle(),
       body: ListView(
@@ -151,12 +166,8 @@ class _DetailFeedState extends State<DetailFeed> {
                           nickname: userNickname,
                         ),
                         RunIcon(
-                          runningTime: runningTime,
-                          runningDistance: runningDistance,
-                          userCalorie: userCalorie,
-                          userPace: userPace,
                           runCount: runCount,
-                            runningId: runId
+                          runningId: runId,
                         ),
                       ],
                     ),

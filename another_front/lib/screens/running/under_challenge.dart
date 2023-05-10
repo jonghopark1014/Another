@@ -1,4 +1,5 @@
-import 'package:another/screens/running/api/versus_api.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -18,8 +19,6 @@ class UnderChallenge extends StatefulWidget {
 }
 
 class _UnderChallengeState extends State<UnderChallenge> {
-  double runningId = 1;
-
   @override
   void dispose() {
     super.dispose();
@@ -55,60 +54,92 @@ class UnderChallengeStatus extends StatefulWidget {
 }
 
 class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
-  // 거리
-  double runningDistance = 0.0;
-  // 상대방 목표 거리
-  double challengeDistance = 100.0;
-
-  // 여기에다가 변화는 값 만들어 줘야됨 (시간을 넣어주면됨)
-  double _currentSliderValue = 80.0;
-
-  // 상대방
-  double _currentYouSliderValue = 60.0;
+  late Timer _timer;
+  late String runningId;
+  late String targetRunningDistance;
+  late String runningTime;
+  late String userCalorie;
+  late String userPace;
+  late double currentRunningDistance;
+  late List<double> challengeDistanceList = [];
+  late var runningData;
+  double currentDistance = 0;
 
   @override
   void initState() {
     super.initState();
-    _versusApi();
+    var challengeData = Provider.of<ChallengeData>(context, listen: false);
+    runningId = challengeData.runningId;
+    targetRunningDistance = challengeData.runningDistance;
+    runningTime = challengeData.runningTime;
+    userCalorie = challengeData.userCalorie;
+    userPace = challengeData.userPace;
+    challengeDistanceList = challengeData.challengeDistanceList;
+
+    pace();
   }
+
+  // 상대방 목표 거리
+  // runningDistance
+
+  // 여기에다가 변화는 값 만들어 줘야됨 (시간을 넣어주면됨)
+  // double _currentSliderValue = 80.0;
+
+  // 상대방
+  // double _currentYouSliderValue = 0.0;
 
   @override
   void dispose() {
     super.dispose();
   }
 
-  Future<void> _versusApi() async {
-    try {
-      final response = await VersusApi.getFeed('1');
-      print('ddddddd $response');
-
-      setState(
+  int second = 0;
+  void pace() {
+    _timer = Timer.periodic(
+      Duration(seconds: 1),
+      (timer) {
+        if (challengeDistanceList.length - 1> second) {
+          setState(
             () {
-
-        },
-      );
-    } catch (e) {
-      print(e);
-    }
+              second++;
+            },
+          );
+        } else {
+          _timer.cancel();
+          print('타이머 종료');
+        }
+      },
+    );
   }
-
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    runningData = Provider.of<RunningData>(context, listen: false);
+    currentRunningDistance = runningData.runningDistance;
+    if(currentRunningDistance <= double.parse(targetRunningDistance)) {
+      setState(() {
+        currentDistance = currentRunningDistance;
+      });
+    } else {
+      currentDistance = double.parse(targetRunningDistance);
+    }
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: Column(
             children: [
-              SizedBox(height: 25.0,),
+              SizedBox(
+                height: 25.0,
+              ),
               Target(
                 targetname: '목표기록',
-                runningDistance: '',
-                userCalorie: '',
-                runningTime: '',
-                userPace: '',
+                runningDistance: targetRunningDistance,
+                userCalorie: userCalorie,
+                runningTime: runningTime,
+                userPace: userPace,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -117,21 +148,24 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
                     children: [
                       DistanceBar(
                         name: '상대 페이스',
-                        pace: _currentYouSliderValue,
-                        youDistance: challengeDistance,
+                        pace: challengeDistanceList[second],
+                        //print();
+                        // 수정 주석처리만 하고 밑에 있는 값 바꾸면 됨
+                        // youDistance: double.parse(targetRunningDistance),
+                        youDistance: 0.832,
                       ),
                       DistanceBar(
                         name: '내 페이스',
-                        pace: _currentSliderValue,
-                        youDistance: challengeDistance,
-                        distance: runningDistance,
+                        pace: currentRunningDistance,
+                        // youDistance: double.parse(targetRunningDistance),
+                        youDistance: 0.832,
                       ),
                     ],
                   ),
                   Positioned(
                     child: AbsorbPointer(
                       absorbing: true,
-                      child: Container(
+                      child: SizedBox(
                         width: 400,
                         height: 150,
                       ),
@@ -139,7 +173,7 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
                   ),
                 ]),
               ),
-              RunningStatus(),
+              RunningStatus(isChallenge: true,),
             ],
           ),
         ),

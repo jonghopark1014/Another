@@ -7,12 +7,10 @@ class DistanceBar extends StatefulWidget {
   final String name;
   final double pace;
   final double youDistance;
-  double? distance;
   DistanceBar({
     required this.pace,
     required this.name,
     required this.youDistance,
-    this.distance,
     Key? key,
   }) : super(key: key);
 
@@ -21,8 +19,9 @@ class DistanceBar extends StatefulWidget {
 }
 
 class _DistanceBarState extends State<DistanceBar> {
-  late final String name;
+  final String name;
   double _progress = 0.0;
+  double _previousValue = 0.0;
 
   _DistanceBarState({required this.name});
 
@@ -60,9 +59,9 @@ class _DistanceBarState extends State<DistanceBar> {
               // 거리 widget.distance 넣어주면 될듯 함 상대방의 거리
               max: widget.youDistance,
               onChanged: (double value) {
-                setState(() {
-                  _progress = value;
-                });
+                  setState(() {
+                    _progress = value;
+                  });
               },
             ),
           ),

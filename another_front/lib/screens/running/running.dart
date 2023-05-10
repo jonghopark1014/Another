@@ -49,7 +49,7 @@ class _RunningTabState extends State<RunningTab> {
                   // RunningCircleButton(iconNamed: Icons.play_arrow, onPressed: onPressed()),
                   RunningCircleButton(
                     iconNamed: Icons.play_arrow,
-                    onPressed: onPressed,
+                    onPressed: () {onPressed('/UnderRunning');},
                   ),
                   RunningSmallButton(
                     iconNamed: Icons.list,
@@ -121,8 +121,7 @@ class _RunningTabState extends State<RunningTab> {
                       '러닝 시작!',
                       style: TextStyle(fontSize: 18),
                     ),
-                    // 나중에 수정해야함!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    onPressed: onPressed,
+                    onPressed: () {onPressed('/UnderRunning');},
                   ),
                 ],
               ),
@@ -179,8 +178,7 @@ class _RunningTabState extends State<RunningTab> {
                       padding: EdgeInsets.all(10),
                       primary: MAIN_COLOR,
                     ),
-                    // 나중에 수정해야함!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    onPressed: onPressed,
+                    onPressed: () {onPressed('/UnderChallenge');},
                     child: const Text(
                       '러닝 시작!',
                       style: TextStyle(fontSize: 18),
@@ -194,20 +192,23 @@ class _RunningTabState extends State<RunningTab> {
   }
 
   // 타이머 페이지로 context
-  void onPressed() {
+  void onPressed(String str) {
     final runningData = Provider.of<RunningData>(context, listen: false);
     runningData.reset();
     runningData.addLocation(runningData.currentPosition.target);
 
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (_) => TimerScreen(
-          path: '/UnderRunning',
-          initialPosition: runningData.currentPosition,
+    // currentposition 초기값 그대로이면 받아오기전으로 판단
+    if (runningData.currentPosition.target.longitude != 0 && runningData.currentPosition.target.latitude != 0 ) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => TimerScreen(
+            path: str,
+            initialPosition: runningData.currentPosition,
+          ),
         ),
-      ),
-      (route) => false,
-    );
+            (route) => false,
+      );
+    }
   }
 }
 

@@ -44,7 +44,7 @@ class _FeedScreenState extends State<FeedScreen> {
   Future<void> _loadFeed() async {
     try {
       final response = await FeedApi.getFeed();
-      print(response);
+      // print(response);
 
       final contents = response['data']['content'];
       List<String> feedPicUrls = [];
@@ -70,7 +70,7 @@ class _FeedScreenState extends State<FeedScreen> {
           kcalList.add(content['userCalories'].toString());
         }
       }
-      print(runningIdsList);
+      // print(runningIdsList);
       setState(
         () {
           thumbnailUrls = feedPicUrls;
@@ -96,7 +96,7 @@ class _FeedScreenState extends State<FeedScreen> {
       List<String> walkCountList = [];
       List<String> kcalList = [];
       String profilePic = '';
-      print(response);
+      // print(response);
 
       if (contents != []) {
         for (var content in contents) {
