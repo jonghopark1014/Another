@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -54,15 +52,17 @@ class UnderChallengeStatus extends StatefulWidget {
 }
 
 class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
-  late Timer _timer;
   late String runningId;
   late String targetRunningDistance;
-  late String runningTime;
+  late String targetRunningTime;
   late String userCalorie;
   late String userPace;
-  late double currentRunningDistance;
-  late List<double> challengeDistanceList = [];
-  late var runningData;
+  String time = '';
+  int secondForIndex = 0;
+  double currentRunningDistance = 0;
+  List<double> challengeDistanceList = [];
+  double challengeDistance = 0;
+  late RunningData runningData;
   double currentDistance = 0;
 
   @override
@@ -71,60 +71,36 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
     var challengeData = Provider.of<ChallengeData>(context, listen: false);
     runningId = challengeData.runningId;
     targetRunningDistance = challengeData.runningDistance;
-    runningTime = challengeData.runningTime;
+    targetRunningTime = challengeData.runningTime;
     userCalorie = challengeData.userCalorie;
     userPace = challengeData.userPace;
     challengeDistanceList = challengeData.challengeDistanceList;
-
-    pace();
   }
-
-  // 상대방 목표 거리
-  // runningDistance
-
-  // 여기에다가 변화는 값 만들어 줘야됨 (시간을 넣어주면됨)
-  // double _currentSliderValue = 80.0;
-
-  // 상대방
-  // double _currentYouSliderValue = 0.0;
 
   @override
   void dispose() {
     super.dispose();
   }
 
-  int second = 0;
-  void pace() {
-    _timer = Timer.periodic(
-      Duration(seconds: 1),
-      (timer) {
-        if (challengeDistanceList.length - 1> second) {
-          setState(
-            () {
-              second++;
-            },
-          );
-        } else {
-          _timer.cancel();
-          print('타이머 종료');
-        }
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    runningData = Provider.of<RunningData>(context, listen: false);
+    // 러닝 데이터 받기
+    runningData = Provider.of<RunningData>(context);
+    time = runningData.runningTime;
+    // 사용자 거리 업데이트
     currentRunningDistance = runningData.runningDistance;
-    if(currentRunningDistance <= double.parse(targetRunningDistance)) {
-      setState(() {
-        currentDistance = currentRunningDistance;
-      });
+    if (currentRunningDistance <= double.parse(targetRunningDistance)) {
+      currentDistance = currentRunningDistance;
     } else {
       currentDistance = double.parse(targetRunningDistance);
     }
-
+    if (secondForIndex < challengeDistanceList.length) {
+      challengeDistance = challengeDistanceList[secondForIndex];
+      // 인덱스로 쓰는 시간 변환
+      secondForIndex = int.parse(time.substring(0, 2)) * 3600 +
+          int.parse(time.substring(3, 5)) * 60 +
+          int.parse(time.substring(6, 8));
+    }
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -138,7 +114,7 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
                 targetname: '목표기록',
                 runningDistance: targetRunningDistance,
                 userCalorie: userCalorie,
-                runningTime: runningTime,
+                runningTime: targetRunningTime,
                 userPace: userPace,
               ),
               Padding(
@@ -148,7 +124,7 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
                     children: [
                       DistanceBar(
                         name: '상대 페이스',
-                        pace: challengeDistanceList[second],
+                        pace: challengeDistance,
                         //print();
                         // 수정 주석처리만 하고 밑에 있는 값 바꾸면 됨
                         // youDistance: double.parse(targetRunningDistance),
@@ -173,7 +149,9 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
                   ),
                 ]),
               ),
-              RunningStatus(isChallenge: true,),
+              RunningStatus(
+                isChallenge: true,
+              ),
             ],
           ),
         ),

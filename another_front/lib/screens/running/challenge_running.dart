@@ -55,8 +55,8 @@ class _ChallengeRunningState extends State<ChallengeRunning> {
     try {
       // 수정 주석처리만 하고 밑에 있는 값 바꾸면 됨
       //print();
-      // final response = await VersusApi.getFeed(runningId);
-      final response = await VersusApi.getFeed('1230509055100');
+      final response = await VersusApi.getFeed(runningId);
+      // final response = await VersusApi.getFeed('1230509055100');
       final contents = response['data'];
 
       for (var content in contents) {
