@@ -26,6 +26,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
+    print('_CustomTextFieldState 빌드 됨/');
+    print(errorText);
     return TextFormField(
       controller: widget.controller,
       validator: widget.validator,
@@ -48,8 +50,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
       ),
       style: TextStyle(color: SERVEONE_COLOR), // 원하는 입력 텍스트 색상으로 변경
       onChanged: (value) {
+        print('=========여기 체인지=======');
+        print(value);
+        print('=========여기 체인지=======');
         setState(() {
           errorText = widget.validator?.call(value);
+          print('-----------');
+          print(errorText);
+          print('-----------');
         });
       },
     );
@@ -95,26 +103,81 @@ class _CustomInputFormState extends State<CustomInputForm> {
     });
   }
 
-  // 닉네임 수정했을 때 발동할 함수
+  // 닉네임 입력값 수정했을 때 발동할 함수
   Future<void> nicknameImpossible() async {
     setState(() {
       isNicknamePossible = false;
     });
   }
 
-  // 중복확인 버튼 활성화 여부를 판단하는 함수
+  // 비밀번호 입력값 수정했을 때 발동할 함수
+  Future<void> pwInputChange() async {
+    if (isPwPossible || isPwCheckPossible) {
+      if (pwController.text != pwCheckController.text) {
+        setState(() {
+          isPwCheckPossible = false;
+          _validatePw(pwController.text);
+          _validatePwCheck(pwCheckController.text);
+        });
+      } else if (pwController.text == pwCheckController.text) {
+        setState(() {
+          isPwCheckPossible = true;
+          _validatePw(pwController.text);
+          _validatePwCheck(pwCheckController.text);
+        });
+      }
+    }
+  }
+
+  // 중복확인 버튼 활성화 여부를 판단하는 함수 (닉네임 입력할때마다 확인)
   @override
   void initState() {
     super.initState();
-    nicknameController.addListener(() async {
-      await nicknameImpossible();
+    nicknameController.addListener(() {
+      nicknameImpossible();
       setState(() {
         isNicknameButtonActive = nicknameController.text.length >= 2 &&
-                nicknameController.text.length <= 8 &&
+                nicknameController.text.length <= 12 &&
                 !isNicknamePossible
             ? true
             : false;
       });
+    });
+    pwController.addListener(() {
+      if (isPwPossible || isPwCheckPossible) {
+        if (pwController.text != pwCheckController.text) {
+          setState(() {
+            isPwCheckPossible = false;
+          });
+        } else if (pwController.text == pwCheckController.text) {
+          setState(() {
+            isPwCheckPossible = true;
+          });
+        }
+      }
+      _validatePw(pwController.text);
+      _validatePwCheck(pwCheckController.text);
+      print('pwPossible변경');
+      print('isPwPossible: $isPwPossible');
+      print('isPwCheckPossible: $isPwCheckPossible');
+    });
+    pwCheckController.addListener(() {
+      if (isPwPossible || isPwCheckPossible) {
+        if (pwController.text != pwCheckController.text) {
+          setState(() {
+            isPwCheckPossible = false;
+          });
+        } else if (pwController.text == pwCheckController.text) {
+          setState(() {
+            isPwCheckPossible = true;
+            _validatePw(pwController.text);
+            _validatePwCheck(pwCheckController.text);
+          });
+        }
+      }
+      print('pwCheckController변경');
+      print('isPwPossible: $isPwPossible');
+      print('isPwCheckPossible: $isPwCheckPossible');
     });
   }
 
@@ -125,6 +188,8 @@ class _CustomInputFormState extends State<CustomInputForm> {
       setState(() {
         isEmailPossible = false;
       });
+      print('이메일: $value');
+      print('이메일 여부: $isEmailPossible');
       return '이메일을 입력해주세요.';
     }
     // 입력한 경우 이메일 형식 검사
@@ -135,21 +200,28 @@ class _CustomInputFormState extends State<CustomInputForm> {
       setState(() {
         isEmailPossible = false;
       });
+      print('이메일: $value');
+      print('이메일 여부: $isEmailPossible');
       return '잘못된 이메일 형식입니다.';
     }
     // 잘 된 경우
     setState(() {
       isEmailPossible = true;
     });
+    print('이메일: $value');
+    print('이메일 여부: $isEmailPossible');
     return null;
   }
 
   // 비밀번호 유효성 검사
   String? _validatePw(String? value) {
+    print('pw함수 들어옴');
     if (value == null || value.isEmpty) {
       setState(() {
         isPwPossible = false;
       });
+      print('비밀번호: $value');
+      print('비밀번호 여부: $isPwPossible');
       return '비밀번호를 입력해주세요.';
     }
     // 비밀번호 길이 검사
@@ -157,6 +229,8 @@ class _CustomInputFormState extends State<CustomInputForm> {
       setState(() {
         isPwPossible = false;
       });
+      print('비밀번호: $value');
+      print('비밀번호 여부: $isPwPossible');
       return '8~16자 사이로 입력해주세요.';
     }
     // 특수문자 포함 여부 검사
@@ -166,27 +240,44 @@ class _CustomInputFormState extends State<CustomInputForm> {
       setState(() {
         isPwPossible = false;
       });
+      print('비밀번호: $value');
+      print('비밀번호 여부: $isPwPossible');
       return '특수문자를 포함하여 입력해주세요.';
     }
     // 잘 된 경우
     setState(() {
       isPwPossible = true;
     });
+    if (isPwPossible == true) {
+      print('비밀번호: $value');
+      print('비밀번호 여부: $isPwPossible');
+      return null;
+    }
+    print('비밀번호: $value');
+    print('비밀번호 여부: $isPwPossible');
     return null;
   }
 
   // 비밀번호 확인 유효성 검사
   String? _validatePwCheck(String? value) {
+    print('pwcheck함수 들어옴');
     if (value != pwController.text) {
       setState(() {
         isPwCheckPossible = false;
       });
+      print('비밀번호 확인: $value');
+      print('비밀번호 확인 여부: $isPwCheckPossible');
       return '비밀번호를 다시 입력해주세요.';
+    } else if (value == pwController.text) {
+      setState(() {
+        isPwCheckPossible = true;
+      });
+      print('비밀번호 확인: $value');
+      print('비밀번호 확인 여부: $isPwCheckPossible');
+      return null;
+    } else if (isPwCheckPossible == true){
+      print('둘다 체크 완료');
     }
-    // 잘 된 경우
-    setState(() {
-      isPwCheckPossible = true;
-    });
     return null;
   }
 
@@ -196,14 +287,16 @@ class _CustomInputFormState extends State<CustomInputForm> {
       return '닉네임을 입력해주세요.';
     }
     // 닉네임 길이 검사
-    if (value.length < 2 || value.length > 8) {
-      return '2~8자 사이로 입력해주세요.';
+    if (value.length < 2 || value.length > 12) {
+      return '2~12자 사이로 입력해주세요.';
     }
     return null;
   }
 
   @override
   Widget build(BuildContext context) {
+    print('build');
+    print('=================================');
     return Form(
       key: _formKey,
       child: Column(
@@ -248,10 +341,8 @@ class _CustomInputFormState extends State<CustomInputForm> {
                                   nicknameDuplication: nicknameDuplication) ==
                               '사용 가능') {
                             isNicknamePossible = true;
-                            print('사용 가능123');
                           } else {
                             isNicknamePossible = false;
-                            print('사용 불가123');
                           }
                         }
                       : null,

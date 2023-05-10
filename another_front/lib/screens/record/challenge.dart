@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:another/constant/color.dart';
 import './widgets/category_title.dart';
 import './widgets/challenge_item.dart';
-import 'package:another/screens/record/widgets/record_chart.dart';
 
 class ChallengePage extends StatelessWidget {
   ChallengePage({Key? key}) : super(key: key);
@@ -63,6 +62,8 @@ class ChallengePage extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ChallengeHeader(exp: 12000),
               // 월간 시간 챌린지
@@ -126,6 +127,7 @@ class ChallengeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(

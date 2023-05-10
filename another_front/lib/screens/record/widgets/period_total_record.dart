@@ -33,7 +33,9 @@ class PeriodTotalRecord extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: 20, top: 12, bottom: 4),
                 child: Text(
-                  recordData['Date'] ?? '-',
+                  selectedIndex == 0
+                      ? '${recordData['curAvg']['startDate']}'
+                      : '${recordData['curAvg']['startDate']} ~ ${recordData['curAvg']['endDate']}',
                   style: TextStyle(color: SERVETWO_COLOR),
                 ),
               ),
@@ -43,24 +45,30 @@ class PeriodTotalRecord extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     BigTargetBox(
-                      data: (recordData['runningDistance'] * 1000).round() / 1000 ?? '-',
+                      data:
+                          (recordData['curAvg']['sumDistance'] * 1000).round() /
+                                  1000 ??
+                              '-',
                       unit: 'km',
                     ),
                     SizedBox(height: 15),
                     Row(
                       children: [
                         SmallTargetBox(
-                          data: recordData['runningTime'] ?? '-',
+                          data: recordData['curAvg']['sumTime'] ?? '-',
                           unit: '시간',
                         ),
                         SizedBox(width: 40),
                         SmallTargetBox(
-                          data: (recordData['userCalories'] * 1000).round() / 1000 ?? '-',
+                          data: recordData['curAvg']['sumKcal'] ?? '-',
                           unit: 'kcal',
                         ),
                         SizedBox(width: 40),
                         SmallTargetBox(
-                          data: (recordData['runningDistance'] * 1000).round() / 1000 ?? '-',
+                          data: (recordData['curAvg']['avgSpeed'] * 1000)
+                                      .round() /
+                                  1000 ??
+                              '-',
                           unit: '페이스',
                         ),
                       ],
