@@ -80,7 +80,17 @@ class RunningData extends ChangeNotifier {
 }
 
 class UserInfo extends ChangeNotifier {
-  var userId = 1;
+  int? userId;
+  String? accessToken;
+  String? refreshToken;
+
+  void updateUserInfo(String userId, String accessToken, String refreshToken) {
+    this.userId = int.parse(userId);
+    this.accessToken = accessToken;
+    this.refreshToken = refreshToken;
+    notifyListeners();
+  }
+  // var userId = 1;
   var nickname = '임범규';
   var height = 185;
   var weight = 70;
@@ -105,8 +115,14 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  final userInfo = UserInfo();
   @override
   Widget build(BuildContext context) {
+    if (userInfo.userId != null){
+      print('not null');
+    } else{
+      print('null');
+    }
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (c) => UserInfo()) ,

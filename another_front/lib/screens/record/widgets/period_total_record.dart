@@ -46,9 +46,7 @@ class PeriodTotalRecord extends StatelessWidget {
                   children: [
                     BigTargetBox(
                       data:
-                          (recordData['curAvg']['sumDistance'] * 1000).round() /
-                                  1000 ??
-                              '-',
+                          recordData['curAvg']['sumDistance'] ?? '-',
                       unit: 'km',
                     ),
                     SizedBox(height: 15),
@@ -65,9 +63,7 @@ class PeriodTotalRecord extends StatelessWidget {
                         ),
                         SizedBox(width: 40),
                         SmallTargetBox(
-                          data: (recordData['curAvg']['avgSpeed'] * 1000)
-                                      .round() /
-                                  1000 ??
+                          data: recordData['curAvg']['avgSpeed'] ??
                               '-',
                           unit: '페이스',
                         ),
