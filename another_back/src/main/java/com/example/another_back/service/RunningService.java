@@ -211,11 +211,53 @@ public class RunningService {
             startDate = new Date(calendar1.getTimeInMillis());
             endDate = new Date(Calendar.getInstance().getTimeInMillis());
         } else {
-            calendar1.set(0,1,1);
+            calendar1.set(0, 1, 1);
             startDate = new Date(calendar1.getTimeInMillis());
             endDate = new Date(Calendar.getInstance().getTimeInMillis());
         }
         return runningRepository.findWithDateByUserId(user, startDate, endDate, pageable);
+    }
+
+    /**
+     * 달력에서 선택한 날짜 API
+     *
+     * @param userId
+     * @param createDate
+     * @return CurRunningDto
+     */
+    public CurRunningDto getIntervalRecord(Long userId, Date createDate) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+        RunningRecordDto curRunningRecordDto = runningRepository.findRunningRecordDtoByUserId(user, createDate).get();
+        curRunningRecordDto = defaultRunningHistoryDto(curRunningRecordDto);
+
+        String time1 = convertTime(curRunningRecordDto.getSumRunningTime());
+        String time2 = convertTime(curRunningRecordDto.getAvgRunningTime().longValue());
+
+        return CurRunningDto.builder()
+                .avgTime(time2)
+                .sumTime(time1)
+                .avgDistance(curRunningRecordDto.getAvgRunningDistance())
+                .sumDistance(curRunningRecordDto.getSumRunningDistance())
+                .avgKcal(curRunningRecordDto.getAvgKcal())
+                .sumKcal(curRunningRecordDto.getSumKcal())
+                .avgPace(convertPace(curRunningRecordDto.getAvgPace()))
+                .startDate(createDate.toString())
+                .endDate(createDate.toString())
+                .build();
+    }
+
+    /**
+     * 달력에서 선택한 날짜 API
+     *
+     * @param userId
+     * @param createDate
+     * @return Page<RunningEachHistoryDto>
+     */
+    public Page<RunningEachHistoryDto> getIntervalHistory(Long userId, Date createDate, Pageable pageable) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+        return runningRepository.findByCreateDateAndUserId(user, createDate, pageable);
     }
 
     private RunningRecordDto defaultRunningHistoryDto(RunningRecordDto runningRecordDto) {
@@ -254,7 +296,7 @@ public class RunningService {
     private String convertPace(Double pace) {
         String minute = Integer.toString(pace.intValue() / 60);
         String second = Integer.toString(pace.intValue() % 60);
-        return minute+"'"+second+"''";
+        return minute + "'" + second + "''";
     }
 
     /**
