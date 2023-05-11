@@ -55,6 +55,8 @@ public class UserService {
         return UserLevelExpDto.builder()
                 .level(user.getLevel())
                 .exp(user.getExp())
+                .nickname(user.getNickname())
+                .profilePic(user.getProfilePic())
                 .build();
     }
 
