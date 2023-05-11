@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:another/main.dart';
+import 'package:another/screens/running/api/feed_create_api.dart';
 import 'package:another/screens/running/running_feed_complete.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
 import 'package:another/widgets/target.dart';
@@ -21,12 +22,14 @@ class UnderChallengeScreenEndFeed extends StatefulWidget {
 }
 
 class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFeed> {
-  // 표시할 사진들 위젯
-  List<Widget> imageWidgetList = [];
-  // 고른 사진들 위젯
-  List<Widget> pickedImgWidget = [];
-  // 뛴지도 위젯
-  late final Widget runPicWidget;
+  // api 요청용
+  late int userId = Provider.of<UserInfo>(context, listen: false).userId as int;
+  late String runningId;
+  List<Uint8List> feedPics = [];
+  // 고른 사진들
+  List<Uint8List> pickedImgs = [];
+  // 뛴지도 사진
+  late final Uint8List runPic;
   // 받아올 사진들 정보
   late List<Uint8List> images = [];
   // 표시할 데이터
@@ -41,18 +44,14 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
   void initState() {
     // TODO: implement initState
     var runningData = Provider.of<RunningData>(context, listen: false);
+    runningId = runningData.runningId;
     runningDistance = runningData.runningDistance.toStringAsFixed(3);
     userCalorie = runningData.userCalories.toString();
     runningTime = runningData.runningTime;
     userPace = runningData.userPace;
-    runPicWidget = SizedBox(
-      height: 350.0,
-      child: Image.memory(
-        widget.captureInfo!,
-        fit: BoxFit.contain,
-      ),
-    );
-    imageWidgetList.add(runPicWidget);
+
+    runPic = widget.captureInfo!;
+    feedPics.add(runPic);
     super.initState();
   }
 
@@ -115,9 +114,15 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
                     child: PageView.builder(
                       controller: _pageController,
                       itemBuilder: (BuildContext context, int index) {
-                        return imageWidgetList[index];
+                        return SizedBox(
+                          height: 350.0,
+                          child: Image.memory(
+                            feedPics[index],
+                            fit: BoxFit.contain,
+                          ),
+                        );
                       },
-                      itemCount: imageWidgetList.length,
+                      itemCount: feedPics.length,
                     ),
                   ),
                 ),
@@ -136,7 +141,8 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
                     primary: MAIN_COLOR,
                     elevation: 20.0,
                   ),
-                  onPressed: () async {
+                  onPressed: () {
+                    feedCreateApi(userId, runningId, feedPics);
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                             builder: (_) => RunningFeedComplete()),
@@ -167,19 +173,11 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
       File file = File(imageXFiles[i].path);
       Uint8List imgByteList = await file.readAsBytes();
       // 받아온 이미지 위젯리스트에 추가
-      pickedImgWidget.add(
-          SizedBox(
-            height: 350.0,
-            child: Image.memory(
-              imgByteList,
-              fit: BoxFit.contain,
-            ),
-          )
-      );
+      pickedImgs.add(imgByteList);
     }
     setState(() {
-      imageWidgetList = [...pickedImgWidget];
-      imageWidgetList.add(runPicWidget);
+      feedPics = [...pickedImgs];
+      feedPics.add(runPic);
     });
   }
   // 이미지 불러올지, 사진 찍을지 고르기
