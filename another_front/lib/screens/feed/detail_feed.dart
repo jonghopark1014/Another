@@ -36,10 +36,12 @@ class _DetailFeedState extends State<DetailFeed> {
   String userNickname = '';
   String runCount = '';
   String runId = '';
+  var challengeData;
 
   @override
   void initState() {
     super.initState();
+    challengeData = Provider.of<ChallengeData>(context, listen: false);
     _detailFeed();
   }
 
@@ -47,7 +49,6 @@ class _DetailFeedState extends State<DetailFeed> {
   Future<void> _detailFeed() async {
     try {
       final response = await DetailFeedApi.getFeed(widget.runningId);
-
 
       List<String> feedPicUrls = [];
       List<dynamic> graphs = [];
@@ -88,18 +89,14 @@ class _DetailFeedState extends State<DetailFeed> {
             double userPace = 0.0;
             if (data['runningDistance'] != null && data['userPace'] != null) {
               runningDistance = data['runningDistance'] ?? 0.0;
-              userPace = double.parse(data['userPace']
-                      .replaceAll("''", "")
-                      .replaceAll("'", ".")) ??
-                  0.0;
+              userPace = double.parse(
+                  data['userPace'].replaceAll("''", "").replaceAll("'", "."));
             }
             return PacesData(
                 runningDistance: runningDistance, userPace: userPace);
           },
         ).toList();
       }
-
-
 
       setState(
         () {
@@ -115,8 +112,14 @@ class _DetailFeedState extends State<DetailFeed> {
           userNickname = nickname;
           runCount = withRunCount;
           runId = runningId;
-
         },
+      );
+      challengeData.setValues(
+        runId,
+        runningDistance,
+        runningTime,
+        userCalorie,
+        userPace,
       );
     } catch (e) {
       print(e);
@@ -127,10 +130,6 @@ class _DetailFeedState extends State<DetailFeed> {
 
   @override
   Widget build(BuildContext context) {
-    final challengeData = Provider.of<ChallengeData>(context, listen: false);
-
-    challengeData.setValues(
-        runId, runningDistance, runningTime, userCalorie, userPace );
 
     return Scaffold(
       appBar: GoBackAppBarStyle(),

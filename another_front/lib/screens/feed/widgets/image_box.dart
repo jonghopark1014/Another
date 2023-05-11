@@ -24,7 +24,6 @@ class ImageBox extends StatefulWidget {
 }
 
 class _ImageBoxState extends State<ImageBox> {
-
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -37,6 +36,7 @@ class _ImageBoxState extends State<ImageBox> {
         itemCount: widget.thumbnailUrls.isNotEmpty ? widget.thumbnailUrls.length : 1,
         itemBuilder: (context, index) {
           if (widget.thumbnailUrls.isNotEmpty) {
+
             return InkWell(
               child: _buildListItem(context, index),
               onTap: () {

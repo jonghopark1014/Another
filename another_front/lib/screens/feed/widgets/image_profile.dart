@@ -17,6 +17,7 @@ class ImageProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print(profilePic);
     return InkWell(
       child: Row(
         children: [

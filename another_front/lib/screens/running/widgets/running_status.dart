@@ -1,18 +1,23 @@
 // 지도를 매번 setState로 매초 다시 그리면 터짐
 // 그래서 따로 뺌
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+
 import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:another/screens/running/under_challenge_end.dart';
-import 'package:another/screens/running/widgets/running_circle_button.dart';
-import 'package:another/widgets/record_result.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import 'package:another/screens/running/under_challenge_end.dart';
+import 'package:another/screens/running/widgets/running_circle_button.dart';
+import 'package:another/widgets/record_result.dart';
 
 import '../../../main.dart';
 import '../api/under_running_api.dart';
@@ -151,6 +156,7 @@ class _RunningStatus extends State<RunningStatus> {
             minutes = 0;
           }
           setData();
+          sendDataToWatch();
         }
       });
     });
@@ -236,7 +242,6 @@ class _RunningStatus extends State<RunningStatus> {
       // // hdfs 저장
       saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
 
-
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (_) => UnderChallengeScreenEnd(
@@ -272,16 +277,41 @@ class _RunningStatus extends State<RunningStatus> {
     // saveRunningTime.saveRunData(userId: userId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
     // // hdfs 저장
     // saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
-
-
   }
 
-  // 캡처하기 위한 함수
+  // 캡처 하기 위한 함수
   Future<Uint8List?> captureWidget() async {
     var mapController = Provider.of<RunningData>(context, listen: false).mapController;
     final Uint8List? bytes = await mapController.takeSnapshot();
     return bytes;
   }
+
+  // 워치로 보내는 하는 데이터 값
+  void sendDataToWatch() async {
+    const messageChannel =
+    const BasicMessageChannel<String>('com.another.data', StringCodec());
+    assert(messageChannel != null);
+    var runningData = Provider.of<RunningData>(context, listen: false);
+    var userId = Provider.of<UserInfo>(context, listen: false).userId;
+    // 데이터를 전송할 맵 객체 생성
+    Map<String, dynamic> data = {'userId': userId!, 'runningId': runningData.runningId, runningTime: runningData.runningTime, 'runningDistance': runningData.runningDistance, 'userCalories': runningData.userCalories, 'userPace': runningData.userPace, 'runningPic': runningData.runningPic};
+    print(data);
+    // 데이터 전송
+    print(json.encode(data));
+    print('워치로 보내고 싶어');
+    if (messageChannel != null) {
+      final String? response = await messageChannel.send(json.encode(data));
+      print('보내지는거 맞나?');
+    } else {
+      print('제발제발되라!!!');
+    }
+    
+
+    // 워치 어플에서 보낸 응답 출력
+    
+    
+  }
+
 
   void onChange() {}
 }

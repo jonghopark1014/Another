@@ -1,15 +1,13 @@
-import 'dart:typed_data';
-
-import 'package:another/constant/color.dart';
-import 'package:another/screens/home_screen.dart';
-import 'package:another/screens/running/challenge_running.dart';
-import 'package:another/screens/running/running.dart';
-import 'package:another/screens/running/under_challenge.dart';
-import 'package:another/screens/running/under_running.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
+
+import 'package:another/constant/color.dart';
+import 'package:another/screens/home_screen.dart';
+import 'package:another/screens/running/challenge_running.dart';
+import 'package:another/screens/running/under_challenge.dart';
+import 'package:another/screens/running/under_running.dart';
 
 class RunningSetting extends ChangeNotifier {
   int distance = 0;
@@ -123,7 +121,7 @@ class ChallengeData extends ChangeNotifier {
 }
 
 class UserInfo extends ChangeNotifier {
-  int? userId;
+  int userId = 1;
   String? accessToken;
   String? refreshToken;
 
@@ -133,7 +131,7 @@ class UserInfo extends ChangeNotifier {
     this.refreshToken = refreshToken;
     notifyListeners();
   }
-  // var userId = 1;
+  // int userId = 1;
   var nickname = '임범규';
   var height = 185;
   var weight = 70;

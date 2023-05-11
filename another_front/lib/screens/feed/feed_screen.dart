@@ -96,7 +96,6 @@ class _FeedScreenState extends State<FeedScreen> {
       List<String> walkCountList = [];
       List<String> kcalList = [];
       String profilePic = '';
-      // print(response);
 
       if (contents != []) {
         for (var content in contents) {
@@ -124,7 +123,6 @@ class _FeedScreenState extends State<FeedScreen> {
         // walkCountList.add('0');
         // kcalList.add('0');
       }
-
       setState(
         () {
           profilePic = response['data']['profilePic'];

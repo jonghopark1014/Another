@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:another_front_wear_os/common/const/color.dart';
 import 'package:another_front_wear_os/screen/widget/carousel_indicator.dart';
 import 'package:another_front_wear_os/screen/widget/distance_bar.dart';
 import 'package:another_front_wear_os/screen/widget/watch_record_result_box.dart';
-
-import 'package:flutter/material.dart';
 
 class WatchRunningRecord extends StatefulWidget {
   const WatchRunningRecord({
@@ -95,6 +96,17 @@ class _WatchRunningRecordState extends State<WatchRunningRecord> {
   void onPressed() {
     setState(() {
       isStart = !isStart;
+    });
+  }
+
+  void receiveDataFromPhone() {
+    const messageChannel =
+    const BasicMessageChannel<String>('com.another.data', StringCodec());
+
+    // 데이터 수신
+    messageChannel.setMessageHandler((String? data) async {
+      print(data);
+      return "Response from watch";
     });
   }
 }
