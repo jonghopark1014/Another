@@ -136,7 +136,7 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
                     primary: MAIN_COLOR,
                     elevation: 20.0,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                             builder: (_) => RunningFeedComplete()),
