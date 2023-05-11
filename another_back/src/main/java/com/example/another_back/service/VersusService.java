@@ -93,7 +93,7 @@ public class VersusService {
      * @return Page<RunningResponseDto>
      */
     public Page<RunningResponseDto> getMyRecord(Long userId, Pageable pageable) {
-        List<Running> runningList = runningRepository.findByUserId(userId);
+        List<Running> runningList = runningRepository.findByUserIdOrderByCreateDateDesc(userId);
         Page<RunningResponseDto> response = new PageImpl<>(runningList.stream().map(RunningResponseDto::new).collect(Collectors.toList()), pageable, runningList.size());
         return response;
     }

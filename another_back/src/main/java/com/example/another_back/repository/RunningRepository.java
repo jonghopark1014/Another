@@ -25,7 +25,7 @@ public interface RunningRepository extends JpaRepository<Running, String> {
     @Query("select distinct r,fp from Running r left outer join fetch r.feedPic fp where r.id = :runningId")
     Optional<Running> findRunningByIdWithFeedPics(String runningId);
 
-    List<Running> findByUserId(Long userId);
+    List<Running> findByUserIdOrderByCreateDateDesc(Long userId);
 
     @Query(value = "select new com.example.another_back.dto.RunningEachHistoryDto(r.id, r.runningTime, r.runningDistance,r.userPace, r.createDate, r.userCalories) from Running r where r.user = :user and r.createDate = :createDate")
     Page<RunningEachHistoryDto> findByCreateDateAndUserId(User user,Date createDate, Pageable pageable);
