@@ -237,13 +237,15 @@ public class RunningService {
         return CurRunningDto.builder()
                 .avgTime(time2)
                 .sumTime(time1)
-                .avgDistance(curRunningRecordDto.getAvgRunningDistance())
-                .sumDistance(curRunningRecordDto.getSumRunningDistance())
+                .avgDistance(convertDistance(curRunningRecordDto.getAvgRunningDistance()))
+                .sumDistance(convertDistance(curRunningRecordDto.getSumRunningDistance()))
                 .avgKcal(curRunningRecordDto.getAvgKcal())
                 .sumKcal(curRunningRecordDto.getSumKcal())
                 .avgPace(convertPace(curRunningRecordDto.getAvgPace()))
                 .startDate(createDate.toString())
                 .endDate(createDate.toString())
+                .originalPace(Math.round(curRunningRecordDto.getAvgPace()*1000)/1000.0)
+                .originalTime(curRunningRecordDto.getSumRunningTime())
                 .build();
     }
 
