@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:another/constant/color.dart';
 import 'package:another/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'dart:ui' as ui;
 
 import 'package:provider/provider.dart';
 
@@ -25,37 +23,55 @@ class RunningMap extends StatefulWidget {
 }
 
 class _RunningMapState extends State<RunningMap> {
+  bool flag = false;
+  int stopCount = -1;
+
   late Uint8List? img;
   late Timer _timer;
   // 지도에 위치 그리기
   GoogleMapController? mapController;
   late CameraPosition currentPosition;
-// 캡처를 위한 키
+  // 맵컨트롤러 받기 => 지도 카메라 위치 조정시 필요
+  onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+    var runningData = Provider.of<RunningData>(context, listen: false);
+    runningData.setMapController(mapController!);
+    mapController?.setMapStyle(
+        '''[
+          {"featureType": "administrative.land_parcel", "elementType": "labels", "stylers": [{"visibility": "off"}]},
+          {"featureType": "poi", "elementType": "labels.text", "stylers": [{"visibility": "off"}]},
+          {"featureType": "poi", "elementType": "labels.icon", "stylers": [{"visibility": "off"}]},
+          {"featureType": "poi.business", "stylers": [{"visibility": "off"}]},
+          {"featureType": "road", "elementType": "labels.icon", "stylers": [{"visibility": "off"}]},
+          {"featureType": "road", "elementType": "labels", "stylers": [{"visibility": "off"}]},
+          {"featureType": "road.local", "elementType": "labels", "stylers": [{"visibility": "off"}]},
+          {"featureType": "transit", "stylers": [{"visibility": "off"}]},
+        ]'''
+    );
+  }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     currentPosition = widget.initialPosition;
-    _timer = Timer.periodic(Duration(seconds: 3), (timer) async {
+    Provider.of<RunningData>(context, listen: false).newPolyLine(currentPosition.target, 0);
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
       getCurrentLocation();
     });
   }
   @override
   void dispose() async {
-    mapController!.dispose();
-    _timer.cancel();
+    print("내가바로 dispose!_map!");
     super.dispose();
-  }
-  // 캡처하기 위한 함수
-  Future<Uint8List> captureWidget(GlobalKey globalKey) async {
-    print(globalKey);
-    RenderRepaintBoundary boundaryObject = globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-    ui.Image image = await boundaryObject.toImage();
-    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    return byteData!.buffer.asUint8List();
+    _timer.cancel();
+    mapController!.dispose();
   }
   @override
   Widget build(BuildContext context) {
+    print("Rebuild!");
+    print("=============================");
+    print(Provider.of<RunningData>(context, listen: false).polyLine.length);
+    print(Provider.of<RunningData>(context, listen: false).stopCount);
     return Stack(
       children: [
         GoogleMap(
@@ -65,17 +81,22 @@ class _RunningMapState extends State<RunningMap> {
         myLocationEnabled: true,
         myLocationButtonEnabled: false,
         onMapCreated: onMapCreated,
-        polylines: {
-          Polyline(
-            polylineId: PolylineId('temp'),
-            points: widget.runningData.location,
-            color: MAIN_COLOR,
-            // jointType: JointType.round,
-          ),
-        }
-      ),
-    ]
+        polylines: Set<Polyline>.of(Provider.of<RunningData>(context, listen: true).polyLine)
+        ),
+      ]
     );
+  }
+  void forPolyList(LatLng latLng) {
+    var runFunc = Provider.of<RunningData>(context, listen: false);
+    stopCount = runFunc.stopCount;
+    print(stopCount);
+    if (stopCount == runFunc.polyLine.length) {
+      runFunc.newPolyLine(latLng, stopCount);
+    }
+
+    else if (stopCount < runFunc.polyLine.length) {
+      runFunc.addPolyLine(stopCount, latLng);
+    }
   }
 
   void getCurrentLocation() async {
@@ -95,31 +116,28 @@ class _RunningMapState extends State<RunningMap> {
       return ;
     }
     // 위치 권한 완료
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    setState(() {
-      currentPosition = CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 17);
-      var runningData = Provider.of<RunningData>(context, listen: false);
-      if (runningData.curValue != currentPosition.target) {
-        runningData.setCurrentPosition(currentPosition);
-        runningData.addLocation(currentPosition.target);
-        mapController!.animateCamera(
-            CameraUpdate.newCameraPosition(currentPosition)
-        );
-      }
-    });
+    if (mounted) {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+      changeCamera(position);
+    }
     return ;
   }
-
-  Future<Uint8List?> captureMap() async {
-    var mapController = Provider.of<RunningData>(context, listen: false).mapController;
-    final Uint8List? bytes = await mapController.takeSnapshot();
-    return bytes;
-  }
-  // 맵컨트롤러 받기 => 지도 카메라 위치 조정시 필요
-  onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-    Provider.of<RunningData>(context, listen: false).setMapController(mapController!);
+  void changeCamera(Position position) {
+    print("카메라냐??");
+    var runningData = Provider.of<RunningData>(context, listen: false);
+    if (position.latitude != runningData.curValue.latitude && position.longitude != runningData.curValue.longitude && mapController != null) {
+      runningData.setLat(position.latitude);
+      runningData.setLng(position.longitude);
+      runningData.addLocation(LatLng(position.latitude, position.longitude), 0);
+      runningData.setCurrentPosition(CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 17));
+      if (Provider.of<RunningData>(context, listen: false).stopFlag == false) {
+        setState(() {
+          forPolyList(LatLng(position.latitude, position.longitude));
+        });
+      }
+      mapController!.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 17)));
+    }
   }
   // 사용자에게 위치 동의 구하기 단계별로
   Future<String> checkPermission() async {

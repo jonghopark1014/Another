@@ -205,7 +205,8 @@ class _RunningTabState extends State<RunningTab> {
   void onPressed(String str) {
     final runningData = Provider.of<RunningData>(context, listen: false);
     runningData.reset();
-    runningData.addLocation(runningData.currentPosition.target);
+    runningData.firstMinMax(runningData.currentPosition.target);
+    runningData.addLocation(runningData.currentPosition.target, 1);
 
     // currentposition 초기값 그대로이면 받아오기전으로 판단
     if (runningData.currentPosition.target.longitude != 0 &&
