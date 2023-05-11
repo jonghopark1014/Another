@@ -22,7 +22,6 @@ class UnderChallengeScreenEndFeed extends StatefulWidget {
 }
 
 class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFeed> {
-  int widgetIndex = 0;
   // 표시할 사진들 위젯
   final List<Widget> imageWidgetList = [];
   // 받아올 사진들 정보
@@ -32,6 +31,8 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
   late String userCalorie;
   late String runningTime;
   late String userPace;
+  // 뛴지도 위젯
+  late Widget runPic;
 
   @override
   void initState() {
@@ -41,13 +42,13 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
     userCalorie = runningData.userCalories.toString();
     runningTime = runningData.runningTime;
     userPace = runningData.userPace;
-    imageWidgetList.add(SizedBox(
+    runPic = SizedBox(
       height: 350.0,
       child: Image.memory(
         widget.captureInfo!,
         fit: BoxFit.contain,
       ),
-    ));
+    );
     super.initState();
   }
 
@@ -107,7 +108,7 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
                   width: MediaQuery.of(context).size.width,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: ImageListCarousel(imageWidgetList: imageWidgetList)
+                    child: ImageListCarousel(imageWidgetList: imageWidgetList, runPic: runPic),
                   ),
                 ),
               ),
@@ -154,17 +155,15 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
     // xfile(path) 를 uint8list(이미지 데이터)로 변환
     for (var i = 0; i < imageXFiles.length; i++) {
       File file = File(imageXFiles[i].path);
-      Uint8List imgByteList= await file.readAsBytes();
+      Uint8List imgByteList = await file.readAsBytes();
       images.add(imgByteList);
     }
-    // 리빌드
-    setState(() {
-      addWidgetList();
-    });
+    addWidgetList();
   }
   // 받아온 이미지 위젯리스트에 추가
   void addWidgetList() {
     if (images.isNotEmpty) {
+      print(imageWidgetList);
       for (var i = 0; i < images.length; i++ ) {
         imageWidgetList.add(
             SizedBox(
@@ -177,6 +176,9 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
         );
       }
     }
+    setState(() {
+
+    });
   }
   
   // 이미지 불러올지, 사진 찍을지 고르기
