@@ -67,6 +67,7 @@ class _CustomImageState extends State<CustomImage> {
                   constraints: BoxConstraints(
                     maxHeight: 300,
                   ),
+
                   child: ListView.builder(
                     itemBuilder: (BuildContext context, int index) {
                       // Why network for web?
