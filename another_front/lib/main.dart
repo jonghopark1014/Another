@@ -175,37 +175,6 @@ class ChallengeData extends ChangeNotifier {
   }
 }
 
-class ChallengeData extends ChangeNotifier {
-  String runningId = '';
-  String runningDistance = '';
-  String runningTime = '';
-  String userCalorie = '';
-  String userPace = '';
-  List<double> challengeDistanceList = [];
-
-
-  void setValues(String id, String distance, String time, String calorie, String pace) {
-    runningId = id;
-    runningDistance = distance;
-    runningTime = time;
-    userCalorie = calorie;
-    userPace = pace;
-    notifyListeners();
-  }
-  void setList(List<double> DistanceList){
-    challengeDistanceList = DistanceList;
-  }
-  void reset() {
-    runningId = '';
-    runningDistance = '';
-    runningTime = '';
-    userCalorie = '';
-    userPace = '';
-
-    notifyListeners();
-  }
-}
-
 class UserInfo extends ChangeNotifier {
   int? userId = 1;
   String? accessToken;

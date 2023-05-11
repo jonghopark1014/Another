@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:another/main.dart';
 import 'package:another/screens/running/running_feed_complete.dart';
+import 'package:another/screens/running/widgets/image_list_carousel.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/foundation.dart';
@@ -19,10 +22,11 @@ class UnderChallengeScreenEndFeed extends StatefulWidget {
 }
 
 class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFeed> {
+  int widgetIndex = 0;
   // 표시할 사진들 위젯
-  final List<Widget> loadedImg = [];
+  final List<Widget> imageWidgetList = [];
   // 받아올 사진들 정보
-  late List<XFile?> images = [];
+  late List<Uint8List> images = [];
   // 표시할 데이터
   late String runningDistance;
   late String userCalorie;
@@ -37,11 +41,11 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
     userCalorie = runningData.userCalories.toString();
     runningTime = runningData.runningTime;
     userPace = runningData.userPace;
-    loadedImg.add(SizedBox(
+    imageWidgetList.add(SizedBox(
       height: 350.0,
       child: Image.memory(
         widget.captureInfo!,
-        fit: BoxFit.cover,
+        fit: BoxFit.contain,
       ),
     ));
     super.initState();
@@ -49,8 +53,7 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-
+    print('리빌드');
     return Scaffold(
       appBar: GoBackAppBarStyle(),
       body: Padding(
@@ -95,13 +98,16 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height / 2,
+                ),
                 child: SizedBox(
-                  height: 350.0,
-                  child: Image.memory(
-                    widget.captureInfo!,
-                    fit: BoxFit.cover,
+                  height: MediaQuery.of(context).size.width,
+                  width: MediaQuery.of(context).size.width,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: ImageListCarousel(imageWidgetList: imageWidgetList)
                   ),
                 ),
               ),
@@ -140,17 +146,37 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
       ),
     );
   }
-
+  // 저장된 이미지 가져오기
   void onTapPressed() async {
-    print('사진 아이콘');
-    final image = await ImagePicker().pickMultiImage(
+    final imageXFiles = await ImagePicker().pickMultiImage(
       imageQuality: 100,
     );
-    print('선택완료');
-    print(image);
+    // xfile(path) 를 uint8list(이미지 데이터)로 변환
+    for (var i = 0; i < imageXFiles.length; i++) {
+      File file = File(imageXFiles[i].path);
+      Uint8List imgByteList= await file.readAsBytes();
+      images.add(imgByteList);
+    }
+    // 리빌드
     setState(() {
-      images = image;
+      addWidgetList();
     });
+  }
+  // 받아온 이미지 위젯리스트에 추가
+  void addWidgetList() {
+    if (images.isNotEmpty) {
+      for (var i = 0; i < images.length; i++ ) {
+        imageWidgetList.add(
+            SizedBox(
+              height: 350.0,
+              child: Image.memory(
+                images[i],
+                fit: BoxFit.contain,
+              ),
+            )
+        );
+      }
+    }
   }
   
   // 이미지 불러올지, 사진 찍을지 고르기

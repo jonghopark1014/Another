@@ -83,7 +83,7 @@ class UnderChallengeScreenEnd extends StatelessWidget {
   void endFeed(BuildContext context) {
     var runningData = Provider.of<RunningData>(context, listen: false);
     var userId = Provider.of<UserInfo>(context, listen: false).userId;
-    var challengeData = Provider.of<ChallengeData>(context, listen: true);
+    var challengeData = Provider.of<ChallengeData>(context, listen: false);
     print('challengeeeeee');
     // // mySQL 저장
     saveRunningTime.saveRunData(userId: userId!, hostRunningId: challengeData.runningId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
