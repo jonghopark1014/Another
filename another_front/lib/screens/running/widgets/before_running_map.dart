@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:another/main.dart';
+import 'package:another/widgets/get_permission.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -50,38 +51,15 @@ class _BeforeRunningMapState extends State<BeforeRunningMap> {
     ) : Center(child: CircularProgressIndicator());
   }
   void getCurrentLocation() async {
-    // // 위치 정보 권한 요청
-    // final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
-    // if (!isLocationEnabled) {
-    //   return ;
-    // }
-    // LocationPermission checkedPermission = await Geolocator.checkPermission();
-    // if (checkedPermission == LocationPermission.denied) {
-    //   checkedPermission = await Geolocator.requestPermission();
-    //   if (checkedPermission == LocationPermission.denied) {
-    //     return ;
-    //   }
-    //   print('$checkedPermission================================');
-    // }
-    // if (checkedPermission == LocationPermission.deniedForever) {
-    //   return ;
-    // }
 
-    PermissionStatus backgroundStatus = await Permission.locationAlways.request();
-
-    PermissionStatus locationStatus = await Permission.location.request();
-
-    if (locationStatus == PermissionStatus.granted) {
-      // 위치 권한이 허용된 경우
-      // 백그라운드 위치 권한 요청
-      PermissionStatus backgroundStatus = await Permission.locationAlways.request();
-
-      if (backgroundStatus == PermissionStatus.granted) {
-        // 백그라운드 위치 권한이 허용된 경우
-        // 원하는 작업 수행
-      }
+    // 권한 확인 및 요청 (복붙) =====================================
+    bool permissionStatus = await getPermission();
+    if (permissionStatus == false) {
+      return;
     }
-    // 위치 권한 완료
+    // 권한 확인 후 로직 ===========================================
+
+    // 위치 권한 완료 후 로직
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     setState(() {

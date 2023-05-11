@@ -123,7 +123,7 @@ class ChallengeData extends ChangeNotifier {
 }
 
 class UserInfo extends ChangeNotifier {
-  int? userId;
+  int? userId = 1;
   String? accessToken;
   String? refreshToken;
 
