@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:another/main.dart';
 import 'package:another/screens/running/running_feed_complete.dart';
-import 'package:another/screens/running/widgets/image_list_carousel.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/foundation.dart';
@@ -23,7 +22,11 @@ class UnderChallengeScreenEndFeed extends StatefulWidget {
 
 class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFeed> {
   // 표시할 사진들 위젯
-  final List<Widget> imageWidgetList = [];
+  List<Widget> imageWidgetList = [];
+  // 고른 사진들 위젯
+  List<Widget> pickedImgWidget = [];
+  // 뛴지도 위젯
+  late final Widget runPicWidget;
   // 받아올 사진들 정보
   late List<Uint8List> images = [];
   // 표시할 데이터
@@ -31,24 +34,25 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
   late String userCalorie;
   late String runningTime;
   late String userPace;
-  // 뛴지도 위젯
-  late Widget runPic;
+
+  final PageController _pageController = PageController(initialPage: 0);
 
   @override
   void initState() {
     // TODO: implement initState
     var runningData = Provider.of<RunningData>(context, listen: false);
-    runningDistance = runningData.runningDistance.toString();
+    runningDistance = runningData.runningDistance.toStringAsFixed(3);
     userCalorie = runningData.userCalories.toString();
     runningTime = runningData.runningTime;
     userPace = runningData.userPace;
-    runPic = SizedBox(
+    runPicWidget = SizedBox(
       height: 350.0,
       child: Image.memory(
         widget.captureInfo!,
         fit: BoxFit.contain,
       ),
     );
+    imageWidgetList.add(runPicWidget);
     super.initState();
   }
 
@@ -108,7 +112,13 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
                   width: MediaQuery.of(context).size.width,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: ImageListCarousel(imageWidgetList: imageWidgetList, runPic: runPic),
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemBuilder: (BuildContext context, int index) {
+                        return imageWidgetList[index];
+                      },
+                      itemCount: imageWidgetList.length,
+                    ),
                   ),
                 ),
               ),
@@ -156,31 +166,22 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
     for (var i = 0; i < imageXFiles.length; i++) {
       File file = File(imageXFiles[i].path);
       Uint8List imgByteList = await file.readAsBytes();
-      images.add(imgByteList);
-    }
-    addWidgetList();
-  }
-  // 받아온 이미지 위젯리스트에 추가
-  void addWidgetList() {
-    if (images.isNotEmpty) {
-      print(imageWidgetList);
-      for (var i = 0; i < images.length; i++ ) {
-        imageWidgetList.add(
-            SizedBox(
-              height: 350.0,
-              child: Image.memory(
-                images[i],
-                fit: BoxFit.contain,
-              ),
-            )
-        );
-      }
+      // 받아온 이미지 위젯리스트에 추가
+      pickedImgWidget.add(
+          SizedBox(
+            height: 350.0,
+            child: Image.memory(
+              imgByteList,
+              fit: BoxFit.contain,
+            ),
+          )
+      );
     }
     setState(() {
-
+      imageWidgetList = [...pickedImgWidget];
+      imageWidgetList.add(runPicWidget);
     });
   }
-  
   // 이미지 불러올지, 사진 찍을지 고르기
   // Future<dynamic> toImageSelector() {
   //   return showModalBottomSheet(
