@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Setter
 public class MyFeedListDto {
     private String runningId;
-    private Integer runningTime;
+    private String runningTime;
     private Float runningDistance;
     private Integer userCalories;
     private String runningPic;
@@ -21,10 +21,23 @@ public class MyFeedListDto {
     @Builder
     public MyFeedListDto(Running running) {
         this.runningId = running.getId();
-        this.runningTime = running.getRunningTime();
+        this.runningTime = convertTime(Long.valueOf(running.getRunningTime()));
         this.runningDistance = running.getRunningDistance();
         this.userCalories = running.getUserCalories();
         this.runningPic = running.getRunningPic();
         this.feedPic = running.getFeedPic().stream().map(FeedPicResponseDto::new).collect(Collectors.toList());
+    }
+
+    private String convertTime(Long time) {
+        String hour = Long.toString(time / 3600);
+        time %= 3600;
+        String minute = Long.toString(time / 60);
+        String second = Long.toString(time % 60);
+        if (hour.length() == 1) hour = "0" + hour;
+        if (minute.length() == 1) minute = "0" + minute;
+        if (second.length() == 1) second = "0" + second;
+
+
+        return hour + ":" + minute + ":" + second;
     }
 }

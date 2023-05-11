@@ -11,5 +11,7 @@ public class AvgRunningDto {
     private String avgPace;
     private Double avgKcal;
     private Double avgDistance;
+    private Long originalTime;
+    private Double originalPace;
 
 }
