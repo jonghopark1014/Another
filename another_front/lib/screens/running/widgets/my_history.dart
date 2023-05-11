@@ -41,7 +41,7 @@ class _MyHistoryState extends State<MyHistory> {
             // 눌렀을 때 하이라이트
             onPressed: () => {
               challengeData.setValues(
-                historyList[index]['runningId'].toString(),
+                historyList[index]['hostRunningId'].toString(),
                 historyList[index]['runningDistance'].toString(),
                 historyList[index]['runningTime'].toString(),
                 historyList[index]['userCalories'].toString(),
