@@ -7,10 +7,14 @@ import lombok.Data;
 public class UserLevelExpDto {
     private Integer level;
     private Integer Exp;
+    private String nickname;
+    private String profilePic;
 
     @Builder
-    public UserLevelExpDto(Integer level, Integer exp) {
+    public UserLevelExpDto(Integer level, Integer exp, String nickname, String profilePic) {
         this.level = level;
-        Exp = exp;
+        this.Exp = exp;
+        this.nickname = nickname;
+        this.profilePic = profilePic;
     }
 }

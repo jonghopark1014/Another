@@ -1,8 +1,6 @@
 package com.example.another_back.controller;
 
 import com.example.another_back.dto.RunningResponseDto;
-import com.example.another_back.dto.SearchRequestDto;
-import com.example.another_back.dto.SearchResponseDto;
 import com.example.another_back.dto.response.Response;
 import com.example.another_back.service.VersusService;
 import lombok.RequiredArgsConstructor;
