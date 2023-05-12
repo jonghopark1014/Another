@@ -14,9 +14,9 @@ Future<bool> getPermission() async {
     return false;
   }
   // 사진 권한 요청
-  PermissionStatus photoStatus = await Permission.photos.request();
-  if (photoStatus == PermissionStatus.denied) {
-    return false;
-  }
+  // PermissionStatus photoStatus = await Permission.photos.request();
+  // if (photoStatus == PermissionStatus.denied) {
+  //   return false;
+  // }
   return true;
 }

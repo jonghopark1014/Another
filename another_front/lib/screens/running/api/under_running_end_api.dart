@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 class saveRunningTime {
 
-  static const _baseUrl = "https://k  8b308.p.ssafy.io";
+  static const _baseUrl = "https://k8b308.p.ssafy.io";
 
   static Future<void> sendTopic({
     required String runningId,
