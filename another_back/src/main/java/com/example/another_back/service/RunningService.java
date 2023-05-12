@@ -175,7 +175,7 @@ public class RunningService {
                 .avgPace(convertPace(curRunningRecordDto.getAvgPace()))
                 .startDate(startDate.toString())
                 .endDate(endDate.toString())
-                .originalPace(Math.round(curRunningRecordDto.getAvgPace()*1000)/1000.0)
+                .originalPace(Math.round(curRunningRecordDto.getAvgPace() * 1000) / 1000.0)
                 .originalTime(curRunningRecordDto.getSumRunningTime())
                 .build();
         AvgRunningDto prevDto = AvgRunningDto.builder()
@@ -183,7 +183,7 @@ public class RunningService {
                 .avgDistance(convertDistance(prevRunningRecordDto.getAvgRunningDistance()))
                 .avgKcal(prevRunningRecordDto.getAvgKcal())
                 .avgPace(convertPace(prevRunningRecordDto.getAvgPace()))
-                .originalPace(Math.round(prevRunningRecordDto.getAvgPace()*1000)/1000.0)
+                .originalPace(Math.round(prevRunningRecordDto.getAvgPace() * 1000) / 1000.0)
                 .originalTime(prevRunningRecordDto.getSumRunningTime())
                 .build();
 
@@ -244,7 +244,7 @@ public class RunningService {
                 .avgPace(convertPace(curRunningRecordDto.getAvgPace()))
                 .startDate(createDate.toString())
                 .endDate(createDate.toString())
-                .originalPace(Math.round(curRunningRecordDto.getAvgPace()*1000)/1000.0)
+                .originalPace(Math.round(curRunningRecordDto.getAvgPace() * 1000) / 1000.0)
                 .originalTime(curRunningRecordDto.getSumRunningTime())
                 .build();
     }
@@ -279,7 +279,7 @@ public class RunningService {
     }
 
     private Double convertDistance(Double distance) {
-        return Math.round(distance*1000)/1000.0;
+        return Math.round(distance * 1000) / 1000.0;
     }
 
     private String convertTime(Long time) {
@@ -349,7 +349,7 @@ public class RunningService {
      * @return ChallengeResponseDto
      */
     public ChallengeResponseDto getRecommendChallenge(Long userId) {
-        Challenge challenge = userChallengeRepository.findTop1ByUserAndStatusNotaAndWithChallenge(userId, "silver");
+        Challenge challenge = userChallengeRepository.findTop1ByUserAndStatusNotaAndWithChallenge(userId, "SILVER");
         if (challenge == null) return null;
         ChallengeResponseDto response = new ChallengeResponseDto(challenge);
         return response;

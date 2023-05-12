@@ -12,10 +12,13 @@ import javax.persistence.*;
 public class UserChallenge {
 
     @Column(name = "user_challenge_id")
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String status;
+
+    private Integer userChallengeValue;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
@@ -24,8 +27,9 @@ public class UserChallenge {
     private Challenge challenge;
 
     public UserChallenge(User user, Challenge challenge) {
-        this.status = "silver";
+        this.status = "SILVER";
         this.user = user;
         this.challenge = challenge;
+        this.userChallengeValue = 0;
     }
 }
