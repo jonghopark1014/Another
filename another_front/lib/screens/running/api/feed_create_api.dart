@@ -12,7 +12,7 @@ Future<void> feedCreateApi(int userId, String runningId, List<Uint8List> feedPic
   request.headers.addAll({"Content-Type" : "multipart/form-data"});
   for (var i = 0; i < feedPics.length; i++) {
     print(feedPics[i]);
-    request.files.add(http.MultipartFile.fromBytes('feedPics', feedPics[i], filename: '${runningId}feedPic$i.jpg'));
+    request.files.add(http.MultipartFile.fromBytes('feedPics', feedPics[i], filename: '${runningId}feedPic.jpg'));
   }
   request.fields['userId'] = userId.toString();
   request.fields['runningId'] = runningId;

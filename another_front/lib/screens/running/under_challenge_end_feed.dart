@@ -1,16 +1,15 @@
 import 'dart:io';
 
+import 'package:another/constant/color.dart';
 import 'package:another/main.dart';
 import 'package:another/screens/running/api/feed_create_api.dart';
-import 'package:another/screens/running/running_feed_complete.dart';
+import 'package:another/screens/running/feed_create_complete.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-
-import '../../constant/color.dart';
 
 class UnderChallengeScreenEndFeed extends StatefulWidget {
   final Uint8List? captureInfo;
@@ -145,7 +144,7 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
                     feedCreateApi(userId, runningId, feedPics);
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
-                            builder: (_) => RunningFeedComplete()),
+                            builder: (_) => FeedCreateComplete(feedPics: feedPics,)),
                         (route) => route.settings.name == '/');
                   },
                   child: Text(
