@@ -10,9 +10,12 @@ public class RunningHistoryResponseDto {
 
     @Builder
     public RunningHistoryResponseDto(AvgRunningDto prevAvg, CurRunningDto curAvg) {
-        prevAvg.setAvgDistance(Math.round(prevAvg.getAvgDistance()*1000)/1000.0);
-        curAvg.setAvgDistance(Math.round(curAvg.getAvgDistance()*1000)/1000.0);
-        curAvg.setSumDistance(Math.round(curAvg.getSumDistance()*1000)/1000.0);
+        prevAvg.setAvgDistance(Math.round(prevAvg.getAvgDistance() * 1000) / 1000.0);
+        curAvg.setAvgDistance(Math.round(curAvg.getAvgDistance() * 1000) / 1000.0);
+        curAvg.setSumDistance(Math.round(curAvg.getSumDistance() * 1000) / 1000.0);
+        prevAvg.setAvgKcal(Math.round(prevAvg.getAvgKcal() * 1000) / 1000.0);
+        curAvg.setAvgKcal(Math.round(prevAvg.getAvgKcal() * 1000) / 1000.0);
+        curAvg.setAvgKcal(Math.round(prevAvg.getAvgKcal() * 1000) / 1000.0);
         this.prevAvg = prevAvg;
         this.curAvg = curAvg;
     }
