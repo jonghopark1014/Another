@@ -24,6 +24,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -60,12 +61,12 @@ public class FeedService {
      * @return String
      * @throws IOException
      */
-    public String addFeed(AddFeedRequestDto addFeedRequestDto) throws IOException {
+    public String addFeed(AddFeedRequestDto addFeedRequestDto, MultipartFile[] feedPics) throws IOException {
         Running running = runningRepository.findById(addFeedRequestDto.getRunningId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 러닝기록을 찾지 못했습니다."));
         running.setStatus(Status.LIVE);
-        if (addFeedRequestDto.feedPicsLength() != 0) {
-            List<String> list = s3UploaderService.upload(bucket, "image", addFeedRequestDto.getFeedPics());
+        if (feedPics != null) {
+            List<String> list = s3UploaderService.upload(bucket, "image", feedPics);
             for (String url :
                     list) {
                 FeedPic feedPic = new FeedPic(url, running);
