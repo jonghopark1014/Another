@@ -2,9 +2,7 @@
 // 그래서 따로 뺌
 import 'dart:async';
 import 'dart:math';
-import 'dart:typed_data';
 
-import 'package:another/screens/running/under_challenge_end.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
 import 'package:another/widgets/record_result.dart';
 import 'package:flutter/cupertino.dart';
@@ -62,7 +60,6 @@ class _RunningStatus extends State<RunningStatus> {
     double nowDistance = runningData.runningDistance;
     LatLng past = runningData.preValue;
     LatLng current = runningData.curValue;
-    print(nowDistance);
 
     // 러닝 시간
     runningTime =
@@ -81,8 +78,10 @@ class _RunningStatus extends State<RunningStatus> {
     runningData.setPace(userPace);
 
     if (runningData.currentPosition.target != past) {
+      print("+++++++++++++++++++++++++++++");
       print(past);
       print(current);
+      print("+++++++++++++++++++++++++++++");
       // 거리 계산
       // // 기준점 변경
 
@@ -228,7 +227,7 @@ class _RunningStatus extends State<RunningStatus> {
     // api 요청
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (_) => UnderChallengeScreenEnd(
+          builder: (_) => UnderRunningScreenEnd(
             runningTime: runningTime,
             runningDistance: runningDistance.toString(),
             userCalorie: userCalories.toString(),
