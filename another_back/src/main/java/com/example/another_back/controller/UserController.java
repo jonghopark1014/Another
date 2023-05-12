@@ -23,18 +23,17 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
 public class UserController {
-/*
-
- */
     private final UserService userService;
+
     @PostMapping(value = "/join")
     public ResponseEntity join(@RequestBody @Valid UserJoinDto userJoinDto, BindingResult result, Model model) {
         ResponseEntity BAD_REQUEST = getErrors(result);
         if (BAD_REQUEST != null) return BAD_REQUEST;
         Long userId = userService.join(userJoinDto);
 
-        return Response.success(HttpStatus.OK);
+        return Response.success(HttpStatus.OK, userId);
     }
+
     @PatchMapping(value = "profile/image/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity updateProfileImage(@PathVariable("userId") Long userId, @RequestParam("profileImage") MultipartFile file) throws IOException {
         String image = userService.updateProfileImage(file, userId);
@@ -52,7 +51,7 @@ public class UserController {
     @GetMapping(value = "/duplicate/nickname/{nickname}")
     @ApiOperation(value = "false : 이미 있음, true : 없음")
     public ResponseEntity checkDuplicatedNickname(@PathVariable("nickname") String nickname) {
-        return Response.success(HttpStatus.OK,userService.checkDuplicatedNickname(nickname));
+        return Response.success(HttpStatus.OK, userService.checkDuplicatedNickname(nickname));
     }
 
     @Nullable
@@ -66,7 +65,7 @@ public class UserController {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity IllegalArgumentException(IllegalArgumentException e){
+    public ResponseEntity IllegalArgumentException(IllegalArgumentException e) {
         return Response.fail(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 }
