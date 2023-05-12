@@ -89,7 +89,7 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
   @override
   Widget build(BuildContext context) {
     // 러닝 데이터 받기
-    runningData = Provider.of<RunningData>(context, listen: false);
+    runningData = Provider.of<RunningData>(context);
     time = runningData.runningTime;
     // 사용자 거리 업데이트
     currentRunningDistance = runningData.runningDistance;

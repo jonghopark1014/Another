@@ -176,7 +176,7 @@ class ChallengeData extends ChangeNotifier {
 }
 
 class UserInfo extends ChangeNotifier {
-  int userId = 1;
+  int? userId = 1;
   String? accessToken;
   String? refreshToken;
 
