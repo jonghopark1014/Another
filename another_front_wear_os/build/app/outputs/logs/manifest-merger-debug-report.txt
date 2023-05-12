@@ -26,6 +26,7 @@ INJECTED from C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\ap
 INJECTED from C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:1:1-33:12
 MERGED from C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml:1:1-33:12
 MERGED from [:wearable_rotary] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\wearable_rotary\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:flutter_blue_plus] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_blue_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-25:12
 MERGED from [:is_wear] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\is_wear\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:flutter_wear_os_connectivity] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_wear_os_connectivity\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:watch_connectivity] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\watch_connectivity\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-14:12
@@ -73,6 +74,8 @@ INJECTED from C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\ap
 INJECTED from C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\main\AndroidManifest.xml
 MERGED from [:wearable_rotary] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\wearable_rotary\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:wearable_rotary] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\wearable_rotary\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_blue_plus] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_blue_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_blue_plus] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_blue_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:is_wear] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\is_wear\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:is_wear] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\is_wear\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_wear_os_connectivity] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_wear_os_connectivity\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
@@ -133,6 +136,30 @@ uses-permission#android.permission.INTERNET
 ADDED from C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\debug\AndroidManifest.xml:6:5-66
 	android:name
 		ADDED from C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\android\app\src\debug\AndroidManifest.xml:6:22-64
+uses-permission#android.permission.BLUETOOTH_SCAN
+ADDED from [:flutter_blue_plus] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_blue_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:13:5-73
+	android:name
+		ADDED from [:flutter_blue_plus] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_blue_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:13:22-70
+uses-permission#android.permission.BLUETOOTH_CONNECT
+ADDED from [:flutter_blue_plus] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_blue_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:14:5-76
+	android:name
+		ADDED from [:flutter_blue_plus] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_blue_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:14:22-73
+uses-permission#android.permission.BLUETOOTH
+ADDED from [:flutter_blue_plus] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_blue_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:17:5-19:38
+	android:maxSdkVersion
+		ADDED from [:flutter_blue_plus] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_blue_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:19:9-35
+	android:name
+		ADDED from [:flutter_blue_plus] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_blue_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:18:9-52
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from [:flutter_blue_plus] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_blue_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:20:5-22:38
+	android:maxSdkVersion
+		ADDED from [:flutter_blue_plus] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_blue_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:22:9-35
+	android:name
+		ADDED from [:flutter_blue_plus] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_blue_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:21:9-58
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from [:flutter_blue_plus] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_blue_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:23:5-79
+	android:name
+		ADDED from [:flutter_blue_plus] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_blue_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:23:22-76
 queries
 ADDED from [:watch_connectivity] C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\watch_connectivity\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-12:15
 package#com.google.android.wearable.app

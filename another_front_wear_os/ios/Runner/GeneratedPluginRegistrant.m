@@ -6,6 +6,12 @@
 
 #import "GeneratedPluginRegistrant.h"
 
+#if __has_include(<flutter_blue_plus/FlutterBluePlusPlugin.h>)
+#import <flutter_blue_plus/FlutterBluePlusPlugin.h>
+#else
+@import flutter_blue_plus;
+#endif
+
 #if __has_include(<flutter_watch_os_connectivity/FlutterWatchOsConnectivityPlugin.h>)
 #import <flutter_watch_os_connectivity/FlutterWatchOsConnectivityPlugin.h>
 #else
@@ -27,6 +33,7 @@
 @implementation GeneratedPluginRegistrant
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
+  [FlutterBluePlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterBluePlusPlugin"]];
   [FlutterWatchOsConnectivityPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterWatchOsConnectivityPlugin"]];
   [IsWearPlugin registerWithRegistrar:[registry registrarForPlugin:@"IsWearPlugin"]];
   [WatchConnectivityPlugin registerWithRegistrar:[registry registrarForPlugin:@"WatchConnectivityPlugin"]];

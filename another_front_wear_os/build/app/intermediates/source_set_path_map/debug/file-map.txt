@@ -12,7 +12,8 @@ com.example.another_front_wear_os.app-rs-10 C:\Users\SSAFY\Desktop\S08P31B308\an
 com.example.another_front_wear_os.app-mergeDebugResources-11 C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\app\intermediates\incremental\debug\mergeDebugResources\merged.dir
 com.example.another_front_wear_os.app-mergeDebugResources-12 C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\app\intermediates\incremental\debug\mergeDebugResources\stripped.dir
 com.example.another_front_wear_os.app-merged_res-13 C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\app\intermediates\merged_res\debug
-com.example.another_front_wear_os.app-packaged_res-14 C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_wear_os_connectivity\intermediates\packaged_res\debug
-com.example.another_front_wear_os.app-packaged_res-15 C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\is_wear\intermediates\packaged_res\debug
-com.example.another_front_wear_os.app-packaged_res-16 C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\watch_connectivity\intermediates\packaged_res\debug
-com.example.another_front_wear_os.app-packaged_res-17 C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\wearable_rotary\intermediates\packaged_res\debug
+com.example.another_front_wear_os.app-packaged_res-14 C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_blue_plus\intermediates\packaged_res\debug
+com.example.another_front_wear_os.app-packaged_res-15 C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\flutter_wear_os_connectivity\intermediates\packaged_res\debug
+com.example.another_front_wear_os.app-packaged_res-16 C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\is_wear\intermediates\packaged_res\debug
+com.example.another_front_wear_os.app-packaged_res-17 C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\watch_connectivity\intermediates\packaged_res\debug
+com.example.another_front_wear_os.app-packaged_res-18 C:\Users\SSAFY\Desktop\S08P31B308\another_front_wear_os\build\wearable_rotary\intermediates\packaged_res\debug

@@ -2,11 +2,23 @@ import 'package:another_front_wear_os/common/const/color.dart';
 import 'package:another_front_wear_os/screen/watch_time_screen.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
+
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
@@ -68,4 +80,6 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+
+
 }

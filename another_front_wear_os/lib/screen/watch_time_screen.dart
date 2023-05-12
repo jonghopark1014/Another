@@ -37,6 +37,12 @@ class _WatchTimeScreenState extends State<WatchTimeScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(

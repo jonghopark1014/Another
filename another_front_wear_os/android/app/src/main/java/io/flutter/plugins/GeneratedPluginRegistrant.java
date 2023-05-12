@@ -16,6 +16,11 @@ public final class GeneratedPluginRegistrant {
   private static final String TAG = "GeneratedPluginRegistrant";
   public static void registerWith(@NonNull FlutterEngine flutterEngine) {
     try {
+      flutterEngine.getPlugins().add(new com.boskokg.flutter_blue_plus.FlutterBluePlusPlugin());
+    } catch(Exception e) {
+      Log.e(TAG, "Error registering plugin flutter_blue_plus, com.boskokg.flutter_blue_plus.FlutterBluePlusPlugin", e);
+    }
+    try {
       flutterEngine.getPlugins().add(new com.sstonn.flutter_wear_os_connectivity.FlutterWearOsConnectivityPlugin());
     } catch(Exception e) {
       Log.e(TAG, "Error registering plugin flutter_wear_os_connectivity, com.sstonn.flutter_wear_os_connectivity.FlutterWearOsConnectivityPlugin", e);

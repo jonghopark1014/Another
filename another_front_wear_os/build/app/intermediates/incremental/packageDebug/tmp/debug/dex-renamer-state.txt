@@ -1,4 +1,4 @@
-#Thu May 04 15:39:11 KST 2023
+#Thu May 11 12:11:39 KST 2023
 base.0=C\:\\Users\\SSAFY\\Desktop\\S08P31B308\\another_front_wear_os\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 base.1=C\:\\Users\\SSAFY\\Desktop\\S08P31B308\\another_front_wear_os\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\0\\classes.dex
 base.2=C\:\\Users\\SSAFY\\Desktop\\S08P31B308\\another_front_wear_os\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex

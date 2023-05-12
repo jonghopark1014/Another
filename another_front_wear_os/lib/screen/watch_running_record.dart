@@ -24,6 +24,16 @@ class _WatchRunningRecordState extends State<WatchRunningRecord> {
   int pageViewCount = 2;
 
   @override
+  void initState() {
+    super.initState();
+  }
+  @override
+  void dispose() {
+    super.dispose();
+
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -99,14 +109,5 @@ class _WatchRunningRecordState extends State<WatchRunningRecord> {
     });
   }
 
-  void receiveDataFromPhone() {
-    const messageChannel =
-    const BasicMessageChannel<String>('com.another.data', StringCodec());
 
-    // 데이터 수신
-    messageChannel.setMessageHandler((String? data) async {
-      print(data);
-      return "Response from watch";
-    });
-  }
 }
