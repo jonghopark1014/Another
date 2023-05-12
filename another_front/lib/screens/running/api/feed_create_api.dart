@@ -1,21 +1,24 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 
 const String _baseUrl = 'https://k8b308.p.ssafy.io';
 
-Future<void> feedCreateApi(int userId, String runningId, List<Uint8List> feedPics) async {
-  Uri url = Uri.parse('$_baseUrl/api/feed/create');
+Future<bool> feedCreateApi(int userId, String runningId, List<Uint8List> feedPics) async {
+  Uri url = Uri.parse('https://k8b308.p.ssafy.io/api/feed/create');
   var request = http.MultipartRequest('POST', url);
-  request.headers.addAll({"Content-Type" : "multipart/form-data"});
+  request.headers.addAll({"Content-Type" : "application/json"});
   for (var i = 0; i < feedPics.length; i++) {
     print(feedPics[i]);
-    request.files.add(http.MultipartFile.fromBytes('feedPics', feedPics[i], filename: '${runningId}feedPic.jpg'));
+    request.files.add(http.MultipartFile.fromBytes('feedPics', feedPics[i], filename: 'feedPics.jpg'));
   }
-  request.fields['userId'] = userId.toString();
-  request.fields['runningId'] = runningId;
+  request.fields['addFeedRequestDto'] = {
+    "userId": userId,
+    "runningId": runningId,
+  }.toString();
   print('1');
   var response = await request.send();
   print('2');
@@ -23,8 +26,10 @@ Future<void> feedCreateApi(int userId, String runningId, List<Uint8List> feedPic
   print('3');
   if (response.statusCode == 200) {
     print('오운완 등록 성공');
+    return true;
   } else {
     print('오운완 등록 실패');
+    return false;
   }
 
 }

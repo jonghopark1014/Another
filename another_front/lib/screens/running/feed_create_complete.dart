@@ -32,7 +32,7 @@ class _FeedCreateCompleteState extends State<FeedCreateComplete> {
   late String runningTime;
   late String userPace;
   // 유저 정보
-  late String userNickname;
+  late String userNickname = '';
   // 사진 정보
 
   // 차트 정보
@@ -49,8 +49,9 @@ class _FeedCreateCompleteState extends State<FeedCreateComplete> {
     // TODO: implement initState
     RunningData runningData = Provider.of<RunningData>(context, listen:false);
     createDate = runningData.runningTime;
-    runningDistance = runningData.runningDistance.toString();
+    runningDistance = runningData.runningDistance.toStringAsFixed(3);
     userCalorie = runningData.userCalories.toString();
+    runningTime = runningData.runningTime;
     userPace = runningData.userPace.toString();
     chartDataList = [];
     super.initState();

@@ -73,15 +73,7 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
                     width: 2.5,
                   ),
                 ),
-                onPressed: onTapPressed
-                //     () {
-                //   Navigator.of(context).push(
-                //     MaterialPageRoute(
-                //       builder: (_) => CustomImage(),
-                //     ),
-                //   );
-                // }
-                ,
+                onPressed: onTapPressed ,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -140,12 +132,22 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
                     primary: MAIN_COLOR,
                     elevation: 20.0,
                   ),
-                  onPressed: () {
-                    feedCreateApi(userId, runningId, feedPics);
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (_) => FeedCreateComplete(feedPics: feedPics,)),
-                        (route) => route.settings.name == '/');
+                  onPressed: () async {
+                    // 등록 요청 하고 페이지 이동하도록?
+                    bool isComplete = await feedCreateApi(userId, runningId, feedPics);
+                    // 현재 위젯이 그대로 마운트 되어있을때
+                    if (context.mounted) {
+                      if (isComplete) {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (_) => FeedCreateComplete(feedPics: feedPics,)),
+                                (route) => route.settings.name == '/');
+                      } else {
+                        // 미완료 모달창
+                      }
+
+                    }
+
                   },
                   child: Text(
                     '오운완 등록하기',
