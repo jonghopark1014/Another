@@ -53,7 +53,7 @@ class RecordChart extends StatelessWidget {
             ),
             ColumnSeries<ChartData, String>(
               width: 0.9,
-              spacing: 0.1,
+              spacing: 0.05,
               dataSource: chartData,
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y2graph,
