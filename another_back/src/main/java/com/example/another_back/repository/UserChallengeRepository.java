@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface UserChallengeRepository extends JpaRepository<UserChallenge, Long>, CustormUserChallengeRepository {
     List<UserChallenge> findByUser(User user);
+
+    List<UserChallenge> findByUserAndStatus(User user, String gold);
 }

@@ -7,14 +7,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AllBadgeResponseDto {
+public class BadgeResponseDto {
     private Integer challengeCategory;
     private String challengeName;
     private Double challengeValue;
     private String challengeUrl;
 
     @Builder
-    public AllBadgeResponseDto(UserChallenge userChallenge) {
+    public BadgeResponseDto(UserChallenge userChallenge) {
         this.challengeCategory = userChallenge.getChallenge().getChallengeCategory();
         this.challengeName = userChallenge.getChallenge().getChallengeName();
         if (userChallenge.getStatus().equals("SILVER")) {

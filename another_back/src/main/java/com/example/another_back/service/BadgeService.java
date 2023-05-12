@@ -1,6 +1,6 @@
 package com.example.another_back.service;
 
-import com.example.another_back.dto.badge.AllBadgeResponseDto;
+import com.example.another_back.dto.badge.BadgeResponseDto;
 import com.example.another_back.entity.User;
 import com.example.another_back.entity.UserChallenge;
 import com.example.another_back.repository.UserChallengeRepository;
@@ -21,12 +21,25 @@ public class BadgeService {
      * 사용자에 관련된 모든 뱃지 정보 가져오기
      *
      * @param userId
-     * @return List<AllBadgeResponseDto>
+     * @return List<BadgeResponseDto>
      */
-    public List<AllBadgeResponseDto> getAllBadge(Long userId) {
+    public List<BadgeResponseDto> getAllBadge(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Badge Service: 유저를 찾지 못했습니다."));
         List<UserChallenge> userChallenge = userChallengeRepository.findByUser(user);
-        List<AllBadgeResponseDto> response = userChallenge.stream().map(x -> AllBadgeResponseDto.builder().userChallenge(x).build()).collect(Collectors.toList());
+        List<BadgeResponseDto> response = userChallenge.stream().map(x -> BadgeResponseDto.builder().userChallenge(x).build()).collect(Collectors.toList());
+        return response;
+    }
+
+    /**
+     * 사용자 뱃지 가져오기
+     *
+     * @param userId
+     * @return List<BadgeResponseDto>
+     */
+    public List<BadgeResponseDto> getUserBadge(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Badge Service: 유저를 찾지 못했습니다."));
+        List<UserChallenge> userChallenge = userChallengeRepository.findByUserAndStatus(user, "GOLD");
+        List<BadgeResponseDto> response = userChallenge.stream().map(x -> BadgeResponseDto.builder().userChallenge(x).build()).collect(Collectors.toList());
         return response;
     }
 }
