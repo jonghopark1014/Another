@@ -28,7 +28,7 @@ public interface RunningRepository extends JpaRepository<Running, String> {
     List<Running> findByUserIdOrderByCreateDateDesc(Long userId);
 
     @Query(value = "select new com.example.another_back.dto.RunningEachHistoryDto(r.id, r.runningTime, r.runningDistance,r.userPace, r.createDate, r.userCalories) from Running r where r.user = :user and r.createDate = :createDate")
-    Page<RunningEachHistoryDto> findByCreateDateAndUserId(User user,Date createDate, Pageable pageable);
+    Page<RunningEachHistoryDto> findByCreateDateAndUserId(User user, Date createDate, Pageable pageable);
 
     @Query(value = "select new com.example.another_back.dto.RunningRecordDto(avg(r.runningTime), avg(r.runningDistance), avg(r.userPace), avg(r.userCalories),sum(r.runningTime), sum(r.runningDistance), sum(r.userPace), sum(r.userCalories)) from Running r where r.user = :user and r.createDate = :createDate")
     Optional<RunningRecordDto> findRunningRecordDtoByUserId(User user, Date createDate);
@@ -50,6 +50,12 @@ public interface RunningRepository extends JpaRepository<Running, String> {
 
     @Query("select coalesce(sum(r.runningTime), 0) from Running r where r.user.id = :userId")
     Optional<Long> SumRunningTimeByUserId(Long userId);
+
+    @Query("select r.createDate from Running r where r.user = :user order by r.createDate desc")
+    List<Date> findCreateDateByUserId(User user);
+
+    @Query("select count (*) from Running r where r.createDate <= r.createDate")
+    Integer getAccumulatedRunningDays();
 
     List<Running> findByRunningDistanceBetweenAndRunningTimeBetweenAndUserIdNot(Float startDistance, Float endDistance, String startTime, String endTime, Long userId);
 }

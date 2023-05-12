@@ -1,10 +1,8 @@
 package com.example.another_back.service;
 
 import com.example.another_back.dto.*;
-import com.example.another_back.entity.Challenge;
-import com.example.another_back.entity.Running;
-import com.example.another_back.entity.User;
-import com.example.another_back.entity.WithRun;
+import com.example.another_back.dto.badge.EndChallengeResponseDto;
+import com.example.another_back.entity.*;
 import com.example.another_back.repository.RunningRepository;
 import com.example.another_back.repository.UserChallengeRepository;
 import com.example.another_back.repository.UserRepository;
@@ -18,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -45,7 +45,7 @@ public class RunningService {
      * @param runningRequestDto
      * @return String
      */
-    public String addRunning(RunningRequestDto runningRequestDto) {
+    public List<EndChallengeResponseDto> addRunning(RunningRequestDto runningRequestDto) {
         // 러닝 PK 유효성 검사
         checkDuplicatedRunning(runningRequestDto.getRunningId());
         // User 유효성 검사
@@ -70,8 +70,9 @@ public class RunningService {
         // 경험치 체크
         int runningDistance = 0;
         int runningTime = 0;
+        int checkTime = Math.toIntExact(runningRepository.SumRunningTimeByUserId(user.getId()).orElse(0L));
         runningDistance = runningRepository.SumRunningDistanceByUserId(user.getId()).orElse(0D).intValue();
-        runningTime = Math.toIntExact(runningRepository.SumRunningTimeByUserId(user.getId()).orElse(0L) / 600);
+        runningTime = checkTime / 600;
         int exp = runningDistance + runningTime;
         // level 체크
         if (!(user.getExp() >= 166660)) {
@@ -107,9 +108,83 @@ public class RunningService {
                 user.setExp(exp);
             }
         }
+        List<EndChallengeResponseDto> response = new ArrayList<>();
+        for (UserChallenge userChallenge :
+                user.getUserChallengeList()) {
+            if (userChallenge.getStatus().equals("GOLD")) continue;
+            int category = userChallenge.getChallenge().getChallengeCategory();
+            switch (category) {
+                case 1:
+                    userChallenge.setUserChallengeValue(checkTime / 60);
+                    if (userChallenge.getUserChallengeValue() >= userChallenge.getChallenge().getChallengeTarget()) {
+                        userChallenge.setStatus("GOLD");
+                        response.add(EndChallengeResponseDto.builder()
+                                .runningId(running.getId())
+                                .challengeId(userChallenge.getChallenge().getId())
+                                .challengeName(userChallenge.getChallenge().getChallengeName())
+                                .challengeUrl(userChallenge.getChallenge().getChallengeGold())
+                                .build());
+                    }
+                    break;
+                case 2:
+                    userChallenge.setUserChallengeValue(runningDistance);
+                    if (userChallenge.getUserChallengeValue() >= userChallenge.getChallenge().getChallengeTarget()) {
+                        userChallenge.setStatus("GOLD");
+                        response.add(EndChallengeResponseDto.builder()
+                                .runningId(running.getId())
+                                .challengeId(userChallenge.getChallenge().getId())
+                                .challengeName(userChallenge.getChallenge().getChallengeName())
+                                .challengeUrl(userChallenge.getChallenge().getChallengeGold())
+                                .build());
+                    }
+                    break;
+                case 3:
+                    List<Date> dateList = runningRepository.findCreateDateByUserId(user);
+                    int target = userChallenge.getChallenge().getChallengeTarget();
+                    int value = 1;
+                    LocalDate checkDate = null;
+                    for (Date date :
+                            dateList) {
+                        if (checkDate == null) {
+                            checkDate = date.toLocalDate();
+                            continue;
+                        }
+                        if (checkDate.equals(date.toLocalDate())) continue;
+                        if (checkDate.equals(date.toLocalDate().plusDays(1)))
+                            value++;
+                        else
+                            value = 1;
+                        if (value >= target) break;
+                        checkDate = date.toLocalDate();
+                    }
+                    if (value != 1)
+                        userChallenge.setUserChallengeValue(value);
+                    if (userChallenge.getUserChallengeValue() >= 0) {
+                        userChallenge.setStatus("GOLD");
+                        response.add(EndChallengeResponseDto.builder()
+                                .runningId(running.getId())
+                                .challengeId(userChallenge.getChallenge().getId())
+                                .challengeName(userChallenge.getChallenge().getChallengeName())
+                                .challengeUrl(userChallenge.getChallenge().getChallengeGold())
+                                .build());
+                    }
+                    break;
+                case 4:
+                    userChallenge.setUserChallengeValue(runningRepository.getAccumulatedRunningDays());
+                    if (userChallenge.getUserChallengeValue() >= userChallenge.getChallenge().getChallengeTarget()) {
+                        userChallenge.setStatus("GOLD");
+                        response.add(EndChallengeResponseDto.builder()
+                                .runningId(running.getId())
+                                .challengeId(userChallenge.getChallenge().getId())
+                                .challengeName(userChallenge.getChallenge().getChallengeName())
+                                .challengeUrl(userChallenge.getChallenge().getChallengeGold())
+                                .build());
+                    }
+                    break;
+            }
+        }
         userRepository.save(user);
-        // Id 반환
-        return savedRunning.getId();
+        return response;
     }
 
     public SumRunningDto getAllRecord(Long userId) {
