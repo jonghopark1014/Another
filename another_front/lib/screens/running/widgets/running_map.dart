@@ -64,7 +64,6 @@ class _RunningMapState extends State<RunningMap> {
     print("내가바로 dispose!_map!");
     super.dispose();
     _timer.cancel();
-    mapController!.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -129,7 +128,6 @@ class _RunningMapState extends State<RunningMap> {
     if (position.latitude != runningData.curValue.latitude && position.longitude != runningData.curValue.longitude && mapController != null) {
       runningData.setLat(position.latitude);
       runningData.setLng(position.longitude);
-      runningData.addLocation(LatLng(position.latitude, position.longitude), 0);
       runningData.setCurrentPosition(CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 17));
       if (Provider.of<RunningData>(context, listen: false).stopFlag == false) {
         setState(() {
@@ -138,6 +136,8 @@ class _RunningMapState extends State<RunningMap> {
       }
       mapController!.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 17)));
     }
+    runningData.addLocation(LatLng(position.latitude, position.longitude), 0);
+
   }
   // 사용자에게 위치 동의 구하기 단계별로
   Future<String> checkPermission() async {

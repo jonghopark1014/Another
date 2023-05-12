@@ -9,6 +9,7 @@ import 'package:another/widgets/target.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../main.dart';
+import '../home_screen.dart';
 import './api/under_running_end_api.dart';
 
 class UnderRunningScreenEnd extends StatelessWidget {
@@ -62,6 +63,7 @@ class UnderRunningScreenEnd extends StatelessWidget {
   }
 
   void endFeed(BuildContext context) {
+    print("피드 끝낸당");
     var runningData = Provider.of<RunningData>(context, listen: false);
     var userId = Provider.of<UserInfo>(context, listen: false).userId;
     saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
@@ -71,10 +73,11 @@ class UnderRunningScreenEnd extends StatelessWidget {
         MaterialPageRoute(
           builder: (_) => UnderChallengeScreenEndFeed(captureInfo: Provider.of<RunningData>(context, listen: false).runningPic),
         ),
-            (route) => route.settings.name == '/');
+        (route) => route.settings.name == '/');
   }
 
   void feedComplete(BuildContext context) {
+    print("오운완쓰 등록 간다잉");
     var runningData = Provider.of<RunningData>(context, listen: false);
     var userId = Provider.of<UserInfo>(context, listen: false).userId;
     saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
@@ -82,7 +85,7 @@ class UnderRunningScreenEnd extends StatelessWidget {
     saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => UnderChallengeScreenEndFeed(captureInfo: Provider.of<RunningData>(context, listen: false).runningPic),
+        builder: (_) => HomeScreen(),
       ),
     );
   }
