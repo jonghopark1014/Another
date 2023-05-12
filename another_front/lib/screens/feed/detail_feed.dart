@@ -23,7 +23,7 @@ class DetailFeed extends StatefulWidget {
 
 class _DetailFeedState extends State<DetailFeed> {
   // 내 피드인지
-  bool isMyFeed = true;
+  bool isMyFeed = false; // 사용자 다양해지면 true 로 바꾸야함
   late int userId;
   final ScrollController _scrollController = ScrollController();
 

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:another/constant/color.dart';
 import 'package:another/main.dart';
+import 'package:another/screens/home_screen.dart';
 import 'package:another/screens/running/api/feed_create_api.dart';
 import 'package:another/screens/running/feed_create_complete.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
@@ -41,6 +42,7 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
 
   @override
   void initState() {
+    // 홈스크린 라우터에 추가
     // TODO: implement initState
     var runningData = Provider.of<RunningData>(context, listen: false);
     runningId = runningData.runningId;
@@ -56,9 +58,10 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
 
   @override
   Widget build(BuildContext context) {
+
     print('리빌드');
     return Scaffold(
-      appBar: GoBackAppBarStyle(),
+      appBar: GoBackAppBarStyle(toHome: true,),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: SafeArea(
@@ -141,7 +144,7 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                                 builder: (_) => FeedCreateComplete(feedPics: feedPics,)),
-                                (route) => route.settings.name == '/');
+                                (route) => false);
                       } else {
                         // 미완료 모달창
                       }
