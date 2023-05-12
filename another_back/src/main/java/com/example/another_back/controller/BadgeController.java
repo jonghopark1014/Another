@@ -26,7 +26,7 @@ public class BadgeController {
      * @return List<AllBadgeResponseDto>
      */
     @GetMapping("/all/{userId}")
-    public ResponseEntity getAllBadge(@PathVariable Long userId){
+    public ResponseEntity getAllBadge(@PathVariable Long userId) {
         List<AllBadgeResponseDto> response = badgeService.getAllBadge(userId);
         return Response.success(HttpStatus.OK, response);
     }

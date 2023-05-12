@@ -10,19 +10,21 @@ import lombok.Setter;
 public class AllBadgeResponseDto {
     private Integer challengeCategory;
     private String challengeName;
-    private Integer userChallengeValue;
-    private Integer challengeTarget;
+    private Double userChallengeValue;
     private String challengeUrl;
 
     @Builder
     public AllBadgeResponseDto(UserChallenge userChallenge) {
         this.challengeCategory = userChallenge.getChallenge().getChallengeCategory();
         this.challengeName = userChallenge.getChallenge().getChallengeName();
-        this.userChallengeValue = userChallenge.getUserChallengeValue();
-        this.challengeTarget = userChallenge.getChallenge().getChallengeTarget();
-        if (userChallenge.getStatus().equals("SILVER"))
+        if (userChallenge.getStatus().equals("SILVER")) {
             this.challengeUrl = userChallenge.getChallenge().getChallengeSilver();
-        else
+            this.userChallengeValue = Double.valueOf((double) userChallenge.getChallenge().getChallengeTarget() / userChallenge.getUserChallengeValue());
+            if (userChallengeValue.isInfinite())
+                this.userChallengeValue = 0d;
+        } else {
             this.challengeUrl = userChallenge.getChallenge().getChallengeGold();
+            this.userChallengeValue = 1d;
+        }
     }
 }
