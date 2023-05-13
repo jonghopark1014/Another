@@ -528,12 +528,9 @@ class _MyRecordContentsState extends State<MyRecordContents> {
                     ),
               Column(
                 children: [
-                  // if (widget.historyData['content'].isNull)
-                  //   Target(targetname: '0', runningDistance: '0', userCalorie:'0', runningTime: '0', userPace: '0')
-                  // else
-                  for (int i = widget.historyData!['content'].length - 1;
-                      i >= 0;
-                      i--)
+                  for (int i = 0;
+                      i <= widget.historyData!['content'].length - 1;
+                      i++)
                     Target(
                       targetname: widget.historyData!['content'][i]
                                   ['createDate']
@@ -554,6 +551,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
                       userPace: widget.historyData!['content'][i]['userPace']
                               .toString() ??
                           '-',
+                      runningId: widget.historyData!['content'][i]['id']
                     )
                 ],
               ),
