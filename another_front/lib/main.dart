@@ -1,9 +1,6 @@
-import 'dart:typed_data';
-
 import 'package:another/constant/color.dart';
 import 'package:another/screens/home_screen.dart';
 import 'package:another/screens/running/challenge_running.dart';
-import 'package:another/screens/running/running.dart';
 import 'package:another/screens/running/under_challenge.dart';
 import 'package:another/screens/running/under_running.dart';
 import 'package:flutter/material.dart';
@@ -27,9 +24,8 @@ class RunningSetting extends ChangeNotifier {
 
 class RunningData extends ChangeNotifier {
   late GoogleMapController mapController;
-  CameraPosition currentPosition = CameraPosition(target: LatLng(0,0), zoom: 25);
+  CameraPosition currentPosition = CameraPosition(target: LatLng(0,0), zoom: 17);
   String runningId = '';
-  List<LatLng> location = [];
   LatLng preValue = LatLng(0, 0);
   LatLng curValue = LatLng(0, 0);
   String runningTime = '00:00:00';
@@ -38,9 +34,15 @@ class RunningData extends ChangeNotifier {
   String userPace = "0'00''";
   int preLen = 0;
   var runningPic;
+  double minLat = 90;
+  double minLng = 180;
+  double maxLat = -90;
+  double maxLng = -180;
+  int stopCount = 0;
+  List<Polyline> polyLine = [];
+  bool stopFlag = false;
 
   void reset() {
-    location = [];
     preValue = LatLng(0, 0);
     curValue = LatLng(0, 0);
     runningTime = '00:00:00';
@@ -48,14 +50,21 @@ class RunningData extends ChangeNotifier {
     userCalories = 0;
     userPace = "0'00''";
     preLen = 1;
-    notifyListeners();
+    stopCount = 0;
+    polyLine = [];
+    stopFlag = false;
   }
-
+  void funcStopFlag() {
+    if (stopFlag == false) {
+      stopFlag = true;
+    }
+    else {
+      stopFlag = false;
+    }
+  }
   void setRunningId(value) {
     runningId = value;
-    notifyListeners();
   }
-
   void setTime(String time) {
     runningTime = time;
     notifyListeners();
@@ -76,20 +85,60 @@ class RunningData extends ChangeNotifier {
     runningPic = value;
     notifyListeners();
   }
-  void addLocation(LatLng pos) {
-    location.add(pos);
-    preValue = curValue;
-    curValue = pos;
-  }
-  void changeLen(value) {
-    preLen = value;
-    notifyListeners();
+  void addLocation(LatLng pos, int v) {
+    if (v == 0) {
+      preValue = curValue;
+      curValue = pos;
+    }
+    if (v == 1) {
+      preValue = pos;
+      curValue = pos;
+    }
   }
   void setCurrentPosition(CameraPosition pos) {
     currentPosition = pos;
   }
   void setMapController(GoogleMapController con) {
     mapController = con;
+  }
+  void setLat(value) {
+    if (minLat > value) {
+      minLat = value;
+    }
+    else if (maxLat < value) {
+      maxLat = value;
+    }
+  }
+  void setLng(value) {
+    if (minLng > value) {
+      minLng = value;
+    }
+    else if (maxLng < value) {
+      maxLng = value;
+    }
+  }
+  void firstMinMax(LatLng value) {
+    minLat = value.latitude;
+    minLng= value.longitude;
+    maxLat = value.latitude;
+    maxLng = value.longitude;
+  }
+  void funcStop() {
+    stopCount = polyLine.length;
+  }
+  void addPolyLine(int value, LatLng latLng) {
+    polyLine[value].points.add(latLng);
+  }
+  void newPolyLine(LatLng latLng, int value) {
+    List<LatLng> forPoly = [];
+    forPoly.add(latLng);
+    Polyline newPoly = Polyline(
+      polylineId: PolylineId('poly$value'),
+      points: forPoly,
+      color: MAIN_COLOR,
+      // jointType: JointType.round,
+    );
+    polyLine.add(newPoly);
   }
 }
 
@@ -99,29 +148,32 @@ class ChallengeData extends ChangeNotifier {
   String runningTime = '';
   String userCalorie = '';
   String userPace = '';
+  String hostRunningId = '';
   List<double> challengeDistanceList = [];
 
 
   void setValues(String id, String distance, String time, String calorie, String pace) {
-    runningId = id;
+    hostRunningId = id;
     runningDistance = distance;
     runningTime = time;
     userCalorie = calorie;
     userPace = pace;
-
     notifyListeners();
   }
   void setList(List<double> DistanceList){
     challengeDistanceList = DistanceList;
   }
   void reset() {
-    runningId = '';
+    hostRunningId = '';
     runningDistance = '';
     runningTime = '';
     userCalorie = '';
     userPace = '';
 
     notifyListeners();
+  }
+  void forRunId(v) {
+    runningId = v;
   }
 }
 

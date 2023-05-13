@@ -32,7 +32,10 @@ class doubleCheckApi {
       }
       // 통신에 실패한 경우
     } catch (error) {
+      print("=============");
+      print(error);
       print('통신 실패');
+      print("=============");
       return '서버 오류';
     }
   }

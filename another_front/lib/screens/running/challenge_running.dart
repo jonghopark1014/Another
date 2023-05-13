@@ -55,8 +55,8 @@ class _ChallengeRunningState extends State<ChallengeRunning> {
     try {
       // 수정 주석처리만 하고 밑에 있는 값 바꾸면 됨
       //print();
-      // final response = await VersusApi.getFeed(runningId);
-      final response = await VersusApi.getFeed('1230509055100');
+      final response = await VersusApi.getFeed(runningId);
+      // final response = await VersusApi.getFeed('1230509055100');
       final contents = response['data'];
 
       for (var content in contents) {
@@ -107,16 +107,22 @@ class _ChallengeRunningState extends State<ChallengeRunning> {
   void goTimeScreen() {
     final runningData = Provider.of<RunningData>(context, listen: false);
     runningData.reset();
-    runningData.addLocation(runningData.currentPosition.target);
+    runningData.firstMinMax(runningData.currentPosition.target);
+    runningData.addLocation(runningData.currentPosition.target, 1);
 
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (_) => TimerScreen(
-            path: '/UnderChallenge',
-            // 수정 필요함
-            initialPosition: runningData.currentPosition,
+    // currentposition 초기값 그대로이면 받아오기전으로 판단
+    if (runningData.currentPosition.target.longitude != 0 &&
+        runningData.currentPosition.target.latitude != 0) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (_) =>
+                TimerScreen(
+                  path: '/UnderChallenge',
+                  // 수정 필요함
+                  initialPosition: runningData.currentPosition,
+                ),
           ),
-        ),
-        (route) => route.settings.name == '/');
+              (route) => route.settings.name == '/');
+    }
   }
 }
