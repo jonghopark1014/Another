@@ -11,11 +11,13 @@ class PeriodTotalRecord extends StatelessWidget {
 
   final int selectedIndex;
   final selectedDay;
-  final Map<String, dynamic> recordData;
+  final Map<String, dynamic>? recordData;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return recordData == null ?
+      Center(child: CircularProgressIndicator())
+        : Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
@@ -34,11 +36,11 @@ class PeriodTotalRecord extends StatelessWidget {
                 padding: EdgeInsets.only(left: 20, top: 12, bottom: 4),
                 child: Text(
                   selectedIndex == 0
-                      ? '${recordData['curAvg']['startDate']}'
-                  : selectedIndex == 3 ? '${recordData['startDate']} ~ ${recordData['endDate']}'
+                      ? '${recordData!['curAvg']['startDate']}'
+                  : selectedIndex == 3 ? '${recordData!['startDate']} ~ ${recordData!['endDate']}'
                       : selectedIndex == 4
-                          ? '${recordData['startDate']}'
-                          : '${recordData['curAvg']['startDate']} ~ ${recordData['curAvg']['endDate']}',
+                          ? '${recordData!['startDate']}'
+                          : '${recordData!['curAvg']['startDate']} ~ ${recordData!['curAvg']['endDate']}',
                   style: TextStyle(color: SERVETWO_COLOR),
                 ),
               ),
@@ -49,8 +51,8 @@ class PeriodTotalRecord extends StatelessWidget {
                   children: [
                     BigTargetBox(
                       data: selectedIndex == 3 || selectedIndex == 4
-                          ? recordData['sumDistance'] == 0.0 ? '-' : recordData['sumDistance']
-                          : recordData['curAvg']['sumDistance'] == 0.0 ? '-' : recordData['curAvg']['sumDistance'],
+                          ? recordData!['sumDistance'] == 0.0 ? '-' : recordData!['sumDistance']
+                          : recordData!['curAvg']['sumDistance'] == 0.0 ? '-' : recordData!['curAvg']['sumDistance'],
                       unit: 'km',
                     ),
                     SizedBox(height: 15),
@@ -58,22 +60,22 @@ class PeriodTotalRecord extends StatelessWidget {
                       children: [
                         SmallTargetBox(
                           data: selectedIndex == 3 || selectedIndex == 4
-                              ? recordData['sumTime'] == '00:00:00' ? '-' : recordData['sumTime']
-                              : recordData['curAvg']['sumTime'] == '00:00:00' ? '-' : recordData['curAvg']['sumTime'],
+                              ? recordData!['sumTime'] == '00:00:00' ? '-' : recordData!['sumTime']
+                              : recordData!['curAvg']['sumTime'] == '00:00:00' ? '-' : recordData!['curAvg']['sumTime'],
                           unit: '시간',
                         ),
                         SizedBox(width: 40),
                         SmallTargetBox(
                           data: selectedIndex == 3 || selectedIndex == 4
-                              ? recordData['sumKcal'] == 0 ? '-' : recordData['sumKcal']
-                              : recordData['curAvg']['sumKcal'] == 0 ? '-' : recordData['curAvg']['sumKcal'],
+                              ? recordData!['sumKcal'] == 0 ? '-' : recordData!['sumKcal']
+                              : recordData!['curAvg']['sumKcal'] == 0 ? '-' : recordData!['curAvg']['sumKcal'],
                           unit: 'kcal',
                         ),
                         SizedBox(width: 40),
                         SmallTargetBox(
                           data: selectedIndex == 3 || selectedIndex == 4
-                              ? recordData['avgPace'] == "0'0''" ? '-' :  recordData['avgPace']
-                              : recordData['curAvg']['avgPace'] == "0'0''" ? '-' : recordData['curAvg']['avgPace'],
+                              ? recordData!['avgPace'] == "0'0''" ? '-' :  recordData!['avgPace']
+                              : recordData!['curAvg']['avgPace'] == "0'0''" ? '-' : recordData!['curAvg']['avgPace'],
                           unit: '평균 페이스',
                         ),
                       ],
