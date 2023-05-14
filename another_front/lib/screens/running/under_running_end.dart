@@ -30,40 +30,43 @@ class UnderRunningScreenEnd extends StatelessWidget {
     print("빌드빌드end빌드예예");
     final Size size = MediaQuery.of(context).size;
     return MainLayout(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Target(
-            targetname: '내 기록',
-            runningDistance: runningDistance,
-            runningTime: runningTime,
-            userCalorie: userCalorie,
-            userPace: userPace,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 24.0),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: size.height / 7 * 4,
-              ),
-              child: SizedBox(
-                height: size.width,
-                width: size.width,
-                child: EndRunningMap(),
-              ),
-            )
-          ),
-          // SizedBox(
-          //   height: 120,
-          // ),
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: ButtonConponent(
-              onPressed: () => endFeed(context),
-              feedComplete: () => feedComplete(context),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Target(
+              targetname: '내 기록',
+              runningDistance: runningDistance,
+              runningTime: runningTime,
+              userCalorie: userCalorie,
+              userPace: userPace,
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.only(top: 24.0),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: size.height / 7 * 4,
+                ),
+                child: SizedBox(
+                  height: size.width,
+                  width: size.width,
+                  child: EndRunningMap(),
+                ),
+              )
+            ),
+            // SizedBox(
+            //   height: 120,
+            // ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: ButtonConponent(
+                onPressed: () => endFeed(context),
+                feedComplete: () => feedComplete(context),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -79,7 +82,7 @@ class UnderRunningScreenEnd extends StatelessWidget {
         MaterialPageRoute(
           builder: (_) => UnderChallengeScreenEndFeed(captureInfo: Provider.of<RunningData>(context, listen: false).runningPic),
         ),
-        (route) => route.settings.name == '/');
+        (route) => false);
   }
 
   void feedComplete(BuildContext context) {

@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:another/constant/color.dart';
+import 'package:another/constant/text_style.dart';
 import 'package:another/main.dart';
 import 'package:another/screens/home_screen.dart';
 import 'package:another/screens/running/api/feed_create_api.dart';
 import 'package:another/screens/running/feed_create_complete.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
 import 'package:another/widgets/target.dart';
+import 'package:carousel_indicator/carousel_indicator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,10 +20,13 @@ class UnderChallengeScreenEndFeed extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<UnderChallengeScreenEndFeed> createState() => _UnderChallengeScreenEndFeedState();
+  State<UnderChallengeScreenEndFeed> createState() =>
+      _UnderChallengeScreenEndFeedState();
 }
 
-class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFeed> {
+class _UnderChallengeScreenEndFeedState
+    extends State<UnderChallengeScreenEndFeed> {
+  int pageIndex = 0;
   // api 요청용
   late int userId = Provider.of<UserInfo>(context, listen: false).userId as int;
   late String runningId;
@@ -58,14 +63,16 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
 
   @override
   Widget build(BuildContext context) {
-
     print('리빌드');
     return Scaffold(
-      appBar: GoBackAppBarStyle(toHome: true,),
+      appBar: GoBackAppBarStyle(
+        toHome: true,
+      ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 32),
         child: SafeArea(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               OutlinedButton(
@@ -76,7 +83,7 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
                     width: 2.5,
                   ),
                 ),
-                onPressed: onTapPressed ,
+                onPressed: onTapPressed,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -105,19 +112,40 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
                   width: MediaQuery.of(context).size.width,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: PageView.builder(
-                      controller: _pageController,
-                      itemBuilder: (BuildContext context, int index) {
-                        return SizedBox(
-                          height: 350.0,
-                          child: Image.memory(
-                            feedPics[index],
-                            fit: BoxFit.contain,
+                    child: Stack(
+                        alignment: AlignmentDirectional.bottomCenter,
+                        children: [
+                          PageView.builder(
+                            onPageChanged: (value) {
+                              setState(() {
+                                pageIndex = value;
+                              });
+                            },
+                            controller: _pageController,
+                            itemBuilder: (BuildContext context, int index) {
+                              return SizedBox(
+                                height: 350.0,
+                                child: Image.memory(
+                                  feedPics[index],
+                                  fit: BoxFit.contain,
+                                ),
+                              );
+                            },
+                            itemCount: feedPics.length,
                           ),
-                        );
-                      },
-                      itemCount: feedPics.length,
-                    ),
+                          Positioned(
+                            bottom: 10,
+                            child: CarouselIndicator(
+                              space: 15,
+                              activeColor: MAIN_COLOR,
+                              width: 8,
+                              height: 8,
+                              animationDuration: 0,
+                              count: feedPics.length,
+                              index: pageIndex,
+                            ),
+                          )
+                        ]),
                   ),
                 ),
               ),
@@ -130,36 +158,67 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 12.0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: MAIN_COLOR,
-                    elevation: 20.0,
-                  ),
+                child:
+                ElevatedButton(
                   onPressed: () async {
                     // 등록 요청 하고 페이지 이동하도록?
-                    bool isComplete = await feedCreateApi(userId, runningId, feedPics);
+                    bool isComplete =
+                    await feedCreateApi(userId, runningId, feedPics);
                     // 현재 위젯이 그대로 마운트 되어있을때
                     if (context.mounted) {
                       if (isComplete) {
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
-                                builder: (_) => FeedCreateComplete(feedPics: feedPics,)),
+                                builder: (_) => FeedCreateComplete(
+                                  feedPics: feedPics,
+                                )),
                                 (route) => false);
                       } else {
                         // 미완료 모달창
                       }
-
                     }
-
                   },
+                  style: ElevatedButton.styleFrom(
+                    primary: MAIN_COLOR,
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 16),
+                    elevation: 10.0,
+                  ),
                   child: Text(
                     '오운완 등록하기',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16.0,
-                    ),
+                    style: MyTextStyle.twentyTextStyle,
                   ),
-                ),
+                )
+                // ElevatedButton(
+                //   style: ElevatedButton.styleFrom(
+                //     primary: MAIN_COLOR,
+                //     elevation: 20.0,
+                //   ),
+                //   onPressed: () async {
+                //     // 등록 요청 하고 페이지 이동하도록?
+                //     bool isComplete =
+                //         await feedCreateApi(userId, runningId, feedPics);
+                //     // 현재 위젯이 그대로 마운트 되어있을때
+                //     if (context.mounted) {
+                //       if (isComplete) {
+                //         Navigator.of(context).pushAndRemoveUntil(
+                //             MaterialPageRoute(
+                //                 builder: (_) => FeedCreateComplete(
+                //                       feedPics: feedPics,
+                //                     )),
+                //             (route) => false);
+                //       } else {
+                //         // 미완료 모달창
+                //       }
+                //     }
+                //   },
+                //   child: Text(
+                //     '오운완 등록하기',
+                //     style: TextStyle(
+                //       fontWeight: FontWeight.w700,
+                //       fontSize: 16.0,
+                //     ),
+                //   ),
+                // ),
               )
             ],
           ),
@@ -167,6 +226,7 @@ class _UnderChallengeScreenEndFeedState extends State<UnderChallengeScreenEndFee
       ),
     );
   }
+
   // 저장된 이미지 가져오기
   void onTapPressed() async {
     final imageXFiles = await ImagePicker().pickMultiImage(
