@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:another/main.dart';
@@ -67,23 +68,19 @@ class _RunningMapState extends State<RunningMap> {
   }
   @override
   Widget build(BuildContext context) {
-    print("Rebuild!");
-    print("=============================");
-    print(Provider.of<RunningData>(context, listen: false).polyLine.length);
-    print(Provider.of<RunningData>(context, listen: false).stopCount);
-    return Stack(
-      children: [
+    return
         GoogleMap(
+        rotateGesturesEnabled: false,
+        scrollGesturesEnabled: false,
+        tiltGesturesEnabled: false,
         initialCameraPosition: currentPosition,
         mapType: MapType.normal,
         zoomControlsEnabled: false,
         myLocationEnabled: true,
         myLocationButtonEnabled: false,
         onMapCreated: onMapCreated,
-        polylines: Set<Polyline>.of(Provider.of<RunningData>(context, listen: true).polyLine)
-        ),
-      ]
-    );
+        polylines: Set<Polyline>.of(Provider.of<RunningData>(context, listen: true).polyLine),
+        );
   }
   void forPolyList(LatLng latLng) {
     var runFunc = Provider.of<RunningData>(context, listen: false);
@@ -122,23 +119,52 @@ class _RunningMapState extends State<RunningMap> {
     }
     return ;
   }
+  double _toRadians(double degrees) {
+    return degrees * pi / 180;
+  }
+
+  double distanceFunc(past, current) {
+    // 거리 계산
+    // // 기준점 변경
+
+    // // 지구 반지름
+    double earth = 6371;
+
+    // // 기준점 2개(현재, 과거)에 대한 latRad, LonRad
+    double lat1Rad = _toRadians(past.latitude);
+    double lat2Rad = _toRadians(current.latitude);
+    double lon1Rad = _toRadians(past.longitude);
+    double lon2Rad = _toRadians(current.longitude);
+
+    // // 기준점 2개에 대한 delta값
+    double deltaLat = lat2Rad - lat1Rad;
+    double deltaLon = lon2Rad - lon1Rad;
+
+    // // 위도, 경도에 따른 거리 구하기
+    final a = pow(sin(deltaLat / 2), 2) +
+        cos(lat1Rad) *
+            cos(lat2Rad) *
+            pow(sin(deltaLon / 2), 2);
+    final c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    return earth * c;
+  }
+
   void changeCamera(Position position) {
-    print("카메라냐??");
     var runningData = Provider.of<RunningData>(context, listen: false);
     if (position.latitude != runningData.curValue.latitude && position.longitude != runningData.curValue.longitude && mapController != null) {
       runningData.setLat(position.latitude);
       runningData.setLng(position.longitude);
       runningData.setCurrentPosition(CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 17));
       if (Provider.of<RunningData>(context, listen: false).stopFlag == false) {
-        setState(() {
-          forPolyList(LatLng(position.latitude, position.longitude));
-        });
+          setState(() {
+            forPolyList(LatLng(position.latitude, position.longitude));
+          });
+        }
+        mapController!.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 17)));
       }
-      mapController!.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 17)));
+      runningData.addLocation(LatLng(position.latitude, position.longitude), 0);
+      
     }
-    runningData.addLocation(LatLng(position.latitude, position.longitude), 0);
-
-  }
   // 사용자에게 위치 동의 구하기 단계별로
   Future<String> checkPermission() async {
     final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
@@ -158,7 +184,4 @@ class _RunningMapState extends State<RunningMap> {
     return '위치 권한이 허가 되었습니다.';
   }
 }
-
-
-
 
