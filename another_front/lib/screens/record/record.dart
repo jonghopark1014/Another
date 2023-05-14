@@ -172,19 +172,23 @@ class MyChallenge extends StatelessWidget {
       padding: EdgeInsets.all(10),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: Row(
+        child: Column(
           children: [
-            Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
-            SizedBox(width: 5),
-            Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
-            SizedBox(width: 5),
-            Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
-            SizedBox(width: 5),
-            Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
-            SizedBox(width: 5),
-            Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
-            SizedBox(width: 5),
-            Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
+            // if API가 0개이면 띄워줄거 작성해야함
+            Text('아직 획득한 뱃지가 없어요.', style: TextStyle(color: WHITE_COLOR, fontSize: 20)),
+            Text('런닝을 뛰어 뱃지를 얻어보세요', style: TextStyle(color: WHITE_COLOR, fontSize: 20)),
+            TextButton(onPressed: (){}, child: Text('뛰러가기'))
+            // Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
+            // SizedBox(width: 5),
+            // Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
+            // SizedBox(width: 5),
+            // Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
+            // SizedBox(width: 5),
+            // Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
+            // SizedBox(width: 5),
+            // Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
+            // SizedBox(width: 5),
+            // Image.asset('assets/img/10min_gold.png', height: 64, width: 64),
           ],
         ),
       ),
@@ -488,14 +492,9 @@ class _MyRecordContentsState extends State<MyRecordContents> {
                 calendarBuilders: CalendarBuilders(
                   markerBuilder: (context, date, event) {
                     if (event.isNotEmpty) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(
-                          event.length > 3 ? 3 : event.length, // 길이만큼
-                          (index) =>
-                              Icon(Icons.directions_run, color: Color(0xFF8BC34A), size: 14),
-                        ),
-                      );
+                      return event.length >= 10 ? Icon(Icons.directions_run, color: Color(0xFF84DE1C), size: 14) :
+                      event.length >= 5 ? Icon(Icons.directions_run, color: Color(0xFF57CD3A).withOpacity(0.8), size: 14) :
+                      Icon(Icons.directions_run, color: Color(0xFF60B44C), size: 14);
                     }
                   },
                 ),
