@@ -1,10 +1,11 @@
 import 'dart:typed_data';
 
-import 'package:another/constant/color.dart';
-import 'package:another/constant/main_layout.dart';
+import 'package:another/constant/const/color.dart';
 import 'package:another/screens/running/under_challenge_end_feed.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/material.dart';
+
+import '../../constant/layout/main_layout.dart';
 
 class UnderRunningScreenEnd extends StatelessWidget {
   final Uint8List? captureInfo;

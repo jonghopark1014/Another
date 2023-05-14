@@ -1,4 +1,4 @@
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
 import 'package:another/screens/record/api/history_record_api.dart';
 import 'package:another/screens/record/widgets/period_total_record.dart';
 import 'package:flutter/material.dart';

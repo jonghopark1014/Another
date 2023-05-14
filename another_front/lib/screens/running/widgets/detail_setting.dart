@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 
-import '../../../constant/color.dart';
+import '../../../constant/const/color.dart';
 
 class DetailSetting extends StatefulWidget {
   const DetailSetting({

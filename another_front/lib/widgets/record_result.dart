@@ -1,7 +1,7 @@
 import 'package:another/widgets/record_result_box.dart';
 import 'package:flutter/material.dart';
 
-import '../constant/color.dart';
+import '../constant/const/color.dart';
 
 class RecordResult extends StatelessWidget {
   final String timer;

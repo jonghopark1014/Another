@@ -1,4 +1,4 @@
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
 import 'package:another/main.dart';
 import 'package:another/screens/running/widgets/running_map.dart';
 import 'package:another/screens/running/widgets/running_status.dart';

@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../constant/color.dart';
+import '../../constant/const/color.dart';
 
 class RunningFeedComplete extends StatefulWidget {
   // final Uint8List? captureInfo;

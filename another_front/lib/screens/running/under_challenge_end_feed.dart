@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../constant/color.dart';
+import '../../constant/const/color.dart';
 import '../feed/widgets/custom_image.dart';
 
 class UnderChallengeScreenEndFeed extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
 import 'package:another/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

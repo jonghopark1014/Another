@@ -1,4 +1,4 @@
-import 'package:another/constant/main_layout.dart';
+import 'package:another/constant/layout/main_layout.dart';
 import 'package:another/main.dart';
 import 'package:another/screens/feed/all_feed_screen.dart';
 import 'package:another/screens/feed/api/feed_api.dart';
@@ -9,7 +9,7 @@ import 'package:another/screens/feed/widgets/my_feed_result.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../constant/color.dart';
+import '../../constant/const/color.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({Key? key}) : super(key: key);

@@ -1,6 +1,6 @@
 import 'package:another/screens/account/api/nickname_check_api.dart';
 import 'package:flutter/material.dart';
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
 import 'signup_userinfo.dart';
 import '../../widgets/intro_header.dart';
 
@@ -436,14 +436,16 @@ class SignupPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            IntroHeader(),
-            SizedBox(height: 16),
-            CustomInputForm(),
-            Spacer(),
-          ],
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Column(
+            children: [
+              IntroHeader(),
+              SizedBox(height: 16),
+              CustomInputForm(),
+            ],
+          ),
         ),
       ),
     );

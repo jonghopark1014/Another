@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
 import '../../widgets/intro_header.dart';
 import '../../main.dart';
 import 'package:provider/provider.dart';

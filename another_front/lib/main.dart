@@ -1,13 +1,22 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:another/constant/view/splash_screen.dart';
+import 'package:another/watch/screen/watch_home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'firebase_options.dart';
 
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
 import 'package:another/screens/home_screen.dart';
 import 'package:another/screens/running/challenge_running.dart';
 import 'package:another/screens/running/under_challenge.dart';
 import 'package:another/screens/running/under_running.dart';
+import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatform;
 
 class RunningSetting extends ChangeNotifier {
   int distance = 0;
@@ -122,13 +131,13 @@ class ChallengeData extends ChangeNotifier {
 
 class UserInfo extends ChangeNotifier {
   int userId = 1;
-  String? accessToken;
-  String? refreshToken;
+  // String? accessToken;
+  // String? refreshToken;
 
-  void updateUserInfo(String userId, String accessToken, String refreshToken) {
+  void updateUserInfo(String userId) {
     this.userId = int.parse(userId);
-    this.accessToken = accessToken;
-    this.refreshToken = refreshToken;
+    // this.accessToken = accessToken;
+    // this.refreshToken = refreshToken;
     notifyListeners();
   }
   // int userId = 1;
@@ -151,48 +160,90 @@ class ForDate extends ChangeNotifier {
 
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
+  // print(device);
+
   await initializeDateFormatting();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final userInfo = UserInfo();
   @override
   Widget build(BuildContext context) {
-    if (userInfo.userId != null){
-      print('not null');
-    } else{
-      print('null');
-    }
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (c) => UserInfo()) ,
-        ChangeNotifierProvider(create: (c) => RunningData()) ,
-        ChangeNotifierProvider(create: (c) => ForDate()),
-        ChangeNotifierProvider(create: (c) => ChallengeData()),
-        ChangeNotifierProvider(create: (c) => RunningSetting()) ,
-      ],
-      child: MaterialApp(
-        initialRoute: '/',
-        theme: ThemeData(
-          scaffoldBackgroundColor: BACKGROUND_COLOR,
-          fontFamily: 'pretendard',
-          textTheme: TextTheme(
-            headline1: TextStyle(
-              color: MAIN_COLOR,
-              fontFamily: 'Pretendard',
-              fontSize: 16.0,
+    return LayoutBuilder(
+      builder: (_, BoxConstraints constraints) {
+        print(constraints);
+        if (constraints.maxHeight > 300) {
+          return MultiProvider(
+            providers: [
+              ChangeNotifierProvider(create: (c) => UserInfo()),
+              ChangeNotifierProvider(create: (c) => RunningData()),
+              ChangeNotifierProvider(create: (c) => ForDate()),
+              ChangeNotifierProvider(create: (c) => ChallengeData()),
+              ChangeNotifierProvider(create: (c) => RunningSetting()),
+            ],
+            child: MaterialApp(
+              initialRoute: '/',
+              // home: SplashScreen(),
+              theme: ThemeData(
+                scaffoldBackgroundColor: BACKGROUND_COLOR,
+                fontFamily: 'pretendard',
+                textTheme: TextTheme(
+                  headline1: TextStyle(
+                    color: MAIN_COLOR,
+                    fontFamily: 'Pretendard',
+                    fontSize: 16.0,
+                  ),
+                ),
+              ),
+              routes: {
+                // '/': (context) => HomeScreen(),
+                '/': (context) => SplashScreen(),
+                '/Detail': (context) => ChallengeRunning(
+                ),
+                '/UnderRunning': (context) => UnderRunning(),
+                '/UnderChallenge': (context) => UnderChallenge(),
+              },
             ),
-          ),
-        ),
-        routes: {
-          '/': (context) => HomeScreen(),
-          '/Detail': (context) => ChallengeRunning(
-          ),
-          '/UnderRunning': (context) => UnderRunning(),
-          '/UnderChallenge': (context) => UnderChallenge(),
-        },
-      ),
+          );
+        } else {
+          return MultiProvider(
+            providers: [
+              ChangeNotifierProvider(create: (c) => RunningSetting()),
+            ],
+            child: MaterialApp(
+              home: const WathchHomeScreen(),
+              theme: ThemeData(
+                  platform: TargetPlatform.android,
+                  scaffoldBackgroundColor: BACKGROUND_COLOR),
+
+            ),
+          );
+        }
+      }
+
     );
   }
+}
+
+void receiveDataFromPhone() {
+  const messageChannel =
+  const BasicMessageChannel<String>('com.example.another', StringCodec());
+  print('안돼?');
+  // 데이터 수신
+  messageChannel.setMessageHandler(
+        (String? data) async {
+      if (data != null) {
+        final decodedData = json.decode(data);
+        print(decodedData);
+        return decodedData;
+      } else {
+        return 'ddd';
+      }
+    },
+  );
+  print('안돼????');
 }

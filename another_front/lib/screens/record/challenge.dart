@@ -1,6 +1,6 @@
 import 'package:another/widgets/go_back_appbar_style.dart';
 import 'package:flutter/material.dart';
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
 import './widgets/category_title.dart';
 import './widgets/challenge_item.dart';
 

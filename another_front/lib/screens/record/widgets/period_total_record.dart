@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
 
 class PeriodTotalRecord extends StatelessWidget {
   const PeriodTotalRecord(

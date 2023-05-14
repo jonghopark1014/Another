@@ -142,6 +142,7 @@ class _RunningStatus extends State<RunningStatus> {
     String userId = userInfo.userId.toString();
     String forRunId1 = DateFormat('yyMMddHHmmss').format(DateTime.now());
     runDataId = userId + forRunId1;
+
     // 타이머 시작
     isStart = true;
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -156,7 +157,6 @@ class _RunningStatus extends State<RunningStatus> {
             minutes = 0;
           }
           setData();
-          sendDataToWatch();
         }
       });
     });
@@ -171,6 +171,8 @@ class _RunningStatus extends State<RunningStatus> {
 
   @override
   Widget build(BuildContext context) {
+
+    // sendDataToWatch();
     return // 달릴 때 데이터 표시
       Expanded(
         child: Column(
@@ -287,31 +289,17 @@ class _RunningStatus extends State<RunningStatus> {
   }
 
   // 워치로 보내는 하는 데이터 값
-  void sendDataToWatch() async {
-    const messageChannel =
-    const BasicMessageChannel<String>('com.another.data', StringCodec());
-    assert(messageChannel != null);
-    var runningData = Provider.of<RunningData>(context, listen: false);
-    var userId = Provider.of<UserInfo>(context, listen: false).userId;
+  void sendDataToWatch(Map<String, dynamic> data) async {
+    const platform = MethodChannel('com.example.app/sendData');
     // 데이터를 전송할 맵 객체 생성
-    Map<String, dynamic> data = {'userId': userId!, 'runningId': runningData.runningId, runningTime: runningData.runningTime, 'runningDistance': runningData.runningDistance, 'userCalories': runningData.userCalories, 'userPace': runningData.userPace, 'runningPic': runningData.runningPic};
-    print(data);
+    // Map<String, dynamic> data = {'userId': userId!, 'runningId': runningData.runningId, runningTime: runningData.runningTime, 'runningDistance': runningData.runningDistance, 'userCalories': runningData.userCalories, 'userPace': runningData.userPace, 'runningPic': runningData.runningPic};
     // 데이터 전송
-    print(json.encode(data));
-    print('워치로 보내고 싶어');
-    if (messageChannel != null) {
-      final String? response = await messageChannel.send(json.encode(data));
-      print('보내지는거 맞나?');
-    } else {
-      print('제발제발되라!!!');
+    try {
+      await platform.invokeMethod('sendDataToWearable', {'data': data});
+    } on PlatformException catch (e) {
+      print("Failed to send data to wearable: '${e.message}'.");
     }
-    
-
-    // 워치 어플에서 보낸 응답 출력
-    
-    
   }
-
 
   void onChange() {}
 }
