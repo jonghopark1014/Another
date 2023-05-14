@@ -43,6 +43,8 @@ class RecordChart extends StatelessWidget {
             ColumnSeries<ChartData, String>(
               width: 0.9,
               spacing: 0.05,
+              color: MAIN_COLOR.withOpacity(0.8),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)),
               dataSource: chartData,
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y1graph,
@@ -54,6 +56,8 @@ class RecordChart extends StatelessWidget {
             ColumnSeries<ChartData, String>(
               width: 0.9,
               spacing: 0.05,
+              color: MAIN_COLOR.withOpacity(0.8),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)),
               dataSource: chartData,
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y2graph,
