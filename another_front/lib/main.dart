@@ -7,9 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'firebase_options.dart';
 
 import 'package:another/constant/const/color.dart';
 import 'package:another/screens/home_screen.dart';
@@ -151,12 +150,17 @@ class UserInfo extends ChangeNotifier {
 
 class ForDate extends ChangeNotifier {
   DateTime forFocus = DateTime.now();
-
+  var forFocusFormat;
   void changeValue(value) {
     forFocus = value;
+    print(forFocus);
+    print('-=-=-=-=-=');
+    forFocusFormat = DateFormat('yyyy-MM-dd').format(forFocus);
+    print(forFocusFormat);
     notifyListeners();
   }
 }
+
 
 
 void main() async {

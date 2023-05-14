@@ -63,7 +63,7 @@ class GetHistoryRecord {
 
   static Future<Map<String, dynamic>> getAllHistoryRecord() async {
     int userId = 1;
-    var url = Uri.parse('$_baseUrl/record/$userId/history/today');
+    var url = Uri.parse('$_baseUrl/record/$userId/history/all');
 
     try {
       var response = await http.get(url);
@@ -78,4 +78,25 @@ class GetHistoryRecord {
     }
     return {};
   }
+
+  // 달력 선택 날짜에 대한 기록 목록
+  static Future<Map<String, dynamic>> getHistoryRecordSelectDay(String? date) async {
+    int userId = 1;
+
+    var url = Uri.parse('$_baseUrl/record/$userId/history/interval?createDate=$date');
+
+    try {
+      var response = await http.post(url);
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.body);
+        return responseBody['data'];
+      } else {
+        return {};
+      }
+    } catch (error) {
+      print(error);
+    }
+    return {};
+  }
+
 }

@@ -3,6 +3,7 @@ import 'package:another/screens/record/api/history_record_api.dart';
 import 'package:another/screens/record/widgets/period_total_record.dart';
 import 'package:flutter/material.dart';
 import '../account/login.dart';
+import '../account/signup_userinfo.dart';
 import '../record/challenge.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
@@ -13,7 +14,9 @@ import 'package:another/screens/record/widgets/profile.dart';
 import 'package:another/screens/record/widgets/record_chart.dart';
 import 'package:another/screens/record/api/period_total_record_api.dart';
 import 'package:another/screens/record/widgets/target_record_item.dart';
-
+import 'package:another/screens/record/widgets/record_chart.dart';
+import 'dart:convert';
+import 'dart:collection';
 
 class RecordTab extends StatelessWidget {
   const RecordTab({Key? key}) : super(key: key);
