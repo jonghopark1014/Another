@@ -55,6 +55,11 @@ class _RunningCarouselState extends State<RunningCarousel> {
         alignment: AlignmentDirectional.bottomCenter,
         children: [
           PageView.builder(
+            onPageChanged: (value) {
+              setState(() {
+                pageIndex = value;
+              });
+            },
             controller: _pageController,
             itemCount: _carouselPages.length,
             itemBuilder: (BuildContext context, int index) {
