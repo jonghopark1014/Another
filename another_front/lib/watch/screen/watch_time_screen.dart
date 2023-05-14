@@ -1,4 +1,4 @@
-import 'package:another/watch/common/const/color.dart';
+import 'package:another/constant/const/color.dart';
 import 'package:another/watch/screen/watch_running_record.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';

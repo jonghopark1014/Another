@@ -1,7 +1,7 @@
+import 'package:another/constant/const/color.dart';
 import 'package:carousel_indicator/carousel_indicator.dart';
 import 'package:flutter/material.dart';
 
-import '../../common/const/color.dart';
 
 class CustomCarouselIndicator extends StatelessWidget implements PreferredSizeWidget {
   final int count;

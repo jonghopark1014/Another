@@ -1,4 +1,4 @@
-import 'package:another/watch/common/const/color.dart';
+import 'package:another/constant/const/color.dart';
 import 'package:flutter/material.dart';
 
 class RecordResult extends StatelessWidget {
@@ -29,7 +29,7 @@ class RecordResult extends StatelessWidget {
         Text(
           name,
           style: const TextStyle(
-            color: SERVE_COLOR,
+            color: SERVEONE_COLOR,
             fontWeight: FontWeight.w700,
             fontSize: 12.0,
           ),

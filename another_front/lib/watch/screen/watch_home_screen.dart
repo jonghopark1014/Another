@@ -1,4 +1,5 @@
-import 'package:another/watch/common/const/color.dart';
+
+import 'package:another/constant/const/color.dart';
 import 'package:another/watch/screen/watch_time_screen.dart';
 import 'package:flutter/material.dart';
 

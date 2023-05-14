@@ -1,7 +1,7 @@
+import 'package:another/constant/const/color.dart';
 import 'package:another/watch/screen/widget/carousel_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:another/watch/common/const/color.dart';
 import 'package:another/watch/screen/widget/watch_record_result_box.dart';
 
 class WatchRunningRecord extends StatefulWidget {

@@ -1,7 +1,7 @@
+import 'package:another/constant/const/color.dart';
 import 'package:another/watch/screen/widget/watch_record_result.dart';
 import 'package:flutter/material.dart';
 
-import '../../common/const/color.dart';
 
 class RecordResultBox extends StatelessWidget {
   const RecordResultBox({Key? key}) : super(key: key);
@@ -25,7 +25,7 @@ class RecordResultBox extends StatelessWidget {
                 width: 70.0,
                 height: 1.0,
                 child: DecoratedBox(
-                  decoration: BoxDecoration(color: SERVE_COLOR,
+                  decoration: BoxDecoration(color: SERVEONE_COLOR,
                   ),
                 ),
               ),
@@ -41,7 +41,7 @@ class RecordResultBox extends StatelessWidget {
           padding: EdgeInsets.all(4.0),
           child: VerticalDivider(
             width: 1.0,
-            color: SERVE_COLOR,
+            color: SERVEONE_COLOR,
             thickness: 1.0,
             indent: 25.0,
             endIndent: 25.0,
@@ -61,7 +61,7 @@ class RecordResultBox extends StatelessWidget {
                 width: 70.0,
                 height: 1.0,
                 child: DecoratedBox(
-                  decoration: BoxDecoration(color: SERVE_COLOR,
+                  decoration: BoxDecoration(color: SERVEONE_COLOR,
                   ),
                 ),
               ),
