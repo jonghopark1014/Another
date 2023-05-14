@@ -30,7 +30,7 @@ class _WathchHomeScreenState extends State<WathchHomeScreen> {
               const Text(
                 '오늘도 힘차게',
                 style: TextStyle(
-                    color: PRIMARY_COLOR,
+                    color: MAIN_COLOR,
                     fontWeight: FontWeight.w700,
                     fontSize: 20.0),
                 textAlign: TextAlign.center,
@@ -38,7 +38,7 @@ class _WathchHomeScreenState extends State<WathchHomeScreen> {
               const Text(
                 '달려볼까요?🏃🏻🏃🏻‍♂🏃🏻‍♀‍',
                 style: TextStyle(
-                    color: PRIMARY_COLOR,
+                    color: MAIN_COLOR,
                     fontWeight: FontWeight.w700,
                     fontSize: 20.0),
                 textAlign: TextAlign.center,
@@ -50,7 +50,7 @@ class _WathchHomeScreenState extends State<WathchHomeScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: PRIMARY_COLOR,
+                      backgroundColor: MAIN_COLOR,
                     ),
                     child: const Padding(
                       padding: const EdgeInsets.only(bottom: 4.0),

@@ -47,7 +47,7 @@ class _WatchTimeScreenState extends State<WatchTimeScreen> {
         child: Text(
           '$_second',
           style: TextStyle(
-            color: PRIMARY_COLOR,
+            color: MAIN_COLOR,
             fontSize: 100.0,
             fontWeight: FontWeight.w700,
           ),

@@ -71,7 +71,7 @@ class _WatchRunningRecordState extends State<WatchRunningRecord> {
                         height: 45.0,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: PRIMARY_COLOR,
+                            backgroundColor: MAIN_COLOR,
                             fixedSize: Size(120.0, 30.0),
                           ),
                           onPressed: onPressed,
@@ -88,7 +88,7 @@ class _WatchRunningRecordState extends State<WatchRunningRecord> {
                       height: 45.0,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: PRIMARY_COLOR,
+                            backgroundColor: MAIN_COLOR,
                             fixedSize: Size(
                               120.0,
                               30.0,
@@ -111,7 +111,7 @@ class _WatchRunningRecordState extends State<WatchRunningRecord> {
                   height: 45.0,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: PRIMARY_COLOR,
+                      backgroundColor: MAIN_COLOR,
                       fixedSize: Size(
                         120.0,
                         30.0,

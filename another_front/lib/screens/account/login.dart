@@ -148,12 +148,12 @@ class _LoginPageState extends State<LoginPage> {
                           'password': password,
                         },
                       );
-                    print(resp.headers);
+                    // print(resp.headers);
                     final refreshToken = resp.headers['refresh']?[0];
                     final accessToken = resp.headers['Authorization']?[0];
                     final userId = resp.headers['userid']?[0];
 
-                    print(userId);
+                    // print(userId);
                     Provider.of<UserInfo>(context, listen: false).updateUserInfo(userId!);
 
                     await storage.write(

@@ -16,7 +16,7 @@ class CustomCarouselIndicator extends StatelessWidget implements PreferredSizeWi
   @override
   Widget build(BuildContext context) {
     return CarouselIndicator(
-      activeColor: PRIMARY_COLOR,
+      activeColor: MAIN_COLOR,
       count: count,
       index: currentIndex,
       width: 8.0,
