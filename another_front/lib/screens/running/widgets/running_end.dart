@@ -27,8 +27,8 @@ class _EndRunningMapState extends State<EndRunningMap> {
   }
   @override
   void dispose() async {
-    super.dispose();
     mapController!.dispose();
+    super.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -51,15 +51,17 @@ class _EndRunningMapState extends State<EndRunningMap> {
   void _onMapIdle() {
     var runningData = Provider.of<RunningData>(context, listen: false);
     LatLngBounds bound = LatLngBounds(southwest: LatLng(runningData.minLat, runningData.minLng), northeast: LatLng(runningData.maxLat, runningData.maxLng));
-    Future.delayed(Duration(milliseconds: 500), () {
-      print("나왔당");
-      mapController?.animateCamera(CameraUpdate.newLatLngBounds(bound, 50));
-    });
-    Future.delayed(Duration(milliseconds: 500), () async {
-      Uint8List? runPic = await captureWidget();
-      runningData.setRunningPic(runPic);
-      print("찍었당");
-    });
+    if (mounted) {
+      Future.delayed(Duration(milliseconds: 500), () {
+        print("나왔당");
+        mapController?.animateCamera(CameraUpdate.newLatLngBounds(bound, 50));
+      });
+      Future.delayed(Duration(milliseconds: 500), () async {
+        Uint8List? runPic = await captureWidget();
+        runningData.setRunningPic(runPic);
+        print("찍었당");
+      });
+    }
   }
 
   Future<Uint8List?> captureWidget() async {

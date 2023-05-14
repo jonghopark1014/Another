@@ -6,6 +6,7 @@ import 'package:another/widgets/target.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../home_screen.dart';
 import './api/under_running_end_api.dart';
 
 import '../feed/widgets/line_chart_custom.dart';
@@ -85,8 +86,9 @@ class UnderChallengeScreenEnd extends StatelessWidget {
     var userId = Provider.of<UserInfo>(context, listen: false).userId;
     var challengeData = Provider.of<ChallengeData>(context, listen: false);
     print('challengeeeeee');
+    print(challengeData.runningId);
     // // mySQL 저장
-    saveRunningTime.saveRunData(userId: userId!, hostRunningId: challengeData.runningId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
+    saveRunningTime.saveRunData(userId: userId!, hostRunningId: challengeData.hostRunningId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
     // // hdfs 저장
     saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
     Navigator.of(context).pushAndRemoveUntil(
@@ -106,7 +108,7 @@ class UnderChallengeScreenEnd extends StatelessWidget {
     saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => UnderChallengeScreenEndFeed(captureInfo: Provider.of<RunningData>(context, listen: false).runningPic),
+        builder: (_) => HomeScreen(),
       ),
     );
   }

@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 class saveRunningTime {
 
-  static const _baseUrl = "https://k  8b308.p.ssafy.io";
+  static const _baseUrl = "https://k8b308.p.ssafy.io";
 
   static Future<void> sendTopic({
     required String runningId,
@@ -86,7 +86,9 @@ class saveRunningTime {
     request.fields['userCalories'] = userCalories.toString();
     request.fields['userPace'] = pace.toString();
     request.fields['createDate'] = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    request.fields['hostRunningId'] = hostRunningId.toString();
+    if (hostRunningId != null) {
+      request.fields['hostRunningId'] = hostRunningId.toString();
+    }
     print(request.fields);
 
     //
