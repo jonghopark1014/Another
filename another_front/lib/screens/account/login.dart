@@ -163,11 +163,10 @@ class _LoginPageState extends State<LoginPage> {
                       await storage.write(
                           key: ACCESS_TOKEN_KEY, value: accessToken);
 
-                      Navigator.of(context).push(
+                      Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                           builder: (_) => HomeScreen(),
-                        ),
-                      );
+                        ),(route) => false);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: MAIN_COLOR,
