@@ -1,103 +1,87 @@
+import 'package:another/screens/record/widgets/challenge_category.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:another/constant/color.dart';
 import './widgets/category_title.dart';
 import './widgets/challenge_item.dart';
+import './api/challenge_api.dart';
 
-class ChallengePage extends StatelessWidget {
+class ChallengePage extends StatefulWidget {
   ChallengePage({Key? key}) : super(key: key);
 
-  var monthChallenges = [
-    {
-      'title': '300분 달성',
-      'progress': 0.2,
-      'goldBadge': '300min_gold.png',
-      'silverBadge': '300min_silver.png',
-    },
-    {
-      'title': '30분 달성',
-      'progress': 0.5,
-      'goldBadge': '300min_gold.png',
-      'silverBadge': '300min_silver.png',
-    },
-    {
-      'title': '300분 달성',
-      'progress': 1.2,
-      'goldBadge': '300min_gold.png',
-      'silverBadge': '300min_silver.png',
-    },
-  ];
-  var campusChallenges = [
-    {
-      'title': '300분 달성',
-      'progress': 1.2,
-      'goldBadge': '300min_gold.png',
-      'silverBadge': '300min_silver.png',
-    },
-    {
-      'title': '30분 달성',
-      'progress': 1.0,
-      'goldBadge': '300min_gold.png',
-      'silverBadge': '300min_silver.png',
-    },
-    {
-      'title': '30분 달성',
-      'progress': 0.8,
-      'goldBadge': '300min_gold.png',
-      'silverBadge': '300min_silver.png',
-    },
-    {
-      'title': '300분 달성',
-      'progress': 1.2,
-      'goldBadge': '300min_gold.png',
-      'silverBadge': '300min_silver.png',
-    },
-  ];
+  @override
+  State<ChallengePage> createState() => _ChallengePageState();
+}
+
+class _ChallengePageState extends State<ChallengePage> {
+  List<dynamic> _challengeData = [];
+  bool _isLoading = true; // 데이터를 받아오는 중
+
+  @override
+  void initState() {
+    super.initState();
+    getChallenge();
+  }
+
+  Future<void> getChallenge() async {
+    List<dynamic> data = await GetChallenge.challengeList();
+    setState(() {
+      _challengeData = data;
+      _isLoading = false;
+    });
+  }
+
+  double? getChallengeValue(List<dynamic> challengeData, String challengeName) {
+    final challenge = challengeData.firstWhere(
+          (data) {
+        return data['challengeName'] == challengeName;
+      },
+      orElse: () => null,
+    );
+    if (challenge != null) {
+      if (challenge['challengeValue'] is int) {
+        return (challenge['challengeValue'] as int).toDouble();
+      } else {
+        return challenge['challengeValue'] as double?;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: GoBackAppBarStyle(),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ChallengeHeader(exp: 12000),
-              // 월간 시간 챌린지
-              Row(children: [
-                CategoryTitle(title: '월간 시간 챌린지'),
-                Spacer(), // 다른 자식 위젯들을 오른쪽으로 밀어내기 위해 추가
-              ]),
-              Wrap(
-                direction: Axis.horizontal,
-                spacing: 20,
-                runSpacing: 20,
-                children: List.generate(
-                  campusChallenges.length,
-                  (index) {
-                    final challenge = campusChallenges[index];
-                    return ChallengeItem(
-                      title: challenge['title'],
-                      progress: challenge['progress'],
-                      goldBadge: challenge['goldBadge'],
-                      silverBadge: challenge['silverBadge'],
-                    );
-                  },
+        appBar: GoBackAppBarStyle(),
+        body: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ChallengeHeader(exp: 12000),
+                      // 월간 시간 챌린지
+                      MonthChallenge(
+                          challengeData: _challengeData,
+                          getChallengeValue: getChallengeValue),
+                      // 캠퍼스 챌린지
+                      CampusChallenge(
+                          challengeData: _challengeData,
+                          getChallengeValue: getChallengeValue),
+                      // 꾸준함 챌린지
+                      SteadyChallenge(
+                          challengeData: _challengeData,
+                          getChallengeValue: getChallengeValue),
+                      // 누적 챌린지
+                      TotalDayChallenge(
+                          challengeData: _challengeData,
+                          getChallengeValue: getChallengeValue),
+                    ],
+                  ),
                 ),
-              ),
-              // 캠퍼스 챌린지
-              Row(children: [
-                CategoryTitle(title: '캠퍼스 챌린지'),
-                Spacer(), // 다른 자식 위젯들을 오른쪽으로 밀어내기 위해 추가
-              ]),
-            ],
-          ),
-        ),
-      ),
-    );
+              ));
   }
 }
 
