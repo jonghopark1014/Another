@@ -1,6 +1,6 @@
 import 'package:another/main.dart';
 import 'package:another/screens/running/under_challenge_end_feed.dart';
-import 'package:another/screens/running/widgets/ButtonComponent.dart';
+import 'package:another/screens/running/widgets/button_component.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

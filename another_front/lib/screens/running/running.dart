@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:another/constant/const/color.dart';
+import 'package:another/screens/running/api/my_history_api.dart';
 import 'package:another/screens/running/challenge_running.dart';
 import 'package:another/screens/running/timer_screen.dart';
 import 'package:another/screens/running/widgets/before_running_map.dart';
@@ -8,6 +9,7 @@ import 'package:another/screens/running/widgets/my_history.dart';
 import 'package:another/screens/running/widgets/running_carousel.dart';
 import 'package:another/screens/running/widgets/running_small_button.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
+import 'package:another/widgets/target.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -90,8 +92,8 @@ class _RunningTabState extends State<RunningTab> {
                     decoration: BoxDecoration(
                         border: Border(
                             bottom: BorderSide(
-                      color: CONTOUR_COLOR,
-                    ))),
+                              color: CONTOUR_COLOR,
+                            ))),
                     child: Text(
                       '목표설정',
                       style: TextStyle(
@@ -184,8 +186,8 @@ class _RunningTabState extends State<RunningTab> {
                     ),
                     onPressed: () {
                       Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => ChallengeRunning()),
-                          );
+                        MaterialPageRoute(builder: (_) => ChallengeRunning()),
+                      );
                     },
                     child: const Text(
                       '선택 완료',
@@ -203,7 +205,8 @@ class _RunningTabState extends State<RunningTab> {
   void onPressed(String str) {
     final runningData = Provider.of<RunningData>(context, listen: false);
     runningData.reset();
-    runningData.addLocation(runningData.currentPosition.target);
+    runningData.firstMinMax(runningData.currentPosition.target);
+    runningData.addLocation(runningData.currentPosition.target, 1);
 
     // currentposition 초기값 그대로이면 받아오기전으로 판단
     if (runningData.currentPosition.target.longitude != 0 &&
@@ -215,7 +218,7 @@ class _RunningTabState extends State<RunningTab> {
             initialPosition: runningData.currentPosition,
           ),
         ),
-        (route) => false,
+            (route) => false,
       );
     }
   }
