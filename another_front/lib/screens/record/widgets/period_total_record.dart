@@ -35,7 +35,10 @@ class PeriodTotalRecord extends StatelessWidget {
                 child: Text(
                   selectedIndex == 0
                       ? '${recordData['curAvg']['startDate']}'
-                      : '${recordData['curAvg']['startDate']} ~ ${recordData['curAvg']['endDate']}',
+                  : selectedIndex == 3 ? '${recordData['startDate']} ~ ${recordData['endDate']}'
+                      : selectedIndex == 4
+                          ? '${recordData['startDate']}'
+                          : '${recordData['curAvg']['startDate']} ~ ${recordData['curAvg']['endDate']}',
                   style: TextStyle(color: SERVETWO_COLOR),
                 ),
               ),
@@ -45,27 +48,33 @@ class PeriodTotalRecord extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     BigTargetBox(
-                      data:
-                          recordData['curAvg']['sumDistance'] ?? '-',
+                      data: selectedIndex == 3 || selectedIndex == 4
+                          ? recordData['sumDistance'] == 0.0 ? '-' : recordData['sumDistance']
+                          : recordData['curAvg']['sumDistance'] == 0.0 ? '-' : recordData['curAvg']['sumDistance'],
                       unit: 'km',
                     ),
                     SizedBox(height: 15),
                     Row(
                       children: [
                         SmallTargetBox(
-                          data: recordData['curAvg']['sumTime'] ?? '-',
+                          data: selectedIndex == 3 || selectedIndex == 4
+                              ? recordData['sumTime'] == '00:00:00' ? '-' : recordData['sumTime']
+                              : recordData['curAvg']['sumTime'] == '00:00:00' ? '-' : recordData['curAvg']['sumTime'],
                           unit: '시간',
                         ),
                         SizedBox(width: 40),
                         SmallTargetBox(
-                          data: recordData['curAvg']['sumKcal'] ?? '-',
+                          data: selectedIndex == 3 || selectedIndex == 4
+                              ? recordData['sumKcal'] == 0 ? '-' : recordData['sumKcal']
+                              : recordData['curAvg']['sumKcal'] == 0 ? '-' : recordData['curAvg']['sumKcal'],
                           unit: 'kcal',
                         ),
                         SizedBox(width: 40),
                         SmallTargetBox(
-                          data: recordData['curAvg']['avgSpeed'] ??
-                              '-',
-                          unit: '페이스',
+                          data: selectedIndex == 3 || selectedIndex == 4
+                              ? recordData['avgPace'] == "0'0''" ? '-' :  recordData['avgPace']
+                              : recordData['curAvg']['avgPace'] == "0'0''" ? '-' : recordData['curAvg']['avgPace'],
+                          unit: '평균 페이스',
                         ),
                       ],
                     ),
