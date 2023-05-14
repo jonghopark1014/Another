@@ -15,6 +15,8 @@ import 'package:another/screens/record/widgets/record_chart.dart';
 import 'package:another/screens/record/api/period_total_record_api.dart';
 import 'package:another/screens/record/widgets/target_record_item.dart';
 import 'package:another/screens/record/widgets/record_chart.dart';
+import 'dart:convert';
+import 'dart:collection';
 
 class RecordTab extends StatelessWidget {
   const RecordTab({Key? key}) : super(key: key);
@@ -202,6 +204,7 @@ class _MyRecordState extends State<MyRecord> {
   bool _isCalendarOpen = false;
   Map<String, dynamic> _periodData = {};
   Map<String, dynamic> _historyData = {};
+  Map<String, dynamic> _markerData = {};
   String? selectedDay;
   bool _isLoading = true; // 데이터를 받아오는 중
 
@@ -221,6 +224,7 @@ class _MyRecordState extends State<MyRecord> {
   Future<void> getRecord(String? selectedDay) async {
     Map<String, dynamic> data1 = {};
     Map<String, dynamic> data2 = {};
+    Map<String, dynamic> data3 = {};
     setState(() {
       _isLoading = true;
     });
@@ -244,6 +248,7 @@ class _MyRecordState extends State<MyRecord> {
       case 4:
         data1 = await GetPeriodRecord.getPeriodRecordSelectDay(selectedDay);
         data2 = await GetHistoryRecord.getHistoryRecordSelectDay(selectedDay);
+        data3 = await GetHistoryRecord.getAllHistoryRecord(); // 마커 찍기 용 데이터
         break;
       default:
         data1 = {};
@@ -253,16 +258,18 @@ class _MyRecordState extends State<MyRecord> {
     setState(() {
       _periodData = data1;
       _historyData = data2;
+      _markerData = data3;
       _isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    print('===================');
-    print(_periodData);
-    print(_historyData);
-    print('===================');
+    // print('===================');
+    // print('_periodData: $_periodData');
+    // print('_historyData: $_historyData');
+    // print('_markerData: $_markerData');
+    // print('===================');
     return Column(
       children: [
         Row(
@@ -370,6 +377,7 @@ class _MyRecordState extends State<MyRecord> {
                 isCalendarOpen: _isCalendarOpen,
                 periodData: _periodData,
                 historyData: _historyData,
+                markerData: _markerData,
               )
       ],
     );
@@ -381,16 +389,18 @@ class MyRecordContents extends StatefulWidget {
   final bool isCalendarOpen;
   final Map<String, dynamic>? periodData;
   final Map<String, dynamic>? historyData;
+  final Map<String, dynamic>? markerData;
   final Function(String?) getRecord;
 
-  const MyRecordContents(
-      {Key? key,
-      required this.selectedIndex,
-      required this.isCalendarOpen,
-      required this.periodData,
-      required this.historyData,
-      required this.getRecord})
-      : super(key: key);
+  const MyRecordContents({
+    Key? key,
+    required this.selectedIndex,
+    required this.isCalendarOpen,
+    required this.periodData,
+    required this.historyData,
+    required this.markerData,
+    required this.getRecord,
+  }) : super(key: key);
 
   @override
   State<MyRecordContents> createState() => _MyRecordContentsState();
@@ -404,8 +414,42 @@ class _MyRecordContentsState extends State<MyRecordContents> {
   );
 
   DateTime focusedDay = DateTime.now();
+
+  Map<DateTime, List<Event>> parseMarkerData(Map<String, dynamic>? markerData) {
+    if (markerData == null || markerData['content'] == null) {
+      return {};
+    }
+
+    List<Map<String, dynamic>> markerList =
+        List<Map<String, dynamic>>.from(markerData['content']);
+
+    Map<DateTime, List<Event>> parseMarkerDataResult = {};
+
+    for (Map<String, dynamic> marker in markerList) {
+      // TableCalendar의 eventLoader에서 반환하는 day는 UTC 기준으로 함!
+      // 하지만 한국 시간으로 데이터를 받고 있기 때문에 UTC 형식으로 변환해줘야해서 .toUtc() 사용!
+      // 하지만 toUtc() 사용하면 -9시간이 되므로 +9시간을 해줘서 날짜를 맞춤!
+      DateTime createDate =
+          DateTime.parse(marker['createDate']).toUtc().add(Duration(hours: 9));
+      Event id = Event(marker['id']);
+      if (parseMarkerDataResult.containsKey(createDate)) {
+        parseMarkerDataResult[createDate]!.add(id);
+      } else {
+        parseMarkerDataResult[createDate] = [id];
+      }
+    }
+    print('parseMarkerDataResult: $parseMarkerDataResult');
+    return parseMarkerDataResult;
+  }
+
+  List<Event> _getEventsForDay(DateTime day) {
+    // print(day);
+    return parseMarkerData(widget.markerData)[day] ?? [];
+  }
+
   @override
   Widget build(BuildContext context) {
+    // print('_getEventsForDay: $_getEventsForDay');
     final forDate = Provider.of<ForDate>(context);
 
     DateTime selectDay = DateTime(
@@ -417,270 +461,274 @@ class _MyRecordContentsState extends State<MyRecordContents> {
     selectedDay = selectDay;
     focusedDay = forDate.forFocus;
 
-    print('-------history---------: ${widget.historyData}');
-    print('-------period---------: ${widget.periodData}');
-    return widget.periodData == {} || widget.historyData == {}
-        ? Center(child: CircularProgressIndicator())
-        : Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              widget.isCalendarOpen == true
-                  ? TableCalendar(
-                      locale: 'ko_KR',
-                      firstDay: DateTime.utc(2021),
-                      lastDay: DateTime.utc(2025),
-                      focusedDay: focusedDay,
-                      headerStyle: HeaderStyle(
-                        titleCentered: true,
-                        titleTextFormatter: (date, locale) =>
-                            DateFormat.yMMMM(locale).format(date),
-                        formatButtonVisible: false,
-                        titleTextStyle:
-                            TextStyle(fontSize: 20.0, color: Colors.white),
-                        headerPadding:
-                            const EdgeInsets.symmetric(vertical: 4.0),
-                        leftChevronIcon: Icon(Icons.arrow_left,
-                            size: 40.0, color: Colors.white),
-                        rightChevronIcon: Icon(Icons.arrow_right,
-                            size: 40.0, color: Colors.white),
-                      ),
-                      calendarBuilders: CalendarBuilders(
-                          markerBuilder: (context, date, dynamic event) {
-                        if (event.isNotEmpty) {
-                          return Container(
-                            width: 35,
-                            decoration: BoxDecoration(
-                                color: Colors.blue.withOpacity(0.2),
-                                shape: BoxShape.circle),
-                          );
-                        }
-                      }),
-                      calendarStyle: CalendarStyle(
-                          defaultTextStyle: TextStyle(
-                            color: Colors.white,
-                          ),
-                          isTodayHighlighted: true,
-                          // today 표시 여부
-                          // today 글자 스타일
-                          todayTextStyle: TextStyle(
-                            color: MAIN_COLOR,
-                          ),
-                          // today 모양 스타일
-                          todayDecoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: MAIN_COLOR,
-                            ),
-                          ),
-                          // selectedDay 글자 조정
-                          selectedTextStyle:
-                              const TextStyle(color: Colors.white),
-                          // selectedDay 모양 조정
-                          selectedDecoration: const BoxDecoration(
-                            color: MAIN_COLOR,
-                            shape: BoxShape.circle,
-                          ),
-                          // disabledDay 글자 조정
-                          disabledTextStyle:
-                              TextStyle(color: SERVEONE_COLOR.withOpacity(0.2)),
-                          weekendTextStyle: TextStyle(color: Colors.white)),
-                      onDaySelected:
-                          (DateTime selectedDay, DateTime focusedDay) {
-                        final getRecordDay =
-                            DateFormat('yyyy-MM-dd').format(selectedDay);
-                        widget.getRecord(getRecordDay);
-                        // 선택된 날짜의 상태를 갱신
-                        setState(() {
-                          this.selectedDay = selectedDay;
-                          this.focusedDay = focusedDay;
-                          forDate.changeValue(selectedDay);
-                        });
-
-                        // 현재 선택된 달력의 월과 다른 경우, 해당 달력으로 이동
-                        if (selectedDay.month != focusedDay.month) {
-                          setState(() {
-                            focusedDay = DateTime(
-                                selectedDay.year, selectedDay.month, 1);
-                          });
-                        }
-                      },
-                      selectedDayPredicate: (DateTime day) {
-                        // selectedDay 와 동일한 날짜의 모양을 바꿔줌
-                        return isSameDay(selectedDay, day);
-                      })
-                  : SizedBox.shrink(),
-              SizedBox(height: 10),
-              PeriodTotalRecord(
-                selectedIndex: widget.selectedIndex,
-                recordData: widget.periodData,
-              ), // 조회 기간 총 기록
-              SizedBox(height: 20),
-              widget.historyData!['content'].length == 0
-                  ? SizedBox.shrink()
-                  : Padding(
-                      padding: EdgeInsets.only(left: 8),
-                      child: Text(
-                        '런닝 기록',
-                        style: TextStyle(color: WHITE_COLOR, fontSize: 16),
-                        textAlign: TextAlign.start,
-                      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        widget.isCalendarOpen == true
+            ? TableCalendar(
+                locale: 'ko_KR',
+                firstDay: DateTime.utc(2021),
+                lastDay: DateTime.utc(2025),
+                focusedDay: focusedDay,
+                eventLoader: _getEventsForDay,
+                headerStyle: HeaderStyle(
+                  titleCentered: true,
+                  titleTextFormatter: (date, locale) =>
+                      DateFormat.yMMMM(locale).format(date),
+                  formatButtonVisible: false,
+                  titleTextStyle:
+                      TextStyle(fontSize: 20.0, color: Colors.white),
+                  headerPadding: const EdgeInsets.symmetric(vertical: 4.0),
+                  leftChevronIcon:
+                      Icon(Icons.arrow_left, size: 40.0, color: Colors.white),
+                  rightChevronIcon:
+                      Icon(Icons.arrow_right, size: 40.0, color: Colors.white),
+                ),
+                calendarBuilders: CalendarBuilders(
+                  markerBuilder: (context, date, event) {
+                    if (event.isNotEmpty) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          event.length > 3 ? 3 : event.length, // 길이만큼
+                          (index) =>
+                              Icon(Icons.directions_run, color: Color(0xFF8BC34A), size: 14),
+                        ),
+                      );
+                    }
+                  },
+                ),
+                calendarStyle: CalendarStyle(
+                  canMarkersOverflow: false, // marker 여러개 일 때 cell 영역을 벗어날지 여부
+                  markersAlignment: Alignment.bottomCenter, // 마커 위치 조절
+                  markerSize: 10,
+                  markersMaxCount: 3, // 마커 최대 개수
+                  markerDecoration: BoxDecoration(
+                    color: Colors.purple,
+                    shape: BoxShape.circle,
+                  ),
+                  defaultTextStyle: TextStyle(
+                    color: Colors.white,
+                  ),
+                  // today 표시 여부
+                  isTodayHighlighted: true,
+                  // today 글자 스타일
+                  todayTextStyle: TextStyle(
+                    color: MAIN_COLOR,
+                  ),
+                  // today 모양 스타일
+                  todayDecoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: MAIN_COLOR,
                     ),
-              Column(
-                children: [
-                  for (int i = 0;
-                      i <= widget.historyData!['content'].length - 1;
-                      i++)
-                    Target(
-                      targetname: widget.historyData!['content'][i]
-                                  ['createDate']
-                              .toString() ??
-                          '-',
-                      runningDistance: widget.historyData!['content'][i]
-                                  ['runningDistance']
-                              .toString() ??
-                          '-',
-                      userCalorie: widget.historyData!['content'][i]
-                                  ['userCalories']
-                              .toString() ??
-                          '-',
-                      runningTime: widget.historyData!['content'][i]
-                                  ['runningTime']
-                              .toString() ??
-                          '-',
-                      userPace: widget.historyData!['content'][i]['userPace']
-                              .toString() ??
-                          '-',
-                      runningId: widget.historyData!['content'][i]['id']
-                    )
-                ],
+                  ),
+                  // selectedDay 글자 조정
+                  selectedTextStyle: const TextStyle(color: Colors.white),
+                  // selectedDay 모양 조정
+                  selectedDecoration: const BoxDecoration(
+                    color: MAIN_COLOR,
+                    shape: BoxShape.circle,
+                  ),
+                  // disabledDay 글자 조정
+                  disabledTextStyle: TextStyle(
+                    color: SERVEONE_COLOR.withOpacity(0.2),
+                  ),
+                  weekendTextStyle: TextStyle(color: Colors.white),
+                ),
+                onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
+                  final getRecordDay =
+                      DateFormat('yyyy-MM-dd').format(selectedDay);
+                  widget.getRecord(getRecordDay);
+                  // 선택된 날짜의 상태를 갱신
+                  setState(
+                    () {
+                      this.selectedDay = selectedDay;
+                      this.focusedDay = focusedDay;
+                      forDate.changeValue(selectedDay);
+                    },
+                  );
+
+                  // 현재 선택된 달력의 월과 다른 경우, 해당 달력으로 이동
+                  if (selectedDay.month != focusedDay.month) {
+                    setState(
+                      () {
+                        focusedDay =
+                            DateTime(selectedDay.year, selectedDay.month, 1);
+                      },
+                    );
+                  }
+                },
+                selectedDayPredicate: (DateTime day) {
+                  // selectedDay 와 동일한 날짜의 모양을 바꿔줌
+                  return isSameDay(selectedDay, day);
+                },
+              )
+            : SizedBox.shrink(),
+        SizedBox(height: 10),
+        PeriodTotalRecord(
+          selectedIndex: widget.selectedIndex,
+          recordData: widget.periodData,
+        ), // 조회 기간 총 기록
+        SizedBox(height: 20),
+        widget.historyData!['content'].length == 0
+            ? SizedBox.shrink()
+            : Padding(
+                padding: EdgeInsets.only(left: 8),
+                child: Text(
+                  '런닝 기록',
+                  style: TextStyle(color: WHITE_COLOR, fontSize: 16),
+                  textAlign: TextAlign.start,
+                ),
               ),
-              widget.selectedIndex != 3 &&
-                      widget.selectedIndex != 4 &&
-                      widget.historyData!['content'].isNotEmpty
-                  ? Row(
+        Column(
+          children: [
+            for (int i = 0; i <= widget.historyData!['content'].length - 1; i++)
+              Target(
+                  targetname: widget.historyData!['content'][i]['createDate']
+                          .toString() ??
+                      '-',
+                  runningDistance: widget.historyData!['content'][i]
+                              ['runningDistance']
+                          .toString() ??
+                      '-',
+                  userCalorie: widget.historyData!['content'][i]['userCalories']
+                          .toString() ??
+                      '-',
+                  runningTime: widget.historyData!['content'][i]['runningTime']
+                          .toString() ??
+                      '-',
+                  userPace: widget.historyData!['content'][i]['userPace']
+                          .toString() ??
+                      '-',
+                  runningId: widget.historyData!['content'][i]['id'])
+          ],
+        ),
+        widget.selectedIndex != 3 &&
+                widget.selectedIndex != 4 &&
+                widget.historyData!['content'].isNotEmpty
+            ? Row(
+                children: [
+                  Expanded(
+                    child: RecordChart(
+                      '시간',
+                      widget.periodData!['prevAvg']['originalTime'].toDouble(),
+                      widget.periodData!['curAvg']['originalTime'].toDouble(),
+                      widget.periodData!['prevAvg']['avgTime'].toString(),
+                      widget.periodData!['curAvg']['avgTime'].toString(),
+                    ),
+                  ),
+                  Expanded(
+                    child: RecordChart(
+                      '거리',
+                      widget.periodData!['prevAvg']['avgDistance'],
+                      widget.periodData!['curAvg']['avgDistance'],
+                      widget.periodData!['prevAvg']['avgDistance'].toString(),
+                      widget.periodData!['curAvg']['avgDistance'].toString(),
+                    ),
+                  ),
+                  Expanded(
+                    child: RecordChart(
+                      'kcal',
+                      widget.periodData!['prevAvg']['avgKcal'],
+                      widget.periodData!['curAvg']['avgKcal'],
+                      widget.periodData!['prevAvg']['avgKcal'].toString(),
+                      widget.periodData!['curAvg']['avgKcal'].toString(),
+                    ),
+                  ),
+                  Expanded(
+                    child: RecordChart(
+                      '페이스',
+                      widget.periodData!['curAvg']['originalPace'] == 0 ||
+                              widget.periodData!['prevAvg']['originalPace'] == 0
+                          ? widget.periodData!['prevAvg']['originalPace']
+                          : widget.periodData!['curAvg']['originalPace'],
+                      widget.periodData!['curAvg']['originalPace'] == 0 ||
+                              widget.periodData!['prevAvg']['originalPace'] == 0
+                          ? widget.periodData!['curAvg']['originalPace']
+                          : widget.periodData!['prevAvg']['originalPace'],
+                      widget.periodData!['prevAvg']['avgPace'].toString(),
+                      widget.periodData!['curAvg']['avgPace'].toString(),
+                    ),
+                  ),
+                ],
+              )
+            : SizedBox.shrink(),
+        widget.selectedIndex != 3 &&
+                widget.selectedIndex != 4 &&
+                widget.historyData!['content'].isNotEmpty
+            ? Padding(
+                padding:
+                    EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 20),
+                child: Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: CONTOUR_COLOR, width: 1),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          child: RecordChart(
-                            '시간',
-                            widget.periodData!['prevAvg']['originalTime']
-                                .toDouble(),
-                            widget.periodData!['curAvg']['originalTime']
-                                .toDouble(),
-                            widget.periodData!['prevAvg']['avgTime'].toString(),
-                            widget.periodData!['curAvg']['avgTime'].toString(),
-                          ),
-                        ),
-                        Expanded(
-                          child: RecordChart(
-                            '거리',
-                            widget.periodData!['prevAvg']['avgDistance'],
-                            widget.periodData!['curAvg']['avgDistance'],
-                            widget.periodData!['prevAvg']['avgDistance']
-                                .toString(),
-                            widget.periodData!['curAvg']['avgDistance']
-                                .toString(),
-                          ),
-                        ),
-                        Expanded(
-                          child: RecordChart(
-                            'kcal',
-                            widget.periodData!['prevAvg']['avgKcal'],
-                            widget.periodData!['curAvg']['avgKcal'],
-                            widget.periodData!['prevAvg']['avgKcal'].toString(),
-                            widget.periodData!['curAvg']['avgKcal'].toString(),
-                          ),
-                        ),
-                        Expanded(
-                          child: RecordChart(
-                            '페이스',
-                            widget.periodData!['curAvg']['originalPace'] == 0 ||
-                                    widget.periodData!['prevAvg']
-                                            ['originalPace'] ==
-                                        0
-                                ? widget.periodData!['prevAvg']['originalPace']
-                                : widget.periodData!['curAvg']['originalPace'],
-                            widget.periodData!['curAvg']['originalPace'] == 0 ||
-                                    widget.periodData!['prevAvg']
-                                            ['originalPace'] ==
-                                        0
-                                ? widget.periodData!['curAvg']['originalPace']
-                                : widget.periodData!['prevAvg']['originalPace'],
-                            widget.periodData!['prevAvg']['avgPace'].toString(),
-                            widget.periodData!['curAvg']['avgPace'].toString(),
-                          ),
-                        ),
+                        Row(
+                          children: [
+                            Container(
+                                height: 10,
+                                width: 35,
+                                color: MAIN_COLOR.withOpacity(0.5)),
+                            SizedBox(width: 10),
+                            Text(
+                              (() {
+                                switch (widget.selectedIndex) {
+                                  case 0:
+                                    return "어제 기록";
+                                  case 1:
+                                    return "저번주 기록";
+                                  case 2:
+                                    return "저번달 기록";
+                                  default:
+                                    return '';
+                                }
+                              })(),
+                              style: TextStyle(color: WHITE_COLOR),
+                            ),
+                            SizedBox(width: 40),
+                            Container(
+                                height: 10,
+                                width: 35,
+                                color: MAIN_COLOR.withOpacity(0.5)),
+                            SizedBox(width: 10),
+                            Text(
+                              (() {
+                                switch (widget.selectedIndex) {
+                                  case 0:
+                                    return "오늘 기록";
+                                  case 1:
+                                    return "이번주 기록";
+                                  case 2:
+                                    return "이번달 기록";
+                                  default:
+                                    return '';
+                                }
+                              })(),
+                              style: TextStyle(color: WHITE_COLOR),
+                            ),
+                          ],
+                        )
                       ],
-                    )
-                  : SizedBox.shrink(),
-              widget.selectedIndex != 3 &&
-                      widget.selectedIndex != 4 &&
-                      widget.historyData!['content'].isNotEmpty
-                  ? Padding(
-                      padding: EdgeInsets.only(
-                          left: 10, right: 10, top: 10, bottom: 20),
-                      child: Center(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: CONTOUR_COLOR, width: 1),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                      height: 10,
-                                      width: 35,
-                                      color: MAIN_COLOR.withOpacity(0.5)),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    (() {
-                                      switch (widget.selectedIndex) {
-                                        case 0:
-                                          return "어제 기록";
-                                        case 1:
-                                          return "저번주 기록";
-                                        case 2:
-                                          return "저번달 기록";
-                                        default:
-                                          return '';
-                                      }
-                                    })(),
-                                    style: TextStyle(color: WHITE_COLOR),
-                                  ),
-                                  SizedBox(width: 40),
-                                  Container(
-                                      height: 10,
-                                      width: 35,
-                                      color: MAIN_COLOR.withOpacity(0.5)),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    (() {
-                                      switch (widget.selectedIndex) {
-                                        case 0:
-                                          return "오늘 기록";
-                                        case 1:
-                                          return "이번주 기록";
-                                        case 2:
-                                          return "이번달 기록";
-                                        default:
-                                          return '';
-                                      }
-                                    })(),
-                                    style: TextStyle(color: WHITE_COLOR),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                  : SizedBox.shrink()
-            ],
-          );
+                    ),
+                  ),
+                ),
+              )
+            : SizedBox.shrink()
+      ],
+    );
   }
+}
+
+class Event {
+  String id;
+
+  Event(this.id);
 }
