@@ -31,12 +31,8 @@ class _UnderChallengeState extends State<UnderChallenge> {
     return Scaffold(
       body: Stack(
         children: [
-          AspectRatio(
-            aspectRatio: 1/1,
-            child: SizedBox(
-                child: RunningMap(runningData: runningData, initialPosition: initialPosition)
-            ),
-          ),
+          RunningMap(
+              runningData: runningData, initialPosition: initialPosition),
           UnderChallengeStatus(initialPosition: initialPosition),
         ],
       ),
@@ -131,14 +127,14 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
                         pace: challengeDistance,
                         //print();
                         // 수정 주석처리만 하고 밑에 있는 값 바꾸면 됨
-                        youDistance: double.parse(targetRunningDistance),
-                        // youDistance: 0.832,
+                        // youDistance: double.parse(targetRunningDistance),
+                        youDistance: 0.832,
                       ),
                       DistanceBar(
                         name: '내 페이스',
                         pace: currentRunningDistance,
-                        youDistance: double.parse(targetRunningDistance),
-                        // youDistance: 0.832,
+                        // youDistance: double.parse(targetRunningDistance),
+                        youDistance: 0.832,
                       ),
                     ],
                   ),

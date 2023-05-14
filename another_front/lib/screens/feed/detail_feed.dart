@@ -22,9 +22,6 @@ class DetailFeed extends StatefulWidget {
 }
 
 class _DetailFeedState extends State<DetailFeed> {
-  // 내 피드인지
-  bool isMyFeed = false; // 사용자 다양해지면 true 로 바꾸야함
-  late int userId;
   final ScrollController _scrollController = ScrollController();
 
   List<String> thumbnailUrls = [];
@@ -45,22 +42,7 @@ class _DetailFeedState extends State<DetailFeed> {
   void initState() {
     super.initState();
     challengeData = Provider.of<ChallengeData>(context, listen: false);
-    userId = Provider.of<UserInfo>(context, listen: false).userId as int;
     _detailFeed();
-  }
-
-  // 내 피드인지 검사
-  void checkMyFeed() {
-    int id = userId;
-    int idDigit = 0;
-    while (id > 0) {
-      idDigit++; // id는 한자리이상
-      id = id ~/ 10;
-    }
-    print(runId);
-    if (runId.substring(0, idDigit) != userId.toString()) {
-      isMyFeed = false;
-    }
   }
 
   // 피드 가져오기
@@ -101,7 +83,6 @@ class _DetailFeedState extends State<DetailFeed> {
         }
         feedPicUrls.add(contents['runningPic'].toString());
         graphs = contents['graph'];
-        //
         chartData = graphs.map(
           (data) {
             double runningDistance = 0.0;
@@ -131,8 +112,6 @@ class _DetailFeedState extends State<DetailFeed> {
           userNickname = nickname;
           runCount = withRunCount;
           runId = runningId;
-          checkMyFeed();
-
         },
       );
       challengeData.setValues(
@@ -151,10 +130,6 @@ class _DetailFeedState extends State<DetailFeed> {
 
   @override
   Widget build(BuildContext context) {
-    final challengeData = Provider.of<ChallengeData>(context, listen: false);
-
-    challengeData.setValues(
-        runId, runningDistance, runningTime, userCalorie, userPace);
 
     return Scaffold(
       appBar: GoBackAppBarStyle(),
@@ -189,12 +164,10 @@ class _DetailFeedState extends State<DetailFeed> {
                           profilePic: profilePic,
                           nickname: userNickname,
                         ),
-                        isMyFeed
-                            ? Container()
-                            : RunIcon(
-                                runCount: runCount,
-                                runningId: runId,
-                              ),
+                        RunIcon(
+                          runCount: runCount,
+                          runningId: runId,
+                        ),
                       ],
                     ),
                     Target(

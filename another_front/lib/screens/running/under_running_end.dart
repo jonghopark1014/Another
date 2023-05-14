@@ -2,23 +2,19 @@ import 'dart:typed_data';
 
 import 'package:another/constant/const/color.dart';
 import 'package:another/screens/running/under_challenge_end_feed.dart';
-import 'package:another/screens/running/widgets/ButtonComponent.dart';
-import 'package:another/screens/running/widgets/running_end.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../main.dart';
-import '../home_screen.dart';
-import './api/under_running_end_api.dart';
 
 import '../../constant/layout/main_layout.dart';
 
 class UnderRunningScreenEnd extends StatelessWidget {
+  final Uint8List? captureInfo;
   final String runningDistance;
   final String runningTime;
   final String userCalorie;
   final String userPace;
   UnderRunningScreenEnd({
+    required this.captureInfo,
     required this.runningDistance,
     required this.runningTime,
     required this.userCalorie,
@@ -28,7 +24,6 @@ class UnderRunningScreenEnd extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("빌드빌드end빌드예예");
     final Size size = MediaQuery.of(context).size;
     return MainLayout(
       body: Column(
@@ -43,20 +38,19 @@ class UnderRunningScreenEnd extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 24.0),
             child: SizedBox(
-              height: size.width,
+              height: 300.0,
               width: size.width,
-              child: EndRunningMap(),
-            )
+              child: Image.memory(
+                captureInfo!,
+                width: 300.0,
+              ),
+            ),
           ),
           SizedBox(
             height: 120,
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: ButtonConponent(
-              onPressed: () => endFeed(context),
-              feedComplete: () => feedComplete(context),
-            ),
+          ButtonConponent(
+            onPressed: () => endFeed(context),
           ),
         ],
       ),
@@ -64,29 +58,72 @@ class UnderRunningScreenEnd extends StatelessWidget {
   }
 
   void endFeed(BuildContext context) {
-    print("피드 끝낸당");
-    var runningData = Provider.of<RunningData>(context, listen: false);
-    var userId = Provider.of<UserInfo>(context, listen: false).userId;
-    saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
-    // // hdfs 저장
-    saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (_) => UnderChallengeScreenEndFeed(captureInfo: Provider.of<RunningData>(context, listen: false).runningPic),
+          builder: (_) => UnderChallengeScreenEndFeed(
+            captureInfo: captureInfo,
+          ),
         ),
         (route) => route.settings.name == '/');
   }
+}
 
-  void feedComplete(BuildContext context) {
-    print("오운완쓰 등록 간다잉");
-    var runningData = Provider.of<RunningData>(context, listen: false);
-    var userId = Provider.of<UserInfo>(context, listen: false).userId;
-    saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
-    // // hdfs 저장
-    saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => HomeScreen(),
+class ButtonConponent extends StatelessWidget {
+  final VoidCallback onPressed;
+  const ButtonConponent({
+    required this.onPressed,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    return Expanded(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Container(
+            height: size.height * 0.08,
+            width: size.width * 0.4,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/',
+                  (route) => false,
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                primary: SERVETWO_COLOR,
+                elevation: 10.0,
+              ),
+              child: Text(
+                '다음에 할래요!',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            height: size.height * 0.08,
+            width: size.width * 0.4,
+            child: ElevatedButton(
+              onPressed: onPressed,
+              style: ElevatedButton.styleFrom(
+                primary: MAIN_COLOR,
+                elevation: 10.0,
+              ),
+              child: Text(
+                '오운완 등록하기',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

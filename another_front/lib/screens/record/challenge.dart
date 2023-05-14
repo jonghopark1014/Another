@@ -71,20 +71,21 @@ class ChallengePage extends StatelessWidget {
                 CategoryTitle(title: '월간 시간 챌린지'),
                 Spacer(), // 다른 자식 위젯들을 오른쪽으로 밀어내기 위해 추가
               ]),
-              Wrap(
-                direction: Axis.horizontal,
-                spacing: 20,
-                runSpacing: 20,
+              GridView.count(
+                crossAxisCount: 2, //한 행에 두 개의 아이템 배치
+                mainAxisSpacing: 0,
+                crossAxisSpacing: 0,
+                childAspectRatio: 0.8,
+                shrinkWrap: true,
                 children: List.generate(
-                  campusChallenges.length,
+                  monthChallenges.length,
                   (index) {
-                    final challenge = campusChallenges[index];
+                    final challenge = monthChallenges[index];
                     return ChallengeItem(
-                      title: challenge['title'],
-                      progress: challenge['progress'],
-                      goldBadge: challenge['goldBadge'],
-                      silverBadge: challenge['silverBadge'],
-                    );
+                        title: challenge['title'],
+                        progress: challenge['progress'],
+                        goldBadge: challenge['goldBadge'],
+                        silverBadge: challenge['silverBadge']);
                   },
                 ),
               ),
@@ -93,6 +94,24 @@ class ChallengePage extends StatelessWidget {
                 CategoryTitle(title: '캠퍼스 챌린지'),
                 Spacer(), // 다른 자식 위젯들을 오른쪽으로 밀어내기 위해 추가
               ]),
+              GridView.count(
+                crossAxisCount: 2, //한 행에 두 개의 아이템 배치
+                mainAxisSpacing: 0,
+                crossAxisSpacing: 0,
+                childAspectRatio: 0.8,
+                shrinkWrap: true,
+                children: List.generate(
+                  campusChallenges.length,
+                  (index) {
+                    final challenge = campusChallenges[index];
+                    return ChallengeItem(
+                        title: challenge['title'],
+                        progress: challenge['progress'],
+                        goldBadge: challenge['goldBadge'],
+                        silverBadge: challenge['silverBadge']);
+                  },
+                ),
+              ),
             ],
           ),
         ),

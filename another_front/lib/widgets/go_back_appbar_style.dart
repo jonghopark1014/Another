@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import '../constant/const/color.dart';
 
 class GoBackAppBarStyle extends StatelessWidget implements PreferredSizeWidget {
-  bool? toHome;
   String? runningId;
   String? title;
   GoBackAppBarStyle({
-    this.toHome,
     this.runningId,
     this.title,
     Key? key,
@@ -19,9 +17,6 @@ class GoBackAppBarStyle extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: BACKGROUND_COLOR,
       leading: IconButton(
         onPressed: () {
-          if (toHome == true) {
-            Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
-          }
           Navigator.of(context).pop(runningId ?? '');
         },
         icon: Icon(

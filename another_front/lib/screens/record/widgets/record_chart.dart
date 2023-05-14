@@ -23,7 +23,6 @@ class RecordChart extends StatelessWidget {
           border: Border.all(width: 0),
         ),
         child: SfCartesianChart(
-          margin: EdgeInsets.only(top: 20),
           plotAreaBorderWidth: 0,
           borderWidth: 0,
           primaryXAxis: CategoryAxis(
@@ -42,7 +41,7 @@ class RecordChart extends StatelessWidget {
           series: <CartesianSeries>[
             ColumnSeries<ChartData, String>(
               width: 0.9,
-              spacing: 0.05,
+              spacing: 0.1,
               dataSource: chartData,
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y1graph,
@@ -53,7 +52,7 @@ class RecordChart extends StatelessWidget {
             ),
             ColumnSeries<ChartData, String>(
               width: 0.9,
-              spacing: 0.05,
+              spacing: 0.1,
               dataSource: chartData,
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y2graph,
@@ -61,6 +60,12 @@ class RecordChart extends StatelessWidget {
               dataLabelSettings: DataLabelSettings(
                   isVisible: true, textStyle: TextStyle(color: WHITE_COLOR),
               ),
+            ),
+            LineSeries<ChartData, String>(
+              dataSource: chartData,
+              xValueMapper: (ChartData data, _) => data.x,
+              yValueMapper: (ChartData data, _) => data.y2graph,
+              color: WHITE_COLOR,
             ),
           ],
         ),
