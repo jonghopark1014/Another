@@ -130,6 +130,7 @@ class _RunningMapState extends State<RunningMap> {
       runningData.setLat(position.latitude);
       runningData.setLng(position.longitude);
       runningData.addLocation(LatLng(position.latitude, position.longitude), 0);
+      print('===================fguyfiuyfyiu${runningData.polyLine}');
       runningData.setCurrentPosition(CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 17));
       if (Provider.of<RunningData>(context, listen: false).stopFlag == false) {
         setState(() {
