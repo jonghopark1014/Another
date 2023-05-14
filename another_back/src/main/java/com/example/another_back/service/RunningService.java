@@ -424,7 +424,7 @@ public class RunningService {
      * @return ChallengeResponseDto
      */
     public ChallengeResponseDto getRecommendChallenge(Long userId) {
-        Challenge challenge = userChallengeRepository.findTop1ByUserAndStatusNotaAndWithChallenge(userId, "SILVER");
+        Challenge challenge = userChallengeRepository.findTop1ByUserIdAndStatusNotAndWithChallenge(userId, "SILVER");
         if (challenge == null) return null;
         ChallengeResponseDto response = new ChallengeResponseDto(challenge);
         return response;

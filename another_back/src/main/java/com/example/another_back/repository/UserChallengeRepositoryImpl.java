@@ -11,9 +11,9 @@ public class UserChallengeRepositoryImpl implements CustormUserChallengeReposito
     private final EntityManager em;
 
     @Override
-    public Challenge findTop1ByUserAndStatusNotaAndWithChallenge(Long userId, String status) {
+    public Challenge findTop1ByUserIdAndStatusNotAndWithChallenge(Long userId, String status) {
         try {
-            return em.createQuery("select uc.challenge from UserChallenge uc where uc.user.id = :userId and uc.Status = :status", Challenge.class)
+            return em.createQuery("select uc.challenge from UserChallenge uc where uc.user.id = :userId and uc.status = :status", Challenge.class)
                     .setParameter("userId", userId)
                     .setParameter("status", status)
                     .setMaxResults(1)
