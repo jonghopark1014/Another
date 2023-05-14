@@ -25,6 +25,8 @@ class _SetRunningStatusState extends State<SetRunningStatus> {
   // 설정값
   int settingDistance = 0;
   int settingSec = 0;
+  int settingHour = 0;
+  int settingMin = 0;
   List<int> settingInterval = [0,0];
   // 뛴 거리 등
   double runningDistance = 0;
@@ -40,6 +42,8 @@ class _SetRunningStatusState extends State<SetRunningStatus> {
     // 설정값 가져오기
     final runningSetting = Provider.of<RunningSetting>(context);
     settingDistance = runningSetting.distance;
+    settingHour = runningSetting.hour;
+    settingMin = runningSetting.min;
     settingSec = runningSetting.min * 60;
     settingInterval = runningSetting.interval;
     // 뛴 거리 등 받아오기
@@ -110,7 +114,7 @@ class _SetRunningStatusState extends State<SetRunningStatus> {
           settingSec != 0 ? DistanceBar(
             pace: runningTime,
             youDistance: settingSec.toDouble(),
-            name: '목표 시간 : ${(settingSec ~/ 60)}분',
+            name: settingHour != 0 ? '목표 시간 : $settingHour시간 $settingMin분':'목표 시간 : $settingMin분',
           ) : Container(),
         ],
       ),

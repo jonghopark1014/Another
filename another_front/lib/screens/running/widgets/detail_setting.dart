@@ -17,6 +17,7 @@ class DetailSetting extends StatefulWidget {
 
 class _DetailSettingState extends State<DetailSetting> {
   int _distance = 0;
+  int _hour = 0;
   int _min = 0;
   List<int> _interval = [0, 0];
   bool _isSet = false;
@@ -25,6 +26,7 @@ class _DetailSettingState extends State<DetailSetting> {
   void initState() {
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -134,6 +136,7 @@ class _DetailSettingState extends State<DetailSetting> {
           ]),
     );
   }
+
   // 모달창에서 정보받기
   void getResult() async {
     final result = await showModalBottomSheet(
@@ -152,9 +155,11 @@ class _DetailSettingState extends State<DetailSetting> {
       print('$result======================================');
       setState(() {
         _distance = result[0];
-        _min = result[1];
-        _interval = result[2];
-        Provider.of<RunningSetting>(context, listen: false).setData(_distance, _min, _interval);
+        _hour = result[1];
+        _min = result[2];
+        _interval = result[3];
+        Provider.of<RunningSetting>(context, listen: false)
+            .setData(_distance, _hour, _min, _interval);
       });
     }
   }
@@ -185,6 +190,7 @@ class DialData extends StatefulWidget {
 
 class _DialDataState extends State<DialData> {
   int _distance = 0;
+  int _time = 0;
   int _min = 0;
   List<int> _interval = [0, 0];
   bool _isSet = false;
@@ -245,6 +251,32 @@ class _DialDataState extends State<DialData> {
           NumberPicker(
             minValue: 0,
             maxValue: 50,
+            value: _time,
+            step: 1,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(width: 2, color: MAIN_COLOR),
+            ),
+            textStyle: TextStyle(color: Colors.grey.withOpacity(0.7)),
+            selectedTextStyle: TextStyle(
+                color: MAIN_COLOR, fontSize: 16, fontWeight: FontWeight.bold),
+            itemHeight: 30,
+            itemWidth: 60,
+            onChanged: (value) {
+              setState(() {
+                _time = value;
+                _isSet = true;
+              });
+            },
+          ),
+          Text('시간',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold)),
+          NumberPicker(
+            minValue: 0,
+            maxValue: 59,
             value: _min,
             step: 1,
             decoration: BoxDecoration(
@@ -255,6 +287,7 @@ class _DialDataState extends State<DialData> {
             selectedTextStyle: TextStyle(
                 color: MAIN_COLOR, fontSize: 16, fontWeight: FontWeight.bold),
             itemHeight: 30,
+            itemWidth: 60,
             onChanged: (value) {
               setState(() {
                 _min = value;
@@ -272,7 +305,7 @@ class _DialDataState extends State<DialData> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '인터벌',
+              '인터벌  ',
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -340,11 +373,10 @@ class _DialDataState extends State<DialData> {
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-
             backgroundColor: MAIN_COLOR,
           ),
           onPressed: () {
-            Navigator.pop(context, [_distance, _min, _interval]);
+            Navigator.pop(context, [_distance, _time, _min, _interval]);
           },
           child: Text(
             '설정 완료',
