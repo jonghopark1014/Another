@@ -27,6 +27,7 @@ class Target extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
+        color: BACKGROUND_COLOR,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

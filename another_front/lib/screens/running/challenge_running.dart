@@ -80,7 +80,7 @@ class _ChallengeRunningState extends State<ChallengeRunning> {
             child: Column(
               children: [
                 Container(
-                  color: BACKGROUND_COLOR,
+                  color: Colors.transparent,
                   child: Target(
                     targetname: '목표기록',
                     runningDistance: runningDistance,
