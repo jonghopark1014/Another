@@ -103,10 +103,11 @@ class _RunningCarouselState extends State<RunningCarousel> {
                   height: 85,
                   child: RecordChart(
                       '',
-                      runCompareData!['thisMonthDistance']!,
                       runCompareData!['lastMonthDistance']!,
+                      runCompareData!['thisMonthDistance']!,
+                      runCompareData!['lastMonthDistance'].toString(),
                       runCompareData!['thisMonthDistance'].toString(),
-                      runCompareData!['lastMonthDistance'].toString()),
+                      ),
                 ),
                 Text(
                   "나의 기록 그래프",

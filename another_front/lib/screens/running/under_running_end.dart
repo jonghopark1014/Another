@@ -31,6 +31,7 @@ class UnderRunningScreenEnd extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
     return MainLayout(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Target(
             targetname: '내 기록',
@@ -41,15 +42,20 @@ class UnderRunningScreenEnd extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 24.0),
-            child: SizedBox(
-              height: size.width,
-              width: size.width,
-              child: EndRunningMap(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: size.height / 7 * 4,
+              ),
+              child: SizedBox(
+                height: size.width,
+                width: size.width,
+                child: EndRunningMap(),
+              ),
             )
           ),
-          SizedBox(
-            height: 120,
-          ),
+          // SizedBox(
+          //   height: 120,
+          // ),
           Padding(
             padding: const EdgeInsets.only(top: 16.0),
             child: ButtonConponent(
