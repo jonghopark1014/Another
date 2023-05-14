@@ -141,8 +141,8 @@ class UserInfo extends ChangeNotifier {
     notifyListeners();
   }
   // int userId = 1;
-  var nickname = '임범규';
-  var height = 185;
+  var nickname = '';
+  var height = 175;
   var weight = 70;
   String profileImg = 'https://cdn.ggilbo.com/news/photo/201812/575659_429788_3144.jpg';
 // 유저 정보를 수정하는 함수 여기에 작성
