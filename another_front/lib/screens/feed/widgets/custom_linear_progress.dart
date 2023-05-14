@@ -1,4 +1,4 @@
-import 'package:another/constant/text_style.dart';
+import 'package:another/constant/const/text_style.dart';
 import 'package:flutter/material.dart';
 
 class DistanceBar extends StatelessWidget {

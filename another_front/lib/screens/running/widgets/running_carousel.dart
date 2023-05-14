@@ -3,7 +3,7 @@ import 'package:carousel_indicator/carousel_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../constant/color.dart';
+import '../../../constant/const/color.dart';
 
 class RunningCarousel extends StatefulWidget {
   RunningCarousel({

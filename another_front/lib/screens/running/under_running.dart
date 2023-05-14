@@ -1,4 +1,3 @@
-import 'package:another/constant/color.dart';
 import 'package:another/main.dart';
 import 'package:another/screens/running/widgets/running_map.dart';
 import 'package:another/screens/running/widgets/running_status.dart';
@@ -28,7 +27,7 @@ class _UnderRunningState extends State<UnderRunning> {
     if (settingData.distance != 0 ||
         settingData.min != 0 ||
         settingData.interval[0] != 0) {
-        isSet = true;
+      isSet = true;
     } else {
       isSet = false;
     }
@@ -46,7 +45,7 @@ class _UnderRunningState extends State<UnderRunning> {
     final runningData = Provider.of<RunningData>(context, listen: false);
 
     final initialPosition =
-        ModalRoute.of(context)!.settings.arguments as CameraPosition;
+    ModalRoute.of(context)!.settings.arguments as CameraPosition;
 
     return Scaffold(
       body: Padding(
@@ -64,19 +63,19 @@ class _UnderRunningState extends State<UnderRunning> {
                   child: SizedBox(
                     child: isSet
                         ? Stack(
-                            children: [
-                              RunningMap(
-                                runningData: runningData,
-                                initialPosition: initialPosition,
-                              ),
-                              // Text('done?????'),
-                              SetRunningStatus(),
-                            ],
-                          )
+                      children: [
+                        RunningMap(
+                          runningData: runningData,
+                          initialPosition: initialPosition,
+                        ),
+                        // Text('done?????'),
+                        SetRunningStatus(),
+                      ],
+                    )
                         : RunningMap(
-                            runningData: runningData,
-                            initialPosition: initialPosition,
-                          ),
+                      runningData: runningData,
+                      initialPosition: initialPosition,
+                    ),
                   ),
                 ),
               ),

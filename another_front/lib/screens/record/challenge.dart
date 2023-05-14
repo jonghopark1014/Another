@@ -1,8 +1,8 @@
+import 'package:another/constant/const/color.dart';
 import 'package:another/screens/record/widgets/challenge_category.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:another/constant/color.dart';
 import './widgets/category_title.dart';
 import './widgets/challenge_item.dart';
 import './api/challenge_api.dart';
@@ -55,33 +55,33 @@ class _ChallengePageState extends State<ChallengePage> {
         body: _isLoading
             ? Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ChallengeHeader(exp: 12000),
-                      // 월간 시간 챌린지
-                      MonthChallenge(
-                          challengeData: _challengeData,
-                          getChallengeValue: getChallengeValue),
-                      // 캠퍼스 챌린지
-                      CampusChallenge(
-                          challengeData: _challengeData,
-                          getChallengeValue: getChallengeValue),
-                      // 꾸준함 챌린지
-                      SteadyChallenge(
-                          challengeData: _challengeData,
-                          getChallengeValue: getChallengeValue),
-                      // 누적 챌린지
-                      TotalDayChallenge(
-                          challengeData: _challengeData,
-                          getChallengeValue: getChallengeValue),
-                    ],
-                  ),
-                ),
-              ));
+          child: Container(
+            padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ChallengeHeader(exp: 12000),
+                // 월간 시간 챌린지
+                MonthChallenge(
+                    challengeData: _challengeData,
+                    getChallengeValue: getChallengeValue),
+                // 캠퍼스 챌린지
+                CampusChallenge(
+                    challengeData: _challengeData,
+                    getChallengeValue: getChallengeValue),
+                // 꾸준함 챌린지
+                SteadyChallenge(
+                    challengeData: _challengeData,
+                    getChallengeValue: getChallengeValue),
+                // 누적 챌린지
+                TotalDayChallenge(
+                    challengeData: _challengeData,
+                    getChallengeValue: getChallengeValue),
+              ],
+            ),
+          ),
+        ));
   }
 }
 

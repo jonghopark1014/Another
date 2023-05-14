@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
 import 'package:another/screens/running/api/my_history_api.dart';
 import 'package:another/screens/running/challenge_running.dart';
 import 'package:another/screens/running/timer_screen.dart';
@@ -92,8 +92,8 @@ class _RunningTabState extends State<RunningTab> {
                     decoration: BoxDecoration(
                         border: Border(
                             bottom: BorderSide(
-                      color: CONTOUR_COLOR,
-                    ))),
+                              color: CONTOUR_COLOR,
+                            ))),
                     child: Text(
                       '목표설정',
                       style: TextStyle(
@@ -186,8 +186,8 @@ class _RunningTabState extends State<RunningTab> {
                     ),
                     onPressed: () {
                       Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => ChallengeRunning()),
-                          );
+                        MaterialPageRoute(builder: (_) => ChallengeRunning()),
+                      );
                     },
                     child: const Text(
                       '선택 완료',
@@ -218,7 +218,7 @@ class _RunningTabState extends State<RunningTab> {
             initialPosition: runningData.currentPosition,
           ),
         ),
-        (route) => false,
+            (route) => false,
       );
     }
   }

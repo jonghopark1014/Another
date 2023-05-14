@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
 import 'package:provider/provider.dart';
 import 'package:another/main.dart';
 import 'package:another/screens/account/edit.dart';

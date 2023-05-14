@@ -1,4 +1,4 @@
-import 'package:another/constant/main_layout.dart';
+import 'package:another/constant/layout/main_layout.dart';
 import 'package:another/main.dart';
 import 'package:another/screens/feed/all_feed_screen.dart';
 import 'package:another/screens/feed/api/feed_api.dart';
@@ -9,7 +9,7 @@ import 'package:another/screens/feed/widgets/my_feed_result.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../constant/color.dart';
+import '../../constant/const/color.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({Key? key}) : super(key: key);
@@ -87,16 +87,17 @@ class _FeedScreenState extends State<FeedScreen> {
 
   Future<void> _myFeed() async {
     try {
+
+
       final response = await MyFeedApi.getFeed('$userId');
       final contents = response['data']['myFeedListDtos']['content'];
       List<String> feedPicUrls = [];
       List<String> runningIdsList = [];
       List<String> runningTimeList = [];
       List<String> runningDistanceList = [];
-      List<String> walkCountList = [];
+      // List<String> walkCountList = [];
       List<String> kcalList = [];
       String profilePic = '';
-      // print(response);
 
       if (contents != []) {
         for (var content in contents) {
@@ -107,7 +108,7 @@ class _FeedScreenState extends State<FeedScreen> {
             runningIdsList.add(content['runningId'].toString());
             runningTimeList.add(content['runningTime'].toString());
             runningDistanceList.add(content['runningDistance'].toString());
-            walkCountList.add(content['walkCount'].toString());
+            // walkCountList.add(content['walkCount'].toString());
             kcalList.add(content['userCalories'].toString());
           } else {
             feedPicUrls.add(content['runningPic'].toString());
@@ -132,9 +133,9 @@ class _FeedScreenState extends State<FeedScreen> {
           runningIds = runningIdsList;
           runningTimes = runningTimeList;
           runningDistances = runningDistanceList;
-          walkCounts = walkCountList;
+          // walkCounts = walkCountList;
           userCalories = kcalList;
-          profile = profilePic;
+          // profile = profilePic;
         },
       );
     } catch (e) {
@@ -144,6 +145,8 @@ class _FeedScreenState extends State<FeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return MainLayout(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -152,6 +155,7 @@ class _FeedScreenState extends State<FeedScreen> {
               title: Text('로고'),
               expandedHeight: 25.0,
               backgroundColor: BACKGROUND_COLOR,
+
             ),
             SliverToBoxAdapter(
               child: isFeed
@@ -189,19 +193,19 @@ class _FeedScreenState extends State<FeedScreen> {
             Expanded(
               child: isFeed
                   ? AllFeedScreen(
-                      thumbnailUrls: thumbnailUrls,
-                      runningIds: runningIds,
-                      runningTimes: runningTimes,
-                      runningDistances: runningDistances,
-                      userCalories: userCalories,
+                      thumbnailUrls: thumbnailUrls.reversed.toList(),
+                      runningIds: runningIds.reversed.toList(),
+                      runningTimes: runningTimes.reversed.toList(),
+                      runningDistances: runningDistances.reversed.toList(),
+                      userCalories: userCalories.reversed.toList(),
                     )
                   : MyFeedScreen(
-                      thumbnailUrls: thumbnailUrls,
-                      runningIds: runningIds,
-                      runningTimes: runningTimes,
-                      runningDistances: runningDistances,
+                      thumbnailUrls: thumbnailUrls.reversed.toList(),
+                      runningIds: runningIds.reversed.toList(),
+                      runningTimes: runningTimes.reversed.toList(),
+                      runningDistances: runningDistances.reversed.toList(),
                       // walkCounts: walkCounts,
-                      userCalories: userCalories,
+                      userCalories: userCalories.reversed.toList(),
                     ),
             ),
           ],

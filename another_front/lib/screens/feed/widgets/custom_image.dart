@@ -1,28 +1,31 @@
 import 'dart:io';
 
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CustomImage extends StatefulWidget {
   const CustomImage({Key? key}) : super(key: key);
+
   @override
   State<CustomImage> createState() => _CustomImageState();
 }
 
 class _CustomImageState extends State<CustomImage> {
-  late List<XFile?> images = [];
+  XFile? image;
+  final _picker = ImagePicker().pickImage(
+    source: ImageSource.gallery,
+  );
 
   void onTapPressed() async {
-    print('사진 아이콘');
-    final image = await ImagePicker().pickMultiImage(
-      imageQuality: 100,
+    final image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
     );
-    print('선택완료');
-    print(image);
-    setState(() {
-      images = image;
-    });
+    if (image != null) {
+      setState(() {
+        this.image = image;
+      });
+    }
   }
 
   // 사진 찍기
@@ -32,16 +35,9 @@ class _CustomImageState extends State<CustomImage> {
     );
     if (image != null) {
       setState(() {
-        images.add(image);
+        this.image = image;
       });
     }
-  }
-
-  @override
-  void initState() {
-    onTapPressed();
-    // TODO: implement initState
-    super.initState();
   }
 
   @override
@@ -56,43 +52,12 @@ class _CustomImageState extends State<CustomImage> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          _IconsTap(
-            onTapPressed: onTapPressed,
-            onPhotoPressed: onPhotoPressed,
-          ),
-          images.isNotEmpty
-              ? ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: 300,
-                  ),
-
-                  child: ListView.builder(
-                    itemBuilder: (BuildContext context, int index) {
-                      // Why network for web?
-                      // See https://pub.dev/packages/image_picker_for_web#limitations-on-the-web-platform
-                      return Semantics(
-                        label: 'image_picker_example_picked_image',
-                        child: Image.file(
-                          File(images[index]!.path),
-                          errorBuilder: (BuildContext context, Object error,
-                                  StackTrace? stackTrace) =>
-                              const Center(
-                                  child:
-                                      Text('This image type is not supported')),
-                        ),
-                      );
-                    },
-                    itemCount: images.length,
-                  ),
-                )
-              : Text(
-                  '안뜨노',
-                  style: TextStyle(color: Colors.white),
-                ),
-        ],
-      ),
+      body: Column(children: [
+        _IconsTap(
+          onTapPressed: onTapPressed,
+          onPhotoPressed: onPhotoPressed,
+        ),
+      ]),
     );
   }
 }

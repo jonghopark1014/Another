@@ -1,6 +1,7 @@
 // 지도를 매번 setState로 매초 다시 그리면 터짐
 // 그래서 따로 뺌
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:another/screens/running/widgets/running_circle_button.dart';
@@ -8,6 +9,7 @@ import 'package:another/widgets/record_result.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -252,6 +254,16 @@ class _RunningStatus extends State<RunningStatus> {
   //   final Uint8List? bytes = await mapController.takeSnapshot();
   //   return bytes;
   // }
+  final BasicMessageChannel<String> _messageChannel =
+  BasicMessageChannel<String>('com.example.another', StringCodec());
 
+  Future<void> sendDataToWatch(Map<String, dynamic> data) async {
+    try {
+      final String jsonEncodedData = jsonEncode(data);
+      await _messageChannel.send(jsonEncodedData);
+    } on PlatformException catch (e) {
+      print(e.message);
+    }
+  }
   void onChange() {}
 }

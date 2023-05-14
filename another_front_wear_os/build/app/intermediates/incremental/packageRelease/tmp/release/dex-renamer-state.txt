@@ -1,4 +1,0 @@
-#Wed May 03 15:09:43 KST 2023
-base.0=C\:\\Users\\SSAFY\\Desktop\\S08P31B308\\another_front_wear_os\\build\\app\\intermediates\\dex\\release\\minifyReleaseWithR8\\classes.dex
-path.0=classes.dex
-renamed.0=classes.dex

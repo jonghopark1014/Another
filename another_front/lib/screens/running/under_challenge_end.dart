@@ -1,23 +1,22 @@
 import 'package:another/main.dart';
 import 'package:another/screens/running/under_challenge_end_feed.dart';
-import 'package:another/screens/running/widgets/ButtonComponent.dart';
-import 'package:another/screens/running/widgets/running_end.dart';
+import 'package:another/screens/running/widgets/button_component.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../home_screen.dart';
-import './api/under_running_end_api.dart';
 
 import '../feed/widgets/line_chart_custom.dart';
 
 class UnderChallengeScreenEnd extends StatelessWidget {
+  final Uint8List? captureInfo;
   final String runningDistance;
   final String runningTime;
   final String userCalorie;
   final String userPace;
 
   UnderChallengeScreenEnd({
+    required this.captureInfo,
     required this.runningDistance,
     required this.runningTime,
     required this.userCalorie,
@@ -56,14 +55,9 @@ class UnderChallengeScreenEnd extends StatelessWidget {
                         userPace: userPace,
                       ),
                     ),
-                    Padding(
-                        padding: const EdgeInsets.only(top: 24.0),
-                        child: SizedBox(
-                          height: size.width,
-                          width: size.width,
-                          child: EndRunningMap(),
-                        )
-                    ),
+                    Image.memory(
+                      captureInfo!,
+                    )
                   ],
                 ),
               ),
@@ -82,33 +76,17 @@ class UnderChallengeScreenEnd extends StatelessWidget {
   }
 
   void endFeed(BuildContext context) {
-    var runningData = Provider.of<RunningData>(context, listen: false);
-    var userId = Provider.of<UserInfo>(context, listen: false).userId;
-    var challengeData = Provider.of<ChallengeData>(context, listen: false);
-    print('challengeeeeee');
-    print(challengeData.runningId);
-    // // mySQL 저장
-    saveRunningTime.saveRunData(userId: userId!, hostRunningId: challengeData.hostRunningId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
-    // // hdfs 저장
-    saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (_) => UnderChallengeScreenEndFeed(captureInfo: Provider.of<RunningData>(context, listen: false).runningPic),
+          builder: (_) => UnderChallengeScreenEndFeed(captureInfo: captureInfo),
         ),
         (route) => route.settings.name == '/');
   }
 
   void feedComplete(BuildContext context) {
-    var runningData = Provider.of<RunningData>(context, listen: false);
-    var userId = Provider.of<UserInfo>(context, listen: false).userId;
-    var challengeData = Provider.of<ChallengeData>(context, listen: false);
-    // // mySQL 저장
-    saveRunningTime.saveRunData(userId: userId!, hostRunningId: challengeData.runningId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
-    // // hdfs 저장
-    saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => HomeScreen(),
+        builder: (_) => UnderChallengeScreenEndFeed(captureInfo: captureInfo),
       ),
     );
   }

@@ -1,5 +1,5 @@
 // 내기록들 띄우는 위젯
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
 import 'package:another/main.dart';
 import 'package:another/screens/running/api/my_history_api.dart';
 import 'package:another/widgets/target.dart';

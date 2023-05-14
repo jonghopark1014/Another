@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:another/widgets/target_box.dart';
-import '../../../constant/color.dart';
+import '../../../constant/const/color.dart';
 
 class MyRecordResult extends StatelessWidget {
   final List<String> walkCounts;

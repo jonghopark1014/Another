@@ -29,7 +29,7 @@ class _UnderChallengeState extends State<UnderChallenge> {
   Widget build(BuildContext context) {
     final runningData = Provider.of<RunningData>(context, listen: false);
     final initialPosition =
-        ModalRoute.of(context)!.settings.arguments as CameraPosition;
+    ModalRoute.of(context)!.settings.arguments as CameraPosition;
 
     return Scaffold(
       body: Stack(
