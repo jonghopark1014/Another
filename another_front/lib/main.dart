@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
+import 'package:another/screens/account/login.dart';
+import 'package:intl/intl.dart';
 
 class RunningSetting extends ChangeNotifier {
   int distance = 0;
@@ -197,9 +199,13 @@ class UserInfo extends ChangeNotifier {
 
 class ForDate extends ChangeNotifier {
   DateTime forFocus = DateTime.now();
-
+  var forFocusFormat;
   void changeValue(value) {
     forFocus = value;
+    print(forFocus);
+    print('-=-=-=-=-=');
+    forFocusFormat = DateFormat('yyyy-MM-dd').format(forFocus);
+    print(forFocusFormat);
     notifyListeners();
   }
 }
@@ -214,38 +220,44 @@ class MyApp extends StatelessWidget {
   final userInfo = UserInfo();
   @override
   Widget build(BuildContext context) {
-    if (userInfo.userId != null){
-      print('not null');
-    } else{
-      print('null');
-    }
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (c) => UserInfo()) ,
-        ChangeNotifierProvider(create: (c) => RunningData()) ,
-        ChangeNotifierProvider(create: (c) => ForDate()),
-        ChangeNotifierProvider(create: (c) => ChallengeData()),
-        ChangeNotifierProvider(create: (c) => RunningSetting()) ,
-      ],
-      child: MaterialApp(
-        initialRoute: '/',
-        theme: ThemeData(
-          scaffoldBackgroundColor: BACKGROUND_COLOR,
-          fontFamily: 'pretendard',
-          textTheme: TextTheme(
-            headline1: TextStyle(
-              color: MAIN_COLOR,
-              fontFamily: 'Pretendard',
-              fontSize: 16.0,
-            ),
-          ),
-        ),
-        routes: {
-          '/': (context) => HomeScreen(),
-          '/Detail': (context) => ChallengeRunning(
-          ),
-          '/UnderRunning': (context) => UnderRunning(),
-          '/UnderChallenge': (context) => UnderChallenge(),
+    return ChangeNotifierProvider(
+      create: (context) => UserInfo(),
+      child: Consumer<UserInfo>(
+        builder: (context, userInfo, child) {
+          if (userInfo.userId != null) {
+            return MultiProvider(
+              providers: [
+                ChangeNotifierProvider(create: (c) => RunningData()) ,
+                ChangeNotifierProvider(create: (c) => ForDate()),
+                ChangeNotifierProvider(create: (c) => ChallengeData()),
+                ChangeNotifierProvider(create: (c) => RunningSetting()) ,
+              ],
+              child: MaterialApp(
+                initialRoute: '/',
+                theme: ThemeData(
+                  scaffoldBackgroundColor: BACKGROUND_COLOR,
+                  fontFamily: 'pretendard',
+                  textTheme: TextTheme(
+                    headline1: TextStyle(
+                      color: MAIN_COLOR,
+                      fontFamily: 'Pretendard',
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
+                routes: {
+                  '/': (context) => HomeScreen(),
+                  '/Detail': (context) => ChallengeRunning(),
+                  '/UnderRunning': (context) => UnderRunning(),
+                  '/UnderChallenge': (context) => UnderChallenge(),
+                },
+              ),
+            );
+          } else {
+            return MaterialApp(
+              home: LoginPage(),
+            );
+          }
         },
       ),
     );
