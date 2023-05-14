@@ -182,13 +182,13 @@ class UserInfo extends ChangeNotifier {
   String? accessToken;
   String? refreshToken;
 
-  void updateUserInfo(String userId, String accessToken, String refreshToken) {
+    void updateUserInfo(String userId, String accessToken, String refreshToken) {
     this.userId = int.parse(userId);
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
     notifyListeners();
-  }
-  // var userId = 1;
+    }
+  var userId = 1;
   var nickname = '임범규';
   var height = 185;
   var weight = 70;

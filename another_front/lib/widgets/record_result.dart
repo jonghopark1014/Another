@@ -40,7 +40,7 @@ class RecordResult extends StatelessWidget {
                     recordColor: WHITE_COLOR,
                   ),
                   RecordResultBox(
-                    data: '${distance}km',
+                    data: double.parse(distance) < 1? '${(double.parse(distance) * 1000).toStringAsFixed(0)}m' : '${distance}km',
                     name: '거리',
                     textColor: BLUE_COLOR,
                     recordColor: WHITE_COLOR,

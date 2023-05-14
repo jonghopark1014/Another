@@ -31,7 +31,7 @@ class _ChallengeListState extends State<ChallengeList> {
 
   Future<void> _challengeListApi() async {
     try {
-      final response = await ChallengeListApi.getFeed('1');
+      final response = await ChallengeListApi.getFeed(widget.runningId);
       final contents = response['data'];
       List<String> profilePics = [];
       List<String> nicknames = [];
