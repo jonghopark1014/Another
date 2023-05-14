@@ -37,6 +37,9 @@ class _EndRunningMapState extends State<EndRunningMap> {
         children: [
           GoogleMap(
             initialCameraPosition: Provider.of<RunningData>(context, listen: false).currentPosition,
+            rotateGesturesEnabled: false,
+            scrollGesturesEnabled: false,
+            tiltGesturesEnabled: false,
             mapType: MapType.normal,
             zoomControlsEnabled: false,
             myLocationEnabled: false,
