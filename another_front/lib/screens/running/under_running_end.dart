@@ -46,7 +46,7 @@ class UnderRunningScreenEnd extends StatelessWidget {
               padding: const EdgeInsets.only(top: 24.0),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxHeight: size.height / 7 * 4,
+                  maxHeight: size.height / 11 * 6,
                 ),
                 child: SizedBox(
                   height: size.width,
@@ -78,11 +78,10 @@ class UnderRunningScreenEnd extends StatelessWidget {
     saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
     // // hdfs 저장
     saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
-    Navigator.of(context).pushAndRemoveUntil(
+    Navigator.of(context).push(
         MaterialPageRoute(
           builder: (_) => UnderChallengeScreenEndFeed(captureInfo: Provider.of<RunningData>(context, listen: false).runningPic),
-        ),
-        (route) => false);
+        ));
   }
 
   void feedComplete(BuildContext context) {

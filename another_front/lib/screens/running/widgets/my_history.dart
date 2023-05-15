@@ -14,7 +14,8 @@ class MyHistory extends StatefulWidget {
 }
 
 class _MyHistoryState extends State<MyHistory> {
-  late int selectedIndex = 0;
+  late int selectedIndex;
+  late bool firstClicked = false;
   late ChallengeData challengeData;
   bool dataGet = false;
   List<dynamic> historyList = [];
@@ -50,6 +51,7 @@ class _MyHistoryState extends State<MyHistory> {
               ),
               setState(() {
                 selectedIndex = index;
+                firstClicked = true;
               })
             },
             style: ElevatedButton.styleFrom(
@@ -58,7 +60,7 @@ class _MyHistoryState extends State<MyHistory> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0),
                 side: BorderSide(
-                  color: selectedIndex == index ? MAIN_COLOR : BACKGROUND_COLOR,
+                  color: firstClicked && selectedIndex == index ? MAIN_COLOR : BACKGROUND_COLOR,
                   width: 2.0,
                 ),
               ),

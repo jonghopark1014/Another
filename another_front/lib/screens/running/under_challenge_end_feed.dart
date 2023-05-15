@@ -65,11 +65,9 @@ class _UnderChallengeScreenEndFeedState
   Widget build(BuildContext context) {
     print('리빌드');
     return Scaffold(
-      appBar: GoBackAppBarStyle(
-        toHome: true,
-      ),
+      appBar: GoBackAppBarStyle(),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 32),
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
         child: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -105,7 +103,7 @@ class _UnderChallengeScreenEndFeedState
               ),
               ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height / 2,
+                  maxHeight: MediaQuery.of(context).size.height / 11 * 5,
                 ),
                 child: SizedBox(
                   height: MediaQuery.of(context).size.width,
@@ -135,15 +133,17 @@ class _UnderChallengeScreenEndFeedState
                           ),
                           Positioned(
                             bottom: 10,
-                            child: CarouselIndicator(
-                              space: 15,
-                              activeColor: MAIN_COLOR,
-                              width: 8,
-                              height: 8,
-                              animationDuration: 0,
-                              count: feedPics.length,
-                              index: pageIndex,
-                            ),
+                            child: feedPics.length > 1
+                                ? CarouselIndicator(
+                                    space: 15,
+                                    activeColor: MAIN_COLOR,
+                                    width: 8,
+                                    height: 8,
+                                    animationDuration: 0,
+                                    count: feedPics.length,
+                                    index: pageIndex,
+                                  )
+                                : Container(),
                           )
                         ]),
                   ),
@@ -158,21 +158,20 @@ class _UnderChallengeScreenEndFeedState
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 12.0),
-                child:
-                ElevatedButton(
+                child: ElevatedButton(
                   onPressed: () async {
                     // 등록 요청 하고 페이지 이동하도록?
                     bool isComplete =
-                    await feedCreateApi(userId, runningId, feedPics);
+                        await feedCreateApi(userId, runningId, feedPics);
                     // 현재 위젯이 그대로 마운트 되어있을때
                     if (context.mounted) {
                       if (isComplete) {
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                                 builder: (_) => FeedCreateComplete(
-                                  feedPics: feedPics,
-                                )),
-                                (route) => false);
+                                      feedPics: feedPics,
+                                    )),
+                            (route) => false);
                       } else {
                         // 미완료 모달창
                       }
@@ -187,39 +186,8 @@ class _UnderChallengeScreenEndFeedState
                     '오운완 등록하기',
                     style: MyTextStyle.twentyTextStyle,
                   ),
-                )
-                // ElevatedButton(
-                //   style: ElevatedButton.styleFrom(
-                //     primary: MAIN_COLOR,
-                //     elevation: 20.0,
-                //   ),
-                //   onPressed: () async {
-                //     // 등록 요청 하고 페이지 이동하도록?
-                //     bool isComplete =
-                //         await feedCreateApi(userId, runningId, feedPics);
-                //     // 현재 위젯이 그대로 마운트 되어있을때
-                //     if (context.mounted) {
-                //       if (isComplete) {
-                //         Navigator.of(context).pushAndRemoveUntil(
-                //             MaterialPageRoute(
-                //                 builder: (_) => FeedCreateComplete(
-                //                       feedPics: feedPics,
-                //                     )),
-                //             (route) => false);
-                //       } else {
-                //         // 미완료 모달창
-                //       }
-                //     }
-                //   },
-                //   child: Text(
-                //     '오운완 등록하기',
-                //     style: TextStyle(
-                //       fontWeight: FontWeight.w700,
-                //       fontSize: 16.0,
-                //     ),
-                //   ),
-                // ),
-              )
+                ),
+              ),
             ],
           ),
         ),
