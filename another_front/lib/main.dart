@@ -223,11 +223,6 @@ class ForDate extends ChangeNotifier {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
-  // print(device);
-
   await initializeDateFormatting();
   runApp(MyApp());
 }
@@ -274,7 +269,7 @@ class MyApp extends StatelessWidget {
         } else {
           return MultiProvider(
             providers: [
-              ChangeNotifierProvider(create: (c) => RunningSetting()),
+              ChangeNotifierProvider(create: (c) => RunningData()),
             ],
             child: MaterialApp(
               home: const WathchHomeScreen(),
@@ -291,10 +286,11 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
+
 void receiveDataFromPhone() {
   const messageChannel =
   const BasicMessageChannel<String>('com.example.another', StringCodec());
-  print('안돼?');
   // 데이터 수신
   messageChannel.setMessageHandler(
         (String? data) async {
@@ -307,5 +303,4 @@ void receiveDataFromPhone() {
       }
     },
   );
-  print('안돼????');
 }

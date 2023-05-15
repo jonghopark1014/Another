@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:watch_connectivity/watch_connectivity.dart';
 
 import '../../../main.dart';
 import '../../home_screen.dart';
@@ -29,6 +30,11 @@ class RunningStatus extends StatefulWidget {
 }
 
 class _RunningStatus extends State<RunningStatus> {
+  final BasicMessageChannel<String> messageChannel =
+  BasicMessageChannel<String>('com.example.another', StringCodec());
+  final _watch = WatchConnectivity();
+  final _log = <String>[];
+
   GlobalKey captureKey = GlobalKey();
   int _userWeight = 0;
   String runDataId = '0';
@@ -52,6 +58,7 @@ class _RunningStatus extends State<RunningStatus> {
   int minutes = 0;
   int hours = 0;
   late bool isStart;
+
 
   double _toRadians(double degrees) {
     return degrees * pi / 180;
@@ -158,6 +165,19 @@ class _RunningStatus extends State<RunningStatus> {
         }
       });
     });
+    sendMessage();
+  }
+
+  // void sendMessage() {
+  //   final message = {'runningDistance': runningDistance, };
+  //   messageChannel.send(message.toString());
+  //   print('Sent message to phone: $message');
+  // }
+  void sendMessage() {
+    final message = {'runningDistance': runningDistance, };
+    _watch.sendMessage(message);
+    setState(() => _log.add('Sent message: $message'));
+    print('ddd');
   }
 
   @override
@@ -168,6 +188,8 @@ class _RunningStatus extends State<RunningStatus> {
 
   @override
   Widget build(BuildContext context) {
+    // sendDataToWatch(runningData);
+
     return // 달릴 때 데이터 표시
       Expanded(
         child: Column(
@@ -254,16 +276,22 @@ class _RunningStatus extends State<RunningStatus> {
   //   final Uint8List? bytes = await mapController.takeSnapshot();
   //   return bytes;
   // }
-  final BasicMessageChannel<String> _messageChannel =
-  BasicMessageChannel<String>('com.example.another', StringCodec());
 
-  Future<void> sendDataToWatch(Map<String, dynamic> data) async {
+
+  Future<void> sendDataToWatch(List<String> data) async {
+    final BasicMessageChannel<String> _messageChannel =
+    BasicMessageChannel<String>('com.example.another', StringCodec());
+
     try {
       final String jsonEncodedData = jsonEncode(data);
       await _messageChannel.send(jsonEncodedData);
+      print(data);
     } on PlatformException catch (e) {
       print(e.message);
     }
   }
+
+
+
   void onChange() {}
 }

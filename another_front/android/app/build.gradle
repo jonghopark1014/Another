@@ -48,7 +48,8 @@ android {
         applicationId "com.example.another"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 21
+        minSdkVersion 23
+        targetSdkVersion 30
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -59,6 +60,9 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
+            ndk {
+                abiFilters "armeabi-v7a"
+            }
         }
     }
 }
@@ -70,4 +74,8 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.android.gms:play-services-wearable:17.0.0'
+//    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.google.android.support:wearable:2.8.1'
+//    implementation 'io.github.victorl.gearwear:wearable:0.2.0'
+//    implementation 'com.vanryan:rotary-plugin:1.0.0'
 }

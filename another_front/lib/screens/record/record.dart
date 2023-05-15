@@ -25,37 +25,6 @@ class RecordTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black87,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context); // 뒤로가기
-          },
-        ),
-        actions: [
-          ElevatedButton(
-            onPressed: () {
-              // 로그인 페이지로 이동하는 로직을 작성
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginPage()),
-              );
-            },
-            child: Text('로그인'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // 로그인 페이지로 이동하는 로직을 작성
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ChallengePage()),
-              );
-            },
-            child: Text('챌린지'),
-          ),
-        ],
-      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Stack(
