@@ -94,6 +94,7 @@ public class UserService {
                 .weight(userJoinDto.getWeight())
                 .username(userJoinDto.getUsername())
                 .nickname(userJoinDto.getNickname())
+                .profilePic("https://ssafy308-another.s3.ap-northeast-2.amazonaws.com/image/d82d1980-beae-49f8-a16d-0046c9c8a34b114f1c0b-52f0-449a-ad45-e8c81e46a033.jpg")
                 .role(Role.USER)
                 .build();
 
