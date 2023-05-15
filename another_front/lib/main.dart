@@ -24,7 +24,7 @@ class RunningSetting extends ChangeNotifier {
 
 class RunningData extends ChangeNotifier {
   late GoogleMapController mapController;
-  CameraPosition currentPosition = CameraPosition(target: LatLng(0,0), zoom: 17);
+  CameraPosition currentPosition = CameraPosition(target: LatLng(0,0), zoom: 13);
   String runningId = '';
   LatLng preValue = LatLng(0, 0);
   LatLng curValue = LatLng(0, 0);
@@ -188,7 +188,6 @@ class UserInfo extends ChangeNotifier {
     this.refreshToken = refreshToken;
     notifyListeners();
     }
-  var userId = 1;
   var nickname = '임범규';
   var height = 185;
   var weight = 70;

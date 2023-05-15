@@ -54,7 +54,7 @@ dependencies:
   flutter_blue_plus: ^1.4.0
 
 
-
+  flutter_foreground_task: ^4.1.0
   percent_indicator: ^4.0.1
   latlong2: ^0.8.1
   flutter_tts: ^3.6.3

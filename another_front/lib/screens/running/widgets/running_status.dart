@@ -141,6 +141,7 @@ class _RunningStatus extends State<RunningStatus> {
     runDataId = userId + forRunId1;
     // 타이머 시작
     isStart = true;
+    // Isolate.spawn(timerIsolate, 'start');
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         if (isStart) {
@@ -242,16 +243,6 @@ class _RunningStatus extends State<RunningStatus> {
         ),
             (route) => route.settings.name == '/');
   }
-
-  // 캡처하기 위한 함수
-  // Future<Uint8List?> captureWidget() async {
-  //   var data = Provider.of<RunningData>(context, listen: false);
-  //   var mapController = data.mapController;
-  //   print(mapController);
-  //
-  //   final Uint8List? bytes = await mapController.takeSnapshot();
-  //   return bytes;
-  // }
 
   void onChange() {}
 }
