@@ -2,6 +2,7 @@ package com.example.another_back.service;
 
 import com.example.another_back.dto.*;
 import com.example.another_back.dto.badge.EndChallengeResponseDto;
+import com.example.another_back.dto.running.EndRunningDto;
 import com.example.another_back.entity.*;
 import com.example.another_back.repository.RunningRepository;
 import com.example.another_back.repository.UserChallengeRepository;
@@ -43,9 +44,9 @@ public class RunningService {
      * 러닝 종료
      *
      * @param runningRequestDto
-     * @return String
+     * @return EndRunningDto
      */
-    public List<EndChallengeResponseDto> addRunning(RunningRequestDto runningRequestDto) {
+    public EndRunningDto addRunning(RunningRequestDto runningRequestDto) {
         // 러닝 PK 유효성 검사
         checkDuplicatedRunning(runningRequestDto.getRunningId());
         // User 유효성 검사
@@ -108,7 +109,7 @@ public class RunningService {
                 user.setExp(exp);
             }
         }
-        List<EndChallengeResponseDto> response = new ArrayList<>();
+        List<EndChallengeResponseDto> endChallengeResponseDtoList = new ArrayList<>();
         for (UserChallenge userChallenge :
                 user.getUserChallengeList()) {
             if (userChallenge.getStatus().equals("GOLD")) continue;
@@ -118,11 +119,8 @@ public class RunningService {
                     userChallenge.setUserChallengeValue(checkTime / 60);
                     if (userChallenge.getUserChallengeValue() >= userChallenge.getChallenge().getChallengeTarget()) {
                         userChallenge.setStatus("GOLD");
-                        response.add(EndChallengeResponseDto.builder()
-                                .runningId(running.getId())
-                                .challengeId(userChallenge.getChallenge().getId())
-                                .challengeName(userChallenge.getChallenge().getChallengeName())
-                                .challengeUrl(userChallenge.getChallenge().getChallengeGold())
+                        endChallengeResponseDtoList.add(EndChallengeResponseDto.builder()
+                                .challenge(userChallenge.getChallenge())
                                 .build());
                     }
                     break;
@@ -130,11 +128,8 @@ public class RunningService {
                     userChallenge.setUserChallengeValue(runningDistance);
                     if (userChallenge.getUserChallengeValue() >= userChallenge.getChallenge().getChallengeTarget()) {
                         userChallenge.setStatus("GOLD");
-                        response.add(EndChallengeResponseDto.builder()
-                                .runningId(running.getId())
-                                .challengeId(userChallenge.getChallenge().getId())
-                                .challengeName(userChallenge.getChallenge().getChallengeName())
-                                .challengeUrl(userChallenge.getChallenge().getChallengeGold())
+                        endChallengeResponseDtoList.add(EndChallengeResponseDto.builder()
+                                .challenge(userChallenge.getChallenge())
                                 .build());
                     }
                     break;
@@ -161,11 +156,8 @@ public class RunningService {
                         userChallenge.setUserChallengeValue(value);
                     if (userChallenge.getUserChallengeValue() >= 0) {
                         userChallenge.setStatus("GOLD");
-                        response.add(EndChallengeResponseDto.builder()
-                                .runningId(running.getId())
-                                .challengeId(userChallenge.getChallenge().getId())
-                                .challengeName(userChallenge.getChallenge().getChallengeName())
-                                .challengeUrl(userChallenge.getChallenge().getChallengeGold())
+                        endChallengeResponseDtoList.add(EndChallengeResponseDto.builder()
+                                .challenge(userChallenge.getChallenge())
                                 .build());
                     }
                     break;
@@ -173,16 +165,17 @@ public class RunningService {
                     userChallenge.setUserChallengeValue(runningRepository.getAccumulatedRunningDays());
                     if (userChallenge.getUserChallengeValue() >= userChallenge.getChallenge().getChallengeTarget()) {
                         userChallenge.setStatus("GOLD");
-                        response.add(EndChallengeResponseDto.builder()
-                                .runningId(running.getId())
-                                .challengeId(userChallenge.getChallenge().getId())
-                                .challengeName(userChallenge.getChallenge().getChallengeName())
-                                .challengeUrl(userChallenge.getChallenge().getChallengeGold())
+                        endChallengeResponseDtoList.add(EndChallengeResponseDto.builder()
+                                .challenge(userChallenge.getChallenge())
                                 .build());
                     }
                     break;
             }
         }
+        EndRunningDto response = EndRunningDto.builder()
+                .runningId(savedRunning.getId())
+                .endChallengeResponseDtoList(endChallengeResponseDtoList)
+                .build();
         userRepository.save(user);
         return response;
     }
