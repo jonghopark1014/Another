@@ -96,8 +96,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 //        userRepository.save(user);
 
         //리스폰스 해더에 Authorization : "", Refresh : ""로 전달
+        //키 몸무게 닉네임 담아서 주기
         response.addHeader(HEADER_STRING, TOKEN_PREFIX + jwt);
         response.addHeader(RT_HEADER_STRING, TOKEN_PREFIX + rft);
+        response.setIntHeader("height",user.getHeight());
+        response.setIntHeader("weight",user.getWeight());
+        response.setHeader("nickname",user.getNickname());
         response.setIntHeader("userId", Math.toIntExact(user.getId()));
     }
 }

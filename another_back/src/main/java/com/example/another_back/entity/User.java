@@ -27,6 +27,7 @@ public class User {
     private Integer exp;
     private Integer level;
     private String nickname;
+    private String refreshToken;
 
     @Enumerated(value = EnumType.STRING)
     private Role role;
