@@ -13,11 +13,7 @@ Future<bool> feedCreateApi(
   print(feedPics);
   print(feedPics.length);
   print('????');
-  if (feedPics.length - 1 == 0) {
-    request.files.add(http.MultipartFile.fromBytes('feedPics', [],
-        contentType: MediaType('multipart', 'form-data'),
-        ));
-  }
+
   for (var i = 0; i < feedPics.length - 1; i++) {
     print('!!!!!!');
     print(feedPics[i]);
