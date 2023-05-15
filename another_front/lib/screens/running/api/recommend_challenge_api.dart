@@ -12,6 +12,7 @@ Future<dynamic> recommendChallengeApi(int userId) async {
   print('리턴값 출력');
   var bodyContent = jsonDecode(utf8.decode(response.bodyBytes));
   print(bodyContent);
+  print(utf8.decode(response.bodyBytes));
 
   return bodyContent;
 }

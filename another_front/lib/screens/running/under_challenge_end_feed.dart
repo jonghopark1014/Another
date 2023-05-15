@@ -250,7 +250,7 @@ class _UnderChallengeScreenEndFeedState
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+            children: [
               ListTile(
                 leading: Icon(Icons.photo_camera),
                 title: Text(
