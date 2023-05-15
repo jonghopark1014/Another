@@ -31,7 +31,7 @@ class RunningSetting extends ChangeNotifier {
 
 class RunningData extends ChangeNotifier {
   late GoogleMapController mapController;
-  CameraPosition currentPosition = CameraPosition(target: LatLng(0,0), zoom: 17);
+  CameraPosition currentPosition = CameraPosition(target: LatLng(0,0), zoom: 13);
   String runningId = '';
   LatLng preValue = LatLng(0, 0);
   LatLng curValue = LatLng(0, 0);
@@ -196,10 +196,9 @@ class UserInfo extends ChangeNotifier {
     // this.accessToken = accessToken;
     // this.refreshToken = refreshToken;
     notifyListeners();
-  }
-  // int userId = 1;
-  var nickname = '';
-  var height = 175;
+    }
+  var nickname = '임범규';
+  var height = 185;
   var weight = 70;
   String profileImg = 'https://cdn.ggilbo.com/news/photo/201812/575659_429788_3144.jpg';
 // 유저 정보를 수정하는 함수 여기에 작성
