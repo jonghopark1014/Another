@@ -65,7 +65,7 @@ class _FeedCreateCompleteState extends State<FeedCreateComplete> {
     return Stack(children: [
       // 수정중
       Scaffold(
-        appBar: GoBackAppBarStyle(),
+        appBar: GoBackAppBarStyle(toHome: true,),
         body: ListView(
           controller: _scrollController,
           children: [

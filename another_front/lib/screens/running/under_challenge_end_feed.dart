@@ -80,7 +80,7 @@ class _UnderChallengeScreenEndFeedState
                     width: 2.5,
                   ),
                 ),
-                onPressed: onTapPressed,
+                onPressed: () => _showPicker(context),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -192,34 +192,104 @@ class _UnderChallengeScreenEndFeedState
         ),
       ),
     );
+
+
   }
 
-  // 저장된 이미지 가져오기
-  void onTapPressed() async {
+  // 카메라로 사진 찍기
+  void _getCameraImage() async {
+    final imageXFile =
+    await ImagePicker().pickImage(source: ImageSource.camera);
+    if (imageXFile != null) {
+      File file = File(imageXFile.path);
+      Uint8List imgByteList = await file.readAsBytes();
+      // 받아온 이미지 위젯리스트에 추가
+      pickedImgs.add(imgByteList);
+      setState(() {
+        feedPics = [...pickedImgs];
+        feedPics.add(runPic);
+      });
+    }
+  }
+
+  // 갤러리에서 사진 선택
+  void _getPhotoLibraryImage() async {
     final imageXFiles = await ImagePicker().pickMultiImage(
       imageQuality: 100,
     );
     // xfile(path) 를 uint8list(이미지 데이터)로 변환
-    for (var i = 0; i < imageXFiles.length; i++) {
-      File file = File(imageXFiles[i].path);
-      Uint8List imgByteList = await file.readAsBytes();
-      // 받아온 이미지 위젯리스트에 추가
-      pickedImgs.add(imgByteList);
+    if (imageXFiles != null) {
+      for (var i = 0; i < imageXFiles.length; i++) {
+        File file = File(imageXFiles[i].path);
+        Uint8List imgByteList = await file.readAsBytes();
+        // 받아온 이미지 위젯리스트에 추가
+        pickedImgs.add(imgByteList);
+      }
+      setState(() {
+        feedPics = [...pickedImgs];
+        feedPics.add(runPic);
+      });
     }
-    setState(() {
-      feedPics = [...pickedImgs];
-      feedPics.add(runPic);
-    });
   }
-// 이미지 불러올지, 사진 찍을지 고르기
-// Future<dynamic> toImageSelector() {
-//   return showModalBottomSheet(
-//       context: context,
-//       builder: (BuildContext context) {
-//         return Container(
-//
-//         );
-//       }
-//   );
-// }
+
+
+  // 바텀 시트에서 선택지를 보여줍니다.
+  void _showPicker(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(topRight: Radius.circular(20), topLeft:  Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(topRight: Radius.circular(20), topLeft:  Radius.circular(20)),
+            color: SERVEONE_COLOR,
+          ),
+          height: 150,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.photo_camera),
+                title: Text(
+                  "사진 촬영",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  _getCameraImage();
+                },
+              ),
+              Divider(
+                thickness: 1,
+              ),
+              ListTile(
+                leading: Icon(Icons.image),
+                title: Text(
+                  "갤러리에서 선택",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  _getPhotoLibraryImage();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+
 }
