@@ -1,11 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-<!--    사진 권한용-->
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <!--    foreground service ( 백그라운드에서 실행) -->
+<!--    foreground service ( 백그라운드에서 실행) -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -54,6 +48,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

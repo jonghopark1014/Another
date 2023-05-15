@@ -1,8 +1,8 @@
-import 'package:another/constant/text_style.dart';
+import 'package:another/constant/const/text_style.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter/material.dart';
 
-import '../../../constant/color.dart';
+import '../../../constant/const/color.dart';
 
 class Chart extends StatelessWidget {
   final List<PacesData> chartData;

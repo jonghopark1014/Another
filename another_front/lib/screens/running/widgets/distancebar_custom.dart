@@ -1,4 +1,4 @@
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
 import 'package:flutter/material.dart';
 
 class CustomSliderThumbCircle extends SliderComponentShape {

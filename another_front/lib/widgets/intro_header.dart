@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constant/color.dart';
+import '../constant/const/color.dart';
 
 class IntroHeader extends StatelessWidget {
   const IntroHeader({Key? key}) : super(key: key);

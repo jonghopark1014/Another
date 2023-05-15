@@ -1,4 +1,0 @@
--keep class android.app.Application { <init>(); }
--keep class androidx.core.app.CoreComponentFactory { <init>(); }
--keep class com.example.another_front_wear_os.MainActivity { <init>(); }
--keep class com.google.android.gms.common.api.GoogleApiActivity { <init>(); }

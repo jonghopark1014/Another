@@ -1,9 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:another/constant/color.dart';
-import 'package:another/constant/main_layout.dart';
+import 'package:another/constant/layout/main_layout.dart';
 import 'package:another/screens/running/under_challenge_end_feed.dart';
-import 'package:another/screens/running/widgets/ButtonComponent.dart';
+import 'package:another/screens/running/widgets/button_component.dart';
 import 'package:another/screens/running/widgets/running_end.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/material.dart';
@@ -40,12 +39,12 @@ class UnderRunningScreenEnd extends StatelessWidget {
             userPace: userPace,
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 24.0),
-            child: SizedBox(
-              height: size.width,
-              width: size.width,
-              child: EndRunningMap(),
-            )
+              padding: const EdgeInsets.only(top: 24.0),
+              child: SizedBox(
+                height: size.width,
+                width: size.width,
+                child: EndRunningMap(),
+              )
           ),
           SizedBox(
             height: 120,
@@ -73,7 +72,7 @@ class UnderRunningScreenEnd extends StatelessWidget {
         MaterialPageRoute(
           builder: (_) => UnderChallengeScreenEndFeed(captureInfo: Provider.of<RunningData>(context, listen: false).runningPic),
         ),
-        (route) => route.settings.name == '/');
+            (route) => route.settings.name == '/');
   }
 
   void feedComplete(BuildContext context) {

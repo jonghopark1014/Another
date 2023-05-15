@@ -1,5 +1,5 @@
-import 'package:another/constant/color.dart';
-import 'package:another/constant/text_style.dart';
+import 'package:another/constant/const/color.dart';
+import 'package:another/constant/const/text_style.dart';
 import 'package:another/screens/running/widgets/distancebar_custom.dart';
 import 'package:flutter/material.dart';
 

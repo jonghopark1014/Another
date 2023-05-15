@@ -184,4 +184,3 @@ class _RunningMapState extends State<RunningMap> {
     return '위치 권한이 허가 되었습니다.';
   }
 }
-

@@ -1,6 +1,6 @@
 
 import 'package:another/screens/feed/feed_screen.dart';
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
 import 'package:another/screens/record/Record.dart';
 import 'package:another/screens/running/Running.dart';
 import 'package:flutter/material.dart';

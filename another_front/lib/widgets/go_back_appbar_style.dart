@@ -1,6 +1,6 @@
+import 'package:another/constant/const/color.dart';
 import 'package:flutter/material.dart';
 
-import '../constant/color.dart';
 
 class GoBackAppBarStyle extends StatelessWidget implements PreferredSizeWidget {
   bool? toHome;

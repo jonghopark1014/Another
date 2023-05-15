@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:http_parser/http_parser.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 const String _baseUrl = 'https://k8b308.p.ssafy.io';

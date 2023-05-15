@@ -95,19 +95,19 @@ class GetPeriodRecord {
   static Future<Map<String, dynamic>> getPeriodRecordSelectDay(String? date) async {
     int userId = 1;
 
-      var url = Uri.parse('$_baseUrl/record/$userId/interval?createDate=$date');
-      print(date);
-      try {
-        var response = await http.post(url);
-        if (response.statusCode == 200) {
-          var responseBody = jsonDecode(response.body);
-          return responseBody['data'];
-        } else {
-          return {};
-        }
-      } catch (error) {
-        print(error);
+    var url = Uri.parse('$_baseUrl/record/$userId/interval?createDate=$date');
+    print(date);
+    try {
+      var response = await http.post(url);
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.body);
+        return responseBody['data'];
+      } else {
+        return {};
       }
-      return {};
+    } catch (error) {
+      print(error);
     }
+    return {};
   }
+}

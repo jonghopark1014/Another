@@ -1,8 +1,7 @@
 import 'dart:convert';
+import 'package:another/constant/const/data.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-
-const String _baseUrl = 'https://k8b308.p.ssafy.io/api';
 
 class SignupApi {
   static Future<bool> joinUser(BuildContext context,
@@ -12,7 +11,7 @@ class SignupApi {
       required bool isMale,
       int? height,
       int? weight}) async {
-    var url = Uri.parse('${_baseUrl}/user/join');
+    var url = Uri.parse('$baseUrl/user/join');
     Map<String, dynamic> requestBody = {
       'username': email,
       'password': password,

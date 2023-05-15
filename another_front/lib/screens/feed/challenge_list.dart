@@ -1,5 +1,5 @@
-import 'package:another/constant/color.dart';
-import 'package:another/constant/text_style.dart';
+import 'package:another/constant/const/color.dart';
+import 'package:another/constant/const/text_style.dart';
 import 'package:another/screens/feed/api/challenge_list_api.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
 import 'package:flutter/material.dart';

@@ -65,14 +65,14 @@ class _BeforeRunningMapState extends State<BeforeRunningMap> {
     return
       isLoading || Provider.of<RunningData>(context, listen: false).currentPosition != CameraPosition(target: LatLng(0,0), zoom: 13) ?
       GoogleMap(
-      initialCameraPosition: currentPosition,
-      mapType: MapType.normal,
-      zoomControlsEnabled: false,
-      myLocationEnabled: true,
-      myLocationButtonEnabled: false,
-      onMapCreated: onMapCreated,
-    )
-    : Center(child: CircularProgressIndicator());
+        initialCameraPosition: currentPosition,
+        mapType: MapType.normal,
+        zoomControlsEnabled: false,
+        myLocationEnabled: true,
+        myLocationButtonEnabled: false,
+        onMapCreated: onMapCreated,
+      )
+          : Center(child: CircularProgressIndicator());
   }
   void getCurrentLocation() async {
 

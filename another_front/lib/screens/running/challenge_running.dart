@@ -1,10 +1,10 @@
+import 'package:another/constant/const/color.dart';
 import 'package:another/main.dart';
 import 'package:another/screens/running/api/versus_api.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import 'package:another/constant/color.dart';
 import 'package:another/screens/running/timer_screen.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
@@ -34,21 +34,21 @@ class _ChallengeRunningState extends State<ChallengeRunning> {
     super.initState();
     _versusApi();
     var challengeData = Provider.of<ChallengeData>(context, listen: false);
-      runningId = challengeData.runningId;
-      runningDistance = challengeData.runningDistance;
-      runningTime = challengeData.runningTime;
-      userCalorie = challengeData.userCalorie;
-      userPace = challengeData.userPace;
+    runningId = challengeData.runningId;
+    runningDistance = challengeData.runningDistance;
+    runningTime = challengeData.runningTime;
+    userCalorie = challengeData.userCalorie;
+    userPace = challengeData.userPace;
 
-      challengeData.setList(challengeDistanceList);
+    challengeData.setList(challengeDistanceList);
 
-      final userInfo = context.read<UserInfo>();
-      // _userWeight = userInfo.weight;
-      String userId = userInfo.userId.toString();
-      String forRunId1 = DateFormat('yyMMddHHmmss').format(DateTime.now());
-      runDataId = userId + forRunId1;
-      var runningData = Provider.of<RunningData>(context, listen: false);
-      runningData.setRunningId(runDataId);
+    final userInfo = context.read<UserInfo>();
+    // _userWeight = userInfo.weight;
+    String userId = userInfo.userId.toString();
+    String forRunId1 = DateFormat('yyMMddHHmmss').format(DateTime.now());
+    runDataId = userId + forRunId1;
+    var runningData = Provider.of<RunningData>(context, listen: false);
+    runningData.setRunningId(runDataId);
   }
 
   Future<void> _versusApi() async {

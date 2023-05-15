@@ -1,7 +1,6 @@
-import 'package:another/constant/text_style.dart';
+import 'package:another/constant/const/color.dart';
 import 'package:another/widgets/target_box.dart';
 import 'package:flutter/material.dart';
-import 'package:another/constant/color.dart';
 import 'package:another/screens/feed/detail_feed.dart';
 
 class Target extends StatelessWidget {
