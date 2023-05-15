@@ -10,7 +10,8 @@ Future<dynamic> recommendChallengeApi(int userId) async {
   var url = Uri.parse('$_baseUrl/api/run/recommendChallenge/$userId');
   var response = await http.get(url);
   print('리턴값 출력');
-  print(jsonDecode(response.body));
+  var bodyContent = jsonDecode(utf8.decode(response.bodyBytes));
+  print(bodyContent);
 
-  return jsonDecode(response.body);
+  return bodyContent;
 }

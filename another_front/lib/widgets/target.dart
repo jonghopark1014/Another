@@ -53,7 +53,7 @@ class Target extends StatelessWidget {
                 minWidth: 240.0
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   TargetBox(
                     data: runningDistance,
