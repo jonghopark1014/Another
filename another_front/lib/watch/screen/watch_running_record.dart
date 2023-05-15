@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:another/constant/const/color.dart';
 import 'package:another/watch/screen/widget/carousel_indicator.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:another/watch/screen/widget/watch_record_result_box.dart';
 import 'package:watch_connectivity/watch_connectivity.dart';
 import 'package:wear/wear.dart';
+
 
 class WatchRunningRecord extends StatefulWidget {
   const WatchRunningRecord({
@@ -33,44 +35,31 @@ class _WatchRunningRecordState extends State<WatchRunningRecord> {
 
 
   final _watch = WatchConnectivity();
-
   final _log = <String>[];
   @override
   void initState() {
     super.initState();
-    _watch.messageStream.listen(_handleMessage);
-    print(_runningDistance);
-    // messageChannel.setMessageHandler((String? message) async {
 
-    //   print('Received message from watch: $message');
-    //   return '$message';
-    // });
+
 
   }
 
-  void _handleMessage(dynamic message) {
-    if (message.containsKey('runningDistance')) {
-      setState(() {
-        _runningDistance = message['runningDistance'];
-      });
-    }
+
+
+  void receiveDataFromPhone() {
+    // 데이터 수신
+    messageChannel.setMessageHandler(
+          (String? data) async {
+        if (data != null) {
+          final decodedData = json.decode(data);
+          print(decodedData);
+          return decodedData;
+        } else {
+          return 'ddd';
+        }
+      },
+    );
   }
-  void sendData(){
-  }
-  // void receiveDataFromPhone() {
-  //   // 데이터 수신
-  //   messageChannel.setMessageHandler(
-  //         (String? data) async {
-  //       if (data != null) {
-  //         final decodedData = json.decode(data);
-  //         print(decodedData);
-  //         return decodedData;
-  //       } else {
-  //         return 'ddd';
-  //       }
-  //     },
-  //   );
-  // }
 
   @override
   void dispose() {
