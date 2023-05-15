@@ -1,8 +1,7 @@
-
 import 'package:another/constant/const/color.dart';
 import 'package:another/watch/screen/watch_time_screen.dart';
 import 'package:flutter/material.dart';
-
+import 'package:watch_connectivity/watch_connectivity.dart';
 
 class WathchHomeScreen extends StatefulWidget {
   const WathchHomeScreen({super.key});
@@ -12,14 +11,30 @@ class WathchHomeScreen extends StatefulWidget {
 }
 
 class _WathchHomeScreenState extends State<WathchHomeScreen> {
+  final _watch = WatchConnectivity();
+  String _runningDistance = '1.5';
+
   @override
   void initState() {
     super.initState();
+
+    final value = _watch.messageStream.listen((e)=>_handleMessage(e));
+
+  }
+
+  void _handleMessage(dynamic message) {
+    print('ddddd$message');
+    if (message.containsKey('runningDistance')) {
+      setState(() {
+        _runningDistance = message['runningDistance'];
+      });
+    }
+    print('eeeeee$_runningDistance');
   }
 
   @override
   Widget build(BuildContext context) {
-
+    print(_runningDistance);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
@@ -81,6 +96,4 @@ class _WathchHomeScreenState extends State<WathchHomeScreen> {
       ),
     );
   }
-
-
 }
