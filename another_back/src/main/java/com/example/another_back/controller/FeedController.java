@@ -31,7 +31,7 @@ public class FeedController {
      */
     @PostMapping(value = "/create", consumes =
             {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity addFeed(@RequestPart AddFeedRequestDto addFeedRequestDto, @RequestPart MultipartFile[] feedPics) throws IOException {
+    public ResponseEntity addFeed(@RequestPart AddFeedRequestDto addFeedRequestDto, @RequestPart(required = false) MultipartFile[] feedPics) throws IOException {
         String response = feedService.addFeed(addFeedRequestDto, feedPics);
         return Response.success(HttpStatus.OK, response);
     }
