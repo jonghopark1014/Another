@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:another/constant/color.dart';
-import 'package:another/constant/text_style.dart';
+import 'package:another/constant/const/color.dart';
+import 'package:another/constant/const/text_style.dart';
 import 'package:another/main.dart';
 import 'package:another/screens/running/api/feed_create_api.dart';
 import 'package:another/screens/running/feed_create_complete.dart';
