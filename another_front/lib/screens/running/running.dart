@@ -12,7 +12,6 @@ import 'package:another/screens/running/widgets/running_circle_button.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wear/wear.dart';
 
 import '../../main.dart';
 
@@ -204,7 +203,6 @@ class _RunningTabState extends State<RunningTab> {
 
   // 타이머 페이지로 context
   void onPressed(String str) {
-
     final runningData = Provider.of<RunningData>(context, listen: false);
     runningData.reset();
     runningData.firstMinMax(runningData.currentPosition.target);
@@ -226,21 +224,6 @@ class _RunningTabState extends State<RunningTab> {
   }
 }
 
-
-// void sendNotificationToWatch() async {
-//   var initializationSettingsAndroid = AndroidInitializationSettings('app_icon'); // 알림에 사용할 아이콘 설정
-//   var initializationSettings =
-//   InitializationSettings(android: initializationSettingsAndroid);
-//   await FlutterLocalNotificationsPlugin().initialize(initializationSettings);
-//
-//   var notificationDetails = NotificationDetails(
-//       android: AndroidNotificationDetails(
-//           'example_another', 'com.example.another'));
-//   await FlutterLocalNotificationsPlugin().show(
-//       0, 'start', 'start', notificationDetails);
-//   // await FlutterLocalNotificationsPlugin().show(
-//   //     0, 'Notification title', 'Notification body', notificationDetails);
-// }
 // 세팅 종류
 class SettingName extends StatelessWidget {
   final String typeName;
