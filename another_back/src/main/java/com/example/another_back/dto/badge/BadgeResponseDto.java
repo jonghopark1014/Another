@@ -19,7 +19,7 @@ public class BadgeResponseDto {
         this.challengeName = userChallenge.getChallenge().getChallengeName();
         if (userChallenge.getStatus().equals("SILVER")) {
             this.challengeUrl = userChallenge.getChallenge().getChallengeSilver();
-            this.challengeValue = Double.valueOf((double) userChallenge.getChallenge().getChallengeTarget() / userChallenge.getUserChallengeValue());
+            this.challengeValue = Double.valueOf((double) userChallenge.getUserChallengeValue() / userChallenge.getChallenge().getChallengeTarget());
             if (challengeValue.isInfinite())
                 this.challengeValue = 0d;
         } else {
