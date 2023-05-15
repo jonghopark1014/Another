@@ -14,7 +14,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:watch_connectivity/watch_connectivity.dart';
-import 'package:wear/wear.dart';
 
 import '../../../main.dart';
 import '../../home_screen.dart';
@@ -130,6 +129,7 @@ class _RunningStatus extends State<RunningStatus> {
         runningDistance = double.parse(nowDistance.toStringAsFixed(3));
       }
 
+
       // 칼로리 계산
       userCalories = (_userWeight * runningDistance * 1.036 ~/ 1);
       runningData.setCalories(userCalories);
@@ -176,20 +176,9 @@ class _RunningStatus extends State<RunningStatus> {
   void sendMessage() {
     final message = {'runningDistance': runningDistance, };
     _watch.sendMessage(message);
+    setState(() => _log.add('Sent message: $message'));
+    print('ddd');
   }
-
-  // Future<void> sendDataToWatch(List<String> data) async {
-  //   final BasicMessageChannel<String> _messageChannel =
-  //   BasicMessageChannel<String>('com.example.another', StringCodec());
-  //
-  //   try {
-  //     final String jsonEncodedData = jsonEncode(data);
-  //     await _messageChannel.send(jsonEncodedData);
-  //     print(data);
-  //   } on PlatformException catch (e) {
-  //     print(e.message);
-  //   }
-  // }
 
   @override
   void dispose() {
@@ -287,6 +276,22 @@ class _RunningStatus extends State<RunningStatus> {
   //   final Uint8List? bytes = await mapController.takeSnapshot();
   //   return bytes;
   // }
+
+
+  Future<void> sendDataToWatch(List<String> data) async {
+    final BasicMessageChannel<String> _messageChannel =
+    BasicMessageChannel<String>('com.example.another', StringCodec());
+
+    try {
+      final String jsonEncodedData = jsonEncode(data);
+      await _messageChannel.send(jsonEncodedData);
+      print(data);
+    } on PlatformException catch (e) {
+      print(e.message);
+    }
+  }
+
+
 
   void onChange() {}
 }
