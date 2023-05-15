@@ -1,6 +1,6 @@
 import 'package:another/screens/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
 import '../../widgets/intro_header.dart';
 import '../running/running.dart';
 import './widgets/height_weight_picker.dart';

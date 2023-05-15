@@ -1,5 +1,5 @@
-import 'package:another/constant/color.dart';
-import 'package:another/constant/text_style.dart';
+import 'package:another/constant/const/color.dart';
+import 'package:another/constant/const/text_style.dart';
 import 'package:another/screens/feed/api/challenge_list_api.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +31,7 @@ class _ChallengeListState extends State<ChallengeList> {
 
   Future<void> _challengeListApi() async {
     try {
-      final response = await ChallengeListApi.getFeed('1');
+      final response = await ChallengeListApi.getFeed(widget.runningId);
       final contents = response['data'];
       List<String> profilePics = [];
       List<String> nicknames = [];

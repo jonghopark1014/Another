@@ -1,7 +1,7 @@
 import 'package:another/widgets/record_result_box.dart';
 import 'package:flutter/material.dart';
 
-import '../constant/color.dart';
+import '../constant/const/color.dart';
 
 class RecordResult extends StatelessWidget {
   final String timer;
@@ -40,7 +40,7 @@ class RecordResult extends StatelessWidget {
                     recordColor: WHITE_COLOR,
                   ),
                   RecordResultBox(
-                    data: '${distance}km',
+                    data: double.parse(distance) < 1? '${(double.parse(distance) * 1000).toStringAsFixed(0)}m' : '${distance}km',
                     name: '거리',
                     textColor: BLUE_COLOR,
                     recordColor: WHITE_COLOR,

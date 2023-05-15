@@ -1,11 +1,10 @@
 import 'dart:convert';
+import 'package:another/constant/const/data.dart';
 import 'package:http/http.dart' as http;
-
-const String _baseUrl = 'https://k8b308.p.ssafy.io/api';
 
 class FeedApi {
   static Future<dynamic> getFeed() async {
-    var url = Uri.parse('$_baseUrl/feed');
+    var url = Uri.parse('$baseUrl/feed');
     // 요청
     var response = await http.get(
       url,

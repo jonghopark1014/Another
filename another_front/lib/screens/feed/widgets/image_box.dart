@@ -1,5 +1,5 @@
-import 'package:another/constant/color.dart';
-import 'package:another/constant/text_style.dart';
+import 'package:another/constant/const/color.dart';
+import 'package:another/constant/const/text_style.dart';
 import 'package:another/screens/feed/detail_feed.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +24,6 @@ class ImageBox extends StatefulWidget {
 }
 
 class _ImageBoxState extends State<ImageBox> {
-
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -37,6 +36,7 @@ class _ImageBoxState extends State<ImageBox> {
         itemCount: widget.thumbnailUrls.isNotEmpty ? widget.thumbnailUrls.length : 1,
         itemBuilder: (context, index) {
           if (widget.thumbnailUrls.isNotEmpty) {
+
             return InkWell(
               child: _buildListItem(context, index),
               onTap: () {

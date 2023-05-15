@@ -36,14 +36,17 @@ class _EndRunningMapState extends State<EndRunningMap> {
     return Stack(
         children: [
           GoogleMap(
-              initialCameraPosition: Provider.of<RunningData>(context, listen: false).currentPosition,
-              mapType: MapType.normal,
-              zoomControlsEnabled: false,
-              myLocationEnabled: false,
-              myLocationButtonEnabled: false,
-              onMapCreated: _onMapCreated,
-              onCameraIdle: _onMapIdle,
-              polylines: Set<Polyline>.of(Provider.of<RunningData>(context, listen: false).polyLine),
+            initialCameraPosition: Provider.of<RunningData>(context, listen: false).currentPosition,
+            rotateGesturesEnabled: false,
+            scrollGesturesEnabled: false,
+            tiltGesturesEnabled: false,
+            mapType: MapType.normal,
+            zoomControlsEnabled: false,
+            myLocationEnabled: false,
+            myLocationButtonEnabled: false,
+            onMapCreated: _onMapCreated,
+            onCameraIdle: _onMapIdle,
+            polylines: Set<Polyline>.of(Provider.of<RunningData>(context, listen: false).polyLine),
           ),
         ]
     );

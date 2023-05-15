@@ -1,9 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:another/constant/color.dart';
-import 'package:another/constant/main_layout.dart';
+import 'package:another/constant/layout/main_layout.dart';
 import 'package:another/screens/running/under_challenge_end_feed.dart';
-import 'package:another/screens/running/widgets/ButtonComponent.dart';
+import 'package:another/screens/running/widgets/button_component.dart';
 import 'package:another/screens/running/widgets/running_end.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/material.dart';

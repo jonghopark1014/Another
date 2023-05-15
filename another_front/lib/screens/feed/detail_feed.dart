@@ -22,9 +22,6 @@ class DetailFeed extends StatefulWidget {
 }
 
 class _DetailFeedState extends State<DetailFeed> {
-  // 내 피드인지
-  bool isMyFeed = false; // 사용자 다양해지면 true 로 바꾸야함
-  late int userId;
   final ScrollController _scrollController = ScrollController();
 
   List<String> thumbnailUrls = [];
@@ -39,26 +36,13 @@ class _DetailFeedState extends State<DetailFeed> {
   String userNickname = '';
   String runCount = '';
   String runId = '';
+  var challengeData;
 
   @override
   void initState() {
     super.initState();
-    userId = Provider.of<UserInfo>(context, listen: false).userId as int;
+    challengeData = Provider.of<ChallengeData>(context, listen: false);
     _detailFeed();
-  }
-
-  // 내 피드인지 검사
-  void checkMyFeed() {
-    int id = userId;
-    int idDigit = 0;
-    while (id > 0) {
-      idDigit++; // id는 한자리이상
-      id = id ~/ 10;
-    }
-    print(runId);
-    if (runId.substring(0, idDigit) != userId.toString()) {
-      isMyFeed = false;
-    }
   }
 
   // 피드 가져오기
@@ -99,17 +83,14 @@ class _DetailFeedState extends State<DetailFeed> {
         }
         feedPicUrls.add(contents['runningPic'].toString());
         graphs = contents['graph'];
-        //
         chartData = graphs.map(
           (data) {
             double runningDistance = 0.0;
             double userPace = 0.0;
             if (data['runningDistance'] != null && data['userPace'] != null) {
               runningDistance = data['runningDistance'] ?? 0.0;
-              userPace = double.parse(data['userPace']
-                      .replaceAll("''", "")
-                      .replaceAll("'", ".")) ??
-                  0.0;
+              userPace = double.parse(
+                  data['userPace'].replaceAll("''", "").replaceAll("'", "."));
             }
             return PacesData(
                 runningDistance: runningDistance, userPace: userPace);
@@ -131,9 +112,14 @@ class _DetailFeedState extends State<DetailFeed> {
           userNickname = nickname;
           runCount = withRunCount;
           runId = runningId;
-          checkMyFeed();
-
         },
+      );
+      challengeData.setValues(
+        runId,
+        runningDistance,
+        runningTime,
+        userCalorie,
+        userPace,
       );
     } catch (e) {
       print(e);
@@ -144,10 +130,6 @@ class _DetailFeedState extends State<DetailFeed> {
 
   @override
   Widget build(BuildContext context) {
-    final challengeData = Provider.of<ChallengeData>(context, listen: false);
-
-    challengeData.setValues(
-        runId, runningDistance, runningTime, userCalorie, userPace);
 
     return Scaffold(
       appBar: GoBackAppBarStyle(),
@@ -182,12 +164,10 @@ class _DetailFeedState extends State<DetailFeed> {
                           profilePic: profilePic,
                           nickname: userNickname,
                         ),
-                        isMyFeed
-                            ? Container()
-                            : RunIcon(
-                                runCount: runCount,
-                                runningId: runId,
-                              ),
+                        RunIcon(
+                          runCount: runCount,
+                          runningId: runId,
+                        ),
                       ],
                     ),
                     Target(

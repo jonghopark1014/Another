@@ -1,4 +1,4 @@
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
 import 'package:another/screens/record/api/history_record_api.dart';
 import 'package:another/screens/record/widgets/period_total_record.dart';
 import 'package:flutter/material.dart';
@@ -120,7 +120,7 @@ class RecordTab extends StatelessWidget {
                         children: [
                           Padding(
                             padding:
-                                EdgeInsets.only(top: 10, left: 15, right: 15),
+                            EdgeInsets.only(top: 10, left: 15, right: 15),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -376,13 +376,13 @@ class _MyRecordState extends State<MyRecord> {
         _isLoading == true
             ? Center(child: CircularProgressIndicator())
             : MyRecordContents(
-                getRecord: getRecord,
-                selectedIndex: _selectedIndex,
-                isCalendarOpen: _isCalendarOpen,
-                periodData: _periodData,
-                historyData: _historyData,
-                markerData: _markerData,
-              )
+          getRecord: getRecord,
+          selectedIndex: _selectedIndex,
+          isCalendarOpen: _isCalendarOpen,
+          periodData: _periodData,
+          historyData: _historyData,
+          markerData: _markerData,
+        )
       ],
     );
   }
@@ -425,7 +425,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
     }
 
     List<Map<String, dynamic>> markerList =
-        List<Map<String, dynamic>>.from(markerData['content']);
+    List<Map<String, dynamic>>.from(markerData['content']);
 
     Map<DateTime, List<Event>> parseMarkerDataResult = {};
 
@@ -434,7 +434,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
       // 하지만 한국 시간으로 데이터를 받고 있기 때문에 UTC 형식으로 변환해줘야해서 .toUtc() 사용!
       // 하지만 toUtc() 사용하면 -9시간이 되므로 +9시간을 해줘서 날짜를 맞춤!
       DateTime createDate =
-          DateTime.parse(marker['createDate']).toUtc().add(Duration(hours: 9));
+      DateTime.parse(marker['createDate']).toUtc().add(Duration(hours: 9));
       Event id = Event(marker['id']);
       if (parseMarkerDataResult.containsKey(createDate)) {
         parseMarkerDataResult[createDate]!.add(id);
@@ -471,99 +471,99 @@ class _MyRecordContentsState extends State<MyRecordContents> {
       children: [
         widget.isCalendarOpen == true
             ? TableCalendar(
-                locale: 'ko_KR',
-                firstDay: DateTime.utc(2021),
-                lastDay: DateTime.utc(2025),
-                focusedDay: focusedDay,
-                eventLoader: _getEventsForDay,
-                headerStyle: HeaderStyle(
-                  titleCentered: true,
-                  titleTextFormatter: (date, locale) =>
-                      DateFormat.yMMMM(locale).format(date),
-                  formatButtonVisible: false,
-                  titleTextStyle:
-                      TextStyle(fontSize: 20.0, color: Colors.white),
-                  headerPadding: const EdgeInsets.symmetric(vertical: 4.0),
-                  leftChevronIcon:
-                      Icon(Icons.arrow_left, size: 40.0, color: Colors.white),
-                  rightChevronIcon:
-                      Icon(Icons.arrow_right, size: 40.0, color: Colors.white),
-                ),
-                calendarBuilders: CalendarBuilders(
-                  markerBuilder: (context, date, event) {
-                    if (event.isNotEmpty) {
-                      return event.length >= 10 ? Icon(Icons.directions_run, color: Color(0xFF84DE1C), size: 14) :
-                      event.length >= 5 ? Icon(Icons.directions_run, color: Color(0xFF57CD3A).withOpacity(0.8), size: 14) :
-                      Icon(Icons.directions_run, color: Color(0xFF60B44C), size: 14);
-                    }
-                  },
-                ),
-                calendarStyle: CalendarStyle(
-                  canMarkersOverflow: false, // marker 여러개 일 때 cell 영역을 벗어날지 여부
-                  markersAlignment: Alignment.bottomCenter, // 마커 위치 조절
-                  markerSize: 10,
-                  markersMaxCount: 3, // 마커 최대 개수
-                  markerDecoration: BoxDecoration(
-                    color: Colors.purple,
-                    shape: BoxShape.circle,
-                  ),
-                  defaultTextStyle: TextStyle(
-                    color: Colors.white,
-                  ),
-                  // today 표시 여부
-                  isTodayHighlighted: true,
-                  // today 글자 스타일
-                  todayTextStyle: TextStyle(
-                    color: MAIN_COLOR,
-                  ),
-                  // today 모양 스타일
-                  todayDecoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: MAIN_COLOR,
-                    ),
-                  ),
-                  // selectedDay 글자 조정
-                  selectedTextStyle: const TextStyle(color: Colors.white),
-                  // selectedDay 모양 조정
-                  selectedDecoration: const BoxDecoration(
-                    color: MAIN_COLOR,
-                    shape: BoxShape.circle,
-                  ),
-                  // disabledDay 글자 조정
-                  disabledTextStyle: TextStyle(
-                    color: SERVEONE_COLOR.withOpacity(0.2),
-                  ),
-                  weekendTextStyle: TextStyle(color: Colors.white),
-                ),
-                onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
-                  final getRecordDay =
-                      DateFormat('yyyy-MM-dd').format(selectedDay);
-                  widget.getRecord(getRecordDay);
-                  // 선택된 날짜의 상태를 갱신
-                  setState(
-                    () {
-                      this.selectedDay = selectedDay;
-                      this.focusedDay = focusedDay;
-                      forDate.changeValue(selectedDay);
-                    },
-                  );
+          locale: 'ko_KR',
+          firstDay: DateTime.utc(2021),
+          lastDay: DateTime.utc(2025),
+          focusedDay: focusedDay,
+          eventLoader: _getEventsForDay,
+          headerStyle: HeaderStyle(
+            titleCentered: true,
+            titleTextFormatter: (date, locale) =>
+                DateFormat.yMMMM(locale).format(date),
+            formatButtonVisible: false,
+            titleTextStyle:
+            TextStyle(fontSize: 20.0, color: Colors.white),
+            headerPadding: const EdgeInsets.symmetric(vertical: 4.0),
+            leftChevronIcon:
+            Icon(Icons.arrow_left, size: 40.0, color: Colors.white),
+            rightChevronIcon:
+            Icon(Icons.arrow_right, size: 40.0, color: Colors.white),
+          ),
+          calendarBuilders: CalendarBuilders(
+            markerBuilder: (context, date, event) {
+              if (event.isNotEmpty) {
+                return event.length >= 10 ? Icon(Icons.directions_run, color: Color(0xFF84DE1C), size: 14) :
+                event.length >= 5 ? Icon(Icons.directions_run, color: Color(0xFF57CD3A).withOpacity(0.8), size: 14) :
+                Icon(Icons.directions_run, color: Color(0xFF60B44C), size: 14);
+              }
+            },
+          ),
+          calendarStyle: CalendarStyle(
+            canMarkersOverflow: false, // marker 여러개 일 때 cell 영역을 벗어날지 여부
+            markersAlignment: Alignment.bottomCenter, // 마커 위치 조절
+            markerSize: 10,
+            markersMaxCount: 3, // 마커 최대 개수
+            markerDecoration: BoxDecoration(
+              color: Colors.purple,
+              shape: BoxShape.circle,
+            ),
+            defaultTextStyle: TextStyle(
+              color: Colors.white,
+            ),
+            // today 표시 여부
+            isTodayHighlighted: true,
+            // today 글자 스타일
+            todayTextStyle: TextStyle(
+              color: MAIN_COLOR,
+            ),
+            // today 모양 스타일
+            todayDecoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: MAIN_COLOR,
+              ),
+            ),
+            // selectedDay 글자 조정
+            selectedTextStyle: const TextStyle(color: Colors.white),
+            // selectedDay 모양 조정
+            selectedDecoration: const BoxDecoration(
+              color: MAIN_COLOR,
+              shape: BoxShape.circle,
+            ),
+            // disabledDay 글자 조정
+            disabledTextStyle: TextStyle(
+              color: SERVEONE_COLOR.withOpacity(0.2),
+            ),
+            weekendTextStyle: TextStyle(color: Colors.white),
+          ),
+          onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
+            final getRecordDay =
+            DateFormat('yyyy-MM-dd').format(selectedDay);
+            widget.getRecord(getRecordDay);
+            // 선택된 날짜의 상태를 갱신
+            setState(
+                  () {
+                this.selectedDay = selectedDay;
+                this.focusedDay = focusedDay;
+                forDate.changeValue(selectedDay);
+              },
+            );
 
-                  // 현재 선택된 달력의 월과 다른 경우, 해당 달력으로 이동
-                  if (selectedDay.month != focusedDay.month) {
-                    setState(
-                      () {
-                        focusedDay =
-                            DateTime(selectedDay.year, selectedDay.month, 1);
-                      },
-                    );
-                  }
+            // 현재 선택된 달력의 월과 다른 경우, 해당 달력으로 이동
+            if (selectedDay.month != focusedDay.month) {
+              setState(
+                    () {
+                  focusedDay =
+                      DateTime(selectedDay.year, selectedDay.month, 1);
                 },
-                selectedDayPredicate: (DateTime day) {
-                  // selectedDay 와 동일한 날짜의 모양을 바꿔줌
-                  return isSameDay(selectedDay, day);
-                },
-              )
+              );
+            }
+          },
+          selectedDayPredicate: (DateTime day) {
+            // selectedDay 와 동일한 날짜의 모양을 바꿔줌
+            return isSameDay(selectedDay, day);
+          },
+        )
             : SizedBox.shrink(),
         SizedBox(height: 10),
         PeriodTotalRecord(
@@ -574,152 +574,152 @@ class _MyRecordContentsState extends State<MyRecordContents> {
         widget.historyData!['content'].length == 0
             ? SizedBox.shrink()
             : Padding(
-                padding: EdgeInsets.only(left: 8),
-                child: Text(
-                  '런닝 기록',
-                  style: TextStyle(color: WHITE_COLOR, fontSize: 16),
-                  textAlign: TextAlign.start,
-                ),
-              ),
+          padding: EdgeInsets.only(left: 8),
+          child: Text(
+            '런닝 기록',
+            style: TextStyle(color: WHITE_COLOR, fontSize: 16),
+            textAlign: TextAlign.start,
+          ),
+        ),
         Column(
           children: [
             for (int i = 0; i <= widget.historyData!['content'].length - 1; i++)
               Target(
                   targetname: widget.historyData!['content'][i]['createDate']
-                          .toString() ??
+                      .toString() ??
                       '-',
                   runningDistance: widget.historyData!['content'][i]
-                              ['runningDistance']
-                          .toString() ??
+                  ['runningDistance']
+                      .toString() ??
                       '-',
                   userCalorie: widget.historyData!['content'][i]['userCalories']
-                          .toString() ??
+                      .toString() ??
                       '-',
                   runningTime: widget.historyData!['content'][i]['runningTime']
-                          .toString() ??
+                      .toString() ??
                       '-',
                   userPace: widget.historyData!['content'][i]['userPace']
-                          .toString() ??
+                      .toString() ??
                       '-',
                   runningId: widget.historyData!['content'][i]['id'])
           ],
         ),
         widget.selectedIndex != 3 &&
-                widget.selectedIndex != 4 &&
-                widget.historyData!['content'].isNotEmpty
+            widget.selectedIndex != 4 &&
+            widget.historyData!['content'].isNotEmpty
             ? Row(
-                children: [
-                  Expanded(
-                    child: RecordChart(
-                      '시간',
-                      widget.periodData!['prevAvg']['originalTime'].toDouble(),
-                      widget.periodData!['curAvg']['originalTime'].toDouble(),
-                      widget.periodData!['prevAvg']['avgTime'].toString(),
-                      widget.periodData!['curAvg']['avgTime'].toString(),
-                    ),
-                  ),
-                  Expanded(
-                    child: RecordChart(
-                      '거리',
-                      widget.periodData!['prevAvg']['avgDistance'],
-                      widget.periodData!['curAvg']['avgDistance'],
-                      widget.periodData!['prevAvg']['avgDistance'].toString(),
-                      widget.periodData!['curAvg']['avgDistance'].toString(),
-                    ),
-                  ),
-                  Expanded(
-                    child: RecordChart(
-                      'kcal',
-                      widget.periodData!['prevAvg']['avgKcal'],
-                      widget.periodData!['curAvg']['avgKcal'],
-                      widget.periodData!['prevAvg']['avgKcal'].toString(),
-                      widget.periodData!['curAvg']['avgKcal'].toString(),
-                    ),
-                  ),
-                  Expanded(
-                    child: RecordChart(
-                      '페이스',
-                      widget.periodData!['curAvg']['originalPace'] == 0 ||
-                              widget.periodData!['prevAvg']['originalPace'] == 0
-                          ? widget.periodData!['prevAvg']['originalPace']
-                          : widget.periodData!['curAvg']['originalPace'],
-                      widget.periodData!['curAvg']['originalPace'] == 0 ||
-                              widget.periodData!['prevAvg']['originalPace'] == 0
-                          ? widget.periodData!['curAvg']['originalPace']
-                          : widget.periodData!['prevAvg']['originalPace'],
-                      widget.periodData!['prevAvg']['avgPace'].toString(),
-                      widget.periodData!['curAvg']['avgPace'].toString(),
-                    ),
-                  ),
-                ],
-              )
+          children: [
+            Expanded(
+              child: RecordChart(
+                '시간',
+                widget.periodData!['prevAvg']['originalTime'].toDouble(),
+                widget.periodData!['curAvg']['originalTime'].toDouble(),
+                widget.periodData!['prevAvg']['avgTime'].toString(),
+                widget.periodData!['curAvg']['avgTime'].toString(),
+              ),
+            ),
+            Expanded(
+              child: RecordChart(
+                '거리',
+                widget.periodData!['prevAvg']['avgDistance'],
+                widget.periodData!['curAvg']['avgDistance'],
+                widget.periodData!['prevAvg']['avgDistance'].toString(),
+                widget.periodData!['curAvg']['avgDistance'].toString(),
+              ),
+            ),
+            Expanded(
+              child: RecordChart(
+                'kcal',
+                widget.periodData!['prevAvg']['avgKcal'],
+                widget.periodData!['curAvg']['avgKcal'],
+                widget.periodData!['prevAvg']['avgKcal'].toString(),
+                widget.periodData!['curAvg']['avgKcal'].toString(),
+              ),
+            ),
+            Expanded(
+              child: RecordChart(
+                '페이스',
+                widget.periodData!['curAvg']['originalPace'] == 0 ||
+                    widget.periodData!['prevAvg']['originalPace'] == 0
+                    ? widget.periodData!['prevAvg']['originalPace']
+                    : widget.periodData!['curAvg']['originalPace'],
+                widget.periodData!['curAvg']['originalPace'] == 0 ||
+                    widget.periodData!['prevAvg']['originalPace'] == 0
+                    ? widget.periodData!['curAvg']['originalPace']
+                    : widget.periodData!['prevAvg']['originalPace'],
+                widget.periodData!['prevAvg']['avgPace'].toString(),
+                widget.periodData!['curAvg']['avgPace'].toString(),
+              ),
+            ),
+          ],
+        )
             : SizedBox.shrink(),
         widget.selectedIndex != 3 &&
-                widget.selectedIndex != 4 &&
-                widget.historyData!['content'].isNotEmpty
+            widget.selectedIndex != 4 &&
+            widget.historyData!['content'].isNotEmpty
             ? Padding(
-                padding:
-                    EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 20),
-                child: Center(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: CONTOUR_COLOR, width: 1),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                                height: 10,
-                                width: 35,
-                                color: MAIN_COLOR.withOpacity(0.5)),
-                            SizedBox(width: 10),
-                            Text(
-                              (() {
-                                switch (widget.selectedIndex) {
-                                  case 0:
-                                    return "어제 기록";
-                                  case 1:
-                                    return "저번주 기록";
-                                  case 2:
-                                    return "저번달 기록";
-                                  default:
-                                    return '';
-                                }
-                              })(),
-                              style: TextStyle(color: WHITE_COLOR),
-                            ),
-                            SizedBox(width: 40),
-                            Container(
-                                height: 10,
-                                width: 35,
-                                color: MAIN_COLOR.withOpacity(0.5)),
-                            SizedBox(width: 10),
-                            Text(
-                              (() {
-                                switch (widget.selectedIndex) {
-                                  case 0:
-                                    return "오늘 기록";
-                                  case 1:
-                                    return "이번주 기록";
-                                  case 2:
-                                    return "이번달 기록";
-                                  default:
-                                    return '';
-                                }
-                              })(),
-                              style: TextStyle(color: WHITE_COLOR),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              )
+          padding:
+          EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 20),
+          child: Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              height: 40,
+              decoration: BoxDecoration(
+                border: Border.all(color: CONTOUR_COLOR, width: 1),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                          height: 10,
+                          width: 35,
+                          color: MAIN_COLOR.withOpacity(0.5)),
+                      SizedBox(width: 10),
+                      Text(
+                        (() {
+                          switch (widget.selectedIndex) {
+                            case 0:
+                              return "어제 기록";
+                            case 1:
+                              return "저번주 기록";
+                            case 2:
+                              return "저번달 기록";
+                            default:
+                              return '';
+                          }
+                        })(),
+                        style: TextStyle(color: WHITE_COLOR),
+                      ),
+                      SizedBox(width: 40),
+                      Container(
+                          height: 10,
+                          width: 35,
+                          color: MAIN_COLOR.withOpacity(0.5)),
+                      SizedBox(width: 10),
+                      Text(
+                        (() {
+                          switch (widget.selectedIndex) {
+                            case 0:
+                              return "오늘 기록";
+                            case 1:
+                              return "이번주 기록";
+                            case 2:
+                              return "이번달 기록";
+                            default:
+                              return '';
+                          }
+                        })(),
+                        style: TextStyle(color: WHITE_COLOR),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        )
             : SizedBox.shrink()
       ],
     );

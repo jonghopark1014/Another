@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../constant/color.dart';
+import '../../constant/const/color.dart';
 
 class TimerScreen extends StatefulWidget {
 

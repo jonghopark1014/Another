@@ -1,8 +1,6 @@
-import 'package:another/constant/color.dart';
-import 'package:another/constant/text_style.dart';
+import 'package:another/constant/const/color.dart';
+import 'package:another/constant/const/text_style.dart';
 import 'package:another/main.dart';
-import 'package:another/screens/feed/widgets/image_profile.dart';
-import 'package:another/screens/feed/widgets/line_chart_custom.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/foundation.dart';
@@ -145,58 +143,58 @@ class _FeedCreateCompleteState extends State<FeedCreateComplete> {
       ),
       checked
           ? Container(
-              decoration: BoxDecoration(
-                color: Color(0x6B1C1A1E),
-              ),
-              child: Center(
-                child: Container(
-                  height: 130,
-                  width: 300,
+        decoration: BoxDecoration(
+          color: Color(0x6B1C1A1E),
+        ),
+        child: Center(
+          child: Container(
+            height: 130,
+            width: 300,
+            decoration: BoxDecoration(
+              color: WHITE_COLOR,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              children: [
+                Container(
                   decoration: BoxDecoration(
-                    color: WHITE_COLOR,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(
-                          width: 1,
-                          color: SERVETWO_COLOR,
-                        ))),
-                        height: 80,
-                        child: Center(
-                          child: Text(
-                            '오운완 등록 완료!',
-                            style: TextStyle(fontSize: 20, color: BLACK_COLOR),
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: onPressed,
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateColor.resolveWith(
-                              (states) => Colors.white),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '확인',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: MAIN_COLOR,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
+                      border: Border(
+                          bottom: BorderSide(
+                            width: 1,
+                            color: SERVETWO_COLOR,
+                          ))),
+                  height: 80,
+                  child: Center(
+                    child: Text(
+                      '오운완 등록 완료!',
+                      style: TextStyle(fontSize: 20, color: BLACK_COLOR),
+                    ),
                   ),
                 ),
-              ),
-            )
+                TextButton(
+                  onPressed: onPressed,
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateColor.resolveWith(
+                            (states) => Colors.white),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '확인',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: MAIN_COLOR,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      )
           : Container(
-              height: 0,
-            )
+        height: 0,
+      )
     ]);
   }
 }

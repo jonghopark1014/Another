@@ -62,17 +62,25 @@ class _BeforeRunningMapState extends State<BeforeRunningMap> {
   @override
   Widget build(BuildContext context) {
     print("build");
-    return
-      isLoading ?
-      GoogleMap(
+    return Provider.of<RunningData>(context, listen: false).currentPosition != CameraPosition(target: LatLng(0,0), zoom: 13) ?
+    GoogleMap(
       initialCameraPosition: currentPosition,
       mapType: MapType.normal,
       zoomControlsEnabled: false,
       myLocationEnabled: true,
       myLocationButtonEnabled: false,
       onMapCreated: onMapCreated,
-    )
-    : Center(child: CircularProgressIndicator());
+    ) :
+      isLoading ?
+      GoogleMap(
+        initialCameraPosition: currentPosition,
+        mapType: MapType.normal,
+        zoomControlsEnabled: false,
+        myLocationEnabled: true,
+        myLocationButtonEnabled: false,
+        onMapCreated: onMapCreated,
+      )
+          : Center(child: CircularProgressIndicator());
   }
   void getCurrentLocation() async {
 

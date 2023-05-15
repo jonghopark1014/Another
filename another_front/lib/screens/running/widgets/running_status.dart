@@ -1,6 +1,7 @@
 // 지도를 매번 setState로 매초 다시 그리면 터짐
 // 그래서 따로 뺌
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:another/screens/running/widgets/running_circle_button.dart';
@@ -8,11 +9,13 @@ import 'package:another/widgets/record_result.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../main.dart';
+import '../../home_screen.dart';
 import '../api/under_running_api.dart';
 import '../under_running_end.dart';
 
@@ -41,6 +44,9 @@ class _RunningStatus extends State<RunningStatus> {
   // 시간
   String runningTime = '00:00:00';
   late Timer _timer;
+
+  // 악성 사용자 경고
+  int warnFlag = 0;
 
   int seconds = 0;
   int minutes = 0;
@@ -78,10 +84,6 @@ class _RunningStatus extends State<RunningStatus> {
     runningData.setPace(userPace);
 
     if (runningData.currentPosition.target != past) {
-      print("+++++++++++++++++++++++++++++");
-      print(past);
-      print(current);
-      print("+++++++++++++++++++++++++++++");
       // 거리 계산
       // // 기준점 변경
 
@@ -112,8 +114,14 @@ class _RunningStatus extends State<RunningStatus> {
       // // 누적 거리 갱신
       runningData.setDistance(nowDistance);
 
-      // // 소숫점 3자리까지 반환
-      runningDistance = double.parse(nowDistance.toStringAsFixed(3));
+      // // 소숫점 3자리까지 반환 (1km 이상 2자리)
+      if (runningDistance > 1) {
+        runningDistance = double.parse(nowDistance.toStringAsFixed(2));
+      }
+      else {
+        runningDistance = double.parse(nowDistance.toStringAsFixed(3));
+      }
+
 
       // 칼로리 계산
       userCalories = (_userWeight * runningDistance * 1.036 ~/ 1);
@@ -154,8 +162,8 @@ class _RunningStatus extends State<RunningStatus> {
 
   @override
   void dispose() {
-    super.dispose();
     _timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -246,6 +254,16 @@ class _RunningStatus extends State<RunningStatus> {
   //   final Uint8List? bytes = await mapController.takeSnapshot();
   //   return bytes;
   // }
+  final BasicMessageChannel<String> _messageChannel =
+  BasicMessageChannel<String>('com.example.another', StringCodec());
 
+  Future<void> sendDataToWatch(Map<String, dynamic> data) async {
+    try {
+      final String jsonEncodedData = jsonEncode(data);
+      await _messageChannel.send(jsonEncodedData);
+    } on PlatformException catch (e) {
+      print(e.message);
+    }
+  }
   void onChange() {}
 }

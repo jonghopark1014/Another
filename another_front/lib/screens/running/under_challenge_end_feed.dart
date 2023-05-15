@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:another/constant/color.dart';
 import 'package:another/constant/text_style.dart';
 import 'package:another/main.dart';
-import 'package:another/screens/home_screen.dart';
 import 'package:another/screens/running/api/feed_create_api.dart';
 import 'package:another/screens/running/feed_create_complete.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
@@ -212,15 +211,15 @@ class _UnderChallengeScreenEndFeedState
       feedPics.add(runPic);
     });
   }
-  // 이미지 불러올지, 사진 찍을지 고르기
-  // Future<dynamic> toImageSelector() {
-  //   return showModalBottomSheet(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return Container(
-  //
-  //         );
-  //       }
-  //   );
-  // }
+// 이미지 불러올지, 사진 찍을지 고르기
+// Future<dynamic> toImageSelector() {
+//   return showModalBottomSheet(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return Container(
+//
+//         );
+//       }
+//   );
+// }
 }

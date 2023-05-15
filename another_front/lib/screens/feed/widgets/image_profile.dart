@@ -1,4 +1,4 @@
-import 'package:another/constant/text_style.dart';
+import 'package:another/constant/const/text_style.dart';
 import 'package:flutter/material.dart';
 
 class ImageProfile extends StatelessWidget {
@@ -17,6 +17,7 @@ class ImageProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print(profilePic);
     return InkWell(
       child: Row(
         children: [

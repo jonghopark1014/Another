@@ -1,8 +1,15 @@
+import 'dart:convert';
+
+import 'package:another/constant/const/data.dart';
+import 'package:another/main.dart';
+import 'package:another/screens/home_screen.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:provider/provider.dart';
 import 'signup.dart';
 import '../../widgets/intro_header.dart';
-import 'package:another/screens/account/api/login_api.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -18,6 +25,10 @@ class _LoginPageState extends State<LoginPage> {
   bool isFocusPw = false;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController pwController = TextEditingController();
+
+  String username = '';
+  String password = '';
+  final dio = Dio();
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +58,9 @@ class _LoginPageState extends State<LoginPage> {
               IntroHeader(),
               SizedBox(height: 40.0),
               TextField(
+                onChanged: (String value) {
+                  username = value;
+                },
                 controller: emailController,
                 focusNode: idFocusNode,
                 decoration: InputDecoration(
@@ -71,6 +85,9 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 16),
               TextField(
                 controller: pwController,
+                onChanged: (String value) {
+                  password = value;
+                },
                 focusNode: pwFocusNode,
                 decoration: InputDecoration(
                   labelText: '비밀번호',
@@ -125,12 +142,31 @@ class _LoginPageState extends State<LoginPage> {
                   widthFactor: 1.0,
                   child: ElevatedButton(
                     onPressed: () async {
-                      // 로그인 버튼 클릭 시 로그인 로직 작성
-                      await LoginApi.loginUser(
-                        email: emailController.text,
-                        password: pwController.text,
-                        context: context,
-                      );
+
+                      final resp = await dio.post(
+                        '$baseUrl/user/login',
+                        data: {
+                            'username': username,
+                            'password': password,
+                          },
+                        );
+                      // print(resp.headers);
+                      final refreshToken = resp.headers['refresh']?[0];
+                      final accessToken = resp.headers['Authorization']?[0];
+                      final userId = resp.headers['userid']?[0];
+
+                      // print(userId);
+                      Provider.of<UserInfo>(context, listen: false).updateUserInfo(userId!);
+
+                      await storage.write(
+                          key: REFRESH_TOKEN_KEY, value: refreshToken);
+                      await storage.write(
+                          key: ACCESS_TOKEN_KEY, value: accessToken);
+
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (_) => HomeScreen(),
+                        ),(route) => false);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: MAIN_COLOR,

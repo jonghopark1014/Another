@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../constant/color.dart';
+import '../../../constant/const/color.dart';
 
 class RunningCircleButton extends StatelessWidget {
   final IconData iconNamed;

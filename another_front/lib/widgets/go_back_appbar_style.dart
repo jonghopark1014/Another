@@ -1,7 +1,6 @@
 import 'package:another/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../constant/color.dart';
 
 class GoBackAppBarStyle extends StatelessWidget implements PreferredSizeWidget {
   bool? toHome;
