@@ -1,6 +1,7 @@
 import 'package:another/main.dart';
 import 'package:another/screens/running/under_challenge_end_feed.dart';
 import 'package:another/screens/running/widgets/button_component.dart';
+import 'package:another/screens/running/widgets/running_end.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -55,11 +56,21 @@ class UnderChallengeScreenEnd extends StatelessWidget {
                         userPace: userPace,
                       ),
                     ),
-                    Image.memory(
-                      captureInfo!,
-                    )
                   ],
                 ),
+              ),
+              Padding(
+                  padding: const EdgeInsets.only(top: 24.0),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: size.height / 11 * 6,
+                    ),
+                    child: SizedBox(
+                      height: size.width,
+                      width: size.width,
+                      child: EndRunningMap(),
+                    ),
+                  )
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),

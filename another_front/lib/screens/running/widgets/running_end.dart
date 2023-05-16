@@ -17,6 +17,8 @@ class EndRunningMap extends StatefulWidget {
 }
 
 class _EndRunningMapState extends State<EndRunningMap> {
+
+  int isCap = 0;
   bool isFalse = false;
   GoogleMapController? mapController;
 
@@ -54,7 +56,8 @@ class _EndRunningMapState extends State<EndRunningMap> {
   void _onMapIdle() {
     var runningData = Provider.of<RunningData>(context, listen: false);
     LatLngBounds bound = LatLngBounds(southwest: LatLng(runningData.minLat, runningData.minLng), northeast: LatLng(runningData.maxLat, runningData.maxLng));
-    if (mounted) {
+    if (mounted && isCap != 3) {
+      isCap++;
       Future.delayed(Duration(milliseconds: 500), () {
         print("나왔당");
         mapController?.animateCamera(CameraUpdate.newLatLngBounds(bound, 50));
