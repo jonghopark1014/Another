@@ -88,7 +88,7 @@ class _SignupUserInfoPageState extends State<SignupUserInfoPage> {
                     );
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
-                        builder: (_) => RunningTab(),
+                        builder: (_) => HomeScreen(),
                       ),
                           (route) => false,
                     );
