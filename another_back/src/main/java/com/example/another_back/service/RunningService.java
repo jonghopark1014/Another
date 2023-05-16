@@ -154,7 +154,7 @@ public class RunningService {
                     }
                     if (value != 1)
                         userChallenge.setUserChallengeValue(value);
-                    if (userChallenge.getUserChallengeValue() >= 0) {
+                    if (userChallenge.getUserChallengeValue() >= target) {
                         userChallenge.setStatus("GOLD");
                         endChallengeResponseDtoList.add(EndChallengeResponseDto.builder()
                                 .challenge(userChallenge.getChallenge())
