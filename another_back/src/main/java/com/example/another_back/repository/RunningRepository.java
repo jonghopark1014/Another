@@ -54,8 +54,8 @@ public interface RunningRepository extends JpaRepository<Running, String> {
     @Query("select r.createDate from Running r where r.user = :user order by r.createDate desc")
     List<Date> findCreateDateByUserId(User user);
 
-    @Query("select count (*) from Running r where r.createDate <= r.createDate")
-    Integer getAccumulatedRunningDays();
+    @Query("select count (*) from Running r where r.user = :user group by r.createDate")
+    List<Integer> getAccumulatedRunningDays(User user);
 
     List<Running> findByRunningDistanceBetweenAndRunningTimeBetweenAndUserIdNot(Float startDistance, Float endDistance, String startTime, String endTime, Long userId);
 }

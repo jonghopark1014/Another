@@ -162,7 +162,7 @@ public class RunningService {
                     }
                     break;
                 case 4:
-                    userChallenge.setUserChallengeValue(runningRepository.getAccumulatedRunningDays());
+                    userChallenge.setUserChallengeValue(runningRepository.getAccumulatedRunningDays(user).size());
                     if (userChallenge.getUserChallengeValue() >= userChallenge.getChallenge().getChallengeTarget()) {
                         userChallenge.setStatus("GOLD");
                         endChallengeResponseDtoList.add(EndChallengeResponseDto.builder()
