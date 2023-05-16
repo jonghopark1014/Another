@@ -106,6 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: SERVEONE_COLOR),
                     ),
+                    style: TextStyle(color: SERVEONE_COLOR),
                   ),
                   style: TextStyle(color: SERVEONE_COLOR),
                   obscureText: true,
