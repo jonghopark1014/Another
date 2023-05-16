@@ -11,7 +11,7 @@ class GetHistoryRecord {
       var response = await http.get(url);
       if (response.statusCode == 200) {
         var responseBody = jsonDecode(response.body);
-        print(responseBody['data']);
+        // print(responseBody['data']);
         return responseBody['data'];
       } else {
         return {};
@@ -29,7 +29,7 @@ class GetHistoryRecord {
       var response = await http.get(url);
       if (response.statusCode == 200) {
         var responseBody = jsonDecode(response.body);
-        print(responseBody['data']);
+        // print(responseBody['data']);
         return responseBody['data'];
       } else {
         return {};
@@ -47,7 +47,7 @@ class GetHistoryRecord {
       var response = await http.get(url);
       if (response.statusCode == 200) {
         var responseBody = jsonDecode(response.body);
-        print(responseBody['data']);
+        // print(responseBody['data']);
         return responseBody['data'];
       } else {
         return {};
