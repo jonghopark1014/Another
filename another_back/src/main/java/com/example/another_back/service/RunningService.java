@@ -197,6 +197,7 @@ public class RunningService {
         if (category == 1) {
             startDate = new Date(calendar1.getTimeInMillis());
             endDate = new Date(calendar1.getTimeInMillis());
+            calendar1.add(calendar1.DATE, -1);
             prevStartDate = new Date(calendar1.getTimeInMillis());
             prevEndDate = new Date(calendar1.getTimeInMillis());
         } else if (category == 2) {
