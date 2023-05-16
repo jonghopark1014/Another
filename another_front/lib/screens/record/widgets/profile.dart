@@ -60,10 +60,10 @@ class _ProfileWidgetState extends State<ProfileWidget> {
               Stack(
                 children: [
                   CircularPercentIndicator(
+                    header: SizedBox(height: 20),
                     radius: 50,
                     lineWidth: 10,
                     percent: _userExp,
-                    header: Text("Icon header"),
                     center: Container(
                       width: 90,
                       height: 90,
