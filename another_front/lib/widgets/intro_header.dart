@@ -2,21 +2,25 @@ import 'package:flutter/material.dart';
 import '../constant/const/color.dart';
 
 class IntroHeader extends StatelessWidget {
-  const IntroHeader({Key? key}) : super(key: key);
-
+  const IntroHeader({Key? key, required this.logoStyle}) : super(key: key);
+  final String logoStyle;
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          SizedBox(height: 20),
-          Image.asset(
+          SizedBox(height: 100),
+          logoStyle == 'column' ? Image.asset(
           'assets/img/logo_login.png',
-            height: 180,
-            width: 120
-          ),
-          SizedBox(height: 60),
+            height: 120,
+            width: 80
+          ) : logoStyle == 'row' ? Image.asset(
+              'assets/img/logo_small.png',
+              height: 50,
+              width: 80
+          ) : SizedBox.shrink(),
+          SizedBox(height: 40),
           Text(
             '함께하는 즐거운 러닝',
             style: TextStyle(

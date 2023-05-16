@@ -1,21 +1,18 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:another/constant/view/splash_screen.dart';
-import 'package:another/watch/screen/watch_home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:another/constant/const/color.dart';
-import 'package:another/screens/home_screen.dart';
 import 'package:another/screens/running/challenge_running.dart';
 import 'package:another/screens/running/under_challenge.dart';
 import 'package:another/screens/running/under_running.dart';
-import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatform;
+import 'package:flutter/foundation.dart'
+    show TargetPlatform, defaultTargetPlatform;
 
 class RunningSetting extends ChangeNotifier {
   int distance = 0;
@@ -33,7 +30,8 @@ class RunningSetting extends ChangeNotifier {
 
 class RunningData extends ChangeNotifier {
   late GoogleMapController mapController;
-  CameraPosition currentPosition = CameraPosition(target: LatLng(0,0), zoom: 13);
+  CameraPosition currentPosition =
+      CameraPosition(target: LatLng(0, 0), zoom: 13);
   String runningId = '';
   LatLng preValue = LatLng(0, 0);
   LatLng curValue = LatLng(0, 0);
@@ -63,37 +61,44 @@ class RunningData extends ChangeNotifier {
     polyLine = [];
     stopFlag = false;
   }
+
   void funcStopFlag() {
     if (stopFlag == false) {
       stopFlag = true;
-    }
-    else {
+    } else {
       stopFlag = false;
     }
   }
+
   void setRunningId(value) {
     runningId = value;
   }
+
   void setTime(String time) {
     runningTime = time;
     notifyListeners();
   }
+
   void setDistance(double dis) {
     runningDistance = dis;
     notifyListeners();
   }
+
   void setCalories(int cal) {
-    userCalories= cal;
+    userCalories = cal;
     notifyListeners();
   }
+
   void setPace(String pace) {
     userPace = pace;
     notifyListeners();
   }
+
   void setRunningPic(value) {
     runningPic = value;
     notifyListeners();
   }
+
   void addLocation(LatLng pos, int v) {
     if (v == 0) {
       preValue = curValue;
@@ -104,40 +109,46 @@ class RunningData extends ChangeNotifier {
       curValue = pos;
     }
   }
+
   void setCurrentPosition(CameraPosition pos) {
     currentPosition = pos;
   }
+
   void setMapController(GoogleMapController con) {
     mapController = con;
   }
+
   void setLat(value) {
     if (minLat > value) {
       minLat = value;
-    }
-    else if (maxLat < value) {
+    } else if (maxLat < value) {
       maxLat = value;
     }
   }
+
   void setLng(value) {
     if (minLng > value) {
       minLng = value;
-    }
-    else if (maxLng < value) {
+    } else if (maxLng < value) {
       maxLng = value;
     }
   }
+
   void firstMinMax(LatLng value) {
     minLat = value.latitude;
-    minLng= value.longitude;
+    minLng = value.longitude;
     maxLat = value.latitude;
     maxLng = value.longitude;
   }
+
   void funcStop() {
     stopCount = polyLine.length;
   }
+
   void addPolyLine(int value, LatLng latLng) {
     polyLine[value].points.add(latLng);
   }
+
   void newPolyLine(LatLng latLng, int value) {
     List<LatLng> forPoly = [];
     forPoly.add(latLng);
@@ -151,7 +162,6 @@ class RunningData extends ChangeNotifier {
   }
 }
 
-
 class ChallengeData extends ChangeNotifier {
   String runningId = '';
   String runningDistance = '';
@@ -161,8 +171,8 @@ class ChallengeData extends ChangeNotifier {
   String hostRunningId = '';
   List<double> challengeDistanceList = [];
 
-
-  void setValues(String id, String distance, String time, String calorie, String pace) {
+  void setValues(
+      String id, String distance, String time, String calorie, String pace) {
     hostRunningId = id;
     runningDistance = distance;
     runningTime = time;
@@ -170,9 +180,11 @@ class ChallengeData extends ChangeNotifier {
     userPace = pace;
     notifyListeners();
   }
-  void setList(List<double> DistanceList){
+
+  void setList(List<double> DistanceList) {
     challengeDistanceList = DistanceList;
   }
+
   void reset() {
     hostRunningId = '';
     runningDistance = '';
@@ -182,17 +194,17 @@ class ChallengeData extends ChangeNotifier {
 
     notifyListeners();
   }
+
   void forRunId(v) {
     runningId = v;
   }
 }
 
-
 class UserInfo extends ChangeNotifier {
-  int userId = 1;
-  String nickname = '';
-  int height = 175;
-  int weight = 70;
+  late final int userId;
+  late final String nickname;
+  late final int height;
+  late final int weight;
 
   String profileImg = '';
   int userLevel = 0;
@@ -206,14 +218,14 @@ class UserInfo extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateNicknameHeightWeight(String nickname,int height, int weight){
+  void updateNicknameHeightWeight(String nickname, int height, int weight) {
     this.nickname = nickname;
     this.height = height;
     this.weight = weight;
     notifyListeners();
   }
 
-  void updateProfileImg(File? pickedFile){
+  void updateProfileImg(File? pickedFile) {
     profileImg = pickedFile!.path; // 새로운 프로필사진을 선택한 경우만
     notifyListeners();
   }
@@ -235,8 +247,6 @@ class ForDate extends ChangeNotifier {
   }
 }
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting();
@@ -246,63 +256,42 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(              
-        builder: (_, BoxConstraints constraints) {
-          print(constraints);
-          if (constraints.maxHeight > 300) {
-            return MultiProvider(
-              providers: [
-                ChangeNotifierProvider(create: (c) => UserInfo()),
-                ChangeNotifierProvider(create: (c) => RunningData()),
-                ChangeNotifierProvider(create: (c) => ForDate()),
-                ChangeNotifierProvider(create: (c) => ChallengeData()),
-                ChangeNotifierProvider(create: (c) => RunningSetting()),
-              ],
-              child: MaterialApp(
-              debugShowCheckedModeBanner: false,
-                initialRoute: '/',
-                theme: ThemeData(
-                  scaffoldBackgroundColor: BACKGROUND_COLOR,
-                  fontFamily: 'pretendard',
-                  textTheme: TextTheme(
-                    headline1: TextStyle(
-                      color: MAIN_COLOR,
-                      fontFamily: 'Pretendard',
-                      fontSize: 16.0,
-                    ),
-                  ),
+    return LayoutBuilder(
+      builder: (_, BoxConstraints constraints) {
+        return MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (c) => UserInfo()),
+            ChangeNotifierProvider(create: (c) => RunningData()),
+            ChangeNotifierProvider(create: (c) => ForDate()),
+            ChangeNotifierProvider(create: (c) => ChallengeData()),
+            ChangeNotifierProvider(create: (c) => RunningSetting()),
+          ],
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            initialRoute: '/',
+            theme: ThemeData(
+              scaffoldBackgroundColor: BACKGROUND_COLOR,
+              fontFamily: 'pretendard',
+              textTheme: TextTheme(
+                headline1: TextStyle(
+                  color: MAIN_COLOR,
+                  fontFamily: 'Pretendard',
+                  fontSize: 16.0,
                 ),
-                routes: {
-                  
-                  '/': (context) => SplashScreen(),
-                  '/Detail': (context) => ChallengeRunning(
-                  ),
-                  '/UnderRunning': (context) => UnderRunning(),
-                  '/UnderChallenge': (context) => UnderChallenge(),
-                },
               ),
-            );
-          } else {
-            return MultiProvider(
-              providers: [
-                ChangeNotifierProvider(create: (c) => RunningData()),
-              ],
-              child: MaterialApp(
-                home: const WathchHomeScreen(),
-                theme: ThemeData(
-                    platform: TargetPlatform.android,
-                    scaffoldBackgroundColor: BACKGROUND_COLOR),
-
-              ),
-            );
-          }
-        }
-
+            ),
+            routes: {
+              '/': (context) => SplashScreen(),
+              '/Detail': (context) => ChallengeRunning(),
+              '/UnderRunning': (context) => UnderRunning(),
+              '/UnderChallenge': (context) => UnderChallenge(),
+            },
+          ),
+        );
+      },
     );
   }
 }
-
-
 
 // void receiveDataFromPhone() {
 //   const messageChannel =

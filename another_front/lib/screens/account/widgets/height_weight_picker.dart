@@ -118,7 +118,8 @@ class _HeightWeightPickerState extends State<HeightWeightPicker> {
         ),
         SizedBox(height: 32),
         Text('키 : $_heightValue, 몸무게 : $_weightValue',
-            style: TextStyle(color: Colors.white))
+            style: TextStyle(color: Colors.white),
+        ), SizedBox(height: 10),
       ],
     );
   }
