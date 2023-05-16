@@ -1,3 +1,4 @@
+import 'package:another/constant/const/color.dart';
 import 'package:another/main.dart';
 import 'package:another/screens/running/widgets/running_map.dart';
 import 'package:another/screens/running/widgets/running_status.dart';
@@ -7,6 +8,8 @@ import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import 'widgets/LockScreen.dart';
 
 class UnderRunning extends StatefulWidget {
   UnderRunning({Key? key}) : super(key: key);
@@ -48,43 +51,50 @@ class _UnderRunningState extends State<UnderRunning> {
     ModalRoute.of(context)!.settings.arguments as CameraPosition;
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // 높이가 작은 폰에서 안깨지도록 추가함
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height / 9 * 4,
-                ),
-                child: AspectRatio(
-                  aspectRatio: 1 / 1,
-                  child: SizedBox(
-                    child: isSet
-                        ? Stack(
-                      children: [
-                        RunningMap(
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: SafeArea(
+              child: Column(
+                children: [
+                  // 높이가 작은 폰에서 안깨지도록 추가함
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height / 9 * 4,
+                    ),
+                    child: AspectRatio(
+                      aspectRatio: 1 / 1,
+                      child: SizedBox(
+                        child: isSet
+                            ? Stack(
+                          children: [
+                            RunningMap(
+                              runningData: runningData,
+                              initialPosition: initialPosition,
+                            ),
+                            // Text('done?????'),
+                            SetRunningStatus(),
+                          ],
+                        )
+                            : RunningMap(
                           runningData: runningData,
                           initialPosition: initialPosition,
                         ),
-                        // Text('done?????'),
-                        SetRunningStatus(),
-                      ],
-                    )
-                        : RunningMap(
-                      runningData: runningData,
-                      initialPosition: initialPosition,
+                      ),
                     ),
                   ),
-                ),
+                  // 러닝 중 데이터 출력
+                  RunningStatus(),
+                ],
               ),
-              // 러닝 중 데이터 출력
-              RunningStatus(),
-            ],
+            ),
           ),
-        ),
+          LockScreen(),
+        ]
+
       ),
     );
   }
+
 }

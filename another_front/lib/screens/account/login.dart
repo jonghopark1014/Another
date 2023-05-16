@@ -143,7 +143,6 @@ class _LoginPageState extends State<LoginPage> {
                           'password': password,
                         },
                       );
-                      // print(resp.headers);
                       final refreshToken = resp.headers['refresh']?[0];
                       final accessToken = resp.headers['Authorization']?[0];
                       final userId = resp.data['userId'];
