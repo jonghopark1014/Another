@@ -9,7 +9,7 @@ class Target extends StatelessWidget {
   final String userCalorie;
   final String runningTime;
   final String userPace;
-  final String runningId;
+  final String? runningId;
 
   const Target({
     required this.targetname,
@@ -17,7 +17,7 @@ class Target extends StatelessWidget {
     required this.userCalorie,
     required this.runningDistance,
     required this.userPace,
-    required this.runningId,
+    this.runningId,
     Key? key,
   }) : super(key: key);
 
@@ -51,11 +51,13 @@ class Target extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => DetailFeed(runningId: runningId),
-                      ),
-                    );
+                    if (runningId != null ) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => DetailFeed(runningId: runningId!),
+                        ),
+                      );
+                    }
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
