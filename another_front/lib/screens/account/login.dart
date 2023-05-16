@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
 
                         if (userId != null) {
                           Provider.of<UserInfo>(context, listen: false)
-                              .updateUserInfo(userId, nickname, weight, height);
+                              .updateUserInfo(userId, nickname, height, weight);
                         }
                         await storage.write(
                             key: REFRESH_TOKEN_KEY, value: refreshToken);
