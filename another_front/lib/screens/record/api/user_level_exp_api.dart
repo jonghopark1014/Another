@@ -4,10 +4,9 @@ import 'package:http/http.dart' as http;
 const String _baseUrl = 'https://k8b308.p.ssafy.io/api';
 
 class UserLevelExpApi{
-  static Future<Map<String, dynamic>> getUserLevelExp()
+  static Future<Map<String, dynamic>> getUserLevelExp(int userId)
 
   async {
-    int userId = 1;
     var url = Uri.parse('$_baseUrl/record/$userId');
 
     try {

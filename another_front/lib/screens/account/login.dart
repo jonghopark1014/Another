@@ -146,8 +146,9 @@ class _LoginPageState extends State<LoginPage> {
                         final userId = resp.headers['userid']?[0];
 
                         // print(userId);
-                        Provider.of<UserInfo>(context, listen: false).updateUserInfo(userId!);
-
+                        if (userId != null) {
+                          Provider.of<UserInfo>(context, listen: false).updateUserInfo(userId);
+                        }
                         await storage.write(
                             key: REFRESH_TOKEN_KEY, value: refreshToken);
                         await storage.write(

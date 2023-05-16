@@ -141,7 +141,7 @@ class _RunningCarouselState extends State<RunningCarousel> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Image.asset(
-                        'assets/img/10min_gold.png',
+                        'assets/img/gold_firstrun.png',
                         height: 85,
                         width: 85,
                       ),
