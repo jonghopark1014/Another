@@ -190,19 +190,30 @@ class ChallengeData extends ChangeNotifier {
 
 class UserInfo extends ChangeNotifier {
   int userId = 1;
-  // String? accessToken;
-  // String? refreshToken;
+  String nickname = '';
+  int height = 175;
+  int weight = 70;
+  String profileImg = '';
+  int userLevel = 0;
+  double userExp = 0;
 
   void updateUserInfo(String userId) {
     this.userId = int.parse(userId);
-    // this.accessToken = accessToken;
-    // this.refreshToken = refreshToken;
     notifyListeners();
-    }
-  var nickname = '임범규';
-  var height = 185;
-  var weight = 70;
-  String profileImg = 'https://cdn.ggilbo.com/news/photo/201812/575659_429788_3144.jpg';
+  }
+
+  void updateNicknameHeightWeight(String nickname,int height, int weight){
+    this.nickname = nickname;
+    this.height = height;
+    this.weight = weight;
+    notifyListeners();
+  }
+
+  void updateProfileImg(File? pickedFile){
+    profileImg = pickedFile!.path; // 새로운 프로필사진을 선택한 경우만
+    notifyListeners();
+  }
+
 // 유저 정보를 수정하는 함수 여기에 작성
 // 정보 수정하고 바로 적용하려면 마지막에 notifyListers(); 코드 추가
 }
@@ -224,11 +235,6 @@ class ForDate extends ChangeNotifier {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
-  // print(device);
-
   await initializeDateFormatting();
   runApp(MyApp());
 }
@@ -237,56 +243,56 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (_, BoxConstraints constraints) {
-        print(constraints);
-        if (constraints.maxHeight > 300) {
-          return MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (c) => UserInfo()),
-              ChangeNotifierProvider(create: (c) => RunningData()),
-              ChangeNotifierProvider(create: (c) => ForDate()),
-              ChangeNotifierProvider(create: (c) => ChallengeData()),
-              ChangeNotifierProvider(create: (c) => RunningSetting()),
-            ],
-            child: MaterialApp(
-              initialRoute: '/',
-              // home: SplashScreen(),
-              theme: ThemeData(
-                scaffoldBackgroundColor: BACKGROUND_COLOR,
-                fontFamily: 'pretendard',
-                textTheme: TextTheme(
-                  headline1: TextStyle(
-                    color: MAIN_COLOR,
-                    fontFamily: 'Pretendard',
-                    fontSize: 16.0,
+        builder: (_, BoxConstraints constraints) {
+          print(constraints);
+          if (constraints.maxHeight > 300) {
+            return MultiProvider(
+              providers: [
+                ChangeNotifierProvider(create: (c) => UserInfo()),
+                ChangeNotifierProvider(create: (c) => RunningData()),
+                ChangeNotifierProvider(create: (c) => ForDate()),
+                ChangeNotifierProvider(create: (c) => ChallengeData()),
+                ChangeNotifierProvider(create: (c) => RunningSetting()),
+              ],
+              child: MaterialApp(
+                initialRoute: '/',
+                // home: SplashScreen(),
+                theme: ThemeData(
+                  scaffoldBackgroundColor: BACKGROUND_COLOR,
+                  fontFamily: 'pretendard',
+                  textTheme: TextTheme(
+                    headline1: TextStyle(
+                      color: MAIN_COLOR,
+                      fontFamily: 'Pretendard',
+                      fontSize: 16.0,
+                    ),
                   ),
                 ),
+                routes: {
+                  // '/': (context) => HomeScreen(),
+                  '/': (context) => SplashScreen(),
+                  '/Detail': (context) => ChallengeRunning(
+                  ),
+                  '/UnderRunning': (context) => UnderRunning(),
+                  '/UnderChallenge': (context) => UnderChallenge(),
+                },
               ),
-              routes: {
-                // '/': (context) => HomeScreen(),
-                '/': (context) => SplashScreen(),
-                '/Detail': (context) => ChallengeRunning(
-                ),
-                '/UnderRunning': (context) => UnderRunning(),
-                '/UnderChallenge': (context) => UnderChallenge(),
-              },
-            ),
-          );
-        } else {
-          return MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (c) => RunningSetting()),
-            ],
-            child: MaterialApp(
-              home: const WathchHomeScreen(),
-              theme: ThemeData(
-                  platform: TargetPlatform.android,
-                  scaffoldBackgroundColor: BACKGROUND_COLOR),
+            );
+          } else {
+            return MultiProvider(
+              providers: [
+                ChangeNotifierProvider(create: (c) => RunningData()),
+              ],
+              child: MaterialApp(
+                home: const WathchHomeScreen(),
+                theme: ThemeData(
+                    platform: TargetPlatform.android,
+                    scaffoldBackgroundColor: BACKGROUND_COLOR),
 
-            ),
-          );
+              ),
+            );
+          }
         }
-      }
 
     );
   }
@@ -295,7 +301,6 @@ class MyApp extends StatelessWidget {
 void receiveDataFromPhone() {
   const messageChannel =
   const BasicMessageChannel<String>('com.example.another', StringCodec());
-  print('안돼?');
   // 데이터 수신
   messageChannel.setMessageHandler(
         (String? data) async {
@@ -308,5 +313,4 @@ void receiveDataFromPhone() {
       }
     },
   );
-  print('안돼????');
 }
