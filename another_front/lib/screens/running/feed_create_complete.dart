@@ -246,12 +246,15 @@ class _FeedCreateCompleteState extends State<FeedCreateComplete> {
   }
 
   void getChartData() async {
+    List<PacesData> chartData;
     final response = await DetailFeedApi.getFeed(runningId);
     if (response != null) {
       final content = response['data'];
       print(content);
       var cTime = content['createDate'];
-      var chartData = content['graph'].map(
+      print(cTime);
+      List<dynamic> graph = content['graph'];
+      chartData = graph.map(
         (data) {
           double d = 0.0;
           double p = 0.0;
@@ -263,6 +266,7 @@ class _FeedCreateCompleteState extends State<FeedCreateComplete> {
           return PacesData(runningDistance: d, userPace: p);
         },
       ).toList();
+
       setState(() {
         userNickname = content['nickname'];
         userProfile = content['profilePic'];
