@@ -35,6 +35,7 @@ class _RunningCarouselState extends State<RunningCarousel> {
       ),
     ];
     userId = Provider.of<UserInfo>(context, listen: false).userId as int;
+    print('$userId==================================');
     // TODO: implement initState
     getRecommendChallenge();
     getCompareData();
