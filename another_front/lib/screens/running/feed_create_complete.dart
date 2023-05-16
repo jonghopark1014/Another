@@ -1,30 +1,36 @@
 import 'package:another/constant/const/color.dart';
 import 'package:another/constant/const/text_style.dart';
 import 'package:another/main.dart';
+import 'package:another/screens/feed/api/detail_feed_api.dart';
+import 'package:another/screens/feed/widgets/line_chart_custom.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
 import 'package:another/widgets/target.dart';
+import 'package:carousel_indicator/carousel_indicator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
 
 class FeedCreateComplete extends StatefulWidget {
   // final Uint8List? captureInfo;
   final List<Uint8List> feedPics;
   FeedCreateComplete({
     required this.feedPics,
-    Key? key,}) : super(key: key);
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<FeedCreateComplete> createState() => _FeedCreateCompleteState();
 }
 
 class _FeedCreateCompleteState extends State<FeedCreateComplete> {
+  int pageIndex = 0;
+  var userProfile;
   bool checked = true;
   final PageController _pageController = PageController(initialPage: 0);
   // 러닝 정보
-  late String createDate;
+  late String runningId;
+  late String createDate = '';
   late String runningDistance;
   late String userCalorie;
   late String runningTime;
@@ -34,7 +40,7 @@ class _FeedCreateCompleteState extends State<FeedCreateComplete> {
   // 사진 정보
 
   // 차트 정보
-  late List<PacesData> chartDataList;
+  late List<PacesData> chartDataList = [];
 
   void onPressed() {
     setState(() {
@@ -45,13 +51,13 @@ class _FeedCreateCompleteState extends State<FeedCreateComplete> {
   @override
   void initState() {
     // TODO: implement initState
-    RunningData runningData = Provider.of<RunningData>(context, listen:false);
-    createDate = runningData.runningTime;
+    RunningData runningData = Provider.of<RunningData>(context, listen: false);
+    runningId = runningData.runningId;
     runningDistance = runningData.runningDistance.toStringAsFixed(3);
     userCalorie = runningData.userCalories.toString();
     runningTime = runningData.runningTime;
     userPace = runningData.userPace.toString();
-    chartDataList = [];
+    getChartData();
     super.initState();
   }
 
@@ -65,24 +71,50 @@ class _FeedCreateCompleteState extends State<FeedCreateComplete> {
     return Stack(children: [
       // 수정중
       Scaffold(
-        appBar: GoBackAppBarStyle(),
+        appBar: GoBackAppBarStyle(
+          toHome: true,
+        ),
         body: ListView(
           controller: _scrollController,
           children: [
             Column(
               children: [
-                SizedBox(
-                  height: 300.0,
-                  child: PageView.builder(
-                    controller: _pageController,
-                    itemCount: widget.feedPics.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Image.memory(
-                        widget.feedPics[index],
-                        fit: BoxFit.contain,
-                      );
-                    },
-                  ),
+                Stack(
+                  alignment: AlignmentDirectional.bottomCenter,
+                  children: [
+                    SizedBox(
+                      height: 300.0,
+                      child: PageView.builder(
+                        onPageChanged: (value) {
+                          setState(() {
+                            pageIndex = value;
+                          });
+                        },
+                        controller: _pageController,
+                        itemCount: widget.feedPics.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Image.memory(
+                            widget.feedPics[index],
+                            fit: BoxFit.contain,
+                          );
+                        },
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 10,
+                      child: widget.feedPics.length > 1
+                          ? CarouselIndicator(
+                        space: 15,
+                        activeColor: MAIN_COLOR,
+                        width: 8,
+                        height: 8,
+                        animationDuration: 0,
+                        count: widget.feedPics.length,
+                        index: pageIndex,
+                      )
+                          : Container(),
+                    ),
+                  ],
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -95,12 +127,16 @@ class _FeedCreateCompleteState extends State<FeedCreateComplete> {
                           InkWell(
                             child: Row(
                               children: [
-                                CircleAvatar(
-                                  backgroundImage: MemoryImage(
-                                    widget.feedPics[0],
-                                  ),
-                                  radius: 25.0,
-                                ),
+                                userProfile == null
+                                    ? CircleAvatar(
+                                        radius: 25.0,
+                                      )
+                                    : CircleAvatar(
+                                        backgroundImage: NetworkImage(
+                                          userProfile,
+                                        ),
+                                        radius: 25.0,
+                                      ),
                                 SizedBox(
                                   width: 20,
                                 ),
@@ -135,7 +171,18 @@ class _FeedCreateCompleteState extends State<FeedCreateComplete> {
                       // ),
                     ],
                   ),
-                )
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: chartDataList.isNotEmpty
+                      ? SizedBox(
+                          height: 250.0,
+                          child: Chart(
+                            chartData: chartDataList,
+                          ),
+                        )
+                      : Container(),
+                ),
               ],
             ),
           ],
@@ -143,59 +190,86 @@ class _FeedCreateCompleteState extends State<FeedCreateComplete> {
       ),
       checked
           ? Container(
-        decoration: BoxDecoration(
-          color: Color(0x6B1C1A1E),
-        ),
-        child: Center(
-          child: Container(
-            height: 130,
-            width: 300,
-            decoration: BoxDecoration(
-              color: WHITE_COLOR,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              children: [
-                Container(
+              decoration: BoxDecoration(
+                color: Color(0x6B1C1A1E),
+              ),
+              child: Center(
+                child: Container(
+                  height: 130,
+                  width: 300,
                   decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(
-                            width: 1,
-                            color: SERVETWO_COLOR,
-                          ))),
-                  height: 80,
-                  child: Center(
-                    child: Text(
-                      '오운완 등록 완료!',
-                      style: TextStyle(fontSize: 20, color: BLACK_COLOR),
-                    ),
+                    color: WHITE_COLOR,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                          width: 1,
+                          color: SERVETWO_COLOR,
+                        ))),
+                        height: 80,
+                        child: Center(
+                          child: Text(
+                            '오운완 등록 완료!',
+                            style: TextStyle(fontSize: 20, color: BLACK_COLOR),
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: onPressed,
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateColor.resolveWith(
+                              (states) => Colors.white),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '확인',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: MAIN_COLOR,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
-                TextButton(
-                  onPressed: onPressed,
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateColor.resolveWith(
-                            (states) => Colors.white),
-                  ),
-                  child: Center(
-                    child: Text(
-                      '확인',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: MAIN_COLOR,
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      )
+              ),
+            )
           : Container(
-        height: 0,
-      )
+              height: 0,
+            )
     ]);
+  }
+
+  void getChartData() async {
+    final response = await DetailFeedApi.getFeed(runningId);
+    if (response != null) {
+      final content = response['data'];
+      print(content);
+      var cTime = content['createDate'];
+      var chartData = content['graph'].map(
+        (data) {
+          double d = 0.0;
+          double p = 0.0;
+          if (data['runningDistance'] != null && data['userPace'] != null) {
+            d = data['runningDistance'] ?? 0.0;
+            p = double.parse(
+                data['userPace'].replaceAll("''", "").replaceAll("'", "."));
+          }
+          return PacesData(runningDistance: d, userPace: p);
+        },
+      ).toList();
+      setState(() {
+        userNickname = content['nickname'];
+        userProfile = content['profilePic'];
+        chartDataList = chartData;
+        createDate = cTime;
+      });
+    }
   }
 }
 
@@ -226,12 +300,4 @@ Widget ImageProfileSetting() {
       ],
     ),
   );
-}
-
-
-class PacesData {
-  final double runningDistance;
-  final double userPace;
-
-  PacesData({required this.runningDistance, required this.userPace});
 }

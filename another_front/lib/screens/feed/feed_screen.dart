@@ -60,13 +60,13 @@ class _FeedScreenState extends State<FeedScreen> {
           feedPicUrls.add(feedPics[0]['feedPic']);
           runningIdsList.add(content['runningId'].toString());
           runningTimeList.add(content['runningTime'].toString());
-          runningDistanceList.add(content['runningDistance'].toString());
+          runningDistanceList.add(content['runningDistance'].toStringAsFixed(1));
           kcalList.add(content['userCalories'].toString());
         } else {
           feedPicUrls.add(content['runningPic'].toString());
           runningIdsList.add(content['runningId'].toString());
           runningTimeList.add(content['runningTime'].toString());
-          runningDistanceList.add(content['runningDistance'].toString());
+          runningDistanceList.add(content['runningDistance'].toStringAsFixed(1));
           kcalList.add(content['userCalories'].toString());
         }
       }
@@ -87,10 +87,10 @@ class _FeedScreenState extends State<FeedScreen> {
 
   Future<void> _myFeed() async {
     try {
-
-
       final response = await MyFeedApi.getFeed('$userId');
+      print(response);
       final contents = response['data']['myFeedListDtos']['content'];
+      print(contents);
       List<String> feedPicUrls = [];
       List<String> runningIdsList = [];
       List<String> runningTimeList = [];
@@ -107,14 +107,14 @@ class _FeedScreenState extends State<FeedScreen> {
             feedPicUrls.add(feedPics[0]['feedPic']);
             runningIdsList.add(content['runningId'].toString());
             runningTimeList.add(content['runningTime'].toString());
-            runningDistanceList.add(content['runningDistance'].toString());
+            runningDistanceList.add(content['runningDistance'].toStringAsFixed(1));
             // walkCountList.add(content['walkCount'].toString());
             kcalList.add(content['userCalories'].toString());
           } else {
             feedPicUrls.add(content['runningPic'].toString());
             runningIdsList.add(content['runningId'].toString());
             runningTimeList.add(content['runningTime'].toString());
-            runningDistanceList.add(content['runningDistance'].toString());
+            runningDistanceList.add(content['runningDistance'].toStringAsFixed(1));
             kcalList.add(content['userCalories'].toString());
           }
         }
@@ -135,7 +135,7 @@ class _FeedScreenState extends State<FeedScreen> {
           runningDistances = runningDistanceList;
           // walkCounts = walkCountList;
           userCalories = kcalList;
-          // profile = profilePic;
+          profile = profilePic;
         },
       );
     } catch (e) {
