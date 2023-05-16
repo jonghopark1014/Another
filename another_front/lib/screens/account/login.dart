@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IntroHeader(),
+                  IntroHeader(logoStyle: 'row',),
                   SizedBox(height: 20.0),
                   TextField(
                     onChanged: (String value) {
