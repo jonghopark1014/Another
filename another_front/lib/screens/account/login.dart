@@ -49,7 +49,6 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
       body: SafeArea(
-        child: Center(
           child: SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: Container(
@@ -58,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IntroHeader(),
-                  SizedBox(height: 40.0),
+                  SizedBox(height: 20.0),
                   TextField(
                     onChanged: (String value) {
                       username = value;
@@ -180,7 +179,6 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
-      ),
     );
   }
 }
