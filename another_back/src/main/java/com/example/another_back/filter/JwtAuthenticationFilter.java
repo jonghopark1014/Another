@@ -5,6 +5,7 @@ import com.example.another_back.config.JwtProvider;
 import com.example.another_back.config.auth.PrincipalDetails;
 import com.example.another_back.dto.LoginResponseDto;
 import com.example.another_back.dto.UserLoginDto;
+import com.example.another_back.entity.User;
 import com.example.another_back.entity.enums.Role;
 import com.example.another_back.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -79,13 +80,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         System.out.println("successfulAuthentication 실행됨 : 인증완료");
 
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
+        User user =principalDetails.getUser();
         String username = principalDetails.getUser().getUsername();
         Role role = principalDetails.getUser().getRole();
 
         //HS256 방식으로 암호화
-        String jwt = jwtProvider.createAccessToken(username, role.toString());
+        String jwt = jwtProvider.createAccessToken(user);
 
-        String rft = jwtProvider.createRefreshToken(username, role.toString());
+        String rft = jwtProvider.createRefreshToken(user);
 
 //        User user = userRepository.findUserByUsername(username)
 //                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));

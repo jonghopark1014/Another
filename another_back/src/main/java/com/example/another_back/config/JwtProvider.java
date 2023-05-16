@@ -1,5 +1,6 @@
 package com.example.another_back.config;
 
+import com.example.another_back.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -13,7 +14,7 @@ import static com.example.another_back.filter.JwtProperties.*;
 
 @Configuration
 public class JwtProvider {
-    public String createAccessToken(String username, String role) {
+    public String createAccessToken(User user) {
         Map<String, Object> headers = new HashMap<>();
 
         //Header부분 설정
@@ -22,8 +23,9 @@ public class JwtProvider {
 
         //payload부분 설정
         Map<String, Object> payloads = new HashMap<>();
-        payloads.put("username", username);
-        payloads.put("role", role);
+        payloads.put("userId", user.getId());
+        payloads.put("role", user.getRole().toString());
+        payloads.put("nickname", user.getNickname());
 
         Date atExt = new Date(); // 토큰 만료 시간
         atExt.setTime(atExt.getTime() + AT_EXPIRATION_TIME);
@@ -39,7 +41,7 @@ public class JwtProvider {
     }
 
 
-    public String createRefreshToken(String username, String role) {
+    public String createRefreshToken(User user) {
         Map<String, Object> headers = new HashMap<>();
 
         //Header부분 설정
@@ -48,8 +50,9 @@ public class JwtProvider {
 
         //payload부분 설정
         Map<String, Object> payloads = new HashMap<>();
-        payloads.put("username", username);
-        payloads.put("role", role);
+        payloads.put("userId", user.getId());
+        payloads.put("role", user.getRole().toString());
+        payloads.put("nickname", user.getNickname());
 
         Date atExt = new Date(); // 토큰 만료 시간
         atExt.setTime(atExt.getTime() + RT_EXPIRATION_TIME);
