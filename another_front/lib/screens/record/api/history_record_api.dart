@@ -4,8 +4,7 @@ import 'package:http/http.dart' as http;
 const String _baseUrl = 'https://k8b308.p.ssafy.io/api';
 
 class GetHistoryRecord {
-  static Future<Map<String, dynamic>> getTodayHistoryRecord() async {
-    int userId = 1;
+  static Future<Map<String, dynamic>> getTodayHistoryRecord(int userId) async {
     var url = Uri.parse('$_baseUrl/record/$userId/history/today');
 
     try {
@@ -23,8 +22,7 @@ class GetHistoryRecord {
     return {};
   }
 
-  static Future<Map<String, dynamic>> getWeekHistoryRecord() async {
-    int userId = 1;
+  static Future<Map<String, dynamic>> getWeekHistoryRecord(int userId) async {
     var url = Uri.parse('$_baseUrl/record/$userId/history/week');
 
     try {
@@ -42,8 +40,7 @@ class GetHistoryRecord {
     return {};
   }
 
-  static Future<Map<String, dynamic>> getMonthHistoryRecord() async {
-    int userId = 1;
+  static Future<Map<String, dynamic>> getMonthHistoryRecord(int userId) async {
     var url = Uri.parse('$_baseUrl/record/$userId/history/month');
 
     try {
@@ -61,8 +58,7 @@ class GetHistoryRecord {
     return {};
   }
 
-  static Future<Map<String, dynamic>> getAllHistoryRecord() async {
-    int userId = 1;
+  static Future<Map<String, dynamic>> getAllHistoryRecord(int userId) async {
     var url = Uri.parse('$_baseUrl/record/$userId/history/all');
 
     try {
@@ -80,9 +76,7 @@ class GetHistoryRecord {
   }
 
   // 달력 선택 날짜에 대한 기록 목록
-  static Future<Map<String, dynamic>> getHistoryRecordSelectDay(String? date) async {
-    int userId = 1;
-
+  static Future<Map<String, dynamic>> getHistoryRecordSelectDay(int userId, String? date) async {
     var url = Uri.parse('$_baseUrl/record/$userId/history/interval?createDate=$date');
 
     try {

@@ -15,13 +15,15 @@ class ProfileWidget extends StatefulWidget {
 }
 
 class _ProfileWidgetState extends State<ProfileWidget> {
-  
   int _userLevel = 0;
   double _userExp = 0;
   String? _userProfileImg;
+  bool _isLoading = true;
 
   Future<void> _getUserLevelExp() async {
-    Map<String, dynamic> userLevelExp = await UserLevelExpApi.getUserLevelExp();
+    int userId = Provider.of<UserInfo>(context, listen: false).userId;
+    Map<String, dynamic> userLevelExp =
+        await UserLevelExpApi.getUserLevelExp(userId);
     final userInfoProvider = Provider.of<UserInfo>(context, listen: false);
     userInfoProvider.userExp = userLevelExp['exp'];
     userInfoProvider.userLevel = userLevelExp['level'];
@@ -33,6 +35,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
       _userLevel = userLevelExp['level'];
       _userExp = userLevelExp['exp'];
       _userProfileImg = userLevelExp['profileImgUrl'];
+      _isLoading = false;
     });
   }
 
@@ -42,71 +45,70 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     });
   }
 
-
   @override
   void initState() {
     super.initState();
     _getUserLevelExp();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Stack(
-          children: [
-            CircularPercentIndicator(
-              radius: 50,
-              lineWidth: 10,
-              percent: _userExp,
-              header: Text("Icon header"),
-              center: Container(
-                width: 90,
-                height: 90,
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(_userProfileImg!),
-                  radius: 45,
-                ),
-              ),
-              backgroundColor: Colors.grey,
-              progressColor: Colors.blue,
-            ),
-            Positioned(
-              right: 0,
-              bottom: 0,
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ProfileEditPage(),
+    return _isLoading
+        ? Center(child: CircularProgressIndicator())
+        : Column(
+            children: [
+              Stack(
+                children: [
+                  CircularPercentIndicator(
+                    radius: 50,
+                    lineWidth: 10,
+                    percent: _userExp,
+                    header: Text("Icon header"),
+                    center: Container(
+                      width: 90,
+                      height: 90,
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(_userProfileImg!),
+                        radius: 45,
+                      ),
                     ),
-                  );
-                },
-                child: CircleAvatar(
-                  backgroundColor: MAIN_COLOR,
-                  radius: 15,
-                  child: Icon(
-                    Icons.edit,
-                    color: WHITE_COLOR,
-                    size: 20,
+                    backgroundColor: Colors.grey,
+                    progressColor: Colors.blue,
                   ),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 36,
-              top: 0,
-              child: Text(
-                'Lv.${_userLevel}',
-                style: TextStyle(color: Colors.white),
-              ),
-            )
-          ],
-        )
-      ],
-    );
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileEditPage(),
+                          ),
+                        );
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: MAIN_COLOR,
+                        radius: 15,
+                        child: Icon(
+                          Icons.edit,
+                          color: WHITE_COLOR,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 36,
+                    top: 0,
+                    child: Text(
+                      'Lv.${_userLevel}',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              )
+            ],
+          );
   }
 }

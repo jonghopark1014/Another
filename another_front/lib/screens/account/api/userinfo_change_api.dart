@@ -10,11 +10,11 @@ const String _baseUrl = 'https://k8b308.p.ssafy.io/api';
 class UserInfoChangeApi {
   // 유저 정보 변경
   static Future<void> userInfoChange({
+    required int userId,
     required int height,
     required int weight,
     required String nickname,
   }) async {
-    int userId = 1;
     var url = Uri.parse('$_baseUrl/user/profile/$userId');
 
     // HTTP PATCH 요청 보내기
@@ -33,8 +33,7 @@ class UserInfoChangeApi {
   }
 
   // 프로필 사진 변경
-  static Future<void> profileImgChange({File? pickedFile}) async {
-    int userId = 1;
+  static Future<void> profileImgChange({int? userId, File? pickedFile}) async {
     var url = Uri.parse('$_baseUrl/user/profile/image/$userId');
 
     // HTTP PATCH 요청 보내기
