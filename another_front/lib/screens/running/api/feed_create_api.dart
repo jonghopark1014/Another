@@ -7,10 +7,15 @@ const String _baseUrl = 'https://k8b308.p.ssafy.io';
 
 Future<bool> feedCreateApi(
     int userId, String runningId, List<Uint8List> feedPics) async {
-  Uri url = Uri.parse('https://k8b308.p.ssafy.io/api/feed/create');
+  Uri url = Uri.parse('$_baseUrl/api/feed/create');
   var request = http.MultipartRequest('POST', url);
   request.headers.addAll({"Content-Type": "multipart/form-data"});
+  print(feedPics);
+  print(feedPics.length);
+  print('????');
+
   for (var i = 0; i < feedPics.length - 1; i++) {
+    print('!!!!!!');
     print(feedPics[i]);
     request.files.add(http.MultipartFile.fromBytes('feedPics', feedPics[i],
         contentType: MediaType('multipart', 'form-data'),

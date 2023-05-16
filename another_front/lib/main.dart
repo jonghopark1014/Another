@@ -19,10 +19,12 @@ import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatf
 
 class RunningSetting extends ChangeNotifier {
   int distance = 0;
+  int hour = 0;
   int min = 0;
   List<int> interval = [0, 0];
-  void setData(d, m, i) {
+  void setData(d, h, m, i) {
     distance = d;
+    hour = h;
     min = m;
     interval = i;
     notifyListeners();

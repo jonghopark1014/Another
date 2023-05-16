@@ -1,4 +1,5 @@
 import 'package:another/constant/const/color.dart';
+import 'package:another/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 
@@ -20,9 +21,11 @@ class GoBackAppBarStyle extends StatelessWidget implements PreferredSizeWidget {
       leading: IconButton(
         onPressed: () {
           if (toHome == true) {
-            Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => HomeScreen()), (route) => false,);
           }
-          Navigator.of(context).pop(runningId ?? '');
+          else {
+            Navigator.of(context).pop(runningId ?? '');
+          }
         },
         icon: Icon(
           Icons.navigate_before,
