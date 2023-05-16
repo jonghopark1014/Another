@@ -10,12 +10,13 @@ class IntroHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
+          SizedBox(height: 20),
           Image.asset(
-          'assets/img/logo_small.png',
-            height: 40,
-            width: 70,
+          'assets/img/logo_login.png',
+            height: 180,
+            width: 120
           ),
-          SizedBox(height: 30.0),
+          SizedBox(height: 60),
           Text(
             '함께하는 즐거운 러닝',
             style: TextStyle(

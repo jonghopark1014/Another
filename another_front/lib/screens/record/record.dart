@@ -59,7 +59,8 @@ class RecordTab extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.asset('assets/img/logo_small.png', width: 120, height: 70),
+                        Image.asset('assets/img/logo_small.png',
+                            width: 120, height: 70),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -97,7 +98,7 @@ class RecordTab extends StatelessWidget {
                         children: [
                           Padding(
                             padding:
-                                EdgeInsets.only(top: 10, left: 15, right: 15),
+                                EdgeInsets.only(top: 10, left: 20, right: 15),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -172,12 +173,12 @@ class _MyChallengeState extends State<MyChallenge> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.only(bottom: 30),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: _isLoading == true
             ? Center(child: CircularProgressIndicator())
-            : Column(
+            : Row(
                 children:
                     // if API가 0개이면 띄워줄거 작성해야함
                     _successChallenge.isEmpty
@@ -218,17 +219,22 @@ class _MyChallengeState extends State<MyChallenge> {
                           ]
                         : _successChallenge
                             .map(
-                              (challenge) => Column(
-                                children: [
-                                  Image.network(
-                                    challenge['challengeUrl'],
-                                    width: 100,
-                                    height: 100,
-                                  ),
-                                  Text(challenge['challengeName'],
-                                      style: TextStyle(
-                                          color: SERVETWO_COLOR, fontSize: 12))
-                                ],
+                              (challenge) => Padding(
+                                padding: EdgeInsets.only(right: 10),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.network(
+                                      challenge['challengeUrl'],
+                                      width: 100,
+                                      height: 100,
+                                    ),
+                                    Text(challenge['challengeName'],
+                                        style: TextStyle(
+                                            color: SERVETWO_COLOR,
+                                            fontSize: 12))
+                                  ],
+                                ),
                               ),
                             )
                             .toList(),
@@ -293,9 +299,12 @@ class _MyRecordState extends State<MyRecord> {
         data2 = await GetHistoryRecord.getAllHistoryRecord(userId);
         break;
       case 4:
-        data1 = await GetPeriodRecord.getPeriodRecordSelectDay(userId, selectedDay);
-        data2 = await GetHistoryRecord.getHistoryRecordSelectDay(userId, selectedDay);
-        data3 = await GetHistoryRecord.getAllHistoryRecord(userId); // 마커 찍기 용 데이터
+        data1 =
+            await GetPeriodRecord.getPeriodRecordSelectDay(userId, selectedDay);
+        data2 = await GetHistoryRecord.getHistoryRecordSelectDay(
+            userId, selectedDay);
+        data3 =
+            await GetHistoryRecord.getAllHistoryRecord(userId); // 마커 찍기 용 데이터
         break;
       default:
         data1 = {};
@@ -474,7 +483,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
 
     for (Map<String, dynamic> marker in markerList) {
       DateTime createDate =
-          DateTime.parse(marker['createDate']).toUtc().add(Duration(hours: 9));
+          DateTime.parse(marker['createDate']).toUtc();
       Event id = Event(marker['id']);
       if (parseMarkerDataResult.containsKey(createDate)) {
         parseMarkerDataResult[createDate]!.add(id);
@@ -482,7 +491,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
         parseMarkerDataResult[createDate] = [id];
       }
     }
-    print('parseMarkerDataResult: $parseMarkerDataResult');
+    // print('parseMarkerDataResult: $parseMarkerDataResult');
     return parseMarkerDataResult;
   }
 
@@ -622,7 +631,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
             : Padding(
                 padding: EdgeInsets.only(left: 8),
                 child: Text(
-                  '런닝 기록',
+                  '러닝 기록',
                   style: TextStyle(color: WHITE_COLOR, fontSize: 16),
                   textAlign: TextAlign.start,
                 ),
