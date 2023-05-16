@@ -6,9 +6,13 @@ import lombok.Getter;
 public class UserStartDto {
     private Object userId;
     private Object nickname;
+    private Object weight;
+    private Object height;
 
-    public UserStartDto(Object userId, Object nickname) {
+    public UserStartDto(Object userId, Object nickname, Object weight, Object height) {
         this.userId = userId;
         this.nickname = nickname;
+        this.weight = weight;
+        this.height = height;
     }
 }

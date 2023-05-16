@@ -53,6 +53,8 @@ public class JwtProvider {
         payloads.put("userId", user.getId());
         payloads.put("role", user.getRole().toString());
         payloads.put("nickname", user.getNickname());
+        payloads.put("weight", user.getWeight());
+        payloads.put("height", user.getHeight());
 
         Date atExt = new Date(); // 토큰 만료 시간
         atExt.setTime(atExt.getTime() + RT_EXPIRATION_TIME);
