@@ -79,13 +79,16 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                     right: 0,
                     bottom: 0,
                     child: InkWell(
-                      onTap: () {
-                        Navigator.push(
+                      onTap: () async {
+                        await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ProfileEditPage(),
                           ),
                         );
+                        setState(() {
+
+                        });
                       },
                       child: CircleAvatar(
                         backgroundColor: MAIN_COLOR,

@@ -80,17 +80,12 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         weight: _weight,
         nickname: _nicknameController.text,
       );
-      context.read<UserInfo>().updateNicknameHeightWeight(_nicknameController.text, _height, _weight);
       // print('Provider에 닉네임키몸무게 변경');
       // 유저정보 가져오는 API 통신 다시
-      await UserLevelExpApi.getUserLevelExp(userId);
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (_) => RecordTab(),
-          ),(route) => false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('사용자 정보가 변경되었습니다.')),
-      );
+      // await UserLevelExpApi.getUserLevelExp(userId);
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(content: Text('사용자 정보가 변경되었습니다.')),
+      // );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('닉네임 중복확인을 해주세요.')),
@@ -119,106 +114,114 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   @override
   Widget build(BuildContext context) {
     print(profileImg);
-    return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          IntroHeader(logoStyle: 'row'),
-          SizedBox(height: 16),
-          ProfileImage(
-            profileImg: context.watch<UserInfo>().profileImg,
-            key: _imagePickerKey,
-            onFileChanged: (img) => setState(() => profileImg = img),
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ProfileImage(
+                  profileImg: context.watch<UserInfo>().profileImg,
+                  key: _imagePickerKey,
+                  onFileChanged: (img) => setState(() => profileImg = img),
+                ),
+                Padding(
+                    padding: EdgeInsets.all(25),
+                    child: Stack(
+                      children: [
+                        TextFormField(
+                          controller: _nicknameController,
+                          validator: _validateNickname,
+                          onChanged: (value) {
+                            setState(() {
+                              errorText = _validateNickname(value);
+                            });
+                          },
+                          decoration: InputDecoration(
+                            labelText: '닉네임',
+                            hintText: '새로운 닉네임을 입력해주세요.',
+                            hintStyle: TextStyle(color: SERVEONE_COLOR),
+                            errorText: errorText,
+                            labelStyle: TextStyle(
+                              color: SERVEONE_COLOR,
+                            ),
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: SERVEONE_COLOR),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: SERVEONE_COLOR),
+                            ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: SERVEONE_COLOR),
+                            ),
+                          ),
+                          maxLines: 1,
+                          maxLength: 12,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: SERVEONE_COLOR,
+                          ),
+                        ),
+                        Positioned(
+                          top: 10,
+                          right: 10,
+                          child: ElevatedButton(
+                            onPressed:
+                                isNicknameButtonActive && isNicknamePossible == false
+                                    ? () async {
+                                        if (await doubleCheckApi.doubleCheck(
+                                                nickname: _nicknameController.text,
+                                                nicknamePossible: nicknamePossible,
+                                            nicknameDuplication: nicknameDuplication) ==
+                                            '사용 가능') {
+                                          isNicknamePossible = true;
+                                          print('사용 가능');
+                                        } else {
+                                          isNicknamePossible = false;
+                                          print('사용 불가');
+                                        }
+                                      }
+                                    : null,
+                            style: ElevatedButton.styleFrom(
+                              onSurface: Colors.white,
+                            ),
+                            child: Text('중복확인'),
+                          ),
+                        )
+                      ],
+                    )),
+                HeightWeightPicker(
+                  initialHeight: _height,
+                  initialWeight: _weight,
+                  onHeightChanged: (height) => setState(() => _height = height),
+                  onWeightChanged: (weight) => setState(() => _weight = weight),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    PassButton(
+                      text: '취소',
+                      onPressed: () {
+                        Navigator.pop(context); // 뒤로가기
+                      },
+                    ),
+                    CompleteButton(
+                      text: '수정 완료',
+                      onPressed: () {
+                        Provider.of<UserInfo>(context, listen: false).updateNicknameHeightWeight(_nicknameController.text, _height, _weight);
+                        _onSavePressed(context);
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
-          Padding(
-              padding: EdgeInsets.all(25),
-              child: Stack(
-                children: [
-                  TextFormField(
-                    controller: _nicknameController,
-                    validator: _validateNickname,
-                    onChanged: (value) {
-                      setState(() {
-                        errorText = _validateNickname(value);
-                      });
-                    },
-                    decoration: InputDecoration(
-                      labelText: '닉네임',
-                      hintText: '새로운 닉네임을 입력해주세요.',
-                      hintStyle: TextStyle(color: SERVEONE_COLOR),
-                      errorText: errorText,
-                      labelStyle: TextStyle(
-                        color: SERVEONE_COLOR,
-                      ),
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide(color: SERVEONE_COLOR),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: SERVEONE_COLOR),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: SERVEONE_COLOR),
-                      ),
-                    ),
-                    maxLines: 1,
-                    maxLength: 8,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: SERVEONE_COLOR,
-                    ),
-                  ),
-                  Positioned(
-                    top: 15,
-                    right: 10,
-                    child: ElevatedButton(
-                      onPressed:
-                          isNicknameButtonActive && isNicknamePossible == false
-                              ? () async {
-                                  if (await doubleCheckApi.doubleCheck(
-                                          nickname: _nicknameController.text,
-                                          nicknamePossible: nicknamePossible,
-                                      nicknameDuplication: nicknameDuplication) ==
-                                      '사용 가능') {
-                                    isNicknamePossible = true;
-                                    print('사용 가능');
-                                  } else {
-                                    isNicknamePossible = false;
-                                    print('사용 불가');
-                                  }
-                                }
-                              : null,
-                      style: ElevatedButton.styleFrom(
-                        onSurface: Colors.white,
-                      ),
-                      child: Text('중복확인'),
-                    ),
-                  )
-                ],
-              )),
-          HeightWeightPicker(
-            initialHeight: _height,
-            initialWeight: _weight,
-            onHeightChanged: (height) => setState(() => _height = height),
-            onWeightChanged: (weight) => setState(() => _weight = weight),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              PassButton(
-                text: '취소',
-                onPressed: () {
-                  Navigator.pop(context); // 뒤로가기
-                },
-              ),
-              CompleteButton(
-                text: '수정 완료',
-                onPressed: () {
-                  _onSavePressed(context);
-                },
-              ),
-            ],
-          )
-        ],
+        ),
       ),
     );
   }

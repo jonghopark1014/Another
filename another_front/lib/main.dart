@@ -202,9 +202,9 @@ class ChallengeData extends ChangeNotifier {
 
 class UserInfo extends ChangeNotifier {
   late final int userId;
-  late final String nickname;
-  late final int height;
-  late final int weight;
+  late String nickname;
+  late int height;
+  late int weight;
 
   String profileImg = '';
   int userLevel = 0;
