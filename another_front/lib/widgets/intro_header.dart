@@ -16,11 +16,11 @@ class IntroHeader extends StatelessWidget {
             height: 120,
             width: 80
           ) : logoStyle == 'row' ? Image.asset(
-              'assets/img/logo_small.png',
-              height: 50,
-              width: 80
+              'assets/img/logo_login.png',
+              height: 150,
+              width: 200,
           ) : SizedBox.shrink(),
-          SizedBox(height: 40),
+          SizedBox(height: 20),
           Text(
             '함께하는 즐거운 러닝',
             style: TextStyle(

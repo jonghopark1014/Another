@@ -355,6 +355,7 @@ class _CustomInputFormState extends State<CustomInputForm> {
       child: Form(
         key: _formKey,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             CustomTextField(
               myNode: idFocus,
@@ -397,7 +398,7 @@ class _CustomInputFormState extends State<CustomInputForm> {
                   labelColor: nickFoc ? MAIN_COLOR : SERVEONE_COLOR,
                 ),
                 Positioned(
-                  top: 15,
+                  top: 10,
                   right: 10,
                   child: ElevatedButton(
                     onPressed: isNicknameButtonActive &&
@@ -460,7 +461,7 @@ class _CustomInputFormState extends State<CustomInputForm> {
                 ),
               ],
             ),
-            SizedBox(height: 60),
+            SizedBox(height: 30),
             FractionallySizedBox(
                 widthFactor: 1.0,
                 child: ElevatedButton(
@@ -511,7 +512,7 @@ class SignupPage extends StatelessWidget {
           child: Column(
             children: [
               IntroHeader(logoStyle: 'row',),
-              SizedBox(height: 16),
+              // SizedBox(height: 16),
               CustomInputForm(),
             ],
           ),

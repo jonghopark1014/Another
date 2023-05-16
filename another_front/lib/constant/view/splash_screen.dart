@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     userInfo = Provider.of<UserInfo>(context, listen: false);
-    // deleteToken();
+    deleteToken();
     checkToken();
   }
 
