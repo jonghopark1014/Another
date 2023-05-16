@@ -64,16 +64,18 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   }
 
   void _onSavePressed(BuildContext context) async {
+    int userId = Provider.of<UserInfo>(context, listen: false).userId;
     // 프로필 사진 수정한 경우
     if (isNicknamePossible == true) {
       if (profileImg != null) {
-        await UserInfoChangeApi.profileImgChange(pickedFile: profileImg!);
+        await UserInfoChangeApi.profileImgChange(userId: userId, pickedFile: profileImg!);
         // context.read<UserInfo>().updateProfileImg(profileImg);
         print('profileImg: $profileImg');
         print('Provider에 프로필사진 변경');
       }
       // 유저 정보
       await UserInfoChangeApi.userInfoChange(
+        userId: userId,
         height: _height,
         weight: _weight,
         nickname: _nicknameController.text,
@@ -81,7 +83,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       context.read<UserInfo>().updateNicknameHeightWeight(_nicknameController.text, _height, _weight);
       // print('Provider에 닉네임키몸무게 변경');
       // 유저정보 가져오는 API 통신 다시
-      await UserLevelExpApi.getUserLevelExp();
+      await UserLevelExpApi.getUserLevelExp(userId);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (_) => RecordTab(),

@@ -151,15 +151,16 @@ class _LoginPageState extends State<LoginPage> {
                       final weight = resp.data['weight'];
                       final height = resp.data['height'];
 
-                      Provider.of<UserInfo>(context, listen: false)
+                        if (userId != null) {
+                          Provider.of<UserInfo>(context, listen: false)
                           .updateUserInfo(userId, nickname, weight, height);
+                        }
+                        await storage.write(
+                            key: REFRESH_TOKEN_KEY, value: refreshToken);
+                        await storage.write(
+                            key: ACCESS_TOKEN_KEY, value: accessToken);
 
-                      await storage.write(
-                          key: REFRESH_TOKEN_KEY, value: refreshToken);
-                      await storage.write(
-                          key: ACCESS_TOKEN_KEY, value: accessToken);
-
-                      Navigator.of(context).pushAndRemoveUntil(
+                        Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                             builder: (_) => HomeScreen(),
                           ),

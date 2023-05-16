@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import './widgets/category_title.dart';
 import './widgets/challenge_item.dart';
 import './api/challenge_api.dart';
+import 'package:provider/provider.dart';
+import 'package:another/main.dart';
 
 class ChallengePage extends StatefulWidget {
   ChallengePage({Key? key}) : super(key: key);
@@ -25,7 +27,8 @@ class _ChallengePageState extends State<ChallengePage> {
   }
 
   Future<void> getChallenge() async {
-    List<dynamic> data = await GetChallenge.challengeList();
+    int userId = Provider.of<UserInfo>(context, listen: false).userId;
+    List<dynamic> data = await GetChallenge.challengeList(userId);
     setState(() {
       _challengeData = data;
       _isLoading = false;
