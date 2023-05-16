@@ -44,25 +44,13 @@ class _LockScreenState extends State<LockScreen> {
   @override
   Widget build(BuildContext context) {
     return isLocked
-        ? SizedBox(
+        ? Container(
+            decoration: BoxDecoration(
+              color: Colors.black,
+            ),
             height: MediaQuery.of(context).size.height,
             child: Stack(
               children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                  ),
-                  onLongPress: () {
-                    setState(() {
-                      seconds = 0;
-                      isLocked = false;
-                    });
-                  },
-                  onPressed: () {
-                    print("이게 되네");
-                  },
-                  child: Container(),
-                ),
                 Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -83,7 +71,22 @@ class _LockScreenState extends State<LockScreen> {
                       ),
                     ],
                   ),
-                )
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                  ),
+                  onLongPress: () {
+                    setState(() {
+                      seconds = 0;
+                      isLocked = false;
+                    });
+                  },
+                  onPressed: () {
+                    print("이게 되네");
+                  },
+                  child: Container(),
+                ),
               ],
             ))
         : SizedBox(
