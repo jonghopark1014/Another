@@ -46,7 +46,7 @@ public class UserController {
         return Response.success(HttpStatus.OK, image);
     }
 
-    @GetMapping(value = "/valid/refresh")
+    @PostMapping(value = "/valid/refresh")
     public ResponseEntity validRefreshToken(@RequestBody RefreshTokenDto refreshTokenDto) {
         String refresh = refreshTokenDto.getRefresh();
         try{
