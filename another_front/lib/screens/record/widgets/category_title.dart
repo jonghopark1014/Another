@@ -8,19 +8,18 @@ class CategoryTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: EdgeInsets.only(left: 5),
-            child: Text(
-              '$title',
-              style: TextStyle(
-                color: WHITE_COLOR,
-                fontSize: 16,
-              ),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          child: Text(
+            '$title',
+            style: TextStyle(
+              color: WHITE_COLOR,
+              fontSize: 16,
             ),
           ),
-        ]
+        ),
+      ],
     );
   }
 }

@@ -1,5 +1,3 @@
-
-
 import 'package:another/constant/const/color.dart';
 import 'package:another/main.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,7 +5,6 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:provider/provider.dart';
 
 import 'distancebar.dart';
-
 
 class SetRunningStatus extends StatefulWidget {
   const SetRunningStatus({Key? key}) : super(key: key);
@@ -17,6 +14,23 @@ class SetRunningStatus extends StatefulWidget {
 }
 
 class _SetRunningStatusState extends State<SetRunningStatus> {
+  TextStyle currentIntervalStyle = TextStyle(
+    color: MAIN_COLOR,
+    fontSize: 80,
+  );
+  TextStyle otherIntervalStyle = TextStyle(
+    color: WHITE_COLOR,
+    fontSize: 80,
+  );
+  TextStyle currentMinStyle = TextStyle(
+    color: MAIN_COLOR,
+    fontSize: 30,
+  );
+  TextStyle otherMinStyle = TextStyle(
+    color: WHITE_COLOR,
+    fontSize: 30,
+  );
+
   FlutterTts flutterTts = FlutterTts();
 
   bool timeEnd = false;
@@ -31,7 +45,7 @@ class _SetRunningStatusState extends State<SetRunningStatus> {
   int settingSec = 0;
   int settingHour = 0;
   int settingMin = 0;
-  List<int> settingInterval = [0,0];
+  List<int> settingInterval = [0, 0];
   // 뛴 거리 등
   double runningDistance = 0;
   double runningTime = 0;
@@ -41,6 +55,7 @@ class _SetRunningStatusState extends State<SetRunningStatus> {
     initializeTTS();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     // 설정값 가져오기
@@ -59,10 +74,14 @@ class _SetRunningStatusState extends State<SetRunningStatus> {
       }
     }
     String tempTime = runningData.runningTime;
-    if (settingSec != 0 ){
-      double convertedTime = double.parse(tempTime.substring(0,2)) * 3600 + double.parse(tempTime.substring(3,5)) * 60 + double.parse(tempTime.substring(6,8));
+    if (settingSec != 0) {
+      double convertedTime = double.parse(tempTime.substring(0, 2)) * 3600 +
+          double.parse(tempTime.substring(3, 5)) * 60 +
+          double.parse(tempTime.substring(6, 8));
       if (convertedTime <= settingSec) {
-        runningTime = double.parse(tempTime.substring(0,2)) * 3600 + double.parse(tempTime.substring(3,5)) * 60 + double.parse(tempTime.substring(6,8));
+        runningTime = double.parse(tempTime.substring(0, 2)) * 3600 +
+            double.parse(tempTime.substring(3, 5)) * 60 +
+            double.parse(tempTime.substring(6, 8));
       }
     }
     // 인터벌 로직
@@ -72,8 +91,7 @@ class _SetRunningStatusState extends State<SetRunningStatus> {
         intervalFirst = 1;
         intervalSecond = 0;
         tempIntervalTime = settingInterval[0] * 60;
-      }
-      else {
+      } else {
         // First 인터벌 시간일때
         if (intervalFirst == 1) {
           tempIntervalTime--;
@@ -94,14 +112,13 @@ class _SetRunningStatusState extends State<SetRunningStatus> {
             // intervalSecond = 0;
             // tempIntervalTime = settingInterval[0] * 60;
             // playAlarm('두 번째 설정 시각, ${settingInterval[1]} 분 지났어요!');
-
           }
         }
       }
     }
     // tts 관련 설정
     // // 전부다 설정 시
-    int setSec = settingSec~/60;
+    int setSec = settingSec ~/ 60;
     if (settingDistance != 0 && settingSec != 0 && settingInterval[0] != 0) {
       if (intervalFirst == 1 && tempIntervalTime == 0) {
         intervalFirst = 0;
@@ -111,42 +128,35 @@ class _SetRunningStatusState extends State<SetRunningStatus> {
           dishalf = true;
           if (settingSec / 2 == runningTime) {
             playAlarm('첫 번째 인터벌 끝! 설정 시간의 50% 달성! 설정 거리의 50% 돌파!');
-          }
-          else if (settingSec == runningTime && timeEnd == false) {
+          } else if (settingSec == runningTime && timeEnd == false) {
             timeEnd = true;
             playAlarm('첫 번째 인터벌 끝! 설정 시간 $setSec분 달성! 설정 거리의 50% 돌파!');
-          }
-          else {
+          } else {
             playAlarm('첫 번째 인터벌 끝! 설정 거리의 50% 돌파!');
           }
-        }
-        else if (settingDistance <= runningDistance && disEnd == false) {
+        } else if (settingDistance <= runningDistance && disEnd == false) {
           disEnd = true;
           if (settingSec / 2 == runningTime) {
-            playAlarm('첫 번째 인터벌 끝! 설정 시간의 50% 달성! 설정 거리 ${settingDistance}km 완주!');
-          }
-          else if (settingSec == runningTime && timeEnd == false) {
+            playAlarm(
+                '첫 번째 인터벌 끝! 설정 시간의 50% 달성! 설정 거리 ${settingDistance}km 완주!');
+          } else if (settingSec == runningTime && timeEnd == false) {
             timeEnd = true;
-            playAlarm('첫 번째 인터벌 끝! 설정 시간 $setSec분 달성! 설정 거리 ${settingDistance}km 완주!');
-          }
-          else {
+            playAlarm(
+                '첫 번째 인터벌 끝! 설정 시간 $setSec분 달성! 설정 거리 ${settingDistance}km 완주!');
+          } else {
             playAlarm('첫 번째 인터벌 끝! 설정 거리 ${settingDistance}km 완주!');
           }
-        }
-        else {
+        } else {
           if (settingSec / 2 == runningTime) {
             playAlarm('첫 번째 인터벌 끝! 설정 시간의 50% 달성!');
-          }
-          else if (settingSec == runningTime && timeEnd == false) {
+          } else if (settingSec == runningTime && timeEnd == false) {
             timeEnd = true;
             playAlarm('첫 번째 인터벌 끝! 설정 시간 $setSec분 달성!');
-          }
-          else {
+          } else {
             playAlarm('첫 번째 인터벌 ${settingInterval[0]}분 끝! ');
           }
         }
-      }
-      else if (intervalSecond == 1  && tempIntervalTime == 0) {
+      } else if (intervalSecond == 1 && tempIntervalTime == 0) {
         intervalFirst = 1;
         intervalSecond = 0;
         tempIntervalTime = settingInterval[0] * 60;
@@ -154,73 +164,59 @@ class _SetRunningStatusState extends State<SetRunningStatus> {
           dishalf = true;
           if (settingSec / 2 == runningTime) {
             playAlarm('두 번째 인터벌 끝! 설정 시간의 50% 달성! 설정 거리의 50% 돌파!');
-          }
-          else if (settingSec == runningTime && timeEnd == false) {
+          } else if (settingSec == runningTime && timeEnd == false) {
             timeEnd = true;
             playAlarm('두 번째 인터벌 끝! 설정 시간 $setSec분 달성! 설정 거리의 50% 돌파!');
-          }
-          else {
+          } else {
             playAlarm('두 번째 인터벌 끝! 설정 거리의 50% 돌파!');
           }
-        }
-        else if (settingDistance <= runningDistance && disEnd == false) {
+        } else if (settingDistance <= runningDistance && disEnd == false) {
           disEnd = true;
           if (settingSec / 2 == runningTime) {
-            playAlarm('두 번째 인터벌 끝! 설정 시간의 50% 달성! 설정 거리 ${settingDistance}km 완주!');
-          }
-          else if (settingSec == runningTime && timeEnd == false) {
+            playAlarm(
+                '두 번째 인터벌 끝! 설정 시간의 50% 달성! 설정 거리 ${settingDistance}km 완주!');
+          } else if (settingSec == runningTime && timeEnd == false) {
             timeEnd = true;
-            playAlarm('듀 번째 인터벌 끝! 설정 시간 $setSec분 달성! 설정 거리 ${settingDistance}km 완주!');
-          }
-          else {
+            playAlarm(
+                '듀 번째 인터벌 끝! 설정 시간 $setSec분 달성! 설정 거리 ${settingDistance}km 완주!');
+          } else {
             playAlarm('두 번째 인터벌 끝! 설정 거리 ${settingDistance}km 완주!');
           }
-        }
-        else {
+        } else {
           if (settingSec / 2 == runningTime) {
             playAlarm('두 번째 인터벌 끝! 설정 시간의 50% 달성!');
-          }
-          else if (settingSec == runningTime && timeEnd == false) {
+          } else if (settingSec == runningTime && timeEnd == false) {
             timeEnd = true;
             playAlarm('두 번째 인터벌 끝! 설정 시간 $setSec분 달성!');
-          }
-          else {
+          } else {
             playAlarm('두 번째 인터벌 ${settingInterval[0]}분 끝! ');
           }
         }
-      }
-      else {
+      } else {
         if (settingDistance / 2 <= runningDistance && dishalf == false) {
           dishalf = true;
           if (settingSec / 2 == runningTime) {
             playAlarm('설정 시간의 50% 달성! 설정 거리의 50% 돌파!');
-          }
-          else if (settingSec == runningTime && timeEnd == false) {
+          } else if (settingSec == runningTime && timeEnd == false) {
             timeEnd = true;
             playAlarm('설정 시간 $setSec분 달성! 설정 거리의 50% 돌파!');
-          }
-          else {
+          } else {
             playAlarm('설정 거리의 50% 돌파!');
           }
-        }
-        else if (settingDistance <= runningDistance && disEnd == false) {
+        } else if (settingDistance <= runningDistance && disEnd == false) {
           disEnd = true;
           if (settingSec / 2 == runningTime) {
             playAlarm('설정 시간의 50% 달성! 설정 거리 ${settingDistance}km 완주!');
-          }
-          else if (settingSec == runningTime && timeEnd == false) {
+          } else if (settingSec == runningTime && timeEnd == false) {
             timeEnd = true;
             playAlarm('설정 시간 $setSec분 달성! 설정 거리 ${settingDistance}km 완주!');
-          }
-          else {
+          } else {
             playAlarm('설정 거리 ${settingDistance}km 완주!');
           }
-        }
-        else {
+        } else {
           if (settingSec / 2 == runningTime) {
             playAlarm('설정 시간의 50% 달성!');
-          }
-          else if (settingSec == runningTime && timeEnd == false) {
+          } else if (settingSec == runningTime && timeEnd == false) {
             timeEnd = true;
             playAlarm('설정 시간 $setSec분 달성!');
           }
@@ -228,169 +224,158 @@ class _SetRunningStatusState extends State<SetRunningStatus> {
       }
     }
     // // 거리 + 인터벌
-    else if (settingDistance != 0 && settingSec == 0 && settingInterval[0] != 0) {
-      if (intervalFirst == 1  && tempIntervalTime == 0) {
+    else if (settingDistance != 0 &&
+        settingSec == 0 &&
+        settingInterval[0] != 0) {
+      if (intervalFirst == 1 && tempIntervalTime == 0) {
         intervalFirst = 0;
         intervalSecond = 1;
         tempIntervalTime = settingInterval[1] * 60;
         if (settingDistance / 2 <= runningDistance && dishalf == false) {
           dishalf = true;
-            playAlarm('첫 번째 인터벌 끝! 설정 거리의 50% 돌파!');
-        }
-        else if (settingDistance <= runningDistance && disEnd == false) {
+          playAlarm('첫 번째 인터벌 끝! 설정 거리의 50% 돌파!');
+        } else if (settingDistance <= runningDistance && disEnd == false) {
           disEnd = true;
-            playAlarm('첫 번째 인터벌 끝! 설정 거리 ${settingDistance}km 완주!');
+          playAlarm('첫 번째 인터벌 끝! 설정 거리 ${settingDistance}km 완주!');
+        } else {
+          playAlarm('첫 번째 인터벌 ${settingInterval[0]}분 끝! ');
         }
-        else {
-            playAlarm('첫 번째 인터벌 ${settingInterval[0]}분 끝! ');
-        }
-      }
-      else if (intervalSecond == 1  && tempIntervalTime == 0) {
+      } else if (intervalSecond == 1 && tempIntervalTime == 0) {
         intervalFirst = 1;
         intervalSecond = 0;
         tempIntervalTime = settingInterval[0] * 60;
         if (settingDistance / 2 <= runningDistance && dishalf == false) {
           dishalf = true;
           playAlarm('두 번째 인터벌 끝! 설정 거리의 50% 돌파!');
-        }
-        else if (settingDistance <= runningDistance && disEnd == false) {
+        } else if (settingDistance <= runningDistance && disEnd == false) {
           disEnd = true;
           playAlarm('두 번째 인터벌 끝! 설정 거리 ${settingDistance}km 완주!');
-        }
-        else {
+        } else {
           playAlarm('두 번째 인터벌 ${settingInterval[0]}분 끝! ');
         }
-      }
-      else {
+      } else {
         if (settingDistance / 2 <= runningDistance && dishalf == false) {
           dishalf = true;
-            playAlarm('설정 거리의 50% 돌파!');
-        }
-        else if (settingDistance <= runningDistance && disEnd == false) {
+          playAlarm('설정 거리의 50% 돌파!');
+        } else if (settingDistance <= runningDistance && disEnd == false) {
           disEnd = true;
-            playAlarm('설정 거리 ${settingDistance}km 완주!');
+          playAlarm('설정 거리 ${settingDistance}km 완주!');
         }
       }
     }
     // // 시간 + 인터벌
-    else if (settingDistance == 0 && settingSec != 0 && settingInterval[0] != 0) {
+    else if (settingDistance == 0 &&
+        settingSec != 0 &&
+        settingInterval[0] != 0) {
       print(settingSec);
       print(tempIntervalTime);
       print(intervalFirst);
-      if (intervalFirst == 1  && tempIntervalTime == 0) {
+      if (intervalFirst == 1 && tempIntervalTime == 0) {
         intervalFirst = 0;
         intervalSecond = 1;
         tempIntervalTime = settingInterval[1] * 60;
         if (settingSec / 2 == runningTime) {
           playAlarm('첫 번째 인터벌 끝! 설정 시간의 50% 달성!');
-        }
-        else if (settingSec == runningTime && timeEnd == false) {
+        } else if (settingSec == runningTime && timeEnd == false) {
           timeEnd = true;
           playAlarm('첫 번째 인터벌 끝! 설정 시간 $setSec분 달성!');
-        }
-        else {
+        } else {
           playAlarm('첫 번째 인터벌 끝!');
         }
-      }
-      else if (intervalSecond == 1  && tempIntervalTime == 0) {
+      } else if (intervalSecond == 1 && tempIntervalTime == 0) {
         intervalFirst = 1;
         intervalSecond = 0;
         tempIntervalTime = settingInterval[0] * 60;
         if (settingSec / 2 == runningTime) {
           playAlarm('두 번째 인터벌 끝! 설정 시간의 50% 달성!');
-        }
-        else if (settingSec == runningTime && timeEnd == false) {
+        } else if (settingSec == runningTime && timeEnd == false) {
           timeEnd = true;
           playAlarm('두 번째 인터벌 끝! 설정 시간 $setSec분 달성!');
-        }
-        else {
+        } else {
           playAlarm('두 번째 인터벌 끝!');
         }
-      }
-      else {
+      } else {
         if (settingSec / 2 == runningTime) {
           playAlarm('설정 시간의 50% 달성!');
-        }
-        else if (settingSec == runningTime && timeEnd == false) {
+        } else if (settingSec == runningTime && timeEnd == false) {
           timeEnd = true;
           playAlarm('설정 시간 $setSec분 달성!');
         }
       }
     }
     // // 거리 + 시간
-    else if (settingDistance != 0 && settingSec == 0 && settingInterval[0] == 0) {
+    else if (settingDistance != 0 &&
+        settingSec == 0 &&
+        settingInterval[0] == 0) {
       if (settingDistance / 2 <= runningDistance && dishalf == false) {
         dishalf = true;
         if (settingSec / 2 == runningTime) {
           playAlarm('설정 시간의 50% 달성! 설정 거리의 50% 돌파!');
-        }
-        else if (settingSec == runningTime && timeEnd == false) {
+        } else if (settingSec == runningTime && timeEnd == false) {
           timeEnd = true;
           playAlarm('설정 시간 $setSec분 달성! 설정 거리의 50% 돌파!');
-        }
-        else {
+        } else {
           playAlarm('설정 거리의 50% 돌파!');
         }
-      }
-      else if (settingDistance <= runningDistance && disEnd == false) {
+      } else if (settingDistance <= runningDistance && disEnd == false) {
         disEnd = true;
         if (settingSec / 2 == runningTime) {
           playAlarm('설정 시간의 50% 달성! 설정 거리 ${settingDistance}km 완주!');
-        }
-        else if (settingSec == runningTime && timeEnd == false) {
+        } else if (settingSec == runningTime && timeEnd == false) {
           timeEnd = true;
           playAlarm('설정 시간 $setSec분 달성! 설정 거리 ${settingDistance}km 완주!');
-        }
-        else {
+        } else {
           playAlarm('설정 거리 ${settingDistance}km 완주!');
         }
-      }
-      else {
+      } else {
         if (settingSec / 2 == runningTime) {
           playAlarm('설정 시간의 50% 달성!');
-        }
-        else if (settingSec == runningTime && timeEnd == false) {
+        } else if (settingSec == runningTime && timeEnd == false) {
           timeEnd = true;
           playAlarm('설정 시간 $setSec분 달성!');
         }
       }
     }
     // // 거리만
-    else if (settingDistance != 0 && settingSec == 0 && settingInterval[0] == 0) {
-        if (settingDistance / 2 <= runningDistance && dishalf == false) {
-          dishalf = true;
-          playAlarm('설정 거리의 50% 돌파!');
-        }
-        else if (settingDistance <= runningDistance && disEnd == false) {
-          disEnd = true;
-          playAlarm('설정 거리 ${settingDistance}km 완주!');
-        }
+    else if (settingDistance != 0 &&
+        settingSec == 0 &&
+        settingInterval[0] == 0) {
+      if (settingDistance / 2 <= runningDistance && dishalf == false) {
+        dishalf = true;
+        playAlarm('설정 거리의 50% 돌파!');
+      } else if (settingDistance <= runningDistance && disEnd == false) {
+        disEnd = true;
+        playAlarm('설정 거리 ${settingDistance}km 완주!');
       }
+    }
     // // 시간만
-    else if (settingDistance == 0 && settingSec != 0 && settingInterval[0] == 0) {
+    else if (settingDistance == 0 &&
+        settingSec != 0 &&
+        settingInterval[0] == 0) {
       if (settingSec / 2 == runningTime) {
         playAlarm('설정 시간의 50% 달성!');
-      }
-      else if (settingSec == runningTime && timeEnd == false) {
+      } else if (settingSec == runningTime && timeEnd == false) {
         timeEnd = true;
         playAlarm('설정 시간 $setSec분 달성!');
       }
     }
     // // 인터벌 만
-    else if (settingDistance == 0 && settingSec == 0 && settingInterval[0] != 0) {
+    else if (settingDistance == 0 &&
+        settingSec == 0 &&
+        settingInterval[0] != 0) {
       if (intervalFirst == 1 && tempIntervalTime == 0) {
         intervalFirst = 0;
         intervalSecond = 1;
         tempIntervalTime = settingInterval[1] * 60;
         playAlarm('첫 번째 인터벌 끝!');
-      }
-      else if (intervalSecond == 0 && tempIntervalTime == 0) {
+      } else if (intervalSecond == 1 && tempIntervalTime == 0) {
         intervalFirst = 1;
         intervalSecond = 0;
         tempIntervalTime = settingInterval[0] * 60;
         playAlarm('두 번째 인터벌 끝');
       }
     }
+
     return Container(
       decoration: BoxDecoration(
         color: BACKGROUND_COLOR,
@@ -402,16 +387,65 @@ class _SetRunningStatusState extends State<SetRunningStatus> {
           SizedBox(),
           SizedBox(),
           SizedBox(),
-          settingDistance != 0 ? DistanceBar(
-            pace: runningDistance,
-            youDistance: settingDistance.toDouble(),
-            name: '목표 거리 : ${settingDistance}km',
-          ) : Container(),
-          settingSec != 0 ? DistanceBar(
-            pace: runningTime,
-            youDistance: settingSec.toDouble(),
-            name: settingHour != 0 ? '목표 시간 : $settingHour시간 $settingMin분':'목표 시간 : $settingMin분',
-          ) : Container(),
+          settingDistance != 0
+              ? DistanceBar(
+                  pace: runningDistance,
+                  youDistance: settingDistance.toDouble(),
+                  name: '목표 거리 : ${settingDistance}km',
+                )
+              : Container(),
+          settingSec != 0
+              ? DistanceBar(
+                  pace: runningTime,
+                  youDistance: settingSec.toDouble(),
+                  name: settingHour != 0
+                      ? '목표 시간 : $settingHour시간 $settingMin분'
+                      : '목표 시간 : $settingMin분',
+                )
+              : Container(),
+          settingDistance == 0 && settingSec == 0
+              ? Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            '${settingInterval[0]} ',
+                            style: intervalFirst == 1
+                                ? currentIntervalStyle
+                                : otherIntervalStyle,
+                          ),
+                          Text(
+                            '분',
+                            style: intervalFirst == 1
+                                ? currentMinStyle
+                                : otherMinStyle,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            '${settingInterval[1]} ',
+                            style: intervalSecond == 1
+                                ? currentIntervalStyle
+                                : otherIntervalStyle,
+                          ),
+                          Text(
+                            '분',
+                            style: intervalSecond == 1
+                                ? currentMinStyle
+                                : otherMinStyle,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                )
+              : Container(),
         ],
       ),
     );

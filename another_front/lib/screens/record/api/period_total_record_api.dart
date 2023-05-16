@@ -73,8 +73,8 @@ class GetPeriodRecord {
       var response = await http.get(url);
       if (response.statusCode == 200) {
         var responseBody = jsonDecode(response.body);
-        print('getAllRecord');
-        print(responseBody['data']);
+        // print('getAllRecord');
+        // print(responseBody['data']);
         return responseBody['data'];
       } else {
         return {};
@@ -87,12 +87,13 @@ class GetPeriodRecord {
 
   // 달력 선택 날짜에 대한 총 기록
   static Future<Map<String, dynamic>> getPeriodRecordSelectDay(int userId, String? date) async {
-    int userId = 1;
     var url = Uri.parse('$_baseUrl/record/$userId/interval?createDate=$date');
     try {
       var response = await http.post(url);
       if (response.statusCode == 200) {
         var responseBody = jsonDecode(response.body);
+        // print('-------------');
+        // print(responseBody['data']);
         return responseBody['data'];
       } else {
         return {};
