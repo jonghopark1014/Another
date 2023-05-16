@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:another/main.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LockScreen extends StatefulWidget {
   const LockScreen({Key? key}) : super(key: key);
@@ -11,15 +13,24 @@ class LockScreen extends StatefulWidget {
 
 class _LockScreenState extends State<LockScreen> {
   bool isLocked = false;
+  bool isPaused = false;
   var _timer;
   int seconds = 0;
   @override
   void initState() {
+    print(isPaused);
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      isPaused = Provider.of<RunningData>(context, listen: false).stopFlag;
+
       print('락스크린 타이머');
-      if (isLocked == false) {
-        seconds += 1;
+      if (isPaused == false) {
+        if (isLocked == false) {
+          seconds += 1;
+        }
+      } else {
+        seconds = 0;
       }
+
       if (seconds > 5) {
         setState(() {
           isLocked = true;
