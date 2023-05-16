@@ -59,8 +59,7 @@ class RecordTab extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.asset('assets/img/logo_small.png'),
-                        SizedBox(height: 10),
+                        Image.asset('assets/img/logo_small.png', width: 120, height: 70),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
