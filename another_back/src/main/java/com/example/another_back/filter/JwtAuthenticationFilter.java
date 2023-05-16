@@ -3,10 +3,11 @@ package com.example.another_back.filter;
 
 import com.example.another_back.config.JwtProvider;
 import com.example.another_back.config.auth.PrincipalDetails;
+import com.example.another_back.dto.LoginResponseDto;
 import com.example.another_back.dto.UserLoginDto;
-import com.example.another_back.entity.User;
 import com.example.another_back.entity.enums.Role;
 import com.example.another_back.repository.UserRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -86,22 +87,30 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String rft = jwtProvider.createRefreshToken(username, role.toString());
 
-        User user = userRepository.findUserByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+//        User user = userRepository.findUserByUsername(username)
+//                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
         /*
             refreshToken redis방식으로 저장 로직 구현하기
          */
         //user.setRefreshToken(rft);
 
 //        userRepository.save(user);
+        LoginResponseDto loginResponse = new LoginResponseDto(principalDetails.getUser());
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.getWriter().write(convertObjectToJson(loginResponse));
 
         //리스폰스 해더에 Authorization : "", Refresh : ""로 전달
         //키 몸무게 닉네임 담아서 주기
         response.addHeader(HEADER_STRING, TOKEN_PREFIX + jwt);
         response.addHeader(RT_HEADER_STRING, TOKEN_PREFIX + rft);
-        response.setIntHeader("height",user.getHeight());
-        response.setIntHeader("weight",user.getWeight());
-        response.setHeader("nickname",user.getNickname());
-        response.setIntHeader("userId", Math.toIntExact(user.getId()));
+        response.getWriter().flush();
+    }
+    public String convertObjectToJson(Object object) throws JsonProcessingException {
+        if (object == null) {
+            return null;
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(object);
     }
 }
