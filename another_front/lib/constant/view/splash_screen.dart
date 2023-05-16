@@ -6,8 +6,6 @@ import 'package:another/screens/home_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-
-
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
@@ -31,18 +29,15 @@ class _SplashScreenState extends State<SplashScreen> {
     final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
 
-    // print(refreshToken);
 
     final dio = Dio();
 
     try {
-      final resp = await dio.post(
-        '$baseUrl/user/login',
-        options: Options(
-          headers: {
-            'authorization': '$refreshToken',
-          },
-        ),
+      final resp = await dio.get(
+        '$baseUrl/user/valid/refresh',
+        queryParameters: {
+          'refresh': refreshToken,
+        },
       );
 
       await storage.write(

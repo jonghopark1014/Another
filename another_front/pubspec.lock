@@ -528,6 +528,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.18.1"
+  is_wear:
+    dependency: "direct main"
+    description:
+      name: is_wear
+      sha256: c0c8b777ad159e08a77ae9cda011d1066bac28829c85cdec314b579a3aafba4a
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1+2"
   js:
     dependency: transitive
     description:
@@ -941,6 +949,31 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  watch_connectivity:
+    dependency: "direct main"
+    description:
+      name: watch_connectivity
+      sha256: "1344cf43cdd9d13c0970077677796c3a83fd4f146e44b03a6eb63ef391a81164"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.5"
+  watch_connectivity_platform_interface:
+    dependency: transitive
+    description:
+      name: watch_connectivity_platform_interface
+      sha256: "9074115391bd764c08a17346fcbc4d5c0b555672defbe6928ac648503b54aa9c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.2"
+  wear:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: upgrade-versions
+      resolved-ref: "3be8f07380cda83191726ea983f46f694650ff96"
+      url: "https://github.com/ju851zel/flutter_wear_plugin"
+    source: git
+    version: "1.1.0"
   win32:
     dependency: transitive
     description:

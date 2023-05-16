@@ -1,4 +1,5 @@
 import 'package:another/constant/const/color.dart';
+import 'package:another/screens/home_screen.dart';
 import 'package:another/screens/record/api/challenge_api.dart';
 import 'package:another/screens/record/api/history_record_api.dart';
 import 'package:another/screens/record/widgets/period_total_record.dart';
@@ -27,37 +28,6 @@ class RecordTab extends StatelessWidget {
     var userInfo = Provider.of<UserInfo>(context);
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black87,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context); // 뒤로가기
-          },
-        ),
-        actions: [
-          ElevatedButton(
-            onPressed: () {
-              // 로그인 페이지로 이동하는 로직을 작성
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginPage()),
-              );
-            },
-            child: Text('로그인'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // 로그인 페이지로 이동하는 로직을 작성
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ChallengePage()),
-              );
-            },
-            child: Text('챌린지'),
-          ),
-        ],
-      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Stack(
@@ -132,6 +102,7 @@ class RecordTab extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                SizedBox(height: 10),
                                 Row(
                                   children: [
                                     CategoryTitle(title: 'MY 챌린지'),
@@ -151,8 +122,10 @@ class RecordTab extends StatelessWidget {
                                     )
                                   ],
                                 ),
+                                SizedBox(height: 5),
                                 MyChallenge(), // 나의 챌린지
                                 CategoryTitle(title: '나의 활동 기록'),
+                                SizedBox(height: 5),
                                 MyRecord(),
                               ],
                             ),
@@ -183,7 +156,8 @@ class _MyChallengeState extends State<MyChallenge> {
   bool _isLoading = true;
 
   Future<void> getSuccessChallenge() async {
-    List<dynamic> data = await GetChallenge.successChallengeList();
+    int userId = Provider.of<UserInfo>(context, listen: false).userId;
+    List<dynamic> data = await GetChallenge.successChallengeList(userId);
     setState(() {
       _successChallenge = data;
       _isLoading = false;
@@ -209,7 +183,10 @@ class _MyChallengeState extends State<MyChallenge> {
                     // if API가 0개이면 띄워줄거 작성해야함
                     _successChallenge.isEmpty
                         ? [
-                            Center(
+                            Container(
+                              width: MediaQuery.of(context).size.width - 50,
+                              alignment: Alignment.center,
+                              // color: WHITE_COLOR,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -217,15 +194,25 @@ class _MyChallengeState extends State<MyChallenge> {
                                   Text(
                                     '아직 획득한 뱃지가 없어요.',
                                     style: TextStyle(
-                                        color: WHITE_COLOR, fontSize: 14),
+                                        color: WHITE_COLOR.withOpacity(0.85),
+                                        fontSize: 14),
                                   ),
                                   Text(
-                                    '런닝을 뛰어 뱃지를 얻어보세요',
+                                    '런닝을 뛰어 뱃지를 얻어보세요.',
                                     style: TextStyle(
-                                        color: WHITE_COLOR, fontSize: 14),
+                                        color: WHITE_COLOR.withOpacity(0.85),
+                                        fontSize: 14),
                                   ),
                                   TextButton(
-                                      onPressed: () {}, child: Text('뛰러가기')),
+                                    onPressed: () {
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                            builder: (_) => HomeScreen(),
+                                          ),
+                                          (route) => false);
+                                    },
+                                    child: Text('뛰러가기'),
+                                  ),
                                 ],
                               ),
                             ),
@@ -282,6 +269,7 @@ class _MyRecordState extends State<MyRecord> {
   }
 
   Future<void> getRecord(String? selectedDay) async {
+    int userId = Provider.of<UserInfo>(context, listen: false).userId;
     Map<String, dynamic> data1 = {};
     Map<String, dynamic> data2 = {};
     Map<String, dynamic> data3 = {};
@@ -290,25 +278,25 @@ class _MyRecordState extends State<MyRecord> {
     });
     switch (_selectedIndex) {
       case 0:
-        data1 = await GetPeriodRecord.getTodayPeriodRecord();
-        data2 = await GetHistoryRecord.getTodayHistoryRecord();
+        data1 = await GetPeriodRecord.getTodayPeriodRecord(userId);
+        data2 = await GetHistoryRecord.getTodayHistoryRecord(userId);
         break;
       case 1:
-        data1 = await GetPeriodRecord.getWeekPeriodRecord();
-        data2 = await GetHistoryRecord.getWeekHistoryRecord();
+        data1 = await GetPeriodRecord.getWeekPeriodRecord(userId);
+        data2 = await GetHistoryRecord.getWeekHistoryRecord(userId);
         break;
       case 2:
-        data1 = await GetPeriodRecord.getMonthPeriodRecord();
-        data2 = await GetHistoryRecord.getMonthHistoryRecord();
+        data1 = await GetPeriodRecord.getMonthPeriodRecord(userId);
+        data2 = await GetHistoryRecord.getMonthHistoryRecord(userId);
         break;
       case 3:
-        data1 = await GetPeriodRecord.getAllPeriodRecord();
-        data2 = await GetHistoryRecord.getAllHistoryRecord();
+        data1 = await GetPeriodRecord.getAllPeriodRecord(userId);
+        data2 = await GetHistoryRecord.getAllHistoryRecord(userId);
         break;
       case 4:
-        data1 = await GetPeriodRecord.getPeriodRecordSelectDay(selectedDay);
-        data2 = await GetHistoryRecord.getHistoryRecordSelectDay(selectedDay);
-        data3 = await GetHistoryRecord.getAllHistoryRecord(); // 마커 찍기 용 데이터
+        data1 = await GetPeriodRecord.getPeriodRecordSelectDay(userId, selectedDay);
+        data2 = await GetHistoryRecord.getHistoryRecordSelectDay(userId, selectedDay);
+        data3 = await GetHistoryRecord.getAllHistoryRecord(userId); // 마커 찍기 용 데이터
         break;
       default:
         data1 = {};
@@ -486,9 +474,6 @@ class _MyRecordContentsState extends State<MyRecordContents> {
     Map<DateTime, List<Event>> parseMarkerDataResult = {};
 
     for (Map<String, dynamic> marker in markerList) {
-      // TableCalendar의 eventLoader에서 반환하는 day는 UTC 기준으로 함!
-      // 하지만 한국 시간으로 데이터를 받고 있기 때문에 UTC 형식으로 변환해줘야해서 .toUtc() 사용!
-      // 하지만 toUtc() 사용하면 -9시간이 되므로 +9시간을 해줘서 날짜를 맞춤!
       DateTime createDate =
           DateTime.parse(marker['createDate']).toUtc().add(Duration(hours: 9));
       Event id = Event(marker['id']);

@@ -1,3 +1,4 @@
+import 'package:another/constant/const/color.dart';
 import 'package:another/screens/account/api/nickname_check_api.dart';
 import 'package:flutter/material.dart';
 import '../../constant/const/color.dart';
@@ -458,7 +459,7 @@ class _CustomInputFormState extends State<CustomInputForm> {
               ),
             ],
           ),
-          SizedBox(height: 120),
+          SizedBox(height: 80),
           FractionallySizedBox(
               widthFactor: 1.0,
               child: ElevatedButton(
@@ -503,13 +504,15 @@ class SignupPage extends StatelessWidget {
       backgroundColor: BACKGROUND_COLOR,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            IntroHeader(),
-            SizedBox(height: 16),
-            CustomInputForm(),
-            Spacer(),
-          ],
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Column(
+            children: [
+              IntroHeader(),
+              SizedBox(height: 16),
+              CustomInputForm(),
+            ],
+          ),
         ),
       ),
     );

@@ -18,6 +18,7 @@ class GoBackAppBarStyle extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: BACKGROUND_COLOR,
+      elevation: 0,
       leading: IconButton(
         onPressed: () {
           if (toHome == true) {

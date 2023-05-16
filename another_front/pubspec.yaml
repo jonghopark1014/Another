@@ -61,6 +61,23 @@ dependencies:
   background_locator_2: ^2.0.6
   flutter_secure_storage: ^8.0.0
   dio: ^4.0.6
+  watch_connectivity: ^0.1.5
+  is_wear: ^0.0.1+1
+  wear:
+    git:
+      url: https://github.com/ju851zel/flutter_wear_plugin
+      ref: upgrade-versions
+
+#  watch_connectivity:
+#    # When depending on this package from a real application you should use:
+#    #   watch_connectivity: ^x.y.z
+#    # See https://dart.dev/tools/pub/dependencies#version-constraints
+#    # The example app is bundled with the plugin so we use a path dependency on
+#    # the parent directory to use the current plugin's version.
+#    path: ../
+#
+#  watch_connectivity_garmin:
+#    path: ../../watch_connectivity_garmin
 
 dev_dependencies:
   flutter_test:
