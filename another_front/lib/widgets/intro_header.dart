@@ -12,9 +12,10 @@ class IntroHeader extends StatelessWidget {
         children: <Widget>[
           Image.asset(
           'assets/img/logo_small.png',
-            height: 80.0,
+            height: 40,
+            width: 70,
           ),
-          SizedBox(height: 16.0),
+          SizedBox(height: 30.0),
           Text(
             '함께하는 즐거운 러닝',
             style: TextStyle(
