@@ -1,6 +1,7 @@
 package com.example.another_back.controller;
 
 import com.example.another_back.config.JwtProvider;
+import com.example.another_back.dto.RefreshTokenDto;
 import com.example.another_back.dto.UserJoinDto;
 import com.example.another_back.dto.UserStartDto;
 import com.example.another_back.dto.UserUpdateForm;
@@ -46,13 +47,12 @@ public class UserController {
     }
 
     @GetMapping(value = "/valid/refresh")
-    public ResponseEntity validRefreshToken(@RequestParam("refresh") String refresh) {
+    public ResponseEntity validRefreshToken(@RequestBody RefreshTokenDto refreshTokenDto) {
+        String refresh = refreshTokenDto.getRefresh();
         try{
             if(refresh.contains(" "))refresh = refresh.substring(refresh.indexOf(" "));
             Claims claim = jwtProvider.getClaim(refresh);
-            Long userId = (Long)claim.get("userId");
-            String nickname = (String)claim.get("nickname");
-            UserStartDto userStartDto = new UserStartDto(userId, nickname);
+            UserStartDto userStartDto = new UserStartDto(claim.get("userId"), claim.get("nickname"));
             return Response.success(HttpStatus.OK, userStartDto);
         }catch (ExpiredJwtException e){
             return Response.fail(HttpStatus.BAD_REQUEST, null);
