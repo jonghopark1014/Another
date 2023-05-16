@@ -19,11 +19,54 @@ class ChallengePage extends StatefulWidget {
 class _ChallengePageState extends State<ChallengePage> {
   List<dynamic> _challengeData = [];
   bool _isLoading = true; // 데이터를 받아오는 중
+  int totalUserExp = 0;
 
   @override
   void initState() {
     super.initState();
     getChallenge();
+    totalUserExp = userExp();
+  }
+
+  int userExp() {
+    var provider = Provider.of<UserInfo>(context, listen: false);
+    int userLevel = provider.userLevel;
+    double userExp = provider.userExp;
+    int totalUserExp;
+    switch (userLevel) {
+      case 1:
+        totalUserExp = (userExp * 10).round();
+        break;
+      case 2:
+        totalUserExp = (10 + userExp * 50).round();
+        break;
+      case 3:
+        totalUserExp = (50 + userExp * 100).round();
+        break;
+      case 4:
+        totalUserExp = (100 + userExp * 500).round();
+        break;
+      case 5:
+        totalUserExp = (500 + userExp * 1000).round();
+        break;
+      case 6:
+        totalUserExp = (1000 + userExp * 5000).round();
+        break;
+      case 7:
+        totalUserExp = (5000 + userExp * 10000).round();
+        break;
+      case 8:
+        totalUserExp = (10000 + userExp * 50000).round();
+        break;
+      case 9:
+        totalUserExp = (50000 + userExp * 100000).round();
+        break;
+      case 10:
+        totalUserExp = 166660;
+      default:
+        totalUserExp = 0;
+    }
+    return totalUserExp;
   }
 
   Future<void> getChallenge() async {
@@ -37,7 +80,7 @@ class _ChallengePageState extends State<ChallengePage> {
 
   double? getChallengeValue(List<dynamic> challengeData, String challengeName) {
     final challenge = challengeData.firstWhere(
-          (data) {
+      (data) {
         return data['challengeName'] == challengeName;
       },
       orElse: () => null,
@@ -58,33 +101,33 @@ class _ChallengePageState extends State<ChallengePage> {
         body: _isLoading
             ? Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ChallengeHeader(exp: 12000),
-                // 월간 시간 챌린지
-                MonthChallenge(
-                    challengeData: _challengeData,
-                    getChallengeValue: getChallengeValue),
-                // 캠퍼스 챌린지
-                CampusChallenge(
-                    challengeData: _challengeData,
-                    getChallengeValue: getChallengeValue),
-                // 꾸준함 챌린지
-                SteadyChallenge(
-                    challengeData: _challengeData,
-                    getChallengeValue: getChallengeValue),
-                // 누적 챌린지
-                TotalDayChallenge(
-                    challengeData: _challengeData,
-                    getChallengeValue: getChallengeValue),
-              ],
-            ),
-          ),
-        ));
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ChallengeHeader(exp: totalUserExp),
+                      // 월간 시간 챌린지
+                      MonthChallenge(
+                          challengeData: _challengeData,
+                          getChallengeValue: getChallengeValue),
+                      // 캠퍼스 챌린지
+                      CampusChallenge(
+                          challengeData: _challengeData,
+                          getChallengeValue: getChallengeValue),
+                      // 꾸준함 챌린지
+                      SteadyChallenge(
+                          challengeData: _challengeData,
+                          getChallengeValue: getChallengeValue),
+                      // 누적 챌린지
+                      TotalDayChallenge(
+                          challengeData: _challengeData,
+                          getChallengeValue: getChallengeValue),
+                    ],
+                  ),
+                ),
+              ));
   }
 }
 
