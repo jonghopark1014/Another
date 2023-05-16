@@ -43,7 +43,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         System.out.println("인증이나 권한이 필요한 주소 요청이 됨.");
         String jwtHeader = request.getHeader(HEADER_STRING);
         System.out.println("jwtHeader : " + jwtHeader);
-        if (request.getServletPath().equals("/api/user/login") || request.getServletPath().equals("/api/user/refresh")) {
+        if (request.getServletPath().equals("/api/user/login") || request.getServletPath().equals("/api/user/valid/refresh")) {
             System.out.println("login페이지 호출 or refresh 토큰 재호출");
             chain.doFilter(request, response);
             return;
