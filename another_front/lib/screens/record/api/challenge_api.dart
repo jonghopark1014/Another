@@ -23,4 +23,24 @@ class GetChallenge{
     print('null');
     return [];
   }
+
+  static Future<List<dynamic>> successChallengeList()
+  async {
+    int userId = 5;
+    var url = Uri.parse('$_baseUrl/badge/success/$userId');
+
+    try {
+      var response = await http.get(url);
+      if (response.statusCode == 200){
+        var responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+
+        return responseBody['data'];
+      }
+    } catch (error) {
+      print(error);
+      print('가져오기 실패');
+    }
+    print('null');
+    return [];
+  }
 }
