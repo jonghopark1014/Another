@@ -1,10 +1,12 @@
 import 'package:another/constant/const/color.dart';
 import 'package:another/constant/const/data.dart';
 import 'package:another/constant/layout/main_layout.dart';
+import 'package:another/main.dart';
 import 'package:another/screens/account/login.dart';
 import 'package:another/screens/home_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -14,9 +16,12 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  late UserInfo userInfo;
+
   @override
   void initState() {
     super.initState();
+    userInfo = Provider.of<UserInfo>(context, listen: false);
     // deleteToken();
     checkToken();
   }
@@ -33,12 +38,19 @@ class _SplashScreenState extends State<SplashScreen> {
     final dio = Dio();
 
     try {
-      final resp = await dio.get(
+      final resp = await dio.post(
         '$baseUrl/user/valid/refresh',
-        queryParameters: {
+        data: {
           'refresh': refreshToken,
         },
       );
+      int userId = resp.data['data']['userId'];
+      String nickname = resp.data['data']['nickname'];
+      int height = resp.data['data']['height'];
+      int weight = resp.data['data']['weight'];
+      print(userId);
+      userInfo.updateUserInfo(userId, nickname, height, weight);
+
 
       await storage.write(
           key: ACCESS_TOKEN_KEY, value: resp.data['accessToken']);
@@ -48,6 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
             (route) => false,
       );
     } catch (e) {
+
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => LoginPage()),
             (route) => false,
