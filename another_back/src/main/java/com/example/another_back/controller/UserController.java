@@ -52,7 +52,7 @@ public class UserController {
         try{
             if(refresh.contains(" "))refresh = refresh.substring(refresh.indexOf(" "));
             Claims claim = jwtProvider.getClaim(refresh);
-            UserStartDto userStartDto = new UserStartDto(claim.get("userId"), claim.get("nickname"));
+            UserStartDto userStartDto = new UserStartDto(claim.get("userId"), claim.get("nickname"), claim.get("weight"), claim.get("height"));
             return Response.success(HttpStatus.OK, userStartDto);
         }catch (ExpiredJwtException e){
             return Response.fail(HttpStatus.BAD_REQUEST, null);
