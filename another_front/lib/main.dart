@@ -188,19 +188,23 @@ class ChallengeData extends ChangeNotifier {
 
 class UserInfo extends ChangeNotifier {
   int userId = 1;
+  String nickname = '';
+  int height = 175;
+  int weight = 70;
   // String? accessToken;
   // String? refreshToken;
 
-  void updateUserInfo(String userId) {
-    this.userId = int.parse(userId);
+  void updateUserInfo(int userId, String nickname, int height, int weight) {
+    this.userId = userId;
+    this.nickname = nickname;
+    this.height = height;
+    this.weight = weight;
     // this.accessToken = accessToken;
     // this.refreshToken = refreshToken;
     notifyListeners();
   }
   // int userId = 1;
-  var nickname = '';
-  var height = 175;
-  var weight = 70;
+
   String profileImg = 'https://cdn.ggilbo.com/news/photo/201812/575659_429788_3144.jpg';
 // 유저 정보를 수정하는 함수 여기에 작성
 // 정보 수정하고 바로 적용하려면 마지막에 notifyListers(); 코드 추가
@@ -232,7 +236,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (_, BoxConstraints constraints) {
-        print(constraints);
         if (constraints.maxHeight > 300) {
           return MultiProvider(
             providers: [
@@ -243,8 +246,8 @@ class MyApp extends StatelessWidget {
               ChangeNotifierProvider(create: (c) => RunningSetting()),
             ],
             child: MaterialApp(
+              debugShowCheckedModeBanner: false,
               initialRoute: '/',
-              // home: SplashScreen(),
               theme: ThemeData(
                 scaffoldBackgroundColor: BACKGROUND_COLOR,
                 fontFamily: 'pretendard',
@@ -257,7 +260,6 @@ class MyApp extends StatelessWidget {
                 ),
               ),
               routes: {
-                // '/': (context) => HomeScreen(),
                 '/': (context) => SplashScreen(),
                 '/Detail': (context) => ChallengeRunning(
                 ),
@@ -288,19 +290,19 @@ class MyApp extends StatelessWidget {
 
 
 
-void receiveDataFromPhone() {
-  const messageChannel =
-  const BasicMessageChannel<String>('com.example.another', StringCodec());
-  // 데이터 수신
-  messageChannel.setMessageHandler(
-        (String? data) async {
-      if (data != null) {
-        final decodedData = json.decode(data);
-        print(decodedData);
-        return decodedData;
-      } else {
-        return 'ddd';
-      }
-    },
-  );
-}
+// void receiveDataFromPhone() {
+//   const messageChannel =
+//   const BasicMessageChannel<String>('com.example.another', StringCodec());
+//   // 데이터 수신
+//   messageChannel.setMessageHandler(
+//         (String? data) async {
+//       if (data != null) {
+//         final decodedData = json.decode(data);
+//         print(decodedData);
+//         return decodedData;
+//       } else {
+//         return 'ddd';
+//       }
+//     },
+//   );
+// }

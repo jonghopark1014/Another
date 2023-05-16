@@ -12,6 +12,7 @@ import 'package:another/screens/running/widgets/running_circle_button.dart';
 import 'package:another/widgets/target.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:watch_connectivity/watch_connectivity.dart';
 
 import '../../main.dart';
 
@@ -23,9 +24,21 @@ class RunningTab extends StatefulWidget {
 
 class _RunningTabState extends State<RunningTab> {
   BeforeRunningMap beforeRunningMap = BeforeRunningMap();
+
+  late final WatchConnectivityBase _watch;
+  final _log = <String>[];
   @override
   void initState() {
     super.initState();
+    // _watch = WatchConnectivity();
+  }
+
+  void sendMessage() {
+    final message = {'data': 'Hello'};
+    _watch.sendMessage(message);
+    setState(() => _log.add('Sent message: $message'));
+    print('ddddd');
+    print(_watch.sendMessage(message));
   }
 
   @override
@@ -51,8 +64,10 @@ class _RunningTabState extends State<RunningTab> {
                   // RunningCircleButton(iconNamed: Icons.play_arrow, onPressed: onPressed()),
                   RunningCircleButton(
                     iconNamed: Icons.play_arrow,
+
                     onPressed: () {
                       onPressed('/UnderRunning');
+                      sendMessage;
                     },
                   ),
                   RunningSmallButton(

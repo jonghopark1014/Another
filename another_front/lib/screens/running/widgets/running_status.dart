@@ -177,7 +177,6 @@ class _RunningStatus extends State<RunningStatus> {
     final message = {'runningDistance': runningDistance, };
     _watch.sendMessage(message);
     setState(() => _log.add('Sent message: $message'));
-    print('ddd');
   }
 
   @override
