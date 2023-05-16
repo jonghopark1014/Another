@@ -35,6 +35,7 @@ class _RunningCarouselState extends State<RunningCarousel> {
       ),
     ];
     userId = Provider.of<UserInfo>(context, listen: false).userId as int;
+    print('$userId==================================');
     // TODO: implement initState
     getRecommendChallenge();
     getCompareData();
@@ -88,40 +89,61 @@ class _RunningCarouselState extends State<RunningCarousel> {
     var response = await runCompareMonthApi(userId);
     print(response);
     if (response['status'] == 'success') {
-      setState(() {
-        var runCompareData = response['data'];
-        _carouselPages[1] = Container(
-          alignment: Alignment(0, 0.5),
-          color: CONTOUR_COLOR,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                // 그래프 높이 85
-                SizedBox(
-                  height: 85,
-                  child: RecordChart(
-                      '',
-                      runCompareData!['lastMonthDistance']!,
-                      runCompareData!['thisMonthDistance']!,
-                      runCompareData!['lastMonthDistance'].toString(),
-                      runCompareData!['thisMonthDistance'].toString(),
+      setState(
+        () {
+          var runCompareData = response['data'];
+          _carouselPages[1] = Container(
+            alignment: Alignment(0, 0.5),
+            color: CONTOUR_COLOR,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        '${runCompareData!['lastMonthDistance'].toString()}km',
+                        style: TextStyle(
+                          color: WHITE_COLOR,
+                          fontSize: 24,
+                        ),
                       ),
-                ),
-                Text(
-                  "나의 기록 그래프",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+                      Text(
+                        '지난달',
+                        style: TextStyle(
+                          color: WHITE_COLOR,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
                   ),
-                )
-              ],
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        '${runCompareData!['thisMonthDistance'].toString()}km',
+                        style: TextStyle(
+                          color: WHITE_COLOR,
+                          fontSize: 24,
+                        ),
+                      ),
+                      Text(
+                        '이번달',
+                        style: TextStyle(
+                          color: WHITE_COLOR,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      });
+          );
+        },
+      );
     }
   }
 

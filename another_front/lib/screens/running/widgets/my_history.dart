@@ -18,17 +18,16 @@ class _MyHistoryState extends State<MyHistory> {
   late bool firstClicked = false;
   late ChallengeData challengeData;
   bool dataGet = false;
-  List<dynamic> historyList = [];
-  late final _userInfo;
-  late final _userId;
+        List<dynamic> historyList = [];
+        late final _userInfo;
+        late final _userId;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _userInfo = Provider.of<UserInfo>(context, listen: false);
-    // _userId = _userInfo.userId;
-    _userId = 1; // 더미========================================
+        @override
+        void initState() {
+      // TODO: implement initState
+      super.initState();
+      _userInfo = Provider.of<UserInfo>(context, listen: false);
+    _userId = _userInfo.userId;
     challengeData = Provider.of<ChallengeData>(context, listen: false);
     getHistory();
   }

@@ -65,23 +65,37 @@ class _DetailSettingState extends State<DetailSetting> {
                       color: SERVETWO_COLOR,
                     ),
                   ),
-            _min != 0
+            _hour != 0 || _min != 0
                 ? Row(
                     children: [
-                      Text(
+                      _hour != 0 ? Text(
+                        _hour.toString(),
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: WHITE_COLOR,
+                        ),
+                      ) : Container(),
+                      _hour != 0 ? Text(
+                        ' h ',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: SERVETWO_COLOR,
+                        ),
+                      ): Container(),
+                      _min != 0 ? Text(
                         _min.toString(),
                         style: TextStyle(
                           fontSize: 20,
                           color: WHITE_COLOR,
                         ),
-                      ),
-                      Text(
-                        ' min',
+                      ) : Container(),
+                      _min != 0 ? Text(
+                        ' m',
                         style: TextStyle(
                           fontSize: 18,
                           color: SERVETWO_COLOR,
                         ),
-                      )
+                      ): Container(),
                     ],
                   )
                 : Text(
@@ -103,7 +117,7 @@ class _DetailSettingState extends State<DetailSetting> {
                         ),
                       ),
                       Text(
-                        ' min',
+                        ' m ',
                         style: TextStyle(
                           fontSize: 18,
                           color: SERVETWO_COLOR,
@@ -118,7 +132,7 @@ class _DetailSettingState extends State<DetailSetting> {
                         ),
                       ),
                       Text(
-                        ' min',
+                        ' m',
                         style: TextStyle(
                           fontSize: 18,
                           color: SERVETWO_COLOR,
@@ -152,7 +166,6 @@ class _DetailSettingState extends State<DetailSetting> {
           );
         });
     if (result != null) {
-      print('$result======================================');
       setState(() {
         _distance = result[0];
         _hour = result[1];

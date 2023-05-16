@@ -12,7 +12,6 @@ Future<bool> feedCreateApi(
   request.headers.addAll({"Content-Type": "multipart/form-data"});
   print(feedPics);
   print(feedPics.length);
-  print('????');
 
   for (var i = 0; i < feedPics.length - 1; i++) {
     print('!!!!!!');

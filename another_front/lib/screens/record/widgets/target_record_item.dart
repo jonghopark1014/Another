@@ -9,7 +9,7 @@ class Target extends StatelessWidget {
   final String userCalorie;
   final String runningTime;
   final String userPace;
-  final String runningId;
+  final String? runningId;
 
   const Target({
     required this.targetname,
@@ -17,16 +17,24 @@ class Target extends StatelessWidget {
     required this.userCalorie,
     required this.runningDistance,
     required this.userPace,
-    required this.runningId,
+    this.runningId,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
+    return GestureDetector(
+      onTap: () {
+        if (runningId != null) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => DetailFeed(runningId: runningId!),
+            ),
+          );
+        }
+      },
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: Container(
@@ -49,57 +57,48 @@ class Target extends StatelessWidget {
                     textAlign: TextAlign.start,
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => DetailFeed(runningId: runningId),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: TargetBox(
+                        data: runningDistance,
+                        name: 'km',
+                        textColor: MAIN_COLOR,
+                        recordColor: SERVEONE_COLOR,
                       ),
-                    );
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: TargetBox(
-                          data: runningDistance,
-                          name: 'km',
-                          textColor: MAIN_COLOR,
-                          recordColor: SERVEONE_COLOR,
-                        ),
+                    ),
+                    Expanded(
+                      child: TargetBox(
+                        data: runningTime,
+                        name: '시간',
+                        textColor: MAIN_COLOR,
+                        recordColor: SERVEONE_COLOR,
                       ),
-                      Expanded(
-                        child: TargetBox(
-                          data: runningTime,
-                          name: '시간',
-                          textColor: MAIN_COLOR,
-                          recordColor: SERVEONE_COLOR,
-                        ),
+                    ),
+                    Expanded(
+                      child: TargetBox(
+                        data: userCalorie,
+                        name: 'kcal',
+                        textColor: MAIN_COLOR,
+                        recordColor: SERVEONE_COLOR,
                       ),
-                      Expanded(
-                        child: TargetBox(
-                          data: userCalorie,
-                          name: 'kcal',
-                          textColor: MAIN_COLOR,
-                          recordColor: SERVEONE_COLOR,
-                        ),
+                    ),
+                    Expanded(
+                      child: TargetBox(
+                        data: userPace,
+                        name: '평균 페이스',
+                        textColor: MAIN_COLOR,
+                        recordColor: SERVEONE_COLOR,
                       ),
-                      Expanded(
-                        child: TargetBox(
-                          data: userPace,
-                          name: '평균 페이스',
-                          textColor: MAIN_COLOR,
-                          recordColor: SERVEONE_COLOR,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
-        )
-      ],
+        ),
+      ]),
     );
   }
 }
