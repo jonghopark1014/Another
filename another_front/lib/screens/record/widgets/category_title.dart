@@ -10,12 +10,15 @@ class CategoryTitle extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          child: Text(
-            '$title',
-            style: TextStyle(
-              color: WHITE_COLOR,
-              fontSize: 16,
+        Padding(
+          padding: EdgeInsets.only(top: 25, bottom: 10),
+          child: Container(
+            child: Text(
+              '$title',
+              style: TextStyle(
+                color: WHITE_COLOR,
+                fontSize: 16,
+              ),
             ),
           ),
         ),
