@@ -2,6 +2,7 @@ package com.example.another_back.controller;
 
 import com.example.another_back.config.JwtProvider;
 import com.example.another_back.dto.UserJoinDto;
+import com.example.another_back.dto.UserStartDto;
 import com.example.another_back.dto.UserUpdateForm;
 import com.example.another_back.dto.response.Response;
 import com.example.another_back.service.UserService;
@@ -49,7 +50,10 @@ public class UserController {
         try{
             if(refresh.contains(" "))refresh = refresh.substring(refresh.indexOf(" "));
             Claims claim = jwtProvider.getClaim(refresh);
-            return Response.success(HttpStatus.OK);
+            Long userId = (Long)claim.get("userId");
+            String nickname = (String)claim.get("nickname");
+            UserStartDto userStartDto = new UserStartDto(userId, nickname);
+            return Response.success(HttpStatus.OK, userStartDto);
         }catch (ExpiredJwtException e){
             return Response.fail(HttpStatus.BAD_REQUEST, null);
         }
