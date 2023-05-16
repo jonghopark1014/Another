@@ -1,3 +1,4 @@
+import 'package:another/screens/running/widgets/LockScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -41,6 +42,7 @@ class _UnderChallengeState extends State<UnderChallenge> {
             ),
           ),
           UnderChallengeStatus(initialPosition: initialPosition),
+          LockScreen(),
         ],
       ),
     );
@@ -181,7 +183,7 @@ class _UnderChallengeStatusState extends State<UnderChallengeStatus> {
                       ),
                       DistanceBar(
                         name: '내 페이스',
-                        pace: currentRunningDistance,
+                        pace: currentDistance,
                         youDistance: double.parse(targetRunningDistance),
                         // youDistance: 0.832,
                       ),
