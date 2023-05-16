@@ -10,6 +10,8 @@ import './widgets/complete_button.dart';
 import './widgets/image_picker.dart';
 import './api/userinfo_change_api.dart';
 import 'package:another/screens/account/api/nickname_check_api.dart';
+import 'package:another/screens/record/api/user_level_exp_api.dart';
+import 'package:another/screens/record/record.dart';
 
 class ProfileEditPage extends StatefulWidget {
   const ProfileEditPage({Key? key}) : super(key: key);
@@ -61,11 +63,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     return null; // 유효성 검사 통과
   }
 
-  void _onSavePressed() async {
+  void _onSavePressed(BuildContext context) async {
     // 프로필 사진 수정한 경우
     if (isNicknamePossible == true) {
       if (profileImg != null) {
         await UserInfoChangeApi.profileImgChange(pickedFile: profileImg!);
+        // context.read<UserInfo>().updateProfileImg(profileImg);
+        print('profileImg: $profileImg');
+        print('Provider에 프로필사진 변경');
       }
       // 유저 정보
       await UserInfoChangeApi.userInfoChange(
@@ -73,7 +78,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         weight: _weight,
         nickname: _nicknameController.text,
       );
-      Navigator.pop(context); // 뒤로가기
+      context.read<UserInfo>().updateNicknameHeightWeight(_nicknameController.text, _height, _weight);
+      // print('Provider에 닉네임키몸무게 변경');
+      // 유저정보 가져오는 API 통신 다시
+      await UserLevelExpApi.getUserLevelExp();
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (_) => RecordTab(),
+          ),(route) => false);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('사용자 정보가 변경되었습니다.')),
       );
@@ -104,13 +116,15 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(profileImg);
     return Scaffold(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IntroHeader(),
           SizedBox(height: 16),
           ProfileImage(
-            profileImg: _profileImgUrl,
+            profileImg: context.watch<UserInfo>().profileImg,
             key: _imagePickerKey,
             onFileChanged: (img) => setState(() => profileImg = img),
           ),
@@ -197,7 +211,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
               CompleteButton(
                 text: '수정 완료',
                 onPressed: () {
-                  _onSavePressed();
+                  _onSavePressed(context);
                 },
               ),
             ],
