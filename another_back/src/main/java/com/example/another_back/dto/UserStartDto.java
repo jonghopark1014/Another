@@ -4,10 +4,10 @@ import lombok.Getter;
 
 @Getter
 public class UserStartDto {
-    private Long userId;
-    private String nickname;
+    private Object userId;
+    private Object nickname;
 
-    public UserStartDto(Long userId, String nickname) {
+    public UserStartDto(Object userId, Object nickname) {
         this.userId = userId;
         this.nickname = nickname;
     }
