@@ -53,10 +53,10 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       isNicknameButtonActive = false;
       return '닉네임을 입력해주세요.';
     }
-    if (value.length < 2 || value.length > 8) {
+    if (value.length < 2 || value.length > 12) {
       isNicknamePossible = false;
       isNicknameButtonActive = false;
-      return '닉네임은 2~8자 이내로 입력해주세요.';
+      return '닉네임은 2~12자 이내로 입력해주세요.';
     }
     isNicknamePossible = false;
     isNicknameButtonActive = true;
@@ -123,7 +123,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          IntroHeader(),
+          IntroHeader(logoStyle: 'row'),
           SizedBox(height: 16),
           ProfileImage(
             profileImg: context.watch<UserInfo>().profileImg,

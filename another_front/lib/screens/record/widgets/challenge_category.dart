@@ -16,7 +16,7 @@ class MonthChallenge extends StatelessWidget {
     return Column(
       children: [
         Row(children: [
-          CategoryTitle(title: '월간 시간 챌린지'),
+          CategoryTitle(title: '월간 시간 챌린지', top: 25, bottom: 10),
           Spacer(), // 다른 자식 위젯들을 오른쪽으로 밀어내기 위해 추가
         ]),
         Wrap(
@@ -88,7 +88,7 @@ class CampusChallenge extends StatelessWidget {
     return Column(
       children: [
         Row(children: [
-          CategoryTitle(title: '캠퍼스 완주 챌린지'),
+          CategoryTitle(title: '캠퍼스 완주 챌린지', top: 25, bottom: 10),
           Spacer(), // 다른 자식 위젯들을 오른쪽으로 밀어내기 위해 추가
         ]),
         Wrap(
@@ -171,7 +171,7 @@ class SteadyChallenge extends StatelessWidget {
     return Column(
       children: [
         Row(children: [
-          CategoryTitle(title: '연속 출석 챌린지'),
+          CategoryTitle(title: '연속 출석 챌린지', top: 25, bottom: 10),
           Spacer(), // 다른 자식 위젯들을 오른쪽으로 밀어내기 위해 추가
         ]),
         Wrap(
@@ -235,7 +235,7 @@ class TotalDayChallenge extends StatelessWidget {
     return Column(
       children: [
         Row(children: [
-          CategoryTitle(title: '누적 출석 챌린지'),
+          CategoryTitle(title: '누적 출석 챌린지', top: 25, bottom: 10),
           Spacer(), // 다른 자식 위젯들을 오른쪽으로 밀어내기 위해 추가
         ]),
         Wrap(

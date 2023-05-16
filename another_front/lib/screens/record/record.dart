@@ -105,7 +105,7 @@ class RecordTab extends StatelessWidget {
                                 SizedBox(height: 10),
                                 Row(
                                   children: [
-                                    CategoryTitle(title: 'MY 챌린지'),
+                                    CategoryTitle(title: 'MY 챌린지', top: 0, bottom: 0),
                                     IconButton(
                                       onPressed: () {
                                         Navigator.push(
@@ -124,7 +124,7 @@ class RecordTab extends StatelessWidget {
                                 ),
                                 SizedBox(height: 5),
                                 MyChallenge(), // 나의 챌린지
-                                CategoryTitle(title: '나의 활동 기록'),
+                                CategoryTitle(title: '나의 활동 기록', top: 25, bottom: 10),
                                 SizedBox(height: 5),
                                 MyRecord(),
                               ],
@@ -226,13 +226,13 @@ class _MyChallengeState extends State<MyChallenge> {
                                   children: [
                                     Image.network(
                                       challenge['challengeUrl'],
-                                      width: 100,
-                                      height: 100,
+                                      width: 80,
+                                      height: 80,
                                     ),
-                                    Text(challenge['challengeName'],
-                                        style: TextStyle(
-                                            color: SERVETWO_COLOR,
-                                            fontSize: 12))
+                                    // Text(challenge['challengeName'],
+                                    //     style: TextStyle(
+                                    //         color: SERVETWO_COLOR,
+                                    //         fontSize: 12))
                                   ],
                                 ),
                               ),
@@ -482,8 +482,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
     Map<DateTime, List<Event>> parseMarkerDataResult = {};
 
     for (Map<String, dynamic> marker in markerList) {
-      DateTime createDate =
-          DateTime.parse(marker['createDate']).toUtc();
+      DateTime createDate = DateTime.parse(marker['createDate']).toUtc();
       Event id = Event(marker['id']);
       if (parseMarkerDataResult.containsKey(createDate)) {
         parseMarkerDataResult[createDate]!.add(id);

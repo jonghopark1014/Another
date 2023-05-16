@@ -37,7 +37,7 @@ class _SignupUserInfoPageState extends State<SignupUserInfoPage> {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          IntroHeader(),
+          IntroHeader(logoStyle: 'row',),
           Expanded(
             child: HeightWeightPicker(
               initialHeight: _height,

@@ -347,151 +347,153 @@ class _CustomInputFormState extends State<CustomInputForm> {
 
   @override
   Widget build(BuildContext context) {
-    print("=====================");
-    print(isNicknamePossible);
-    print('build');
-    print('=================================');
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          CustomTextField(
-            myNode: idFocus,
-            controller: emailController,
-            labelText: '아이디(이메일)',
-            validator: _validateEmail,
-            hintText: '아이디를 입력해 주세요',
-            labelColor: idFoc ? MAIN_COLOR : SERVEONE_COLOR,
-          ),
-          SizedBox(height: 16),
-          CustomTextField(
-            myNode: pwFocus,
-            controller: pwController,
-            labelText: '비밀번호',
-            validator: _validatePw,
-            obscureText: true,
-            formKey: _formKey,
-            hintText: '비밀번호를 입력해 주세요',
-            labelColor: pwFoc ? MAIN_COLOR : SERVEONE_COLOR,
-          ),
-          SizedBox(height: 16),
-          CustomTextField(
-            myNode: pwCheckFocus,
-            controller: pwCheckController,
-            labelText: '비밀번호 확인',
-            validator: _validatePwCheck,
-            obscureText: true,
-            hintText: '비밀번호를 한번 더 입력해 주세요',
-            labelColor: pwCheckFoc ? MAIN_COLOR : SERVEONE_COLOR,
-          ),
-          SizedBox(height: 16),
-          Stack(
-            children: [
-              CustomTextField(
-                myNode: nickFocus,
-                controller: nicknameController,
-                labelText: '닉네임',
-                validator: _validateNickname,
-                hintText: '닉네임을 입력해 주세요',
-                labelColor: nickFoc ? MAIN_COLOR : SERVEONE_COLOR,
-              ),
-              Positioned(
-                top: 15,
-                right: 10,
-                child: ElevatedButton(
-                  onPressed: isNicknameButtonActive &&
-                      isNicknamePossible == false
-                      ? () async {
-                    if (await doubleCheckApi.doubleCheck(
-                        nickname: nicknameController.text,
-                        nicknamePossible: nicknamePossible,
-                        nicknameDuplication: nicknameDuplication) ==
-                        '사용 가능') {
-                      isNicknamePossible = true;
-                    } else {
-                      isNicknamePossible = false;
+    // print("=====================");
+    // print(isNicknamePossible);
+    // print('build');
+    // print('=================================');
+    return SafeArea(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            CustomTextField(
+              myNode: idFocus,
+              controller: emailController,
+              labelText: '아이디(이메일)',
+              validator: _validateEmail,
+              hintText: '아이디를 입력해 주세요',
+              labelColor: idFoc ? MAIN_COLOR : SERVEONE_COLOR,
+            ),
+            SizedBox(height: 16),
+            CustomTextField(
+              myNode: pwFocus,
+              controller: pwController,
+              labelText: '비밀번호',
+              validator: _validatePw,
+              obscureText: true,
+              formKey: _formKey,
+              hintText: '비밀번호를 입력해 주세요',
+              labelColor: pwFoc ? MAIN_COLOR : SERVEONE_COLOR,
+            ),
+            SizedBox(height: 16),
+            CustomTextField(
+              myNode: pwCheckFocus,
+              controller: pwCheckController,
+              labelText: '비밀번호 확인',
+              validator: _validatePwCheck,
+              obscureText: true,
+              hintText: '비밀번호를 한번 더 입력해 주세요',
+              labelColor: pwCheckFoc ? MAIN_COLOR : SERVEONE_COLOR,
+            ),
+            SizedBox(height: 16),
+            Stack(
+              children: [
+                CustomTextField(
+                  myNode: nickFocus,
+                  controller: nicknameController,
+                  labelText: '닉네임',
+                  validator: _validateNickname,
+                  hintText: '닉네임을 입력해 주세요',
+                  labelColor: nickFoc ? MAIN_COLOR : SERVEONE_COLOR,
+                ),
+                Positioned(
+                  top: 15,
+                  right: 10,
+                  child: ElevatedButton(
+                    onPressed: isNicknameButtonActive &&
+                        isNicknamePossible == false
+                        ? () async {
+                      if (await doubleCheckApi.doubleCheck(
+                          nickname: nicknameController.text,
+                          nicknamePossible: nicknamePossible,
+                          nicknameDuplication: nicknameDuplication) ==
+                          '사용 가능') {
+                        isNicknamePossible = true;
+                      } else {
+                        isNicknamePossible = false;
+                      }
                     }
-                  }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    onSurface: Colors.white,
-                  ),
-                  child: Text('중복확인'),
-                ),
-              )
-            ],
-          ),
-          SizedBox(height: 24),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                '성별',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: SERVEONE_COLOR,
-                ),
-              ),
-              SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  ToggleButtons(
-                    children: <Widget>[
-                      Text('남'),
-                      Text('여'),
-                    ],
-
-                    isSelected: [isMaleSelected, !isMaleSelected],
-                    borderRadius: BorderRadius.circular(20), // 테두리 radius
-                    color: MAIN_COLOR, // 선택되지 않은 버튼의 색
-                    borderColor: MAIN_COLOR, // 선택되지 않은 버튼의 테두리 색
-                    selectedColor: Colors.black87, // 선택된 버튼의 글자색
-                    selectedBorderColor: MAIN_COLOR, // 선택된 버튼의 테두리 색
-                    fillColor: MAIN_COLOR, // 선택된 버튼의 배경 색
-                    onPressed: (int index) {
-                      setState(() {
-                        isMaleSelected = index == 0 ? true : false;
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(height: 80),
-          FractionallySizedBox(
-              widthFactor: 1.0,
-              child: ElevatedButton(
-                onPressed: isEmailPossible &&
-                    isPwPossible &&
-                    isPwCheckPossible &&
-                    isNicknamePossible
-                    ? () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SignupUserInfoPage(
-                        email: emailController.text,
-                        password: pwController.text,
-                        nickname: nicknameController.text,
-                        isMale: isMaleSelected,
-                      ),
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      onSurface: Colors.white,
                     ),
-                  );
-                }
-                    : null,
-                style: ElevatedButton.styleFrom(
-                  onSurface: isEmailPossible &&
+                    child: Text('중복확인'),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(height: 24),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  '성별',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: SERVEONE_COLOR,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    ToggleButtons(
+                      children: <Widget>[
+                        Text('남'),
+                        Text('여'),
+                      ],
+
+                      isSelected: [isMaleSelected, !isMaleSelected],
+                      borderRadius: BorderRadius.circular(20), // 테두리 radius
+                      color: MAIN_COLOR, // 선택되지 않은 버튼의 색
+                      borderColor: MAIN_COLOR, // 선택되지 않은 버튼의 테두리 색
+                      selectedColor: Colors.black87, // 선택된 버튼의 글자색
+                      selectedBorderColor: MAIN_COLOR, // 선택된 버튼의 테두리 색
+                      fillColor: MAIN_COLOR, // 선택된 버튼의 배경 색
+                      onPressed: (int index) {
+                        setState(() {
+                          isMaleSelected = index == 0 ? true : false;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 60),
+            FractionallySizedBox(
+                widthFactor: 1.0,
+                child: ElevatedButton(
+                  onPressed: isEmailPossible &&
                       isPwPossible &&
                       isPwCheckPossible &&
                       isNicknamePossible
-                      ? MAIN_COLOR
-                      : Colors.grey, // 비활성화 색상
-                ),
-                child: const Text('다음으로'),
-              )),
-        ],
+                      ? () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SignupUserInfoPage(
+                          email: emailController.text,
+                          password: pwController.text,
+                          nickname: nicknameController.text,
+                          isMale: isMaleSelected,
+                        ),
+                      ),
+                    );
+                  }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    onSurface: isEmailPossible &&
+                        isPwPossible &&
+                        isPwCheckPossible &&
+                        isNicknamePossible
+                        ? MAIN_COLOR
+                        : Colors.grey, // 비활성화 색상
+                  ),
+                  child: const Text('다음으로'),
+                )),
+          ],
+        ),
       ),
     );
   }
@@ -508,7 +510,7 @@ class SignupPage extends StatelessWidget {
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             children: [
-              IntroHeader(),
+              IntroHeader(logoStyle: 'row',),
               SizedBox(height: 16),
               CustomInputForm(),
             ],
