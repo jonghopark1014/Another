@@ -59,11 +59,11 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             //정상이지 않으면 해당 Method /error페이지 반환
             String jwtToken = request.getHeader(HEADER_STRING).replace(TOKEN_PREFIX, "");
             Claims claims = jwtProvider.getClaim(jwtToken);
-            String username = (String) claims.get("username");
+            Long userId = (Long) claims.get("userId");
 
             // 서명이 정상적으로 됨
-            if (username != null) {
-                User userInfo = userRepository.findUserByUsername(username)
+            if (userId != null) {
+                User userInfo = userRepository.findById(userId)
                         .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
 
                 PrincipalDetails principalDetails = new PrincipalDetails(userInfo);
@@ -81,7 +81,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 String jwtToken = request.getHeader(RT_HEADER_STRING).replace(TOKEN_PREFIX, "");
                 Claims claims = jwtProvider.getClaim(jwtToken);
                 response.setStatus(401);
-                response.setHeader("Authorization", jwtProvider.createAccessToken((String)claims.get("username"), (String)claims.get("role")));
             } catch (ExpiredJwtException e1) {
                 throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "해당 토큰이 만료되었습니다.");
             } catch (JwtException exception) {
