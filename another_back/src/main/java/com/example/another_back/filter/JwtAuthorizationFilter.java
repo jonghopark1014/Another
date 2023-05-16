@@ -43,7 +43,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         System.out.println("인증이나 권한이 필요한 주소 요청이 됨.");
         String jwtHeader = request.getHeader(HEADER_STRING);
         System.out.println("jwtHeader : " + jwtHeader);
-        if (request.getServletPath().equals("/login") || request.getServletPath().equals("/user/refresh")) {
+        if (request.getServletPath().equals("/api/user/login") || request.getServletPath().equals("/api/user/refresh")) {
             System.out.println("login페이지 호출 or refresh 토큰 재호출");
             chain.doFilter(request, response);
             return;
@@ -80,7 +80,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             try {
                 String jwtToken = request.getHeader(RT_HEADER_STRING).replace(TOKEN_PREFIX, "");
                 Claims claims = jwtProvider.getClaim(jwtToken);
-
                 response.setStatus(401);
                 response.setHeader("Authorization", jwtProvider.createAccessToken((String)claims.get("username"), (String)claims.get("role")));
             } catch (ExpiredJwtException e1) {
