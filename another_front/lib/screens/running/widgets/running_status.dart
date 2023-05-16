@@ -150,6 +150,7 @@ class _RunningStatus extends State<RunningStatus> {
     runDataId = userId + forRunId1;
     // 타이머 시작
     isStart = true;
+    // Isolate.spawn(timerIsolate, 'start');
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         if (isStart) {
@@ -275,8 +276,6 @@ class _RunningStatus extends State<RunningStatus> {
   //   final Uint8List? bytes = await mapController.takeSnapshot();
   //   return bytes;
   // }
-
-
   Future<void> sendDataToWatch(List<String> data) async {
     final BasicMessageChannel<String> _messageChannel =
     BasicMessageChannel<String>('com.example.another', StringCodec());

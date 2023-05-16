@@ -1,4 +1,6 @@
+import 'package:another/constant/const/color.dart';
 import 'package:another/main.dart';
+import 'package:carousel_indicator/carousel_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:another/screens/feed/widgets/line_chart_custom.dart';
 
@@ -22,6 +24,7 @@ class DetailFeed extends StatefulWidget {
 }
 
 class _DetailFeedState extends State<DetailFeed> {
+  int pageIndex = 0;
   final ScrollController _scrollController = ScrollController();
 
   List<String> thumbnailUrls = [];
@@ -138,18 +141,42 @@ class _DetailFeedState extends State<DetailFeed> {
         children: [
           Column(
             children: [
-              SizedBox(
-                height: 300.0,
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: thumbnailUrls.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Image.network(
-                      thumbnailUrls[index],
-                      fit: BoxFit.contain,
-                    );
-                  },
-                ),
+              Stack(
+                  alignment: AlignmentDirectional.bottomCenter,
+                  children: [
+                  SizedBox(
+                    height: 300.0,
+                    child: PageView.builder(
+                      onPageChanged: (value) {
+                        setState(() {
+                          pageIndex = value;
+                        });
+                      },
+                      controller: _pageController,
+                      itemCount: thumbnailUrls.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Image.network(
+                          thumbnailUrls[index],
+                          fit: BoxFit.contain,
+                        );
+                      },
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 10,
+                    child: thumbnailUrls.length > 1
+                        ? CarouselIndicator(
+                      space: 15,
+                      activeColor: MAIN_COLOR,
+                      width: 8,
+                      height: 8,
+                      animationDuration: 0,
+                      count: thumbnailUrls.length,
+                      index: pageIndex,
+                    )
+                        : Container(),
+                  ),
+                ]
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),

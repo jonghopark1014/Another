@@ -19,10 +19,12 @@ import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatf
 
 class RunningSetting extends ChangeNotifier {
   int distance = 0;
+  int hour = 0;
   int min = 0;
   List<int> interval = [0, 0];
-  void setData(d, m, i) {
+  void setData(d, h, m, i) {
     distance = d;
+    hour = h;
     min = m;
     interval = i;
     notifyListeners();
@@ -31,7 +33,7 @@ class RunningSetting extends ChangeNotifier {
 
 class RunningData extends ChangeNotifier {
   late GoogleMapController mapController;
-  CameraPosition currentPosition = CameraPosition(target: LatLng(0,0), zoom: 17);
+  CameraPosition currentPosition = CameraPosition(target: LatLng(0,0), zoom: 13);
   String runningId = '';
   LatLng preValue = LatLng(0, 0);
   LatLng curValue = LatLng(0, 0);
@@ -191,21 +193,31 @@ class UserInfo extends ChangeNotifier {
   String nickname = '';
   int height = 175;
   int weight = 70;
-  // String? accessToken;
-  // String? refreshToken;
 
-  void updateUserInfo(int userId, String nickname, int height, int weight) {
-    this.userId = userId;
+  String profileImg = '';
+  int userLevel = 0;
+  double userExp = 0;
+
+  void updateUserInfo(String userId, String nickname, int height, int weight) {
+    this.userId = int.parse(userId);
     this.nickname = nickname;
     this.height = height;
     this.weight = weight;
-    // this.accessToken = accessToken;
-    // this.refreshToken = refreshToken;
     notifyListeners();
   }
-  // int userId = 1;
 
-  String profileImg = 'https://cdn.ggilbo.com/news/photo/201812/575659_429788_3144.jpg';
+  void updateNicknameHeightWeight(String nickname,int height, int weight){
+    this.nickname = nickname;
+    this.height = height;
+    this.weight = weight;
+    notifyListeners();
+  }
+
+  void updateProfileImg(File? pickedFile){
+    profileImg = pickedFile!.path; // 새로운 프로필사진을 선택한 경우만
+    notifyListeners();
+  }
+
 // 유저 정보를 수정하는 함수 여기에 작성
 // 정보 수정하고 바로 적용하려면 마지막에 notifyListers(); 코드 추가
 }
@@ -234,55 +246,57 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, BoxConstraints constraints) {
-        if (constraints.maxHeight > 300) {
-          return MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (c) => UserInfo()),
-              ChangeNotifierProvider(create: (c) => RunningData()),
-              ChangeNotifierProvider(create: (c) => ForDate()),
-              ChangeNotifierProvider(create: (c) => ChallengeData()),
-              ChangeNotifierProvider(create: (c) => RunningSetting()),
-            ],
-            child: MaterialApp(
+    return LayoutBuilder(              
+        builder: (_, BoxConstraints constraints) {
+          print(constraints);
+          if (constraints.maxHeight > 300) {
+            return MultiProvider(
+              providers: [
+                ChangeNotifierProvider(create: (c) => UserInfo()),
+                ChangeNotifierProvider(create: (c) => RunningData()),
+                ChangeNotifierProvider(create: (c) => ForDate()),
+                ChangeNotifierProvider(create: (c) => ChallengeData()),
+                ChangeNotifierProvider(create: (c) => RunningSetting()),
+              ],
+              child: MaterialApp(
               debugShowCheckedModeBanner: false,
-              initialRoute: '/',
-              theme: ThemeData(
-                scaffoldBackgroundColor: BACKGROUND_COLOR,
-                fontFamily: 'pretendard',
-                textTheme: TextTheme(
-                  headline1: TextStyle(
-                    color: MAIN_COLOR,
-                    fontFamily: 'Pretendard',
-                    fontSize: 16.0,
+                initialRoute: '/',
+                theme: ThemeData(
+                  scaffoldBackgroundColor: BACKGROUND_COLOR,
+                  fontFamily: 'pretendard',
+                  textTheme: TextTheme(
+                    headline1: TextStyle(
+                      color: MAIN_COLOR,
+                      fontFamily: 'Pretendard',
+                      fontSize: 16.0,
+                    ),
                   ),
                 ),
+                routes: {
+                  
+                  '/': (context) => SplashScreen(),
+                  '/Detail': (context) => ChallengeRunning(
+                  ),
+                  '/UnderRunning': (context) => UnderRunning(),
+                  '/UnderChallenge': (context) => UnderChallenge(),
+                },
               ),
-              routes: {
-                '/': (context) => SplashScreen(),
-                '/Detail': (context) => ChallengeRunning(
-                ),
-                '/UnderRunning': (context) => UnderRunning(),
-                '/UnderChallenge': (context) => UnderChallenge(),
-              },
-            ),
-          );
-        } else {
-          return MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (c) => RunningData()),
-            ],
-            child: MaterialApp(
-              home: const WathchHomeScreen(),
-              theme: ThemeData(
-                  platform: TargetPlatform.android,
-                  scaffoldBackgroundColor: BACKGROUND_COLOR),
+            );
+          } else {
+            return MultiProvider(
+              providers: [
+                ChangeNotifierProvider(create: (c) => RunningData()),
+              ],
+              child: MaterialApp(
+                home: const WathchHomeScreen(),
+                theme: ThemeData(
+                    platform: TargetPlatform.android,
+                    scaffoldBackgroundColor: BACKGROUND_COLOR),
 
-            ),
-          );
+              ),
+            );
+          }
         }
-      }
 
     );
   }

@@ -14,14 +14,12 @@ class ProfileImage extends StatefulWidget {
 }
 
 class ProfileImageState extends State<ProfileImage> {
-  late var _profileImg;
   File? userPickedFile; // 사진 선택한 파일
 
 
   @override
   void initState() {
     super.initState();
-    _profileImg = Image.network(widget.profileImg);
   }
 
   // 카메라로 사진 찍기
@@ -115,13 +113,15 @@ class ProfileImageState extends State<ProfileImage> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.profileImg);
+    print('===========');
     return Column(
       children: [
         Stack(
           children: [
             CircleAvatar(
               backgroundImage: userPickedFile == null
-                  ? _profileImg.image
+                  ? Image.network(widget.profileImg).image
                   : FileImage(File(userPickedFile!.path)),
               radius: 50,
             ),

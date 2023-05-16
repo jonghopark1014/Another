@@ -5,6 +5,7 @@ const String _baseUrl = 'https://k8b308.p.ssafy.io/api';
 
 class UserLevelExpApi{
   static Future<Map<String, dynamic>> getUserLevelExp()
+
   async {
     int userId = 1;
     var url = Uri.parse('$_baseUrl/record/$userId');
@@ -16,6 +17,7 @@ class UserLevelExpApi{
         var responseBody = jsonDecode(response.body);
         int userLevel = responseBody['data']['level'] ?? 0;
         int userExp = responseBody['data']['exp'] ?? 0;
+        String profileImgUrl = responseBody['data']['profilePic'];
         double progress = 0.0;
         switch (userLevel) {
           case 1:
@@ -50,7 +52,8 @@ class UserLevelExpApi{
             break;
         }
         print('$userLevel, $progress');
-        return {'level': userLevel, 'exp': progress};
+
+        return {'level': userLevel, 'exp': progress, 'profileImgUrl': profileImgUrl};
       }
     } catch (error) {
       print(error);

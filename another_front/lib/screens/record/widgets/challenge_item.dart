@@ -7,10 +7,10 @@ class ChallengeItem extends StatelessWidget {
   final goldBadge;
   final silverBadge;
   ChallengeItem({Key? key,
-    required this.title,
-    required this.progress,
-    required this.goldBadge,
-    required this.silverBadge
+    this.title,
+    this.progress,
+    this.goldBadge,
+    this.silverBadge
   }) : super(key: key);
 
   @override
