@@ -177,7 +177,7 @@ class _MyChallengeState extends State<MyChallenge> {
         scrollDirection: Axis.horizontal,
         child: _isLoading == true
             ? Center(child: CircularProgressIndicator())
-            : Column(
+            : Row(
                 children:
                     // if API가 0개이면 띄워줄거 작성해야함
                     _successChallenge.isEmpty
@@ -657,7 +657,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
                 children: [
                   Expanded(
                     child: RecordChart(
-                      '시간',
+                      '평균 시간',
                       widget.periodData!['prevAvg']['originalTime'].toDouble(),
                       widget.periodData!['curAvg']['originalTime'].toDouble(),
                       widget.periodData!['prevAvg']['avgTime'].toString(),
@@ -666,7 +666,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
                   ),
                   Expanded(
                     child: RecordChart(
-                      '거리',
+                      '평균 거리(km)',
                       widget.periodData!['prevAvg']['avgDistance'],
                       widget.periodData!['curAvg']['avgDistance'],
                       widget.periodData!['prevAvg']['avgDistance'].toString(),
@@ -675,7 +675,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
                   ),
                   Expanded(
                     child: RecordChart(
-                      'kcal',
+                      '평균 kcal',
                       widget.periodData!['prevAvg']['avgKcal'],
                       widget.periodData!['curAvg']['avgKcal'],
                       widget.periodData!['prevAvg']['avgKcal'].toString(),
@@ -684,7 +684,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
                   ),
                   Expanded(
                     child: RecordChart(
-                      '페이스',
+                      '평균 페이스',
                       widget.periodData!['curAvg']['originalPace'] == 0 ||
                               widget.periodData!['prevAvg']['originalPace'] == 0
                           ? widget.periodData!['prevAvg']['originalPace']
