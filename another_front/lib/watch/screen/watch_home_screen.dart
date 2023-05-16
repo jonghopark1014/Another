@@ -2,6 +2,7 @@
 import 'package:another/constant/const/color.dart';
 import 'package:another/watch/screen/watch_time_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:watch_connectivity/watch_connectivity.dart';
 
 
@@ -15,19 +16,32 @@ class WathchHomeScreen extends StatefulWidget {
 class _WathchHomeScreenState extends State<WathchHomeScreen> {
 
   late final WatchConnectivityBase _watch;
+  late final MethodChannel _channel;
   var _supported = false;
   var _paired = false;
   var _reachable = false;
   final _log = <String>[];
+  var _context = <String, dynamic>{};
+  var _receivedContexts = <Map<String, dynamic>>[];
+
+  Future<List<Map<String, dynamic>>> get receivedApplicationContexts async {
+    final receivedApplicationContexts =
+    await _channel.invokeListMethod<Map>('receivedApplicationContexts');
+    return receivedApplicationContexts
+        ?.map((e) => e.cast<String, dynamic>())
+        .toList() ??
+        [];
+  }
+
 
   @override
   void initState() {
     super.initState();
 
     _watch = WatchConnectivity();
+    _channel= WatchConnectivity().channel;
     _watch.messageStream
         .listen((e) => setState(() => _log.add('Received message: $e')));
-    print(_log);
     initPlatformState();
   }
 
