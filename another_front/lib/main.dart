@@ -198,8 +198,8 @@ class UserInfo extends ChangeNotifier {
   int userLevel = 0;
   double userExp = 0;
 
-  void updateUserInfo(String userId, String nickname, int height, int weight) {
-    this.userId = int.parse(userId);
+  void updateUserInfo(int userId, String nickname, int height, int weight) {
+    this.userId = userId;
     this.nickname = nickname;
     this.height = height;
     this.weight = weight;

@@ -1,6 +1,7 @@
 import 'package:another/constant/const/color.dart';
 import 'package:another/screens/account/api/nickname_check_api.dart';
 import 'package:flutter/material.dart';
+import '../../constant/const/color.dart';
 import 'signup_userinfo.dart';
 import '../../widgets/intro_header.dart';
 
