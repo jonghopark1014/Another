@@ -95,30 +95,42 @@ class _RunningCarouselState extends State<RunningCarousel> {
           color: CONTOUR_COLOR,
           child: Padding(
             padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                // 그래프 높이 85
-                SizedBox(
-                  height: 85,
-                  child: RecordChart(
-                      '',
-                      runCompareData!['lastMonthDistance']!,
-                      runCompareData!['thisMonthDistance']!,
-                      runCompareData!['lastMonthDistance'].toString(),
-                      runCompareData!['thisMonthDistance'].toString(),
-                      ),
-                ),
-                Text(
-                  "나의 기록 그래프",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+            child:
+              Row(
+                children: [
+                  Column(
+                    children: [
+
+                    ],
                   ),
-                )
-              ],
-            ),
+
+                ],
+              )
+            // 못생긴 그래프
+            // Column(
+            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //   children: [
+            //     // 그래프 높이 85
+            //     SizedBox(
+            //       height: 85,
+            //       child: RecordChart(
+            //           '',
+            //           runCompareData!['lastMonthDistance']!,
+            //           runCompareData!['thisMonthDistance']!,
+            //           runCompareData!['lastMonthDistance'].toString(),
+            //           runCompareData!['thisMonthDistance'].toString(),
+            //           ),
+            //     ),
+            //     Text(
+            //       "나의 기록",
+            //       style: TextStyle(
+            //         color: Colors.white,
+            //         fontSize: 16,
+            //         fontWeight: FontWeight.w500,
+            //       ),
+            //     )
+            //   ],
+            // ),
           ),
         );
       });

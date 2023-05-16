@@ -60,7 +60,9 @@ class _LockScreenState extends State<LockScreen> {
                         "assets/img/MainLogo1.png",
                         scale: 4,
                       ),
-                      SizedBox(height: 50,),
+                      SizedBox(
+                        height: 50,
+                      ),
                       Text(
                         '5초 동안 클릭하지 않을 시 화면 보호기 활성화됩니다',
                         style: TextStyle(color: Colors.white, fontSize: 15),
