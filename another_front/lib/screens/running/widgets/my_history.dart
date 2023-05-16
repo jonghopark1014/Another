@@ -27,8 +27,7 @@ class _MyHistoryState extends State<MyHistory> {
     // TODO: implement initState
     super.initState();
     _userInfo = Provider.of<UserInfo>(context, listen: false);
-    // _userId = _userInfo.userId;
-    _userId = 1; // 더미========================================
+    _userId = _userInfo.userId;
     challengeData = Provider.of<ChallengeData>(context, listen: false);
     getHistory();
   }
