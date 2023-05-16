@@ -152,7 +152,6 @@ class _DetailSettingState extends State<DetailSetting> {
           );
         });
     if (result != null) {
-      print('$result======================================');
       setState(() {
         _distance = result[0];
         _hour = result[1];
