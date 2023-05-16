@@ -1,9 +1,12 @@
 package com.example.another_back.controller;
 
+import com.example.another_back.config.JwtProvider;
 import com.example.another_back.dto.UserJoinDto;
 import com.example.another_back.dto.UserUpdateForm;
 import com.example.another_back.dto.response.Response;
 import com.example.another_back.service.UserService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.Nullable;
@@ -24,6 +27,7 @@ import java.util.Map;
 @RequestMapping("/api/user")
 public class UserController {
     private final UserService userService;
+    private final JwtProvider jwtProvider;
 
     @PostMapping(value = "/join")
     public ResponseEntity join(@RequestBody @Valid UserJoinDto userJoinDto, BindingResult result, Model model) {
@@ -38,6 +42,17 @@ public class UserController {
     public ResponseEntity updateProfileImage(@PathVariable("userId") Long userId, @RequestParam("profileImage") MultipartFile file) throws IOException {
         String image = userService.updateProfileImage(file, userId);
         return Response.success(HttpStatus.OK, image);
+    }
+
+    @GetMapping(value = "/valid/refresh")
+    public ResponseEntity validRefreshToken(@RequestParam("refresh") String refresh) {
+        try{
+            if(refresh.contains(" "))refresh = refresh.substring(refresh.indexOf(" "));
+            Claims claim = jwtProvider.getClaim(refresh);
+            return Response.success(HttpStatus.OK);
+        }catch (ExpiredJwtException e){
+            return Response.fail(HttpStatus.BAD_REQUEST, null);
+        }
     }
 
     @PatchMapping(value = "profile/{userId}")
