@@ -50,7 +50,7 @@ class _LockScreenState extends State<LockScreen> {
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF20173F),
+                    backgroundColor: Colors.black,
                   ),
                   onLongPress: () {
                     setState(() {
@@ -74,7 +74,7 @@ class _LockScreenState extends State<LockScreen> {
                       ),
                       SizedBox(height: 50,),
                       Text(
-                        '$seconds초 동안 클릭하지 않을 시 화면 보호기 활성화됩니다',
+                        '5초 동안 클릭하지 않을 시 화면 보호기 활성화됩니다',
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
                       Text(
