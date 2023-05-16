@@ -36,7 +36,7 @@ class RecordTab extends StatelessWidget {
           ),
           elevation: 0,
           backgroundColor: BACKGROUND_COLOR,
-          toolbarHeight: 86,
+          toolbarHeight: 88,
         ),
         backgroundColor: Colors.black,
         body: SingleChildScrollView(

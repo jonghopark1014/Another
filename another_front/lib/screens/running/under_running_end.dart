@@ -16,11 +16,13 @@ class UnderRunningScreenEnd extends StatelessWidget {
   final String runningTime;
   final String userCalorie;
   final String userPace;
+  final bool? isChallenge;
   UnderRunningScreenEnd({
     required this.runningDistance,
     required this.runningTime,
     required this.userCalorie,
     required this.userPace,
+    this.isChallenge,
     Key? key,
   }) : super(key: key);
 

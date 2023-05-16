@@ -262,6 +262,7 @@ class _RunningStatus extends State<RunningStatus> {
             runningDistance: runningDistance.toString(),
             userCalorie: userCalories.toString(),
             userPace: userPace,
+            isChallenge: widget.isChallenge,
           ),
         ),
             (route) => route.settings.name == '/');
