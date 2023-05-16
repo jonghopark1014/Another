@@ -263,6 +263,7 @@ class _FeedCreateCompleteState extends State<FeedCreateComplete> {
             p = double.parse(
                 data['userPace'].replaceAll("''", "").replaceAll("'", "."));
           }
+          print('$runningDistance $userPace');
           return PacesData(runningDistance: d, userPace: p);
         },
       ).toList();
