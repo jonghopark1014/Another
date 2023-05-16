@@ -46,9 +46,8 @@ class _LoginPageState extends State<LoginPage> {
       });
     });
 
-    return
-      SafeArea(
-        child: Scaffold(
+    return SafeArea(
+      child: Scaffold(
         backgroundColor: BACKGROUND_COLOR,
         body: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -112,42 +111,48 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: true,
                 ),
                 SizedBox(height: 16),
-                Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  TextButton(
-                    onPressed: () {
-                      // 회원가입 페이지로 이동하는 로직 작성
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => SignupPage()));
-                    },
-                    child: Text(
-                      '회원가입',
-                      style: TextStyle(
-                        color: SERVEONE_COLOR,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        // 회원가입 페이지로 이동하는 로직 작성
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignupPage()));
+                      },
+                      child: Text(
+                        '회원가입',
+                        style: TextStyle(
+                          color: SERVEONE_COLOR,
+                        ),
                       ),
                     ),
-                  ),
-                ]),
+                  ],
+                ),
                 SizedBox(height: 16),
                 FractionallySizedBox(
-                    widthFactor: 1.0,
-                    child: ElevatedButton(
-                      onPressed: () async {
+                  widthFactor: 1.0,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      final resp = await dio.post(
+                        '$baseUrl/user/login',
+                        data: {
+                          'username': username,
+                          'password': password,
+                        },
+                      );
+                      final refreshToken = resp.headers['refresh']?[0];
+                      final accessToken = resp.headers['Authorization']?[0];
+                      final userId = resp.data['userId'];
+                      final nickname = resp.data['nickname'];
+                      final weight = resp.data['weight'];
+                      final height = resp.data['height'];
 
-                        final resp = await dio.post(
-                          '$baseUrl/user/login',
-                          data: {
-                              'username': username,
-                              'password': password,
-                            },
-                          );
-                        // print(resp.headers);
-                        final refreshToken = resp.headers['refresh']?[0];
-                        final accessToken = resp.headers['Authorization']?[0];
-                        // final userId = resp.headers['userid']?[0];
-
-                        // print(userId);
                         if (userId != null) {
-                          Provider.of<UserInfo>(context, listen: false).updateUserInfo(userId);
+                          Provider.of<UserInfo>(context, listen: false)
+                          .updateUserInfo(userId, nickname, weight, height);
                         }
                         await storage.write(
                             key: REFRESH_TOKEN_KEY, value: refreshToken);
@@ -157,19 +162,21 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                             builder: (_) => HomeScreen(),
-                          ),(route) => false);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: MAIN_COLOR,
-                      ),
-                      child: Text('로그인'),
-                    )),
+                          ),
+                          (route) => false);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: MAIN_COLOR,
+                    ),
+                    child: Text('로그인'),
+                  ),
+                ),
                 SizedBox(height: 16),
               ],
             ),
           ),
         ),
-    ),
-      );
+      ),
+    );
   }
 }

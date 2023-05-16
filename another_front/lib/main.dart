@@ -193,12 +193,16 @@ class UserInfo extends ChangeNotifier {
   String nickname = '';
   int height = 175;
   int weight = 70;
+
   String profileImg = '';
   int userLevel = 0;
   double userExp = 0;
 
-  void updateUserInfo(String userId) {
+  void updateUserInfo(String userId, String nickname, int height, int weight) {
     this.userId = int.parse(userId);
+    this.nickname = nickname;
+    this.height = height;
+    this.weight = weight;
     notifyListeners();
   }
 
@@ -242,7 +246,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
+    return LayoutBuilder(              
         builder: (_, BoxConstraints constraints) {
           print(constraints);
           if (constraints.maxHeight > 300) {
@@ -255,8 +259,8 @@ class MyApp extends StatelessWidget {
                 ChangeNotifierProvider(create: (c) => RunningSetting()),
               ],
               child: MaterialApp(
+              debugShowCheckedModeBanner: false,
                 initialRoute: '/',
-                // home: SplashScreen(),
                 theme: ThemeData(
                   scaffoldBackgroundColor: BACKGROUND_COLOR,
                   fontFamily: 'pretendard',
@@ -269,7 +273,7 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
                 routes: {
-                  // '/': (context) => HomeScreen(),
+                  
                   '/': (context) => SplashScreen(),
                   '/Detail': (context) => ChallengeRunning(
                   ),
@@ -298,19 +302,21 @@ class MyApp extends StatelessWidget {
   }
 }
 
-void receiveDataFromPhone() {
-  const messageChannel =
-  const BasicMessageChannel<String>('com.example.another', StringCodec());
-  // 데이터 수신
-  messageChannel.setMessageHandler(
-        (String? data) async {
-      if (data != null) {
-        final decodedData = json.decode(data);
-        print(decodedData);
-        return decodedData;
-      } else {
-        return 'ddd';
-      }
-    },
-  );
-}
+
+
+// void receiveDataFromPhone() {
+//   const messageChannel =
+//   const BasicMessageChannel<String>('com.example.another', StringCodec());
+//   // 데이터 수신
+//   messageChannel.setMessageHandler(
+//         (String? data) async {
+//       if (data != null) {
+//         final decodedData = json.decode(data);
+//         print(decodedData);
+//         return decodedData;
+//       } else {
+//         return 'ddd';
+//       }
+//     },
+//   );
+// }

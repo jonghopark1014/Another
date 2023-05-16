@@ -23,7 +23,7 @@ class RecordResult extends StatelessWidget {
           style: TextStyle(
             color: recordColor,
             fontWeight: FontWeight.w700,
-            fontSize: 16.0,
+            fontSize: 18.0,
           ),
         ),
         Text(

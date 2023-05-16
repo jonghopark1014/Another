@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:another/constant/const/color.dart';
-import 'package:another/screens/running/api/my_history_api.dart';
 import 'package:another/screens/running/challenge_running.dart';
 import 'package:another/screens/running/timer_screen.dart';
 import 'package:another/screens/running/widgets/before_running_map.dart';
@@ -9,9 +8,10 @@ import 'package:another/screens/running/widgets/my_history.dart';
 import 'package:another/screens/running/widgets/running_carousel.dart';
 import 'package:another/screens/running/widgets/running_small_button.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
-import 'package:another/widgets/target.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:watch_connectivity/watch_connectivity.dart';
 
 import '../../main.dart';
 
@@ -23,9 +23,22 @@ class RunningTab extends StatefulWidget {
 
 class _RunningTabState extends State<RunningTab> {
   BeforeRunningMap beforeRunningMap = BeforeRunningMap();
+
+  late final WatchConnectivityBase _watch;
+  late final MethodChannel channel;
+  final _log = <String>[];
   @override
   void initState() {
     super.initState();
+    _watch = WatchConnectivity();
+    channel = WatchConnectivity().channel;
+
+  }
+
+  void sendMessage() {
+    final message = {'data': 'Hello'};
+    _watch.sendMessage(message);
+    setState(() => _log.add('Sent message: $message'));
   }
 
   @override
