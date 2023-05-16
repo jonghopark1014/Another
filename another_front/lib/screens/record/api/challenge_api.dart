@@ -4,9 +4,8 @@ import 'package:http/http.dart' as http;
 const String _baseUrl = 'https://k8b308.p.ssafy.io/api';
 
 class GetChallenge{
-  static Future<List<dynamic>> challengeList()
+  static Future<List<dynamic>> challengeList(int userId)
   async {
-    int userId = 5;
     var url = Uri.parse('$_baseUrl/badge/all/$userId');
 
     try {
@@ -24,9 +23,8 @@ class GetChallenge{
     return [];
   }
 
-  static Future<List<dynamic>> successChallengeList()
+  static Future<List<dynamic>> successChallengeList(int userId)
   async {
-    int userId = 5;
     var url = Uri.parse('$_baseUrl/badge/success/$userId');
 
     try {
