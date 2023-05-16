@@ -19,10 +19,12 @@ import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatf
 
 class RunningSetting extends ChangeNotifier {
   int distance = 0;
+  int hour = 0;
   int min = 0;
   List<int> interval = [0, 0];
-  void setData(d, m, i) {
+  void setData(d, h, m, i) {
     distance = d;
+    hour = h;
     min = m;
     interval = i;
     notifyListeners();
@@ -31,7 +33,7 @@ class RunningSetting extends ChangeNotifier {
 
 class RunningData extends ChangeNotifier {
   late GoogleMapController mapController;
-  CameraPosition currentPosition = CameraPosition(target: LatLng(0,0), zoom: 17);
+  CameraPosition currentPosition = CameraPosition(target: LatLng(0,0), zoom: 13);
   String runningId = '';
   LatLng preValue = LatLng(0, 0);
   LatLng curValue = LatLng(0, 0);

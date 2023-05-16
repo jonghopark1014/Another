@@ -185,9 +185,14 @@ class _RunningTabState extends State<RunningTab> {
                       primary: MAIN_COLOR,
                     ),
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => ChallengeRunning()),
-                      );
+                      final runningData = Provider.of<RunningData>(context, listen: false);
+                      if (runningData.currentPosition.target.longitude != 0 &&
+                          runningData.currentPosition.target.latitude != 0) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => ChallengeRunning()),
+                        );
+                      }
+
                     },
                     child: const Text(
                       '선택 완료',

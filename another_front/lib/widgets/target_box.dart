@@ -19,7 +19,6 @@ class TargetBox extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return SizedBox(
-      width: 90.0,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
