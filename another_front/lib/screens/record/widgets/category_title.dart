@@ -3,7 +3,9 @@ import 'package:another/constant/const/color.dart';
 
 class CategoryTitle extends StatelessWidget {
   final title;
-  CategoryTitle({Key? key, required this.title}) : super(key: key);
+  double top;
+  double bottom;
+  CategoryTitle({Key? key, required this.title, required this.top, required this.bottom}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +13,7 @@ class CategoryTitle extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(top: 25, bottom: 10),
+          padding: EdgeInsets.only(top: top, bottom: bottom),
           child: Container(
             child: Text(
               '$title',

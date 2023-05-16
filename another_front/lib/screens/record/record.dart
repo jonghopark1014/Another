@@ -105,7 +105,7 @@ class RecordTab extends StatelessWidget {
                                 SizedBox(height: 10),
                                 Row(
                                   children: [
-                                    CategoryTitle(title: 'MY 챌린지'),
+                                    CategoryTitle(title: 'MY 챌린지', top: 0, bottom: 0),
                                     IconButton(
                                       onPressed: () {
                                         Navigator.push(
@@ -124,7 +124,7 @@ class RecordTab extends StatelessWidget {
                                 ),
                                 SizedBox(height: 5),
                                 MyChallenge(), // 나의 챌린지
-                                CategoryTitle(title: '나의 활동 기록'),
+                                CategoryTitle(title: '나의 활동 기록', top: 25, bottom: 10),
                                 SizedBox(height: 5),
                                 MyRecord(),
                               ],
