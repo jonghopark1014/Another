@@ -8,6 +8,8 @@ import './widgets/pass_button.dart';
 import './widgets/complete_button.dart';
 import 'package:another/screens/account/api/signup_api.dart';
 
+import 'login.dart';
+
 class SignupUserInfoPage extends StatefulWidget {
   final String email;
   final String password;
@@ -61,7 +63,7 @@ class _SignupUserInfoPageState extends State<SignupUserInfoPage> {
                   );
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                      builder: (_) => HomeScreen(),
+                      builder: (_) => LoginPage(),
                     ),
                     (route) => false,
                   );
@@ -88,7 +90,7 @@ class _SignupUserInfoPageState extends State<SignupUserInfoPage> {
                     );
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
-                        builder: (_) => HomeScreen(),
+                        builder: (_) => LoginPage(),
                       ),
                           (route) => false,
                     );

@@ -25,9 +25,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     Map<String, dynamic> userLevelExp =
         await UserLevelExpApi.getUserLevelExp(userId);
     final userInfoProvider = Provider.of<UserInfo>(context, listen: false);
-    userInfoProvider.userExp = userLevelExp['exp'];
-    userInfoProvider.userLevel = userLevelExp['level'];
-    userInfoProvider.profileImg = userLevelExp['profileImgUrl'];
+    userInfoProvider.updateUserData(userLevelExp['profileImgUrl'], userLevelExp['level'], userLevelExp['exp'] * 10);
 
     // UserInfo.updateProfileImg 에 _userProfileImg
 

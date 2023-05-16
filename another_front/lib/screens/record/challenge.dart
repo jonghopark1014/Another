@@ -53,6 +53,8 @@ class _ChallengePageState extends State<ChallengePage> {
 
   @override
   Widget build(BuildContext context) {
+    int userExp = (Provider.of<UserInfo>(context).userExp).toInt();
+    print(userExp);
     return Scaffold(
         appBar: GoBackAppBarStyle(),
         body: _isLoading
@@ -64,7 +66,7 @@ class _ChallengePageState extends State<ChallengePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ChallengeHeader(exp: 12000),
+                ChallengeHeader(exp: userExp),
                 // 월간 시간 챌린지
                 MonthChallenge(
                     challengeData: _challengeData,

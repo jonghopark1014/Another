@@ -32,7 +32,6 @@ class _RunningTabState extends State<RunningTab> {
     super.initState();
     _watch = WatchConnectivity();
     channel = WatchConnectivity().channel;
-
   }
 
   void sendMessage() {
