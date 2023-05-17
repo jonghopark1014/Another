@@ -116,6 +116,7 @@ class _RunningTabState extends State<RunningTab> {
                   ),
                   Expanded(
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -258,7 +259,7 @@ class SettingName extends StatelessWidget {
         typeName,
         style: TextStyle(
           color: SERVEONE_COLOR,
-          fontSize: 18,
+          fontSize: 16,
           fontWeight: FontWeight.w600,
         ),
       ),
