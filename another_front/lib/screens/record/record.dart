@@ -26,10 +26,20 @@ class RecordTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var userInfo = Provider.of<UserInfo>(context);
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Image.asset('assets/img/logo_small.png',
+                width: 120, height: 70),
+          ),
+          elevation: 0,
+          backgroundColor: BACKGROUND_COLOR,
+          toolbarHeight: 88,
+        ),
+        backgroundColor: Colors.black,
+        body: SingleChildScrollView(
           child: Stack(
             children: [
               Positioned.fill(
@@ -55,26 +65,22 @@ class RecordTab extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(20),
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.asset('assets/img/logo_small.png',
-                            width: 120, height: 70),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Flexible(
+                            Expanded(
                               child: Text(
                                 '안녕하세요 ${context.watch<UserInfo>().nickname}님!\n오늘도 함께 달려볼까요?',
                                 softWrap: true,
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 16),
+                                    color: Colors.white, fontSize: 20),
                               ),
                             ),
-                            Flexible(
-                              child: ProfileWidget(),
-                            )
+                            ProfileWidget()
                           ],
                         ),
                       ],

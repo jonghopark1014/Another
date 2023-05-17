@@ -60,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
             (route) => false,
       );
     } catch (e) {
-
+      print(e);
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => LoginPage()),
             (route) => false,

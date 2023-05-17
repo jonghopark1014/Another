@@ -29,6 +29,7 @@ class RunningSetting extends ChangeNotifier {
 }
 
 class RunningData extends ChangeNotifier {
+  int isCap = 0;
   late GoogleMapController mapController;
   CameraPosition currentPosition =
       CameraPosition(target: LatLng(0, 0), zoom: 13);
@@ -50,6 +51,7 @@ class RunningData extends ChangeNotifier {
   bool stopFlag = false;
 
   void reset() {
+    isCap = 0;
     preValue = LatLng(0, 0);
     curValue = LatLng(0, 0);
     runningTime = '00:00:00';
@@ -60,6 +62,11 @@ class RunningData extends ChangeNotifier {
     stopCount = 0;
     polyLine = [];
     stopFlag = false;
+  }
+
+  void addCap() {
+    isCap++;
+    notifyListeners();
   }
 
   void funcStopFlag() {
@@ -202,9 +209,9 @@ class ChallengeData extends ChangeNotifier {
 
 class UserInfo extends ChangeNotifier {
   late final int userId;
-  late final String nickname;
-  late final int height;
-  late final int weight;
+  late String nickname;
+  late int height;
+  late int weight;
 
   String profileImg = '';
   int userLevel = 0;

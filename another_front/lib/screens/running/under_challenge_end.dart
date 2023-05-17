@@ -1,4 +1,6 @@
 import 'package:another/main.dart';
+import 'package:another/screens/home_screen.dart';
+import 'package:another/screens/running/api/under_running_end_api.dart';
 import 'package:another/screens/running/under_challenge_end_feed.dart';
 import 'package:another/screens/running/widgets/button_component.dart';
 import 'package:another/screens/running/widgets/running_end.dart';
@@ -10,14 +12,12 @@ import 'package:provider/provider.dart';
 import '../feed/widgets/line_chart_custom.dart';
 
 class UnderChallengeScreenEnd extends StatelessWidget {
-  final Uint8List? captureInfo;
   final String runningDistance;
   final String runningTime;
   final String userCalorie;
   final String userPace;
 
   UnderChallengeScreenEnd({
-    required this.captureInfo,
     required this.runningDistance,
     required this.runningTime,
     required this.userCalorie,
@@ -35,6 +35,7 @@ class UnderChallengeScreenEnd extends StatelessWidget {
         padding: const EdgeInsets.only(top: 16.0, right: 16.0, left: 16.0),
         child: SafeArea(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: ListView(
@@ -56,22 +57,23 @@ class UnderChallengeScreenEnd extends StatelessWidget {
                         userPace: userPace,
                       ),
                     ),
+                    Padding(
+                        padding: const EdgeInsets.only(top: 24.0),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxHeight: size.height / 11 * 6,
+                          ),
+                          child: SizedBox(
+                            height: size.width,
+                            width: size.width,
+                            child: EndRunningMap(),
+                          ),
+                        )
+                    ),
                   ],
                 ),
               ),
-              Padding(
-                  padding: const EdgeInsets.only(top: 24.0),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxHeight: size.height / 11 * 6,
-                    ),
-                    child: SizedBox(
-                      height: size.width,
-                      width: size.width,
-                      child: EndRunningMap(),
-                    ),
-                  )
-              ),
+
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
                 child: ButtonConponent(
@@ -87,18 +89,41 @@ class UnderChallengeScreenEnd extends StatelessWidget {
   }
 
   void endFeed(BuildContext context) {
-    Navigator.of(context).pushAndRemoveUntil(
+    var runningData = Provider.of<RunningData>(context, listen: false);
+    if (runningData.isCap >= 3) {
+      var runningData = Provider.of<RunningData>(context, listen: false);
+      var userId = Provider.of<UserInfo>(context, listen: false).userId;
+      saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
+      // // hdfs 저장
+      saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
+      Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) => UnderChallengeScreenEndFeed(captureInfo: captureInfo),
-        ),
-        (route) => route.settings.name == '/');
+          builder: (_) => UnderChallengeScreenEndFeed(captureInfo: Provider.of<RunningData>(context, listen: false).runningPic),
+        ),);
+    }
+    else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('발자취를 담고있습니다. 잠시만 기다려주세요')));
+    }
   }
 
   void feedComplete(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => UnderChallengeScreenEndFeed(captureInfo: captureInfo),
-      ),
-    );
+    var runningData = Provider.of<RunningData>(context, listen: false);
+    if (runningData.isCap >= 3) {
+      var runningData = Provider.of<RunningData>(context, listen: false);
+      var userId = Provider.of<UserInfo>(context, listen: false).userId;
+      saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
+      // // hdfs 저장
+      saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => HomeScreen(),
+        ),
+      );
+    }
+    else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('발자취를 담고있습니다. 잠시만 기다려주세요')));
+    }
   }
 }

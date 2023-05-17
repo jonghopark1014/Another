@@ -27,12 +27,8 @@ class _RunningCarouselState extends State<RunningCarousel> {
   @override
   void initState() {
     _carouselPages = [
-      Center(
-        child: CircularProgressIndicator(),
-      ),
-      Center(
-        child: CircularProgressIndicator(),
-      ),
+      Container(),
+      Container(),
     ];
     userId = Provider.of<UserInfo>(context, listen: false).userId as int;
     print('$userId==================================');
