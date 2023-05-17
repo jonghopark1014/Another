@@ -126,4 +126,16 @@ public class UserService {
         }
         return validatorResult;
     }
+
+    /**
+     * name 중복 검사
+     *
+     * @param username
+     * @return Boolean
+     */
+    public Boolean checkname(String username) {
+        User user = userRepository.findUserByUsername(username).orElse(null);
+        if (user == null) return true;
+        else return false;
+    }
 }
