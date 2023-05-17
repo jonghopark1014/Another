@@ -51,65 +51,60 @@ class _ProfileWidgetState extends State<ProfileWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _isLoading
-        ? Center(child: CircularProgressIndicator())
-        : Column(
+    return _isLoading ? Container() : Column(
+        children: [
+          Stack(
             children: [
-              Stack(
-                children: [
-                  CircularPercentIndicator(
-                    header: SizedBox(height: 20),
-                    radius: 50,
-                    lineWidth: 10,
-                    percent: _userExp,
-                    center: Container(
-                      width: 90,
-                      height: 90,
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(_userProfileImg!),
-                        radius: 45,
-                      ),
-                    ),
-                    backgroundColor: Colors.grey,
-                    progressColor: Colors.blue,
+              CircularPercentIndicator(
+                header: SizedBox(height: 20),
+                radius: 50,
+                lineWidth: 10,
+                percent: _userExp,
+                center: Container(
+                  width: 90,
+                  height: 90,
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(_userProfileImg!),
+                    radius: 45,
                   ),
-                  Positioned(
-                    right: 0,
-                    bottom: 0,
-                    child: InkWell(
-                      onTap: () async {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProfileEditPage(),
-                          ),
-                        );
-                        setState(() {
-
-                        });
-                      },
-                      child: CircleAvatar(
-                        backgroundColor: MAIN_COLOR,
-                        radius: 15,
-                        child: Icon(
-                          Icons.edit,
-                          color: WHITE_COLOR,
-                          size: 20,
-                        ),
+                ),
+                backgroundColor: Colors.grey,
+                progressColor: Colors.blue,
+              ),
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                      builder: (context) => ProfileEditPage(),
                       ),
-                    ),
+                    );
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: MAIN_COLOR,
+                    radius: 15,
+                    child: Icon(
+                      Icons.edit,
+                      color: WHITE_COLOR,
+                      size: 20,
                   ),
-                  Positioned(
-                    left: 36,
-                    top: 0,
-                    child: Text(
-                      'Lv.${_userLevel}',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  )
-                ],
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 36,
+                top: 0,
+                child: Text(
+                  'Lv.${_userLevel}',
+                  style: TextStyle(color: Colors.white),
+                ),
               )
             ],
-          );
+          )
+        ],
+    );
   }
 }
