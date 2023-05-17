@@ -19,10 +19,8 @@ class UnderRunning extends StatefulWidget {
 }
 
 class _UnderRunningState extends State<UnderRunning> {
-  double runningId = 1;
 
   late bool isSet;
-  String runDataId = '';
   @override
   void initState() {
     super.initState();
@@ -34,13 +32,6 @@ class _UnderRunningState extends State<UnderRunning> {
     } else {
       isSet = false;
     }
-    final userInfo = context.read<UserInfo>();
-    // _userWeight = userInfo.weight;
-    String userId = userInfo.userId.toString();
-    String forRunId1 = DateFormat('yyMMddHHmmss').format(DateTime.now());
-    runDataId = userId + forRunId1;
-    var runningData = Provider.of<RunningData>(context, listen: false);
-    runningData.setRunningId(runDataId);
   }
 
   @override

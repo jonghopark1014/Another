@@ -10,6 +10,7 @@ import 'package:another/screens/running/widgets/running_small_button.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:watch_connectivity/watch_connectivity.dart';
 
@@ -229,6 +230,10 @@ class _RunningTabState extends State<RunningTab> {
     // currentposition 초기값 그대로이면 받아오기전으로 판단
     if (runningData.currentPosition.target.longitude != 0 &&
         runningData.currentPosition.target.latitude != 0) {
+      final userId = (Provider.of<UserInfo>(context, listen: false).userId).toString();
+      String forRunId = DateFormat('yyMMddHHmmss').format(DateTime.now());
+      String runDataId = userId + forRunId;
+      runningData.setRunningId(runDataId);
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (_) => TimerScreen(

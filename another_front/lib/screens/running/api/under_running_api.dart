@@ -16,6 +16,7 @@ class Kafka {
     required String userPace,
     required double latitude,
     required double longitude,
+    required int runningSec,
     String? hostRunningId,
   })
   async {
@@ -27,7 +28,8 @@ class Kafka {
       'userCalories': userCalories,
       'userPace': userPace,
       'latitude': latitude,
-      'longitude': longitude
+      'longitude': longitude,
+      'runningSec': runningSec
     };
 
     Map<String, dynamic> requestBody = {
