@@ -22,7 +22,6 @@ class RunningCircleButton extends StatelessWidget {
       // onPressed: () {},
       shape: CircleBorder(),
       elevation: 8,
-      fillColor: MAIN_COLOR,
       child: Icon(
         iconNamed,
         size: width < 60 ? width : 60,
