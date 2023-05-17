@@ -16,10 +16,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RunningRepository extends JpaRepository<Running, String> {
-    @Query("select distinct r,fp from Running r left outer join fetch r.feedPic fp where r.status = :status")
+    @Query("select distinct r,fp from Running r left outer join fetch r.feedPic fp where r.status = :status order by r.createDate")
     List<Running> findRunningByStatusWithFeedPics(Status status);
 
-    @Query("select distinct r,fp from Running r left outer join fetch r.feedPic fp where r.user.id = :userId and r.status = :status")
+    @Query("select distinct r,fp from Running r left outer join fetch r.feedPic fp where r.user.id = :userId and r.status = :status order by r.createDate")
     List<Running> findRunningByUserIdAndStatusWithFeedPics(Long userId, Status status);
 
     @Query("select distinct r,fp from Running r left outer join fetch r.feedPic fp where r.id = :runningId")
