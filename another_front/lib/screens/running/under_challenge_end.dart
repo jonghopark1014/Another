@@ -32,7 +32,7 @@ class UnderChallengeScreenEnd extends StatelessWidget {
 
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(top: 0.0, right: 16.0, left: 16.0),
+        padding: const EdgeInsets.only(top: 16.0, right: 16.0, left: 16.0),
         child: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
