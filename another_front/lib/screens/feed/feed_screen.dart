@@ -152,10 +152,11 @@ class _FeedScreenState extends State<FeedScreen> {
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
             SliverAppBar(
-              title: Text('로고'),
+              automaticallyImplyLeading: false,
+              title: Image.asset('assets/img/logo_small.png',
+                  width: 120, height: 70),
               expandedHeight: 25.0,
               backgroundColor: BACKGROUND_COLOR,
-
             ),
             SliverToBoxAdapter(
               child: isFeed

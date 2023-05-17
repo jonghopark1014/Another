@@ -31,40 +31,43 @@ class UnderRunningScreenEnd extends StatelessWidget {
     return MainLayout(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Target(
-              targetname: '내 기록',
-              runningDistance: runningDistance,
-              runningTime: runningTime,
-              userCalorie: userCalorie,
-              userPace: userPace,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 24.0),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: size.height / 11 * 6,
-                ),
-                child: SizedBox(
-                  height: size.width,
-                  width: size.width,
-                  child: EndRunningMap(),
-                ),
-              )
-            ),
-            // SizedBox(
-            //   height: 120,
-            // ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: ButtonConponent(
-                onPressed: () => endFeed(context),
-                feedComplete: () => feedComplete(context),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Target(
+                targetname: '내 기록',
+                runningDistance: runningDistance,
+                runningTime: runningTime,
+                userCalorie: userCalorie,
+                userPace: userPace,
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(top: 24.0),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: size.height / 11 * 6,
+                  ),
+                  child: SizedBox(
+                    height: size.width,
+                    width: size.width,
+                    child: EndRunningMap(),
+                  ),
+                )
+              ),
+              // SizedBox(
+              //   height: 120,
+              // ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: ButtonConponent(
+                  onPressed: () => endFeed(context),
+                  feedComplete: () => feedComplete(context),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -73,27 +76,42 @@ class UnderRunningScreenEnd extends StatelessWidget {
   void endFeed(BuildContext context) {
     print("피드 끝낸당");
     var runningData = Provider.of<RunningData>(context, listen: false);
-    var userId = Provider.of<UserInfo>(context, listen: false).userId;
-    saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
-    // // hdfs 저장
-    saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
-    Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => UnderChallengeScreenEndFeed(captureInfo: Provider.of<RunningData>(context, listen: false).runningPic),
-        ));
+    if (runningData.isCap >= 3) {
+      var runningData = Provider.of<RunningData>(context, listen: false);
+      var userId = Provider.of<UserInfo>(context, listen: false).userId;
+      saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
+      // // hdfs 저장
+      saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
+      Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => UnderChallengeScreenEndFeed(captureInfo: Provider.of<RunningData>(context, listen: false).runningPic),
+          ));
+    }
+    else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('발자취를 담고있습니다. 잠시만 기다려주세요')));
+    }
   }
 
   void feedComplete(BuildContext context) {
-    print("오운완쓰 등록 간다잉");
     var runningData = Provider.of<RunningData>(context, listen: false);
-    var userId = Provider.of<UserInfo>(context, listen: false).userId;
-    saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
-    // // hdfs 저장
-    saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => HomeScreen(),
-      ),
-    );
+    print("오운완쓰 등록 간다잉");
+    if (runningData.isCap >= 3) {
+      var runningData = Provider.of<RunningData>(context, listen: false);
+      var userId = Provider.of<UserInfo>(context, listen: false).userId;
+      saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
+      // // hdfs 저장
+      saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => HomeScreen(),
+        ),
+      );
+    }
+    else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('발자취를 담고있습니다. 잠시만 기다려주세요')));
+    }
+
   }
 }

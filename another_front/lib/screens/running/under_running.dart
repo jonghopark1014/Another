@@ -90,7 +90,7 @@ class _UnderRunningState extends State<UnderRunning> {
               ),
             ),
           ),
-          // LockScreen(),
+          LockScreen(),
         ]
 
       ),

@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:another/screens/running/under_challenge_end.dart';
 import 'package:another/screens/running/widgets/running_circle_button.dart';
 import 'package:another/widgets/record_result.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,7 +22,7 @@ import '../api/under_running_api.dart';
 import '../under_running_end.dart';
 
 class RunningStatus extends StatefulWidget {
-  bool? isChallenge = false;
+  bool? isChallenge;
   RunningStatus({this.isChallenge, Key? key,})
       : super(key: key);
 
@@ -255,16 +256,30 @@ class _RunningStatus extends State<RunningStatus> {
   // 러닝 종료 시 동작
   void onStop() async {
     // api 요청
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (_) => UnderRunningScreenEnd(
-            runningTime: runningTime,
-            runningDistance: runningDistance.toString(),
-            userCalorie: userCalories.toString(),
-            userPace: userPace,
+    if (widget.isChallenge == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (_) => UnderRunningScreenEnd(
+              runningTime: runningTime,
+              runningDistance: runningDistance.toString(),
+              userCalorie: userCalories.toString(),
+              userPace: userPace,
+            ),
           ),
-        ),
-            (route) => route.settings.name == '/');
+              (route) => false);
+    } else {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (_) => UnderChallengeScreenEnd(
+              runningTime: runningTime,
+              runningDistance: runningDistance.toString(),
+              userCalorie: userCalories.toString(),
+              userPace: userPace,
+            ),
+          ),
+              (route) => false);
+    }
+
   }
 
   // 캡처하기 위한 함수
