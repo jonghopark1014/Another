@@ -24,8 +24,10 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     int userId = Provider.of<UserInfo>(context, listen: false).userId;
     Map<String, dynamic> userLevelExp =
         await UserLevelExpApi.getUserLevelExp(userId);
+    print(userLevelExp);
     final userInfoProvider = Provider.of<UserInfo>(context, listen: false);
-    userInfoProvider.updateUserData(userLevelExp['profileImgUrl'], userLevelExp['level'], userLevelExp['exp'] * 10);
+    userInfoProvider.updateUserData(userLevelExp['profileImgUrl'],
+        userLevelExp['level'], userLevelExp['exp'] * 10);
 
     // UserInfo.updateProfileImg 에 _userProfileImg
 
@@ -33,6 +35,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
       _userLevel = userLevelExp['level'];
       _userExp = userLevelExp['exp'];
       _userProfileImg = userLevelExp['profileImgUrl'];
+      print(_userProfileImg);
+      print("????????????????/");
       _isLoading = false;
     });
   }
@@ -51,60 +55,63 @@ class _ProfileWidgetState extends State<ProfileWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _isLoading ? Container() : Column(
-        children: [
-          Stack(
+    print('기록 빌드됨');
+    print('====================$_userProfileImg');
+    return _isLoading
+        ? Container()
+        : Column(
             children: [
-              CircularPercentIndicator(
-                header: SizedBox(height: 20),
-                radius: 50,
-                lineWidth: 10,
-                percent: _userExp,
-                center: Container(
-                  width: 90,
-                  height: 90,
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(_userProfileImg!),
-                    radius: 45,
-                  ),
-                ),
-                backgroundColor: Colors.grey,
-                progressColor: Colors.blue,
-              ),
-              Positioned(
-                right: 0,
-                bottom: 0,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                      builder: (context) => ProfileEditPage(),
+              Stack(
+                children: [
+                  CircularPercentIndicator(
+                    header: SizedBox(height: 20),
+                    radius: 50,
+                    lineWidth: 10,
+                    percent: _userExp,
+                    center: Container(
+                      width: 90,
+                      height: 90,
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(_userProfileImg!),
+                        radius: 45,
                       ),
-                    );
-                  },
-                  child: CircleAvatar(
-                    backgroundColor: MAIN_COLOR,
-                    radius: 15,
-                    child: Icon(
-                      Icons.edit,
-                      color: WHITE_COLOR,
-                      size: 20,
+                    ),
                   ),
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: InkWell(
+                      onTap: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileEditPage(),
+                          ),
+                        );
+                        await _getUserLevelExp();
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: MAIN_COLOR,
+                        radius: 15,
+                        child: Icon(
+                          Icons.edit,
+                          color: WHITE_COLOR,
+                          size: 20,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Positioned(
-                left: 36,
-                top: 0,
-                child: Text(
-                  'Lv.${_userLevel}',
-                  style: TextStyle(color: Colors.white),
-                ),
+                  Positioned(
+                    left: 36,
+                    top: 0,
+                    child: Text(
+                      'Lv.${_userLevel}',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
               )
             ],
-          )
-        ],
-    );
+          );
   }
 }

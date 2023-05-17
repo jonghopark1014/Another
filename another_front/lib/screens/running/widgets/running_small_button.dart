@@ -19,8 +19,8 @@ class RunningSmallButton extends StatelessWidget {
       onPressed: onPressed,
       // onPressed: () {},
       shape: CircleBorder(),
-      elevation: 2.0,
-      fillColor: SERVEONE_COLOR,
+      elevation: 5,
+      fillColor: WHITE_COLOR,
       padding: EdgeInsets.all(15),
       child: Icon(
         iconNamed,

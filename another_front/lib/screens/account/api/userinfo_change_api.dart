@@ -44,6 +44,7 @@ class UserInfoChangeApi {
       pickedFile!.path,
     ));
     var response = await request.send();
+    print('보내기 완료===============================================');
 
     // 응답 출력
     print(response.statusCode);

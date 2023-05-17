@@ -104,7 +104,7 @@ class RecordTab extends StatelessWidget {
                         children: [
                           Padding(
                             padding:
-                                EdgeInsets.only(top: 10, left: 20, right: 15),
+                                EdgeInsets.only(top: 10, left: 10, right: 10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
