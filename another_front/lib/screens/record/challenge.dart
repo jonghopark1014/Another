@@ -96,6 +96,8 @@ class _ChallengePageState extends State<ChallengePage> {
 
   @override
   Widget build(BuildContext context) {
+    int userExp = (Provider.of<UserInfo>(context).userExp).toInt();
+    print(userExp);
     return Scaffold(
         appBar: GoBackAppBarStyle(),
         body: _isLoading
