@@ -74,19 +74,19 @@ class _ImageBoxState extends State<ImageBox> {
             children: [
               Text(
                 widget.runningDistances[index],
-                style: MyTextStyle.fourteenTextStyle.copyWith(
+                style: MyTextStyle.twelveTextStyle.copyWith(
                   color: WHITE_COLOR,
                 ),
               ),
               Text(
                 widget.userCalories[index],
-                style: MyTextStyle.fourteenTextStyle.copyWith(
+                style: MyTextStyle.twelveTextStyle.copyWith(
                   color: WHITE_COLOR,
                 ),
               ),
               Text(
                 widget.runningTimes[index],
-                style: MyTextStyle.fourteenTextStyle.copyWith(
+                style: MyTextStyle.twelveTextStyle.copyWith(
                   color: WHITE_COLOR,
                 ),
               ),
