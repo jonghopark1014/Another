@@ -217,6 +217,13 @@ class UserInfo extends ChangeNotifier {
   int userLevel = 0;
   double userExp = 0;
 
+  void updateUserData(String profileImg, int userLevel, double userExp) {
+    this.profileImg = profileImg;
+    this.userLevel = userLevel;
+    this.userExp = userExp;
+    notifyListeners();
+  }
+
   void updateUserInfo(int userId, String nickname, int height, int weight) {
     this.userId = userId;
     this.nickname = nickname;

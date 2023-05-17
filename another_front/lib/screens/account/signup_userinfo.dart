@@ -9,6 +9,8 @@ import './widgets/pass_button.dart';
 import './widgets/complete_button.dart';
 import 'package:another/screens/account/api/signup_api.dart';
 
+import 'login.dart';
+
 class SignupUserInfoPage extends StatefulWidget {
   final String email;
   final String password;

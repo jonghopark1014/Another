@@ -183,7 +183,7 @@ class _MyChallengeState extends State<MyChallenge> {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: _isLoading == true
-            ? Center(child: CircularProgressIndicator())
+            ? Container()
             : Row(
                 children:
                     // if API가 0개이면 띄워줄거 작성해야함
@@ -432,7 +432,7 @@ class _MyRecordState extends State<MyRecord> {
           ],
         ),
         _isLoading == true
-            ? Center(child: CircularProgressIndicator())
+            ? Container()
             : MyRecordContents(
                 getRecord: getRecord,
                 selectedIndex: _selectedIndex,
