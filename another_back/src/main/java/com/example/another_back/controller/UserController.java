@@ -31,6 +31,18 @@ public class UserController {
     private final UserService userService;
     private final JwtProvider jwtProvider;
 
+    /**
+     * name 중복 검사
+     *
+     * @param username
+     * @return Boolean
+     */
+    @GetMapping("/checkname/{username}")
+    public ResponseEntity checkname(@PathVariable String username) {
+        Boolean check = userService.checkname(username);
+        return Response.success(HttpStatus.OK, check);
+    }
+
     @PostMapping(value = "/join")
     public ResponseEntity join(@RequestBody @Valid UserJoinDto userJoinDto, BindingResult result, Model model) {
         ResponseEntity BAD_REQUEST = getErrors(result);
@@ -49,12 +61,12 @@ public class UserController {
     @PostMapping(value = "/valid/refresh")
     public ResponseEntity validRefreshToken(@RequestBody RefreshTokenDto refreshTokenDto) {
         String refresh = refreshTokenDto.getRefresh();
-        try{
-            if(refresh.contains(" "))refresh = refresh.substring(refresh.indexOf(" "));
+        try {
+            if (refresh.contains(" ")) refresh = refresh.substring(refresh.indexOf(" "));
             Claims claim = jwtProvider.getClaim(refresh);
             UserStartDto userStartDto = new UserStartDto(claim.get("userId"), claim.get("nickname"), claim.get("weight"), claim.get("height"));
             return Response.success(HttpStatus.OK, userStartDto);
-        }catch (ExpiredJwtException e){
+        } catch (ExpiredJwtException e) {
             return Response.fail(HttpStatus.BAD_REQUEST, null);
         }
     }
