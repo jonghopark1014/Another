@@ -18,7 +18,7 @@ class _WatchTimeScreenState extends State<WatchTimeScreen> {
   void initState() {
     _timer = Timer.periodic(
       Duration(seconds: 1),
-          (timer) {
+      (timer) {
         if (_second != 1) {
           setState(() {
             _second--;
@@ -28,7 +28,7 @@ class _WatchTimeScreenState extends State<WatchTimeScreen> {
               MaterialPageRoute(
                 builder: (_) => WatchRunningRecord(),
               ),
-                  (route) => false);
+              (route) => false);
         }
       },
     );
@@ -46,7 +46,7 @@ class _WatchTimeScreenState extends State<WatchTimeScreen> {
       body: Center(
         child: Text(
           '$_second',
-          style: TextStyle(
+          style: const TextStyle(
             color: MAIN_COLOR,
             fontSize: 100.0,
             fontWeight: FontWeight.w700,

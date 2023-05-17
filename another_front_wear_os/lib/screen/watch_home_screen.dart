@@ -1,9 +1,7 @@
 import 'package:another_front_wear_os/common/const/color.dart';
 import 'package:another_front_wear_os/screen/watch_time_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:watch_connectivity/watch_connectivity.dart';
-
 
 class WatchHomeScreen extends StatefulWidget {
   const WatchHomeScreen({super.key});
@@ -13,43 +11,34 @@ class WatchHomeScreen extends StatefulWidget {
 }
 
 class _WatchHomeScreenState extends State<WatchHomeScreen> {
-
   final WatchConnectivityBase _watch = WatchConnectivity();
-  final MethodChannel channel = MethodChannel('watch_connectivity');
+
   bool _connected = false;
-  var _supported = false;
-  var _paired = false;
-  var _reachable = false;
-  late Map<String?, dynamic> startMessage;
+
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    _initWear();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
     _initWear();
   }
 
   void _initWear() {
-    _watch.messageStream.listen((message) =>
-        setState(() {
-      startMessage = message;
-
-      _connected = true;
-    }),
+    _watch.messageStream.listen(
+      (message) => setState(() {
+        _connected = true;
+        goRunning();
+      }),
     );
   }
 
   void _send(message) {
-    debugPrint("Sent message: $message");
     _watch.sendMessage(message);
   }
-
-  void initPlatformState() async {
-    _supported = await _watch.isSupported;
-    _paired = await _watch.isPaired;
-    _reachable = await _watch.isReachable;
-    setState(() {});
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +67,7 @@ class _WatchHomeScreenState extends State<WatchHomeScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10.0),
-              Container(
+              SizedBox(
                 height: 50.0,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -86,8 +75,9 @@ class _WatchHomeScreenState extends State<WatchHomeScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: MAIN_COLOR,
                     ),
+                    onPressed: goRunning,
                     child: const Padding(
-                      padding: const EdgeInsets.only(bottom: 4.0),
+                      padding: EdgeInsets.only(bottom: 4.0),
                       child: Text(
                         '러닝시작',
                         style: TextStyle(
@@ -96,22 +86,21 @@ class _WatchHomeScreenState extends State<WatchHomeScreen> {
                         ),
                       ),
                     ),
-                    onPressed: () {
-                      // if (startMessage['start'] == 0)
-                      Navigator.push<dynamic>(
-                        context,
-                        MaterialPageRoute<dynamic>(
-                          builder: (BuildContext context) =>
-                          const WatchTimeScreen(),
-                        ),
-                      );
-                    },
                   ),
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void goRunning() {
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (_) => const WatchTimeScreen(),
       ),
     );
   }

@@ -1,7 +1,8 @@
 import 'dart:convert';
+import 'package:another/constant/const/data.dart';
 import 'package:http/http.dart' as http;
 
-const String _baseUrl = 'https://k8b308.p.ssafy.io/api';
+
 
 class doubleCheckApi {
   static Future<String> doubleCheck({
@@ -10,7 +11,7 @@ class doubleCheckApi {
     required Function nicknameDuplication
   })
   async {
-    var url = Uri.parse('${_baseUrl}/user/duplicate/nickname/${nickname}');
+    var url = Uri.parse('$baseUrl/user/duplicate/nickname/$nickname');
 
     try {
       var response = await http.get(url);
@@ -31,8 +32,8 @@ class doubleCheckApi {
         return '사용할 수 없는 닉네임입니다';
       }
       // 통신에 실패한 경우
-    } catch (error) {
-      print('통신 실패');
+    } catch (e) {
+      print(e);
       return '서버 오류';
     }
   }

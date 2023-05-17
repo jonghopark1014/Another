@@ -45,7 +45,6 @@ class _RunningTabState extends State<RunningTab> {
 
   Future<void> _send(message) async {
     _watch.sendMessage(message);
-    print('d');
   }
 
   void initPlatformState() async {
@@ -79,7 +78,7 @@ class _RunningTabState extends State<RunningTab> {
                     iconNamed: Icons.play_arrow,
                     onPressed: () {
                       onPressed('/UnderRunning');
-                      _send('start');
+                      _send({'start': true});
                     },
                   ),
                   RunningSmallButton(
@@ -244,15 +243,15 @@ class _RunningTabState extends State<RunningTab> {
     // currentposition 초기값 그대로이면 받아오기전으로 판단
     if (runningData.currentPosition.target.longitude != 0 &&
         runningData.currentPosition.target.latitude != 0) {
-      // Navigator.of(context).pushAndRemoveUntil(
-      //   MaterialPageRoute(
-      //     builder: (_) => TimerScreen(
-      //       path: str,
-      //       initialPosition: runningData.currentPosition,
-      //     ),
-      //   ),
-      //       (route) => false,
-      // );
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => TimerScreen(
+            path: str,
+            initialPosition: runningData.currentPosition,
+          ),
+        ),
+            (route) => false,
+      );
     }
   }
 }

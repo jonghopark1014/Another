@@ -24,7 +24,6 @@ class MyRecordResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now().toLocal();
-    now = now.add(Duration(seconds: 9 * 3600 ));
     String formattedDate = DateFormat('yyyy.MM.dd').format(now);
     return Padding(
       padding: const EdgeInsets.only(
