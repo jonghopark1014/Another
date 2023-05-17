@@ -56,8 +56,7 @@ class _EndRunningMapState extends State<EndRunningMap> {
   void _onMapIdle() {
     var runningData = Provider.of<RunningData>(context, listen: false);
     LatLngBounds bound = LatLngBounds(southwest: LatLng(runningData.minLat, runningData.minLng), northeast: LatLng(runningData.maxLat, runningData.maxLng));
-    if (mounted && isCap != 3) {
-      isCap++;
+    if (mounted && runningData.isCap != 3) {
       Future.delayed(Duration(milliseconds: 500), () {
         print("나왔당");
         mapController?.animateCamera(CameraUpdate.newLatLngBounds(bound, 50));
@@ -67,6 +66,7 @@ class _EndRunningMapState extends State<EndRunningMap> {
         runningData.setRunningPic(runPic);
         print("찍었당");
       });
+      runningData.addCap();
     }
   }
 

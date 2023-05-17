@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     userInfo = Provider.of<UserInfo>(context, listen: false);
-    deleteToken();
+    // deleteToken();
     checkToken();
   }
 
@@ -60,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
             (route) => false,
       );
     } catch (e) {
-
+      print(e);
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => LoginPage()),
             (route) => false,
