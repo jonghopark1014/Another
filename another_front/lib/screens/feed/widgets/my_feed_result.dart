@@ -32,7 +32,7 @@ class MyRecordResult extends StatelessWidget {
         bottom: 16.0,
       ),
       child: Container(
-        height: 150.0,
+        height: 120.0,
         decoration: BoxDecoration(
           color: BLACK_COLOR,
           borderRadius: BorderRadius.circular(10),
@@ -44,53 +44,55 @@ class MyRecordResult extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        formattedDate,
-                        style: TextStyle(color: MAIN_COLOR, fontSize: 20.0),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            TargetBox(
-                              data: runningDistances[0],
-                              name: 'km',
-                              textColor: WHITE_COLOR,
-                              recordColor: SERVEONE_COLOR,
-                            ),
-                            TargetBox(
-                              data: userCalories[0],
-                              name: 'kcal',
-                              textColor: WHITE_COLOR,
-                              recordColor: SERVEONE_COLOR,
-                            ),
-                            TargetBox(
-                              data: runningTimes[0],
-                              name: '시간',
-                              textColor: WHITE_COLOR,
-                              recordColor: SERVEONE_COLOR,
-                            ),
-                          ],
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          formattedDate,
+                          style: TextStyle(color: MAIN_COLOR, fontSize: 20.0),
                         ),
-                      ),
-                      // Row(
-                      //   crossAxisAlignment: CrossAxisAlignment.end,
-                      //   children: [
-                      //     Text(
-                      //       walkCounts[0],
-                      //       style: TextStyle(color: MAIN_COLOR, fontSize: 40.0),
-                      //     ),
-                      //     Text('걸음',
-                      //         style:
-                      //             TextStyle(color: MAIN_COLOR, fontSize: 20.0))
-                      //   ],
-                      // ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              TargetBox(
+                                data: runningDistances[0],
+                                name: 'km',
+                                textColor: WHITE_COLOR,
+                                recordColor: SERVEONE_COLOR,
+                              ),
+                              TargetBox(
+                                data: userCalories[0],
+                                name: 'kcal',
+                                textColor: WHITE_COLOR,
+                                recordColor: SERVEONE_COLOR,
+                              ),
+                              TargetBox(
+                                data: runningTimes[0],
+                                name: '시간',
+                                textColor: WHITE_COLOR,
+                                recordColor: SERVEONE_COLOR,
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Row(
+                        //   crossAxisAlignment: CrossAxisAlignment.end,
+                        //   children: [
+                        //     Text(
+                        //       walkCounts[0],
+                        //       style: TextStyle(color: MAIN_COLOR, fontSize: 40.0),
+                        //     ),
+                        //     Text('걸음',
+                        //         style:
+                        //             TextStyle(color: MAIN_COLOR, fontSize: 20.0))
+                        //   ],
+                        // ),
+                      ],
+                    ),
                   ),
                   ImageProfileSetting(profile: profile,),
                 ],

@@ -49,7 +49,6 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
       body: SafeArea(
-        child: Center(
           child: SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: Container(
@@ -57,8 +56,8 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IntroHeader(),
-                  SizedBox(height: 40.0),
+                  IntroHeader(logoStyle: 'row',),
+                  SizedBox(height: 20.0),
                   TextField(
                     onChanged: (String value) {
                       username = value;
@@ -154,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
 
                         if (userId != null) {
                           Provider.of<UserInfo>(context, listen: false)
-                              .updateUserInfo(userId, nickname, weight, height);
+                              .updateUserInfo(userId, nickname, height, weight);
                         }
                         await storage.write(
                             key: REFRESH_TOKEN_KEY, value: refreshToken);
@@ -180,7 +179,6 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
-      ),
     );
   }
 }

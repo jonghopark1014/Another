@@ -24,10 +24,10 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     int userId = Provider.of<UserInfo>(context, listen: false).userId;
     Map<String, dynamic> userLevelExp =
         await UserLevelExpApi.getUserLevelExp(userId);
+    print(userLevelExp);
     final userInfoProvider = Provider.of<UserInfo>(context, listen: false);
-    userInfoProvider.userExp = userLevelExp['exp'];
-    userInfoProvider.userLevel = userLevelExp['level'];
-    userInfoProvider.profileImg = userLevelExp['profileImgUrl'];
+    userInfoProvider.updateUserData(userLevelExp['profileImgUrl'],
+        userLevelExp['level'], userLevelExp['exp'] * 10);
 
     // UserInfo.updateProfileImg 에 _userProfileImg
 
@@ -35,6 +35,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
       _userLevel = userLevelExp['level'];
       _userExp = userLevelExp['exp'];
       _userProfileImg = userLevelExp['profileImgUrl'];
+      print(_userProfileImg);
+      print("????????????????/");
       _isLoading = false;
     });
   }
@@ -53,17 +55,19 @@ class _ProfileWidgetState extends State<ProfileWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print('기록 빌드됨');
+    print('====================$_userProfileImg');
     return _isLoading
-        ? Center(child: CircularProgressIndicator())
+        ? Container()
         : Column(
             children: [
               Stack(
                 children: [
                   CircularPercentIndicator(
+                    header: SizedBox(height: 20),
                     radius: 50,
                     lineWidth: 10,
                     percent: _userExp,
-                    header: Text("Icon header"),
                     center: Container(
                       width: 90,
                       height: 90,
@@ -72,20 +76,19 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                         radius: 45,
                       ),
                     ),
-                    backgroundColor: Colors.grey,
-                    progressColor: Colors.blue,
                   ),
                   Positioned(
                     right: 0,
                     bottom: 0,
                     child: InkWell(
-                      onTap: () {
-                        Navigator.push(
+                      onTap: () async {
+                        await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ProfileEditPage(),
                           ),
                         );
+                        await _getUserLevelExp();
                       },
                       child: CircleAvatar(
                         backgroundColor: MAIN_COLOR,

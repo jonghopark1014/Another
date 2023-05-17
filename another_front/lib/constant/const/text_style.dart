@@ -3,6 +3,12 @@ import 'package:flutter/material.dart';
 
 class MyTextStyle {
 
+  static const TextStyle twelveTextStyle = TextStyle(
+    color: WHITE_COLOR,
+    fontSize: 12.0,
+    fontWeight: FontWeight.w700,
+  );
+
   static const TextStyle fourteenTextStyle = TextStyle(
     color: WHITE_COLOR,
     fontSize: 14.0,

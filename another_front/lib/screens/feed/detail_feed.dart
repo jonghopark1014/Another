@@ -8,9 +8,9 @@ import 'package:another/screens/feed/widgets/image_profile.dart';
 import 'package:another/screens/feed/widgets/run_icon.dart';
 import 'package:another/screens/feed/api/detail_feed_api.dart';
 
-import 'package:another/widgets/target.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/go_back_appbar_style.dart';
+import '../record/widgets/target_record_item.dart';
 
 class DetailFeed extends StatefulWidget {
   final String runningId;
@@ -43,6 +43,7 @@ class _DetailFeedState extends State<DetailFeed> {
 
   @override
   void initState() {
+    print('디테일 페이지');
     super.initState();
     challengeData = Provider.of<ChallengeData>(context, listen: false);
     _detailFeed();
@@ -80,7 +81,7 @@ class _DetailFeedState extends State<DetailFeed> {
         withRunCount = contents['withRunCount'].toString();
         List<dynamic> feedPics = contents['feedPics'];
         runningId = contents['runningId'].toString();
-
+        print(runningId);
         for (var feedPic in feedPics) {
           feedPicUrls.add(feedPic['feedPic']);
         }
@@ -133,7 +134,6 @@ class _DetailFeedState extends State<DetailFeed> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: GoBackAppBarStyle(),
       body: ListView(

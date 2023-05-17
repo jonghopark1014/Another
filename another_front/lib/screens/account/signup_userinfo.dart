@@ -1,3 +1,4 @@
+import 'package:another/screens/account/login.dart';
 import 'package:another/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:another/constant/const/color.dart';
@@ -7,6 +8,8 @@ import './widgets/height_weight_picker.dart';
 import './widgets/pass_button.dart';
 import './widgets/complete_button.dart';
 import 'package:another/screens/account/api/signup_api.dart';
+
+import 'login.dart';
 
 class SignupUserInfoPage extends StatefulWidget {
   final String email;
@@ -32,79 +35,82 @@ class _SignupUserInfoPageState extends State<SignupUserInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          children: <Widget>[
-            IntroHeader(),
-            Expanded(
-              child: HeightWeightPicker(
-                initialHeight: _height,
-                initialWeight: _weight,
-                onHeightChanged: (height) => setState(() => _height = height),
-                onWeightChanged: (weight) => setState(() => _weight = weight),
-              ),
-            ),
-            Row(
+    return Scaffold(
+      body: Column(
+        children: [
+          IntroHeader(logoStyle: 'row',),
+          Expanded(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                PassButton(
-                  text: '건너뛰기',
-                  onPressed: () {
-                    SignupApi.joinUser(
-                      context,
-                      email: widget.email,
-                      password: widget.password,
-                      nickname: widget.nickname,
-                      isMale: widget.isMale,
-                      height: 170,
-                      weight: 60,
-                    );
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (_) => HomeScreen(),
-                      ),
-                      (route) => false,
-                    );
-                  },
+              children: <Widget>[
+                HeightWeightPicker(
+                  initialHeight: _height,
+                  initialWeight: _weight,
+                  onHeightChanged: (height) => setState(() => _height = height),
+                  onWeightChanged: (weight) => setState(() => _weight = weight),
                 ),
-                CompleteButton(
-                  text: '회원가입',
-                  onPressed: () async {
-                    // 가입완료 버튼 클릭 시 로직
-                    // 키, 몸무게를 저장해서 데이터 보내주면 될 것 같음! (백으로 보내? store로 보내?)
-                    bool signup = await SignupApi.joinUser(
-                      context,
-                      email: widget.email,
-                      password: widget.password,
-                      nickname: widget.nickname,
-                      isMale: widget.isMale,
-                      height: _height,
-                      weight: _weight,
-                    );
-                    if (signup) {
-                      // 회원가입 성공한 경우
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('회원가입이 완료되었습니다.')),
-                      );
-                      Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                          builder: (_) => HomeScreen(),
-                        ),
-                            (route) => false,
-                      );
-                    } else {
-                      // 회원가입 실패한 경우
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('회원가입에 실패했습니다.')),
-                      );
-                    }
-                  },
-                )
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    PassButton(
+                      text: '건너뛰기',
+                      onPressed: () {
+                        SignupApi.joinUser(
+                          context,
+                          email: widget.email,
+                          password: widget.password,
+                          nickname: widget.nickname,
+                          isMale: widget.isMale,
+                          height: 170,
+                          weight: 60,
+                        );
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (_) => LoginPage(),
+                          ),
+                          (route) => false,
+                        );
+                      },
+                    ),
+                    CompleteButton(
+                      text: '회원가입',
+                      onPressed: () async {
+                        // 가입완료 버튼 클릭 시 로직
+                        // 키, 몸무게를 저장해서 데이터 보내주면 될 것 같음! (백으로 보내? store로 보내?)
+                        bool signup = await SignupApi.joinUser(
+                          context,
+                          email: widget.email,
+                          password: widget.password,
+                          nickname: widget.nickname,
+                          isMale: widget.isMale,
+                          height: _height,
+                          weight: _weight,
+                        );
+                        if (signup) {
+                          // 회원가입 성공한 경우
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('회원가입이 완료되었습니다.')),
+                          );
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (_) => LoginPage(),
+                            ),
+                                (route) => false,
+                          );
+                        } else {
+                          // 회원가입 실패한 경우
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('회원가입에 실패했습니다.')),
+                          );
+                        }
+                      },
+                    )
+                  ],
+                ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -26,10 +26,20 @@ class RecordTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var userInfo = Provider.of<UserInfo>(context);
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Image.asset('assets/img/logo_small.png',
+                width: 120, height: 70),
+          ),
+          elevation: 0,
+          backgroundColor: BACKGROUND_COLOR,
+          toolbarHeight: 88,
+        ),
+        backgroundColor: Colors.black,
+        body: SingleChildScrollView(
           child: Stack(
             children: [
               Positioned.fill(
@@ -55,25 +65,22 @@ class RecordTab extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(20),
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.asset('assets/img/logo_small.png', width: 120, height: 70),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Flexible(
+                            Expanded(
                               child: Text(
                                 '안녕하세요 ${context.watch<UserInfo>().nickname}님!\n오늘도 함께 달려볼까요?',
                                 softWrap: true,
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 16),
+                                    color: Colors.white, fontSize: 20),
                               ),
                             ),
-                            Flexible(
-                              child: ProfileWidget(),
-                            )
+                            ProfileWidget()
                           ],
                         ),
                       ],
@@ -97,14 +104,14 @@ class RecordTab extends StatelessWidget {
                         children: [
                           Padding(
                             padding:
-                                EdgeInsets.only(top: 10, left: 15, right: 15),
+                                EdgeInsets.only(top: 10, left: 10, right: 10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(height: 10),
                                 Row(
                                   children: [
-                                    CategoryTitle(title: 'MY 챌린지'),
+                                    CategoryTitle(title: 'MY 챌린지', top: 0, bottom: 0),
                                     IconButton(
                                       onPressed: () {
                                         Navigator.push(
@@ -123,7 +130,7 @@ class RecordTab extends StatelessWidget {
                                 ),
                                 SizedBox(height: 5),
                                 MyChallenge(), // 나의 챌린지
-                                CategoryTitle(title: '나의 활동 기록'),
+                                CategoryTitle(title: '나의 활동 기록', top: 25, bottom: 10),
                                 SizedBox(height: 5),
                                 MyRecord(),
                               ],
@@ -172,12 +179,12 @@ class _MyChallengeState extends State<MyChallenge> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.only(bottom: 30),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: _isLoading == true
-            ? Center(child: CircularProgressIndicator())
-            : Column(
+            ? Container()
+            : Row(
                 children:
                     // if API가 0개이면 띄워줄거 작성해야함
                     _successChallenge.isEmpty
@@ -218,17 +225,22 @@ class _MyChallengeState extends State<MyChallenge> {
                           ]
                         : _successChallenge
                             .map(
-                              (challenge) => Column(
-                                children: [
-                                  Image.network(
-                                    challenge['challengeUrl'],
-                                    width: 100,
-                                    height: 100,
-                                  ),
-                                  Text(challenge['challengeName'],
-                                      style: TextStyle(
-                                          color: SERVETWO_COLOR, fontSize: 12))
-                                ],
+                              (challenge) => Padding(
+                                padding: EdgeInsets.only(right: 10),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.network(
+                                      challenge['challengeUrl'],
+                                      width: 80,
+                                      height: 80,
+                                    ),
+                                    // Text(challenge['challengeName'],
+                                    //     style: TextStyle(
+                                    //         color: SERVETWO_COLOR,
+                                    //         fontSize: 12))
+                                  ],
+                                ),
                               ),
                             )
                             .toList(),
@@ -293,9 +305,12 @@ class _MyRecordState extends State<MyRecord> {
         data2 = await GetHistoryRecord.getAllHistoryRecord(userId);
         break;
       case 4:
-        data1 = await GetPeriodRecord.getPeriodRecordSelectDay(userId, selectedDay);
-        data2 = await GetHistoryRecord.getHistoryRecordSelectDay(userId, selectedDay);
-        data3 = await GetHistoryRecord.getAllHistoryRecord(userId); // 마커 찍기 용 데이터
+        data1 =
+            await GetPeriodRecord.getPeriodRecordSelectDay(userId, selectedDay);
+        data2 = await GetHistoryRecord.getHistoryRecordSelectDay(
+            userId, selectedDay);
+        data3 =
+            await GetHistoryRecord.getAllHistoryRecord(userId); // 마커 찍기 용 데이터
         break;
       default:
         data1 = {};
@@ -417,7 +432,7 @@ class _MyRecordState extends State<MyRecord> {
           ],
         ),
         _isLoading == true
-            ? Center(child: CircularProgressIndicator())
+            ? Container()
             : MyRecordContents(
                 getRecord: getRecord,
                 selectedIndex: _selectedIndex,
@@ -473,8 +488,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
     Map<DateTime, List<Event>> parseMarkerDataResult = {};
 
     for (Map<String, dynamic> marker in markerList) {
-      DateTime createDate =
-          DateTime.parse(marker['createDate']).toUtc().add(Duration(hours: 9));
+      DateTime createDate = DateTime.parse(marker['createDate']).toUtc();
       Event id = Event(marker['id']);
       if (parseMarkerDataResult.containsKey(createDate)) {
         parseMarkerDataResult[createDate]!.add(id);
@@ -482,7 +496,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
         parseMarkerDataResult[createDate] = [id];
       }
     }
-    print('parseMarkerDataResult: $parseMarkerDataResult');
+    // print('parseMarkerDataResult: $parseMarkerDataResult');
     return parseMarkerDataResult;
   }
 
@@ -622,7 +636,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
             : Padding(
                 padding: EdgeInsets.only(left: 8),
                 child: Text(
-                  '런닝 기록',
+                  '러닝 기록',
                   style: TextStyle(color: WHITE_COLOR, fontSize: 16),
                   textAlign: TextAlign.start,
                 ),
@@ -657,7 +671,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
                 children: [
                   Expanded(
                     child: RecordChart(
-                      '시간',
+                      '평균 시간',
                       widget.periodData!['prevAvg']['originalTime'].toDouble(),
                       widget.periodData!['curAvg']['originalTime'].toDouble(),
                       widget.periodData!['prevAvg']['avgTime'].toString(),
@@ -666,7 +680,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
                   ),
                   Expanded(
                     child: RecordChart(
-                      '거리',
+                      '평균 거리(km)',
                       widget.periodData!['prevAvg']['avgDistance'],
                       widget.periodData!['curAvg']['avgDistance'],
                       widget.periodData!['prevAvg']['avgDistance'].toString(),
@@ -675,7 +689,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
                   ),
                   Expanded(
                     child: RecordChart(
-                      'kcal',
+                      '평균 kcal',
                       widget.periodData!['prevAvg']['avgKcal'],
                       widget.periodData!['curAvg']['avgKcal'],
                       widget.periodData!['prevAvg']['avgKcal'].toString(),
@@ -684,7 +698,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
                   ),
                   Expanded(
                     child: RecordChart(
-                      '페이스',
+                      '평균 페이스',
                       widget.periodData!['curAvg']['originalPace'] == 0 ||
                               widget.periodData!['prevAvg']['originalPace'] == 0
                           ? widget.periodData!['prevAvg']['originalPace']

@@ -3,8 +3,8 @@ import 'package:another/constant/const/text_style.dart';
 import 'package:another/main.dart';
 import 'package:another/screens/feed/api/detail_feed_api.dart';
 import 'package:another/screens/feed/widgets/line_chart_custom.dart';
+import 'package:another/screens/record/widgets/target_record_item.dart';
 import 'package:another/widgets/go_back_appbar_style.dart';
-import 'package:another/widgets/target.dart';
 import 'package:carousel_indicator/carousel_indicator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -246,12 +246,15 @@ class _FeedCreateCompleteState extends State<FeedCreateComplete> {
   }
 
   void getChartData() async {
+    List<PacesData> chartData;
     final response = await DetailFeedApi.getFeed(runningId);
     if (response != null) {
       final content = response['data'];
       print(content);
       var cTime = content['createDate'];
-      var chartData = content['graph'].map(
+      print(cTime);
+      List<dynamic> graph = content['graph'];
+      chartData = graph.map(
         (data) {
           double d = 0.0;
           double p = 0.0;
@@ -260,9 +263,11 @@ class _FeedCreateCompleteState extends State<FeedCreateComplete> {
             p = double.parse(
                 data['userPace'].replaceAll("''", "").replaceAll("'", "."));
           }
+          print('$runningDistance $userPace');
           return PacesData(runningDistance: d, userPace: p);
         },
       ).toList();
+
       setState(() {
         userNickname = content['nickname'];
         userProfile = content['profilePic'];
