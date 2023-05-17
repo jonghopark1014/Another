@@ -25,7 +25,7 @@ class TargetBox extends StatelessWidget {
           SizedBox(
             child: Text(
               data,
-              style: MyTextStyle.twentyTextStyle.copyWith(color: textColor),
+              style: MyTextStyle.sixteenTextStyle.copyWith(color: textColor),
               textAlign: TextAlign.center,
             ),
           ),

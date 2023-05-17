@@ -15,6 +15,7 @@ class ProfileWidget extends StatefulWidget {
 }
 
 class _ProfileWidgetState extends State<ProfileWidget> {
+
   int _userLevel = 0;
   double _userExp = 0;
   String? _userProfileImg;
@@ -53,6 +54,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print('기록 빌드됨');
+    print('====================$_userProfileImg');
     return _isLoading
         ? Center(child: CircularProgressIndicator())
         : Column(
@@ -86,9 +89,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                             builder: (context) => ProfileEditPage(),
                           ),
                         );
-                        setState(() {
-
-                        });
+                        await _getUserLevelExp();
                       },
                       child: CircleAvatar(
                         backgroundColor: MAIN_COLOR,

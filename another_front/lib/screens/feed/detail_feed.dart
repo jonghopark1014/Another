@@ -192,7 +192,7 @@ class _DetailFeedState extends State<DetailFeed> {
                           nickname: userNickname,
                         ),
                         RunIcon(
-                          runCount: runCount,
+                          runCount: runCount ?? '0',
                           runningId: runId,
                         ),
                       ],
