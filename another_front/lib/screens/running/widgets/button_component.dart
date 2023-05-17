@@ -27,7 +27,7 @@ class ButtonConponent extends StatelessWidget {
           ),
           child: Text(
             '다음에 할래요!',
-            style: MyTextStyle.twentyTextStyle
+            style: MyTextStyle.sixteenTextStyle
           ),
         ),
         ElevatedButton(
@@ -39,7 +39,7 @@ class ButtonConponent extends StatelessWidget {
           ),
           child: Text(
             '오운완 등록하기',
-            style: MyTextStyle.twentyTextStyle,
+            style: MyTextStyle.sixteenTextStyle,
           ),
         )
       ],

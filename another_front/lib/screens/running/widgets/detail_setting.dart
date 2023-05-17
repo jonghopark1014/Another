@@ -61,7 +61,7 @@ class _DetailSettingState extends State<DetailSetting> {
                 : Text(
                     '거리 목표를 설정해주세요!',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       color: SERVETWO_COLOR,
                     ),
                   ),
@@ -101,7 +101,7 @@ class _DetailSettingState extends State<DetailSetting> {
                 : Text(
                     '시간을 설정해주세요!',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       color: SERVETWO_COLOR,
                     ),
                   ),
@@ -141,9 +141,9 @@ class _DetailSettingState extends State<DetailSetting> {
                     ],
                   )
                 : Text(
-                    '러닝시간과 걷기시간을 설정해주세요!',
+                    '인터벌을 설정해주세요!',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       color: SERVETWO_COLOR,
                     ),
                   ),

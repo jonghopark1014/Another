@@ -306,5 +306,8 @@ class _RunningStatus extends State<RunningStatus> {
 
 
 
-  void onChange() {}
+  void onChange() {
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(duration: Duration(milliseconds: 1000),content: Text('정지하려면 2초 이상 눌러주세요')));
+  }
 }

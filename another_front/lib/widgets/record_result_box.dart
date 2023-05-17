@@ -17,10 +17,11 @@ class RecordResultBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width * 0.4;
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Container(
-        width: 160.0,
+        width: width < 160.0 ? width : 160,
         height: 100.0,
         child: Column(
           children: [

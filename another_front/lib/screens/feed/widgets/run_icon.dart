@@ -14,6 +14,9 @@ class RunIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (runCount == 'null') {
+      runCount = '0';
+    }
     return Row(children: [
       InkWell(
         onTap: () {
@@ -52,7 +55,7 @@ class RunIcon extends StatelessWidget {
             ),
           );
         },
-        child: Text(runCount , style: MyTextStyle.sixteenTextStyle),
+        child: Text(runCount, style: MyTextStyle.sixteenTextStyle),
       ),
       SizedBox(
         width: 10.0,

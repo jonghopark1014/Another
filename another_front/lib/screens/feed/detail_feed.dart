@@ -43,6 +43,7 @@ class _DetailFeedState extends State<DetailFeed> {
 
   @override
   void initState() {
+    print('디테일 페이지');
     super.initState();
     challengeData = Provider.of<ChallengeData>(context, listen: false);
     _detailFeed();
@@ -80,7 +81,7 @@ class _DetailFeedState extends State<DetailFeed> {
         withRunCount = contents['withRunCount'].toString();
         List<dynamic> feedPics = contents['feedPics'];
         runningId = contents['runningId'].toString();
-
+        print(runningId);
         for (var feedPic in feedPics) {
           feedPicUrls.add(feedPic['feedPic']);
         }
@@ -133,7 +134,6 @@ class _DetailFeedState extends State<DetailFeed> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: GoBackAppBarStyle(),
       body: ListView(

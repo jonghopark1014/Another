@@ -30,35 +30,41 @@ class UnderRunningScreenEnd extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
     return MainLayout(
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 16),
+        padding: EdgeInsets.only(bottom: 16),
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Target(
-                targetname: '내 기록',
-                runningDistance: runningDistance,
-                runningTime: runningTime,
-                userCalorie: userCalorie,
-                userPace: userPace,
+              Expanded(
+                child: ListView(
+                  children: [
+                    Target(
+                      targetname: '내 기록',
+                      runningDistance: runningDistance,
+                      runningTime: runningTime,
+                      userCalorie: userCalorie,
+                      userPace: userPace,
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.only(top: 24.0),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxHeight: size.height / 11 * 6,
+                          ),
+                          child: SizedBox(
+                            height: size.width,
+                            width: size.width,
+                            child: EndRunningMap(),
+                          ),
+                        )
+                    ),
+                    // SizedBox(
+                    //   height: 120,
+                    // ),
+                  ],
+                ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 24.0),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: size.height / 11 * 6,
-                  ),
-                  child: SizedBox(
-                    height: size.width,
-                    width: size.width,
-                    child: EndRunningMap(),
-                  ),
-                )
-              ),
-              // SizedBox(
-              //   height: 120,
-              // ),
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
                 child: ButtonConponent(
@@ -89,7 +95,7 @@ class UnderRunningScreenEnd extends StatelessWidget {
     }
     else {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('발자취를 담고있습니다. 잠시만 기다려주세요')));
+          const SnackBar(duration: Duration(milliseconds: 1000), content: Text('발자취를 담는 중 입니다.')));
     }
   }
 
@@ -110,7 +116,7 @@ class UnderRunningScreenEnd extends StatelessWidget {
     }
     else {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('발자취를 담고있습니다. 잠시만 기다려주세요')));
+          const SnackBar(duration: Duration(milliseconds: 1000), content: Text('발자취를 담는 중 입니다.')));
     }
 
   }
