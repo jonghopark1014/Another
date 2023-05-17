@@ -41,14 +41,6 @@ class _ChallengeRunningState extends State<ChallengeRunning> {
     userPace = challengeData.userPace;
 
     challengeData.setList(challengeDistanceList);
-
-    final userInfo = context.read<UserInfo>();
-    // _userWeight = userInfo.weight;
-    String userId = userInfo.userId.toString();
-    String forRunId1 = DateFormat('yyMMddHHmmss').format(DateTime.now());
-    runDataId = userId + forRunId1;
-    var runningData = Provider.of<RunningData>(context, listen: false);
-    runningData.setRunningId(runDataId);
   }
 
   Future<void> _versusApi() async {
@@ -109,10 +101,13 @@ class _ChallengeRunningState extends State<ChallengeRunning> {
     runningData.reset();
     runningData.firstMinMax(runningData.currentPosition.target);
     runningData.addLocation(runningData.currentPosition.target, 1);
-
     // currentposition 초기값 그대로이면 받아오기전으로 판단
     if (runningData.currentPosition.target.longitude != 0 &&
         runningData.currentPosition.target.latitude != 0) {
+      final userId = (Provider.of<UserInfo>(context, listen: false).userId).toString();
+      String forRunId = DateFormat('yyMMddHHmmss').format(DateTime.now());
+      String runDataId = userId + forRunId;
+      runningData.setRunningId(runDataId);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (_) =>

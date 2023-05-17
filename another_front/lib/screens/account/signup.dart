@@ -89,11 +89,13 @@ class _CustomInputFormState extends State<CustomInputForm> {
   TextEditingController nicknameController = TextEditingController();
   bool isMaleSelected = true;
   bool isNicknameButtonActive = false;
+  bool isEmailButtonActive = false;
   bool isNicknamePossible = false;
   bool isEmailPossible = false;
   bool isPwPossible = false;
   bool isPwCheckPossible = false;
   String preNick = '';
+  String preEmail = '';
 
   FocusNode idFocus = new FocusNode();
   FocusNode pwFocus = new FocusNode();
@@ -104,7 +106,23 @@ class _CustomInputFormState extends State<CustomInputForm> {
   bool pwCheckFoc = false;
   bool nickFoc = false;
 
+
   @override
+  void emailPossible() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("사용 가능한 이메일입니다."))
+    );
+    setState(() {
+      isEmailPossible = true;
+    });
+  }
+  void emailDuplication() {
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("이미 사용중인 이메일입니다."))
+    );
+    isEmailPossible = false;
+  }
+
   // 백엔드와 API 통신을 통해 사용 가능하다는 통신을 받으면 true로 변경 (nickname_check_api.dart)
   void nicknamePossible() {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -209,42 +227,6 @@ class _CustomInputFormState extends State<CustomInputForm> {
     }
   }
 
-
-  // 이메일 유효성 검사
-  String? _validateEmail(String? value) {
-    // 입력값이 없는 경우
-    if (value == null || value.isEmpty) {
-      if (pwController.text != '') {
-        return null;
-      }
-      else {
-        setState(() {
-          isEmailPossible = false;
-        });
-        return null;
-      }
-    }
-    // 입력한 경우 이메일 형식 검사
-    String emailPattern =
-        r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$'; // 이메일 정규식
-    RegExp regex = RegExp(emailPattern);
-    if (!regex.hasMatch(value)) {
-      setState(() {
-        isEmailPossible = false;
-      });
-      print('이메일: $value');
-      print('이메일 여부: $isEmailPossible');
-      return '잘못된 이메일 형식입니다.';
-    }
-    // 잘 된 경우
-    setState(() {
-      isEmailPossible = true;
-    });
-    print('이메일: $value');
-    print('이메일 여부: $isEmailPossible');
-    return null;
-  }
-
   // 비밀번호 유효성 검사
   String? _validatePw(String? value) {
     print('pw함수 들어옴');
@@ -316,6 +298,45 @@ class _CustomInputFormState extends State<CustomInputForm> {
     return null;
   }
 
+  // 이메일 유효성 검사
+  String? _validateEmail(String? value) {
+    // 입력값이 없는 경우
+    if (value == null || value.isEmpty) {
+      if (pwController.text != '') {
+        return null;
+      }
+      else {
+        setState(() {
+          isEmailPossible = false;
+        });
+        return null;
+      }
+    }
+    // 입력한 경우 이메일 형식 검사
+    String emailPattern =
+        r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$'; // 이메일 정규식
+    RegExp regex = RegExp(emailPattern);
+    if (!regex.hasMatch(value)) {
+      setState(() {
+        isEmailButtonActive = false;
+      });
+      print('이메일: $value');
+      print('이메일 여부: $isEmailPossible');
+      return '잘못된 이메일 형식입니다.';
+    }
+    // 확정 입력 값이 달라진 경우
+    else if (isEmailPossible == true && value != preEmail) {
+      isEmailPossible = false;
+    }
+    // 잘 된 경우
+    setState(() {
+      isEmailButtonActive = true;
+    });
+    print('이메일: $value');
+    print('이메일 여부: $isEmailPossible');
+    return null;
+  }
+
   // 닉네임 유효성 검사
   String? _validateNickname(String? value) {
     if (isNicknamePossible == true && value != preNick) {
@@ -357,13 +378,42 @@ class _CustomInputFormState extends State<CustomInputForm> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            CustomTextField(
-              myNode: idFocus,
-              controller: emailController,
-              labelText: '아이디(이메일)',
-              validator: _validateEmail,
-              hintText: '아이디를 입력해 주세요',
-              labelColor: idFoc ? MAIN_COLOR : SERVEONE_COLOR,
+            Stack(
+              children: [
+                CustomTextField(
+                  myNode: idFocus,
+                  controller: emailController,
+                  labelText: '아이디(이메일)',
+                  validator: _validateEmail,
+                  hintText: '아이디를 입력해 주세요',
+                  labelColor: idFoc ? MAIN_COLOR : SERVEONE_COLOR,
+                ),
+                Positioned(
+                  top: 10,
+                  right: 10,
+                  child: ElevatedButton(
+                    onPressed: isEmailButtonActive &&
+                        isEmailPossible == false
+                        ? () async {
+                      if (await emailCheckApi.emailCheck(
+                          email: emailController.text,
+                          emailPossible: emailPossible,
+                          emailDuplication: emailDuplication) ==
+                          '사용 가능') {
+                        preEmail = emailController.text;
+                        isEmailPossible = true;
+                      } else {
+                        isEmailPossible = false;
+                      }
+                    }
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      onSurface: Colors.white,
+                    ),
+                    child: Text('중복확인'),
+                  ),
+                )
+              ]
             ),
             SizedBox(height: 16),
             CustomTextField(
@@ -409,6 +459,7 @@ class _CustomInputFormState extends State<CustomInputForm> {
                           nicknamePossible: nicknamePossible,
                           nicknameDuplication: nicknameDuplication) ==
                           '사용 가능') {
+                        preNick = nicknameController.text;
                         isNicknamePossible = true;
                       } else {
                         isNicknamePossible = false;

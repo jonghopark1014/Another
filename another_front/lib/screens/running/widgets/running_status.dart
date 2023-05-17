@@ -135,7 +135,8 @@ class _RunningStatus extends State<RunningStatus> {
       userCalories = (_userWeight * runningDistance * 1.036 ~/ 1);
       runningData.setCalories(userCalories);
     }
-    Kafka.sendTopic(latitude: current.latitude, longitude: current.longitude, runningId: runDataId, runningDistance: runningDistance, runningTime: runningTime, userCalories: userCalories, userPace: userPace);
+    runDataId = Provider.of<RunningData>(context, listen: false).runningId;
+    Kafka.sendTopic(latitude: current.latitude, longitude: current.longitude, runningId: runDataId, runningDistance: runningDistance, runningTime: runningTime, userCalories: userCalories, userPace: userPace, runningSec: timeToSec.toInt());
   }
 
   // 시간초는 거리 갱신할때도 쓰면 좋아서 그대로 흘러감
@@ -146,9 +147,6 @@ class _RunningStatus extends State<RunningStatus> {
     // 유저 정보 받아오기
     final userInfo = context.read<UserInfo>();
     _userWeight = userInfo.weight;
-    String userId = userInfo.userId.toString();
-    String forRunId1 = DateFormat('yyMMddHHmmss').format(DateTime.now());
-    runDataId = userId + forRunId1;
     // 타이머 시작
     isStart = true;
     // Isolate.spawn(timerIsolate, 'start');
@@ -215,15 +213,10 @@ class _RunningStatus extends State<RunningStatus> {
                   iconNamed: Icons.play_arrow,
                   onPressed: onStart,
                 ),
-                GestureDetector(
-                  onLongPress: () {
-                    onStop();
-                  },
-                  child: RunningCircleButton(
+                RunningCircleButton(
                     iconNamed: Icons.stop,
-                    onPressed: onChange,
+                    onPressed: onStop,
                   ),
-                ),
               ],
             ),
           ],
@@ -303,8 +296,4 @@ class _RunningStatus extends State<RunningStatus> {
       print(e.message);
     }
   }
-
-
-
-  void onChange() {}
 }
