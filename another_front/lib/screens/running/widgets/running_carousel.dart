@@ -43,10 +43,18 @@ class _RunningCarouselState extends State<RunningCarousel> {
     return Container(
       clipBehavior: Clip.hardEdge,
       margin: EdgeInsets.fromLTRB(15, 70, 15, 0),
-      height: 150,
+      height: 170,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: CONTOUR_COLOR,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          )
+        ]
       ),
       child: Stack(
         alignment: AlignmentDirectional.bottomCenter,
@@ -92,7 +100,7 @@ class _RunningCarouselState extends State<RunningCarousel> {
             alignment: Alignment(0, 0.5),
             color: CONTOUR_COLOR,
             child: Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -148,52 +156,65 @@ class _RunningCarouselState extends State<RunningCarousel> {
     var response = await recommendChallengeApi(userId);
     print(response);
     if (response['status'] == 'success') {
-      setState(() {
-        _carouselPages[0] = Container(
-          // alignment: Alignment(0, 0.5),
-          color: CONTOUR_COLOR,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
-            child: response['data'] == null
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Image.asset(
-                        'assets/img/gold_firstrun.png',
-                        height: 85,
-                        width: 85,
-                      ),
-                      Text(
-                        "첫 러닝을 시작해볼까요😀",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
+      setState(
+        () {
+          _carouselPages[0] = Container(
+            // alignment: Alignment(0, 0.5),
+            color: CONTOUR_COLOR,
+
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(0, 5, 0, 15),
+              child: response['data'] == null
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Image.asset(
+                          'assets/img/gold_firstrun.png',
+                          height: 85,
+                          width: 85,
                         ),
-                      )
-                    ],
-                  )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Image.network(
-                        response['data']['challengeGold'],
-                        height: 85,
-                        width: 85,
-                      ),
-                      Text(
-                        response['data']['challengeName'],
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                        Text(
+                          "첫 러닝을 시작해볼까요😀",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        )
+                      ],
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Image.network(
+                          response['data']['challengeGold'],
+                          height: 85,
+                          width: 85,
                         ),
-                      )
-                    ],
-                  ),
-          ),
-        );
-      });
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              '${response['data']['challengeName']}',
+                              style: TextStyle(
+                                color: SERVEONE_COLOR,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Text(
+                              '뱃지를 획득해보세요!',
+                              style: TextStyle(
+                                  fontSize: 14, color: SERVETWO_COLOR),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+            ),
+          );
+        },
+      );
       print("////////////");
     }
   }
