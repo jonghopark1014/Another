@@ -103,7 +103,7 @@ class UnderChallengeScreenEnd extends StatelessWidget {
     }
     else {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('발자취를 담고있습니다. 잠시만 기다려주세요')));
+          const SnackBar(duration: Duration(milliseconds: 1000), content: Text('발자취를 담는 중 입니다.')));
     }
   }
 
@@ -123,7 +123,7 @@ class UnderChallengeScreenEnd extends StatelessWidget {
     }
     else {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('발자취를 담고있습니다. 잠시만 기다려주세요')));
+          const SnackBar(duration: Duration(milliseconds: 1000), content: Text('발자취를 담는 중 입니다.')));
     }
   }
 }

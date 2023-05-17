@@ -19,6 +19,10 @@ class RecordResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    var height = size.height /5;
+    print(height);
+    // var width = size.width * 0.95;
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: Container(
@@ -26,7 +30,8 @@ class RecordResult extends StatelessWidget {
           color: BLACK_COLOR,
           borderRadius: BorderRadius.circular(10),
         ),
-        height: 180.0,
+        height: 170,
+        // width: width,
         child: Column(
           children: [
             Flexible(

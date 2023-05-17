@@ -28,7 +28,7 @@ class ImageProfile extends StatelessWidget {
             radius: radius,
           ),
           SizedBox(
-            width: 20,
+            width: 10,
           ),
           Text(
             nickname,
