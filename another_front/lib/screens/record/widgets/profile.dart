@@ -58,7 +58,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     print('기록 빌드됨');
     print('====================$_userProfileImg');
     return _isLoading
-        ? Center(child: CircularProgressIndicator())
+        ? Container()
         : Column(
             children: [
               Stack(
