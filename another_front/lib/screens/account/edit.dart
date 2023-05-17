@@ -119,106 +119,108 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   @override
   Widget build(BuildContext context) {
     print(profileImg);
-    return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          IntroHeader(),
-          SizedBox(height: 16),
-          ProfileImage(
-            profileImg: context.watch<UserInfo>().profileImg,
-            key: _imagePickerKey,
-            onFileChanged: (img) => setState(() => profileImg = img),
-          ),
-          Padding(
-              padding: EdgeInsets.all(25),
-              child: Stack(
-                children: [
-                  TextFormField(
-                    controller: _nicknameController,
-                    validator: _validateNickname,
-                    onChanged: (value) {
-                      setState(() {
-                        errorText = _validateNickname(value);
-                      });
-                    },
-                    decoration: InputDecoration(
-                      labelText: '닉네임',
-                      hintText: '새로운 닉네임을 입력해주세요.',
-                      hintStyle: TextStyle(color: SERVEONE_COLOR),
-                      errorText: errorText,
-                      labelStyle: TextStyle(
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IntroHeader(),
+            SizedBox(height: 16),
+            ProfileImage(
+              profileImg: context.watch<UserInfo>().profileImg,
+              key: _imagePickerKey,
+              onFileChanged: (img) => setState(() => profileImg = img),
+            ),
+            Padding(
+                padding: EdgeInsets.all(25),
+                child: Stack(
+                  children: [
+                    TextFormField(
+                      controller: _nicknameController,
+                      validator: _validateNickname,
+                      onChanged: (value) {
+                        setState(() {
+                          errorText = _validateNickname(value);
+                        });
+                      },
+                      decoration: InputDecoration(
+                        labelText: '닉네임',
+                        hintText: '새로운 닉네임을 입력해주세요.',
+                        hintStyle: TextStyle(color: SERVEONE_COLOR),
+                        errorText: errorText,
+                        labelStyle: TextStyle(
+                          color: SERVEONE_COLOR,
+                        ),
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(color: SERVEONE_COLOR),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: SERVEONE_COLOR),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: SERVEONE_COLOR),
+                        ),
+                      ),
+                      maxLines: 1,
+                      maxLength: 8,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
                         color: SERVEONE_COLOR,
                       ),
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide(color: SERVEONE_COLOR),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: SERVEONE_COLOR),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: SERVEONE_COLOR),
-                      ),
                     ),
-                    maxLines: 1,
-                    maxLength: 8,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: SERVEONE_COLOR,
-                    ),
-                  ),
-                  Positioned(
-                    top: 15,
-                    right: 10,
-                    child: ElevatedButton(
-                      onPressed:
-                          isNicknameButtonActive && isNicknamePossible == false
-                              ? () async {
-                                  if (await doubleCheckApi.doubleCheck(
-                                          nickname: _nicknameController.text,
-                                          nicknamePossible: nicknamePossible,
-                                      nicknameDuplication: nicknameDuplication) ==
-                                      '사용 가능') {
-                                    isNicknamePossible = true;
-                                    print('사용 가능');
-                                  } else {
-                                    isNicknamePossible = false;
-                                    print('사용 불가');
+                    Positioned(
+                      top: 15,
+                      right: 10,
+                      child: ElevatedButton(
+                        onPressed:
+                            isNicknameButtonActive && isNicknamePossible == false
+                                ? () async {
+                                    if (await doubleCheckApi.doubleCheck(
+                                            nickname: _nicknameController.text,
+                                            nicknamePossible: nicknamePossible,
+                                        nicknameDuplication: nicknameDuplication) ==
+                                        '사용 가능') {
+                                      isNicknamePossible = true;
+                                      print('사용 가능');
+                                    } else {
+                                      isNicknamePossible = false;
+                                      print('사용 불가');
+                                    }
                                   }
-                                }
-                              : null,
-                      style: ElevatedButton.styleFrom(
-                        onSurface: Colors.white,
+                                : null,
+                        style: ElevatedButton.styleFrom(
+                          onSurface: Colors.white,
+                        ),
+                        child: Text('중복확인'),
                       ),
-                      child: Text('중복확인'),
-                    ),
-                  )
-                ],
-              )),
-          HeightWeightPicker(
-            initialHeight: _height,
-            initialWeight: _weight,
-            onHeightChanged: (height) => setState(() => _height = height),
-            onWeightChanged: (weight) => setState(() => _weight = weight),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              PassButton(
-                text: '취소',
-                onPressed: () {
-                  Navigator.pop(context); // 뒤로가기
-                },
-              ),
-              CompleteButton(
-                text: '수정 완료',
-                onPressed: () {
-                  _onSavePressed(context);
-                },
-              ),
-            ],
-          )
-        ],
+                    )
+                  ],
+                )),
+            HeightWeightPicker(
+              initialHeight: _height,
+              initialWeight: _weight,
+              onHeightChanged: (height) => setState(() => _height = height),
+              onWeightChanged: (weight) => setState(() => _weight = weight),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                PassButton(
+                  text: '취소',
+                  onPressed: () {
+                    Navigator.pop(context); // 뒤로가기
+                  },
+                ),
+                CompleteButton(
+                  text: '수정 완료',
+                  onPressed: () {
+                    _onSavePressed(context);
+                  },
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

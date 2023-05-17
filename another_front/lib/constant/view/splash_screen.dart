@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
     final dio = Dio();
-
+    print(refreshToken);
     try {
       final resp = await dio.post(
         '$baseUrl/user/valid/refresh',
@@ -60,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
             (route) => false,
       );
     } catch (e) {
-
+      print(e);
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => LoginPage()),
             (route) => false,
