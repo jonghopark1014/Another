@@ -49,6 +49,12 @@ spring:
   file-dir: /src/main/resources/static/
 ---
 spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+---
+spring:
   config:
     activate:
       on-profile: "common"
