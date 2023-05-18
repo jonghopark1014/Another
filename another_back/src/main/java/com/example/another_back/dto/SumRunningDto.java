@@ -19,12 +19,21 @@ public class SumRunningDto {
 
     @Builder
     public SumRunningDto(Long sumTime, Long sumKcal, Double sumDistance, Double avgPace, Date startDate, Date endDate) {
-        this.sumTime = convertTime(sumTime);
-        this.sumKcal = sumKcal;
-        this.sumDistance = Math.round(sumDistance * 1000) / 1000.0;
-        this.avgPace = convertPace(avgPace);
-        this.startDate = startDate.toString().substring(0, 10);
-        this.endDate = endDate.toString().substring(0, 10);
+        if (sumTime == null) {
+            this.sumTime = convertTime(0L);
+            this.sumKcal = 0L;
+            this.sumDistance = Math.round(0.0 * 1000) / 1000.0;
+            this.avgPace = convertPace(0.0);
+            this.startDate = new java.sql.Date(System.currentTimeMillis()).toString();
+            this.endDate = new java.sql.Date(System.currentTimeMillis()).toString();
+        } else {
+            this.sumTime = convertTime(sumTime);
+            this.sumKcal = sumKcal;
+            this.sumDistance = Math.round(sumDistance * 1000) / 1000.0;
+            this.avgPace = convertPace(avgPace);
+            this.startDate = startDate.toString().substring(0, 10);
+            this.endDate = endDate.toString().substring(0, 10);
+        }
     }
 
     private String convertTime(Long time) {
