@@ -23,19 +23,17 @@ import '../under_running_end.dart';
 
 class RunningStatus extends StatefulWidget {
   bool? isChallenge;
-  RunningStatus({this.isChallenge, Key? key,})
-      : super(key: key);
+  RunningStatus({
+    this.isChallenge,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<RunningStatus> createState() => _RunningStatus();
 }
 
 class _RunningStatus extends State<RunningStatus> {
-  final BasicMessageChannel<String> messageChannel =
-  BasicMessageChannel<String>('com.example.another', StringCodec());
   final _watch = WatchConnectivity();
-  final _log = <String>[];
-
   GlobalKey captureKey = GlobalKey();
   int _userWeight = 0;
   String runDataId = '0';
@@ -54,12 +52,11 @@ class _RunningStatus extends State<RunningStatus> {
 
   // 악성 사용자 경고
   int warnFlag = 0;
-
   int seconds = 0;
   int minutes = 0;
   int hours = 0;
   late bool isStart;
-
+  late bool runningStop;
 
   double _toRadians(double degrees) {
     return degrees * pi / 180;
@@ -77,7 +74,7 @@ class _RunningStatus extends State<RunningStatus> {
 
     // 러닝 시간
     runningTime =
-    '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}';
+        '${hours.toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}:${(seconds % 60).toString().padLeft(2, '0')}';
     runningData.setTime(runningTime);
 
     // 페이스 계산
@@ -110,9 +107,7 @@ class _RunningStatus extends State<RunningStatus> {
 
       // // 위도, 경도에 따른 거리 구하기
       final a = pow(sin(deltaLat / 2), 2) +
-          cos(lat1Rad) *
-              cos(lat2Rad) *
-              pow(sin(deltaLon / 2), 2);
+          cos(lat1Rad) * cos(lat2Rad) * pow(sin(deltaLon / 2), 2);
       final c = 2 * atan2(sqrt(a), sqrt(1 - a));
       final distance = earth * c;
 
@@ -125,18 +120,23 @@ class _RunningStatus extends State<RunningStatus> {
       // // 소숫점 3자리까지 반환 (1km 이상 2자리)
       if (runningDistance > 1) {
         runningDistance = double.parse(nowDistance.toStringAsFixed(2));
-      }
-      else {
+      } else {
         runningDistance = double.parse(nowDistance.toStringAsFixed(3));
       }
-
-
       // 칼로리 계산
       userCalories = (_userWeight * runningDistance * 1.036 ~/ 1);
       runningData.setCalories(userCalories);
     }
     runDataId = Provider.of<RunningData>(context, listen: false).runningId;
-    Kafka.sendTopic(latitude: current.latitude, longitude: current.longitude, runningId: runDataId, runningDistance: runningDistance, runningTime: runningTime, userCalories: userCalories, userPace: userPace, runningSec: timeToSec.toInt());
+    Kafka.sendTopic(
+        latitude: current.latitude,
+        longitude: current.longitude,
+        runningId: runDataId,
+        runningDistance: runningDistance,
+        runningTime: runningTime,
+        userCalories: userCalories,
+        userPace: userPace,
+        runningSec: timeToSec.toInt());
   }
 
   // 시간초는 거리 갱신할때도 쓰면 좋아서 그대로 흘러감
@@ -150,6 +150,7 @@ class _RunningStatus extends State<RunningStatus> {
     // 타이머 시작
     isStart = true;
     // Isolate.spawn(timerIsolate, 'start');
+    _initWear();
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         if (isStart) {
@@ -162,21 +163,20 @@ class _RunningStatus extends State<RunningStatus> {
             minutes = 0;
           }
           setData();
+          sendMessage();
         }
       });
     });
-    sendMessage();
   }
 
-  // void sendMessage() {
-  //   final message = {'runningDistance': runningDistance, };
-  //   messageChannel.send(message.toString());
-  //   print('Sent message to phone: $message');
-  // }
   void sendMessage() {
-    final message = {'runningDistance': runningDistance, };
+    final message = {
+      'runningDistance': runningDistance,
+      'userCalories': userCalories,
+      'userPace': userPace,
+      'runningTime': runningTime,
+    };
     _watch.sendMessage(message);
-    setState(() => _log.add('Sent message: $message'));
   }
 
   @override
@@ -185,43 +185,77 @@ class _RunningStatus extends State<RunningStatus> {
     super.dispose();
   }
 
+  void _initWear() {
+    _watch.messageStream.listen(
+      (message) => setState(
+        () {
+          runningStop = message['stop'];
+          if (runningStop) {
+            onStop();
+            _send({'stop': true});
+          }
+          isStart = message['isStart'];
+          if (isStart) {
+            onStart();
+            _send({'isStart': true});
+          } else {
+            onPause();
+            _send({'isStart': false});
+          }
+        },
+      ),
+    );
+  }
+
+  void _send(message) {
+    _watch.sendMessage(message);
+  }
+
   @override
   Widget build(BuildContext context) {
     // sendDataToWatch(runningData);
 
     return // 달릴 때 데이터 표시
-      Expanded(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            RecordResult(
-              timer: runningTime,
-              distance: runningDistance.toString(),
-              calories: userCalories.toString(),
-              pace: userPace,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                // RunningCircleButton(iconNamed: Icons.play_arrow,onPressed: ,),
-                isStart
-                    ? RunningCircleButton(
-                  iconNamed: Icons.pause,
-                  onPressed: onPause,
-                )
-                    : RunningCircleButton(
-                  iconNamed: Icons.play_arrow,
-                  onPressed: onStart,
-                ),
-                RunningCircleButton(
-                    iconNamed: Icons.stop,
-                    onPressed: onStop,
-                  ),
-              ],
-            ),
-          ],
-        ),
-      );
+        Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          RecordResult(
+            timer: runningTime,
+            distance: runningDistance.toString(),
+            calories: userCalories.toString(),
+            pace: userPace,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              // RunningCircleButton(iconNamed: Icons.play_arrow,onPressed: ,),
+              isStart
+                  ? RunningCircleButton(
+                      iconNamed: Icons.pause,
+                      onPressed: () {
+                        onPause();
+                        _send({'isStart': false});
+                      },
+                    )
+                  : RunningCircleButton(
+                      iconNamed: Icons.play_arrow,
+                      onPressed: () {
+                        onStart();
+                        _send({'isStart': false});
+                      }),
+              RunningCircleButton(
+                iconNamed: Icons.stop,
+                onPressed: () {
+                  onStop();
+                  _send({'stop': true});
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   // 시작 버튼을 누르면 동작 => 시간 갱신 시작
@@ -259,7 +293,7 @@ class _RunningStatus extends State<RunningStatus> {
               userPace: userPace,
             ),
           ),
-              (route) => false);
+          (route) => false);
     } else {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
@@ -270,9 +304,8 @@ class _RunningStatus extends State<RunningStatus> {
               userPace: userPace,
             ),
           ),
-              (route) => false);
+          (route) => false);
     }
-
   }
 
   // 캡처하기 위한 함수
@@ -286,7 +319,7 @@ class _RunningStatus extends State<RunningStatus> {
   // }
   Future<void> sendDataToWatch(List<String> data) async {
     final BasicMessageChannel<String> _messageChannel =
-    BasicMessageChannel<String>('com.example.another', StringCodec());
+        BasicMessageChannel<String>('com.example.another', StringCodec());
 
     try {
       final String jsonEncodedData = jsonEncode(data);

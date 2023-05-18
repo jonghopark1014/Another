@@ -556,20 +556,20 @@ class _CustomInputFormState extends State<CustomInputForm> {
 class SignupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: BACKGROUND_COLOR,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Column(
-            children: [
-              IntroHeader(
-                logoStyle: 'row',
-              ),
-              // SizedBox(height: 16),
-              CustomInputForm(),
-            ],
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: BACKGROUND_COLOR,
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Column(
+              children: [
+                IntroHeader(logoStyle: 'row',),
+                // SizedBox(height: 16),
+                CustomInputForm(),
+              ],
+            ),
           ),
         ),
       ),

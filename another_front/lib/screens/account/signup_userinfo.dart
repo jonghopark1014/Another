@@ -35,83 +35,84 @@ class _SignupUserInfoPageState extends State<SignupUserInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          IntroHeader(logoStyle: 'row',),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                HeightWeightPicker(
-                  initialHeight: _height,
-                  initialWeight: _weight,
-                  onHeightChanged: (height) => setState(() => _height = height),
-                  onWeightChanged: (weight) => setState(() => _weight = weight),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    PassButton(
-                      text: '건너뛰기',
-                      onPressed: () {
-                        SignupApi.joinUser(
-                          context,
-                          email: widget.email,
-                          password: widget.password,
-                          nickname: widget.nickname,
-                          isMale: widget.isMale,
-                          height: 170,
-                          weight: 60,
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('회원가입이 완료되었습니다.')),
-                        );
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                            builder: (_) => LoginPage(),
-                          ),
-                          (route) => false,
-                        );
-                      },
-                    ),
-                    CompleteButton(
-                      text: '회원가입',
-                      onPressed: () async {
-                        bool signup = await SignupApi.joinUser(
-                          context,
-                          email: widget.email,
-                          password: widget.password,
-                          nickname: widget.nickname,
-                          isMale: widget.isMale,
-                          height: _height,
-                          weight: _weight,
-                        );
-                        if (signup) {
-                          // 회원가입 성공한 경우
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('회원가입이 완료되었습니다.')),
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            IntroHeader(logoStyle: 'row',),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  HeightWeightPicker(
+                    initialHeight: _height,
+                    initialWeight: _weight,
+                    onHeightChanged: (height) => setState(() => _height = height),
+                    onWeightChanged: (weight) => setState(() => _weight = weight),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      PassButton(
+                        text: '건너뛰기',
+                        onPressed: () {
+                          SignupApi.joinUser(
+                            context,
+                            email: widget.email,
+                            password: widget.password,
+                            nickname: widget.nickname,
+                            isMale: widget.isMale,
+                            height: 170,
+                            weight: 60,
                           );
                           Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                               builder: (_) => LoginPage(),
                             ),
-                                (route) => false,
+                            (route) => false,
                           );
-                        } else {
-                          // 회원가입 실패한 경우
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('회원가입에 실패했습니다.')),
+                        },
+                      ),
+                      CompleteButton(
+                        text: '회원가입',
+                        onPressed: () async {
+                          // 가입완료 버튼 클릭 시 로직
+                          // 키, 몸무게를 저장해서 데이터 보내주면 될 것 같음! (백으로 보내? store로 보내?)
+                          bool signup = await SignupApi.joinUser(
+                            context,
+                            email: widget.email,
+                            password: widget.password,
+                            nickname: widget.nickname,
+                            isMale: widget.isMale,
+                            height: _height,
+                            weight: _weight,
                           );
-                        }
-                      },
-                    )
-                  ],
-                ),
-              ],
+                          if (signup) {
+                            // 회원가입 성공한 경우
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('회원가입이 완료되었습니다.')),
+                            );
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                builder: (_) => LoginPage(),
+                              ),
+                                  (route) => false,
+                            );
+                          } else {
+                            // 회원가입 실패한 경우
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('회원가입에 실패했습니다.')),
+                            );
+                          }
+                        },
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
     final dio = Dio();
-
+    print(refreshToken);
     try {
       final resp = await dio.post(
         '$baseUrl/user/valid/refresh',

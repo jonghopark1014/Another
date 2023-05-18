@@ -25,22 +25,35 @@ class RunningTab extends StatefulWidget {
 class _RunningTabState extends State<RunningTab> {
   BeforeRunningMap beforeRunningMap = BeforeRunningMap();
 
-  late final WatchConnectivityBase _watch;
-  late final MethodChannel channel;
-  final _log = <String>[];
+  final WatchConnectivityBase _watch = WatchConnectivity();
+  final MethodChannel channel = MethodChannel('watch_connectivity');
+  var _supported = false;
+  var _paired = false;
+  var _reachable = false;
+  bool _connected = false;
+
   @override
   void initState() {
     super.initState();
-    _watch = WatchConnectivity();
-    channel = WatchConnectivity().channel;
+    initPlatformState();
+  }
+  
+  void _initWear() {
+    _watch.messageStream.listen((message) => setState(() {
+      _connected = true;
+    }));
   }
 
-  void sendMessage() {
-    final message = {'data': 'Hello'};
+  Future<void> _send(message) async {
     _watch.sendMessage(message);
-    setState(() => _log.add('Sent message: $message'));
   }
 
+  void initPlatformState() async {
+    _supported = await _watch.isSupported;
+    _paired = await _watch.isPaired;
+    _reachable = await _watch.isReachable;
+    setState(() {});
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,6 +79,7 @@ class _RunningTabState extends State<RunningTab> {
                     iconNamed: Icons.play_arrow,
                     onPressed: () {
                       onPressed('/UnderRunning');
+                      _send({'start': true});
                     },
                   ),
                   RunningSmallButton(

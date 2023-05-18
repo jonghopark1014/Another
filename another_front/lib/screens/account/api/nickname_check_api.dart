@@ -1,7 +1,8 @@
 import 'dart:convert';
+import 'package:another/constant/const/data.dart';
 import 'package:http/http.dart' as http;
 
-const String _baseUrl = 'https://k8b308.p.ssafy.io/api';
+
 
 class emailCheckApi {
   static Future<String> emailCheck({
@@ -10,7 +11,7 @@ class emailCheckApi {
     required Function emailDuplication
   })
   async {
-    var url = Uri.parse('${_baseUrl}/user/checkname/${email}');
+    var url = Uri.parse('$baseUrl/user/checkname/${email}');
 
     try{
       var response = await http.get(url);
@@ -45,7 +46,7 @@ class doubleCheckApi {
     required Function nicknameDuplication
   })
   async {
-    var url = Uri.parse('${_baseUrl}/user/duplicate/nickname/${nickname}');
+    var url = Uri.parse('$baseUrl/user/duplicate/nickname/$nickname');
 
     try {
       var response = await http.get(url);

@@ -34,17 +34,23 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  # 이미지 가져오는거
   image_picker: ^0.8.7+4
+
   cupertino_icons: ^1.0.2
   carousel_indicator: ^1.0.6
   numberpicker: ^2.1.2
   google_maps_flutter: ^2.2.5
   geolocator: ^9.0.2
   table_calendar: ^3.0.9
+  # 원하는데로 날짜 수정
   intl: ^0.18.1
+  # 차트(그래프)
   fl_chart: ^0.62.0
   flutter_sensors: ^1.0.1
+  # 차트(그래프)
   syncfusion_flutter_charts: ^21.1.41
+  # 상태관리 패키지
   provider: ^6.0.1
   kakao_flutter_sdk_user: ^1.4.1
   http: ^0.13.6
@@ -60,10 +66,18 @@ dependencies:
   flutter_background_service: ^2.4.6
   flutter_local_notifications: ^14.0.0+2
   background_locator_2: ^2.0.6
+  # 로그인 할때 토큰 저장소 패키지
   flutter_secure_storage: ^8.0.0
+  # api 쉽게 가져올수 있게 하는 패키지
   dio: ^4.0.6
+  # 워치랑 연결
+  another_front_wear_os:
+    path: ../another_front_wear_os
+  # 워치랑 연결하는 패키지
   watch_connectivity: ^0.1.5
+  # 워치가 맞는지 아닌지
   is_wear: ^0.0.1+1
+  # wear OS
   wear:
     git:
       url: https://github.com/ju851zel/flutter_wear_plugin
