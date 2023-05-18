@@ -64,7 +64,7 @@ class _UnderChallengeScreenEndFeedState
   Widget build(BuildContext context) {
     print('리빌드');
     return Scaffold(
-      appBar: GoBackAppBarStyle(),
+      appBar: GoBackAppBarStyle(toHome: true,),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
         child: SafeArea(
