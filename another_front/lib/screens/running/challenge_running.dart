@@ -32,25 +32,28 @@ class _ChallengeRunningState extends State<ChallengeRunning> {
   @override
   void initState() {
     super.initState();
-    _versusApi();
+
     var challengeData = Provider.of<ChallengeData>(context, listen: false);
-    runningId = challengeData.runningId;
+    runningId = challengeData.hostRunningId;
     runningDistance = challengeData.runningDistance;
     runningTime = challengeData.runningTime;
     userCalorie = challengeData.userCalorie;
     userPace = challengeData.userPace;
-
+    print(runningId);
+    _versusApi();
+    print(challengeDistanceList);
     challengeData.setList(challengeDistanceList);
   }
 
   Future<void> _versusApi() async {
     try {
       // 수정 주석처리만 하고 밑에 있는 값 바꾸면 됨
-      //print();
+      print('111111');
       final response = await VersusApi.getFeed(runningId);
+      print('2222222$response');
       // final response = await VersusApi.getFeed('1230509055100');
       final contents = response['data'];
-
+      print('$contents ==================================');
       for (var content in contents) {
         challengeDistanceList.add(content['runningDistance']);
       }
