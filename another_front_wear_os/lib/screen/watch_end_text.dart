@@ -30,7 +30,6 @@ class _WatchEndTextState extends State<WatchEndText> {
   void initState() {
     super.initState();
     randomIndex = random.nextInt(encouragementList.length);
-    print(randomIndex);
 
     _navigateToNextScreenAfterDelay();
   }
