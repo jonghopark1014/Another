@@ -15,7 +15,6 @@ class CustomTextField extends StatefulWidget {
   final String hintText;
   final bool obscureText;
 
-
   CustomTextField({
     Key? key,
     this.formKey,
@@ -48,20 +47,21 @@ class _CustomTextFieldState extends State<CustomTextField> {
           labelText: widget.labelText,
           hintText: widget.hintText,
           errorText: errorText,
-          labelStyle: TextStyle(color:
-          widget.labelColor, // 원하는 라벨 텍스트 색상으로 변경
+          labelStyle: TextStyle(
+            color: widget.labelColor, // 원하는 라벨 텍스트 색상으로 변경
           ),
           border: UnderlineInputBorder(
-            borderSide: BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
+            borderSide:
+                BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
           ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: MAIN_COLOR), // 원하는 입력란 테두리 색상으로 변경
           ),
           enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
+            borderSide:
+                BorderSide(color: SERVEONE_COLOR), // 원하는 입력란 테두리 색상으로 변경
           ),
-          hintStyle: TextStyle(color: SERVEONE_COLOR, fontSize: 13)
-      ),
+          hintStyle: TextStyle(color: SERVEONE_COLOR, fontSize: 13)),
       style: TextStyle(color: SERVEONE_COLOR), // 원하는 입력 텍스트 색상으로 변경
       onChanged: (value) {
         setState(() {
@@ -106,27 +106,32 @@ class _CustomInputFormState extends State<CustomInputForm> {
   bool pwCheckFoc = false;
   bool nickFoc = false;
 
-
   @override
   void emailPossible() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("사용 가능한 이메일입니다."))
-    );
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text("사용 가능한 이메일입니다."),
+      duration: Duration(seconds: 1),
+    ));
     setState(() {
       isEmailPossible = true;
     });
   }
+
   void emailDuplication() {
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("이미 사용중인 이메일입니다."))
-    );
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text("이미 사용중인 이메일입니다."),
+      duration: Duration(seconds: 1),
+    ));
     isEmailPossible = false;
   }
 
   // 백엔드와 API 통신을 통해 사용 가능하다는 통신을 받으면 true로 변경 (nickname_check_api.dart)
   void nicknamePossible() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('사용 가능한 닉네임입니다.')),
+      const SnackBar(
+        content: Text('사용 가능한 닉네임입니다.'),
+        duration: Duration(seconds: 1),
+      ),
     );
     setState(() {
       isNicknamePossible = true;
@@ -135,7 +140,10 @@ class _CustomInputFormState extends State<CustomInputForm> {
 
   void nicknameDuplication() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('이미 사용중인 닉네임입니다')),
+      const SnackBar(
+        content: Text('이미 사용중인 닉네임입니다'),
+        duration: Duration(seconds: 1),
+      ),
     );
     setState(() {
       isNicknamePossible = false;
@@ -178,51 +186,51 @@ class _CustomInputFormState extends State<CustomInputForm> {
       // });
     });
   }
+
   void idChange() {
     if (idFocus.hasFocus) {
       setState(() {
         idFoc = true;
       });
-    }
-    else {
+    } else {
       setState(() {
-        idFoc=false;
+        idFoc = false;
       });
     }
   }
+
   void pwChange() {
     if (pwFocus.hasFocus) {
       setState(() {
         pwFoc = true;
       });
-    }
-    else {
+    } else {
       setState(() {
-        pwFoc=false;
+        pwFoc = false;
       });
     }
   }
+
   void pwCheckChange() {
     if (pwCheckFocus.hasFocus) {
       setState(() {
         pwCheckFoc = true;
       });
-    }
-    else {
+    } else {
       setState(() {
-        pwCheckFoc=false;
+        pwCheckFoc = false;
       });
     }
   }
+
   void nickChange() {
     if (nickFocus.hasFocus) {
       setState(() {
         nickFoc = true;
       });
-    }
-    else {
+    } else {
       setState(() {
-        nickFoc=false;
+        nickFoc = false;
       });
     }
   }
@@ -277,8 +285,7 @@ class _CustomInputFormState extends State<CustomInputForm> {
     print('pwcheck함수 들어옴');
     if (pwController.text != value && pwCheckController.text == '') {
       return null;
-    }
-    else if (value != pwController.text) {
+    } else if (value != pwController.text) {
       setState(() {
         isPwCheckPossible = false;
       });
@@ -292,7 +299,7 @@ class _CustomInputFormState extends State<CustomInputForm> {
       print('비밀번호 확인: $value');
       print('비밀번호 확인 여부: $isPwCheckPossible');
       return null;
-    } else if (isPwCheckPossible == true){
+    } else if (isPwCheckPossible == true) {
       print('둘다 체크 완료');
     }
     return null;
@@ -304,8 +311,7 @@ class _CustomInputFormState extends State<CustomInputForm> {
     if (value == null || value.isEmpty) {
       if (pwController.text != '') {
         return null;
-      }
-      else {
+      } else {
         setState(() {
           isEmailPossible = false;
         });
@@ -343,8 +349,7 @@ class _CustomInputFormState extends State<CustomInputForm> {
       setState(() {
         isNicknamePossible = false;
       });
-    }
-    else if (value == null || value.isEmpty) {
+    } else if (value == null || value.isEmpty) {
       setState(() {
         isNicknameButtonActive = false;
       });
@@ -378,43 +383,40 @@ class _CustomInputFormState extends State<CustomInputForm> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Stack(
-              children: [
-                CustomTextField(
-                  myNode: idFocus,
-                  controller: emailController,
-                  labelText: '아이디(이메일)',
-                  validator: _validateEmail,
-                  hintText: '아이디를 입력해 주세요',
-                  labelColor: idFoc ? MAIN_COLOR : SERVEONE_COLOR,
-                ),
-                Positioned(
-                  top: 10,
-                  right: 10,
-                  child: ElevatedButton(
-                    onPressed: isEmailButtonActive &&
-                        isEmailPossible == false
-                        ? () async {
-                      if (await emailCheckApi.emailCheck(
-                          email: emailController.text,
-                          emailPossible: emailPossible,
-                          emailDuplication: emailDuplication) ==
-                          '사용 가능') {
-                        preEmail = emailController.text;
-                        isEmailPossible = true;
-                      } else {
-                        isEmailPossible = false;
-                      }
-                    }
-                        : null,
-                    style: ElevatedButton.styleFrom(
-                      onSurface: Colors.white,
-                    ),
-                    child: Text('중복확인'),
+            Stack(children: [
+              CustomTextField(
+                myNode: idFocus,
+                controller: emailController,
+                labelText: '아이디(이메일)',
+                validator: _validateEmail,
+                hintText: '아이디를 입력해 주세요',
+                labelColor: idFoc ? MAIN_COLOR : SERVEONE_COLOR,
+              ),
+              Positioned(
+                top: 10,
+                right: 10,
+                child: ElevatedButton(
+                  onPressed: isEmailButtonActive && isEmailPossible == false
+                      ? () async {
+                          if (await emailCheckApi.emailCheck(
+                                  email: emailController.text,
+                                  emailPossible: emailPossible,
+                                  emailDuplication: emailDuplication) ==
+                              '사용 가능') {
+                            preEmail = emailController.text;
+                            isEmailPossible = true;
+                          } else {
+                            isEmailPossible = false;
+                          }
+                        }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    onSurface: Colors.white,
                   ),
-                )
-              ]
-            ),
+                  child: Text('중복확인'),
+                ),
+              )
+            ]),
             SizedBox(height: 16),
             CustomTextField(
               myNode: pwFocus,
@@ -452,19 +454,19 @@ class _CustomInputFormState extends State<CustomInputForm> {
                   right: 10,
                   child: ElevatedButton(
                     onPressed: isNicknameButtonActive &&
-                        isNicknamePossible == false
+                            isNicknamePossible == false
                         ? () async {
-                      if (await doubleCheckApi.doubleCheck(
-                          nickname: nicknameController.text,
-                          nicknamePossible: nicknamePossible,
-                          nicknameDuplication: nicknameDuplication) ==
-                          '사용 가능') {
-                        preNick = nicknameController.text;
-                        isNicknamePossible = true;
-                      } else {
-                        isNicknamePossible = false;
-                      }
-                    }
+                            if (await doubleCheckApi.doubleCheck(
+                                    nickname: nicknameController.text,
+                                    nicknamePossible: nicknamePossible,
+                                    nicknameDuplication: nicknameDuplication) ==
+                                '사용 가능') {
+                              preNick = nicknameController.text;
+                              isNicknamePossible = true;
+                            } else {
+                              isNicknamePossible = false;
+                            }
+                          }
                         : null,
                     style: ElevatedButton.styleFrom(
                       onSurface: Colors.white,
@@ -517,28 +519,28 @@ class _CustomInputFormState extends State<CustomInputForm> {
                 widthFactor: 1.0,
                 child: ElevatedButton(
                   onPressed: isEmailPossible &&
-                      isPwPossible &&
-                      isPwCheckPossible &&
-                      isNicknamePossible
+                          isPwPossible &&
+                          isPwCheckPossible &&
+                          isNicknamePossible
                       ? () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SignupUserInfoPage(
-                          email: emailController.text,
-                          password: pwController.text,
-                          nickname: nicknameController.text,
-                          isMale: isMaleSelected,
-                        ),
-                      ),
-                    );
-                  }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SignupUserInfoPage(
+                                email: emailController.text,
+                                password: pwController.text,
+                                nickname: nicknameController.text,
+                                isMale: isMaleSelected,
+                              ),
+                            ),
+                          );
+                        }
                       : null,
                   style: ElevatedButton.styleFrom(
                     onSurface: isEmailPossible &&
-                        isPwPossible &&
-                        isPwCheckPossible &&
-                        isNicknamePossible
+                            isPwPossible &&
+                            isPwCheckPossible &&
+                            isNicknamePossible
                         ? MAIN_COLOR
                         : Colors.grey, // 비활성화 색상
                   ),
@@ -562,7 +564,9 @@ class SignupPage extends StatelessWidget {
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             children: [
-              IntroHeader(logoStyle: 'row',),
+              IntroHeader(
+                logoStyle: 'row',
+              ),
               // SizedBox(height: 16),
               CustomInputForm(),
             ],
