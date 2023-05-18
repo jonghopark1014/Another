@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Setter
 public class FeedListResponseDto {
     private String runningId;
-    private Integer runningTime;
+    private String runningTime;
     private Float runningDistance;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date createDate;
@@ -25,10 +25,23 @@ public class FeedListResponseDto {
     @Builder
     public FeedListResponseDto(Running running) {
         this.runningId = running.getId();
-        this.runningTime = running.getRunningTime();
+        this.runningTime = convertTime(running.getRunningTime());
         this.runningDistance = running.getRunningDistance();
         this.userCalories = running.getUserCalories();
         this.runningPic = running.getRunningPic();
         this.feedPics = running.getFeedPic().stream().map(FeedPicResponseDto::new).collect(Collectors.toList());
+    }
+
+    private String convertTime(Integer time) {
+        String hour = Long.toString(time / 3600);
+        time %= 3600;
+        String minute = Long.toString(time / 60);
+        String second = Long.toString(time % 60);
+        if (hour.length() == 1) hour = "0" + hour;
+        if (minute.length() == 1) minute = "0" + minute;
+        if (second.length() == 1) second = "0" + second;
+
+
+        return hour + ":" + minute + ":" + second;
     }
 }
