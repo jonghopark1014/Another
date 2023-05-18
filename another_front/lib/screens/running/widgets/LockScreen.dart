@@ -31,7 +31,7 @@ class _LockScreenState extends State<LockScreen> {
         seconds = 0;
       }
 
-      if (seconds > 5) {
+      if (seconds > 8) {
         setState(() {
           isLocked = true;
         });
@@ -64,7 +64,7 @@ class _LockScreenState extends State<LockScreen> {
                         height: 50,
                       ),
                       Text(
-                        '5초 동안 클릭하지 않을 시 화면 보호기 활성화됩니다',
+                        '8초 동안 클릭하지 않을 시 화면 보호기 활성화됩니다',
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
                       Text(

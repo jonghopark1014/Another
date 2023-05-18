@@ -37,6 +37,7 @@ class RecordTab extends StatelessWidget {
           elevation: 0,
           backgroundColor: BACKGROUND_COLOR,
           toolbarHeight: 88,
+          leading: null,
         ),
         backgroundColor: Colors.black,
         body: SingleChildScrollView(
@@ -111,7 +112,8 @@ class RecordTab extends StatelessWidget {
                                 SizedBox(height: 10),
                                 Row(
                                   children: [
-                                    CategoryTitle(title: 'MY 챌린지', top: 0, bottom: 0),
+                                    CategoryTitle(
+                                        title: 'MY 챌린지', top: 0, bottom: 0),
                                     IconButton(
                                       onPressed: () {
                                         Navigator.push(
@@ -130,7 +132,8 @@ class RecordTab extends StatelessWidget {
                                 ),
                                 SizedBox(height: 5),
                                 MyChallenge(), // 나의 챌린지
-                                CategoryTitle(title: '나의 활동 기록', top: 25, bottom: 10),
+                                CategoryTitle(
+                                    title: '나의 활동 기록', top: 25, bottom: 10),
                                 SizedBox(height: 5),
                                 MyRecord(),
                               ],
@@ -546,15 +549,14 @@ class _MyRecordContentsState extends State<MyRecordContents> {
                 calendarBuilders: CalendarBuilders(
                   markerBuilder: (context, date, event) {
                     if (event.isNotEmpty) {
-                      return event.length >= 10
+                      return event.length >= 3
                           ? Icon(Icons.directions_run,
-                              color: Color(0xFF84DE1C), size: 14)
-                          : event.length >= 5
+                              color: Color(0xFFB3ED37), size: 14)
+                          : event.length >= 2
                               ? Icon(Icons.directions_run,
-                                  color: Color(0xFF57CD3A).withOpacity(0.8),
-                                  size: 14)
+                                  color: Color(0xFF7ECD1A), size: 14)
                               : Icon(Icons.directions_run,
-                                  color: Color(0xFF60B44C), size: 14);
+                                  color: Color(0xFF4BBE15), size: 14);
                     }
                   },
                 ),
@@ -733,9 +735,10 @@ class _MyRecordContentsState extends State<MyRecordContents> {
                         Row(
                           children: [
                             Container(
-                                height: 10,
-                                width: 35,
-                                color: MAIN_COLOR.withOpacity(0.5)),
+                              height: 10,
+                              width: 35,
+                              color: Color(0xFF8E8E8E).withOpacity(0.9),
+                            ),
                             SizedBox(width: 10),
                             Text(
                               (() {
@@ -754,9 +757,10 @@ class _MyRecordContentsState extends State<MyRecordContents> {
                             ),
                             SizedBox(width: 40),
                             Container(
-                                height: 10,
-                                width: 35,
-                                color: MAIN_COLOR.withOpacity(0.5)),
+                              height: 10,
+                              width: 35,
+                              color: Color(0xFF4AF279).withOpacity(0.8),
+                            ),
                             SizedBox(width: 10),
                             Text(
                               (() {
