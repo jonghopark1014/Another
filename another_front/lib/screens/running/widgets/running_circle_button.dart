@@ -15,14 +15,14 @@ class RunningCircleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width * 0.1;
+    var width = MediaQuery.of(context).size.width * 0.15;
     return MaterialButton(
       color: MAIN_COLOR,
       onPressed: onPressed,
       // onPressed: () {},
       shape: CircleBorder(),
       elevation: 8,
-      padding: EdgeInsets.all(35.0),
+      padding: EdgeInsets.all(30.0),
       child: Icon(
         iconNamed,
         size: width < 60 ? width : 60,
