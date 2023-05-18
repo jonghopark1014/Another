@@ -22,7 +22,6 @@ class _WatchEndTextState extends State<WatchEndText> {
     '운동의 근본은\n지금 이 순간입니다\n오늘도 최선을 다한 \n당신을 칭찬해요\n🤩😝😊',
     '당신은 운동을 통해\n자신을 돌봐주고 성장하는\n멋진 모습입니다\n😋🙂🤗',
   ];
-
   Random random = Random();
   late int randomIndex;
   late String randomEncouragement;
@@ -30,6 +29,10 @@ class _WatchEndTextState extends State<WatchEndText> {
   @override
   void initState() {
     super.initState();
+    randomIndex = random.nextInt(encouragementList.length);
+    print(randomIndex);
+
+    _navigateToNextScreenAfterDelay();
   }
 
   @override
@@ -37,15 +40,10 @@ class _WatchEndTextState extends State<WatchEndText> {
     super.dispose();
   }
 
-  void setRandomIndex() {
-    randomIndex = random.nextInt(encouragementList.length);
-    print(randomIndex);
-  }
-
   void _navigateToNextScreenAfterDelay() {
-    setRandomIndex();
-    Future.delayed(const Duration(seconds: 5), () async {
-      await Navigator.of(context).pushAndRemoveUntil(
+    Future.delayed(const Duration(seconds: 5), () {
+      Navigator.pushAndRemoveUntil(
+        context,
         MaterialPageRoute(builder: (_) => const WatchHomeScreen()),
         (route) => false,
       );
@@ -54,11 +52,10 @@ class _WatchEndTextState extends State<WatchEndText> {
 
   @override
   Widget build(BuildContext context) {
-    _navigateToNextScreenAfterDelay();
     return Scaffold(
       body: Center(
         child: Text(
-          encouragementList[randomIndex],
+          encouragementList[3],
           style: const TextStyle(
             color: MAIN_COLOR,
             fontWeight: FontWeight.w700,
