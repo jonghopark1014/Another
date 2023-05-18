@@ -11,6 +11,8 @@ import com.example.another_back.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +24,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static com.example.another_back.filter.JwtProperties.*;
 
@@ -108,6 +112,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.addHeader(RT_HEADER_STRING, TOKEN_PREFIX + rft);
         response.getWriter().flush();
     }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("code", HttpStatus.UNAUTHORIZED.value());
+        body.put("error", failed.getMessage());
+
+        new ObjectMapper().writeValue(response.getOutputStream(), body);
+    }
+
     public String convertObjectToJson(Object object) throws JsonProcessingException {
         if (object == null) {
             return null;
