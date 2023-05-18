@@ -32,33 +32,28 @@ class _ChallengeRunningState extends State<ChallengeRunning> {
   @override
   void initState() {
     super.initState();
-    _versusApi();
+
     var challengeData = Provider.of<ChallengeData>(context, listen: false);
-    runningId = challengeData.runningId;
+    runningId = challengeData.hostRunningId;
     runningDistance = challengeData.runningDistance;
     runningTime = challengeData.runningTime;
     userCalorie = challengeData.userCalorie;
     userPace = challengeData.userPace;
-
+    print(runningId);
+    _versusApi();
+    print(challengeDistanceList);
     challengeData.setList(challengeDistanceList);
-
-    final userInfo = context.read<UserInfo>();
-    // _userWeight = userInfo.weight;
-    String userId = userInfo.userId.toString();
-    String forRunId1 = DateFormat('yyMMddHHmmss').format(DateTime.now());
-    runDataId = userId + forRunId1;
-    var runningData = Provider.of<RunningData>(context, listen: false);
-    runningData.setRunningId(runDataId);
   }
 
   Future<void> _versusApi() async {
     try {
       // 수정 주석처리만 하고 밑에 있는 값 바꾸면 됨
-      //print();
+      print('111111');
       final response = await VersusApi.getFeed(runningId);
+      print('2222222$response');
       // final response = await VersusApi.getFeed('1230509055100');
       final contents = response['data'];
-
+      print('$contents ==================================');
       for (var content in contents) {
         challengeDistanceList.add(content['runningDistance']);
       }
@@ -109,10 +104,13 @@ class _ChallengeRunningState extends State<ChallengeRunning> {
     runningData.reset();
     runningData.firstMinMax(runningData.currentPosition.target);
     runningData.addLocation(runningData.currentPosition.target, 1);
-
     // currentposition 초기값 그대로이면 받아오기전으로 판단
     if (runningData.currentPosition.target.longitude != 0 &&
         runningData.currentPosition.target.latitude != 0) {
+      final userId = (Provider.of<UserInfo>(context, listen: false).userId).toString();
+      String forRunId = DateFormat('yyMMddHHmmss').format(DateTime.now());
+      String runDataId = userId + forRunId;
+      runningData.setRunningId(runDataId);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (_) =>

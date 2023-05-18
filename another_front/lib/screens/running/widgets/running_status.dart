@@ -127,14 +127,8 @@ class _RunningStatus extends State<RunningStatus> {
       userCalories = (_userWeight * runningDistance * 1.036 ~/ 1);
       runningData.setCalories(userCalories);
     }
-    Kafka.sendTopic(
-        latitude: current.latitude,
-        longitude: current.longitude,
-        runningId: runDataId,
-        runningDistance: runningDistance,
-        runningTime: runningTime,
-        userCalories: userCalories,
-        userPace: userPace);
+    runDataId = Provider.of<RunningData>(context, listen: false).runningId;
+    Kafka.sendTopic(latitude: current.latitude, longitude: current.longitude, runningId: runDataId, runningDistance: runningDistance, runningTime: runningTime, userCalories: userCalories, userPace: userPace, runningSec: timeToSec.toInt());
   }
 
   // 시간초는 거리 갱신할때도 쓰면 좋아서 그대로 흘러감
@@ -145,9 +139,6 @@ class _RunningStatus extends State<RunningStatus> {
     // 유저 정보 받아오기
     final userInfo = context.read<UserInfo>();
     _userWeight = userInfo.weight;
-    String userId = userInfo.userId.toString();
-    String forRunId1 = DateFormat('yyMMddHHmmss').format(DateTime.now());
-    runDataId = userId + forRunId1;
     // 타이머 시작
     isStart = true;
     // Isolate.spawn(timerIsolate, 'start');
@@ -255,11 +246,11 @@ class _RunningStatus extends State<RunningStatus> {
                   onPressed: onChange,
                 ),
               ),
-            ],
-          ),
-        ],
-      ),
-    );
+              ],
+            ),
+          ],
+        ),
+      );
   }
 
   // 시작 버튼을 누르면 동작 => 시간 갱신 시작
@@ -332,11 +323,5 @@ class _RunningStatus extends State<RunningStatus> {
     } on PlatformException catch (e) {
       print(e.message);
     }
-  }
-
-  void onChange() {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        duration: Duration(milliseconds: 1000),
-        content: Text('정지하려면 2초 이상 눌러주세요')));
   }
 }

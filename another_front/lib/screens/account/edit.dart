@@ -63,7 +63,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     return null; // 유효성 검사 통과
   }
 
-  void _onSavePressed(BuildContext context) async {
+  Future<void> _onSavePressed(BuildContext context) async {
     int userId = Provider.of<UserInfo>(context, listen: false).userId;
     // 프로필 사진 수정한 경우
     if (isNicknamePossible == true) {
@@ -210,10 +210,12 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                     ),
                     CompleteButton(
                       text: '수정 완료',
-                      onPressed: () {
+                      onPressed: () async {
                         Provider.of<UserInfo>(context, listen: false).updateNicknameHeightWeight(_nicknameController.text, _height, _weight);
-                        _onSavePressed(context);
-                        Navigator.pop(context);
+                        await _onSavePressed(context);
+                        if (context.mounted) {
+                          Navigator.pop(context);
+                        }
                       },
                     ),
                   ],
