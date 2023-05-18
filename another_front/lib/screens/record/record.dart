@@ -330,11 +330,11 @@ class _MyRecordState extends State<MyRecord> {
 
   @override
   Widget build(BuildContext context) {
-    // print('===================');
+    print('===================');
     // print('_periodData: $_periodData');
     // print('_historyData: $_historyData');
-    // print('_markerData: $_markerData');
-    // print('===================');
+    print('_markerData: $_markerData');
+    print('===================');
     return Column(
       children: [
         Row(
@@ -491,7 +491,8 @@ class _MyRecordContentsState extends State<MyRecordContents> {
     Map<DateTime, List<Event>> parseMarkerDataResult = {};
 
     for (Map<String, dynamic> marker in markerList) {
-      DateTime createDate = DateTime.parse(marker['createDate']).toUtc();
+      DateTime createDate =
+          DateTime.parse(marker['createDate']).toUtc().add(Duration(hours: 9));
       Event id = Event(marker['id']);
       if (parseMarkerDataResult.containsKey(createDate)) {
         parseMarkerDataResult[createDate]!.add(id);
@@ -551,17 +552,17 @@ class _MyRecordContentsState extends State<MyRecordContents> {
                     if (event.isNotEmpty) {
                       return event.length >= 3
                           ? Icon(Icons.directions_run,
-                              color: Color(0xFFB3ED37), size: 14)
+                              color: Color(0xFF7ECD1A), size: 14)
                           : event.length >= 2
                               ? Icon(Icons.directions_run,
                                   color: Color(0xFF7ECD1A), size: 14)
                               : Icon(Icons.directions_run,
-                                  color: Color(0xFF4BBE15), size: 14);
+                                  color: Color(0xFF7ECD1A), size: 14);
                     }
                   },
                 ),
                 calendarStyle: CalendarStyle(
-                  canMarkersOverflow: false, // marker 여러개 일 때 cell 영역을 벗어날지 여부
+                  canMarkersOverflow: true, // marker 여러개 일 때 cell 영역을 벗어날지 여부
                   markersAlignment: Alignment.bottomCenter, // 마커 위치 조절
                   markerSize: 10,
                   markersMaxCount: 3, // 마커 최대 개수
