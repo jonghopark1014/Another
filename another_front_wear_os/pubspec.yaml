@@ -56,7 +56,7 @@ dependencies:
   vibration: ^1.7.6
   # 화면 깨우기
   wakelock: ^0.6.1+2
-
+  provider: ^6.0.1
   another:
     path: ../another_front
 

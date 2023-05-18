@@ -23,70 +23,62 @@ class _WatchHomeScreenState extends State<WatchHomeScreen> {
 
   @override
   void dispose() {
-    super.dispose();
     _initWear();
+    super.dispose();
   }
 
   void _initWear() {
     _watch.messageStream.listen(
       (message) => setState(() {
-        _connected = true;
-        goRunning();
+        if (message.containsKey('start')) {
+          _connected = true;
+          goRunning();
+        }
       }),
     );
-  }
-
-  void _send(message) {
-    _watch.sendMessage(message);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+        padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               const Text(
-                '오늘도 힘차게',
+                '오늘도 어나더와\n힘차게 달려볼까요?\n🏃🏻🏃🏻‍♂🏃🏻‍♀‍',
                 style: TextStyle(
-                    color: MAIN_COLOR,
+                    color: WHITE_COLOR,
                     fontWeight: FontWeight.w700,
-                    fontSize: 20.0),
+                    fontSize: 18.0),
                 textAlign: TextAlign.center,
               ),
-              const Text(
-                '달려볼까요?🏃🏻🏃🏻‍♂🏃🏻‍♀‍',
-                style: TextStyle(
-                    color: MAIN_COLOR,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 20.0),
-                textAlign: TextAlign.center,
+              const SizedBox(
+                height: 6.0,
               ),
-              const SizedBox(height: 10.0),
-              SizedBox(
-                height: 50.0,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: MAIN_COLOR,
-                    ),
-                    onPressed: goRunning,
-                    child: const Padding(
-                      padding: EdgeInsets.only(bottom: 4.0),
-                      child: Text(
-                        '러닝시작',
-                        style: TextStyle(
-                          fontSize: 28.0,
-                          fontWeight: FontWeight.w700,
-                        ),
+              RichText(
+                textAlign: TextAlign.center,
+                text: const TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: '앱',
+                      style: TextStyle(
+                        color: MAIN_COLOR,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 20.0,
                       ),
                     ),
-                  ),
+                    TextSpan(
+                      text: '에서 실행해주세요',
+                      style: TextStyle(
+                          color: WHITE_COLOR,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18.0),
+                    )
+                  ],
                 ),
               ),
             ],
@@ -97,11 +89,13 @@ class _WatchHomeScreenState extends State<WatchHomeScreen> {
   }
 
   void goRunning() {
-    Navigator.push<dynamic>(
-      context,
-      MaterialPageRoute<dynamic>(
-        builder: (_) => const WatchTimeScreen(),
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (_) => WatchTimeScreen(
+          connected: _connected,
+        ),
       ),
+      (route) => false,
     );
   }
 }

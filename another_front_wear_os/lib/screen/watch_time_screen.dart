@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 class WatchTimeScreen extends StatefulWidget {
-  const WatchTimeScreen({super.key});
+  final bool connected;
+  const WatchTimeScreen({
+    required this.connected,
+    super.key,
+  });
 
   @override
   State<WatchTimeScreen> createState() => _WatchTimeScreenState();
@@ -13,31 +17,49 @@ class WatchTimeScreen extends StatefulWidget {
 class _WatchTimeScreenState extends State<WatchTimeScreen> {
   late Timer _timer;
   int _second = 3;
-
+  bool connected = false;
   @override
   void initState() {
+    if(widget.connected){
+      connected = true;
+      timeCount();
+    } else{
+      timeCount();
+    }
+  }
+
+  @override
+  void dispose() {
+    if (_timer.isActive) {
+      _timer.cancel();
+    }
+    super.dispose();
+  }
+
+  void timeCount() {
     _timer = Timer.periodic(
       Duration(seconds: 1),
-      (timer) {
+          (timer) {
         if (_second != 1) {
           setState(() {
             _second--;
           });
         } else {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (_) => WatchRunningRecord(),
-              ),
-              (route) => false);
+          goRunning();
         }
       },
     );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _timer.cancel();
+
+  void goRunning() {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => WatchRunningRecord(
+              connected : connected
+          ),
+        ),
+            (route) => false);
   }
 
   @override

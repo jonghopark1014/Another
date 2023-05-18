@@ -18,6 +18,7 @@ class RecordResultBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -32,7 +33,7 @@ class RecordResultBox extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 4.0),
               child: SizedBox(
-                width: 70.0,
+                width: size.width/2.5,
                 height: 1.0,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
@@ -49,13 +50,13 @@ class RecordResultBox extends StatelessWidget {
           ],
         ),
         Padding(
-          padding: EdgeInsets.all(4.0),
+          padding: EdgeInsets.all(6.0),
           child: VerticalDivider(
             width: 1.0,
             color: SERVE_COLOR,
             thickness: 1.0,
-            indent: 20.0,
-            endIndent: 20.0,
+            indent: 10.0,
+            endIndent: 10.0,
           ),
         ),
         Column(
@@ -64,12 +65,12 @@ class RecordResultBox extends StatelessWidget {
             RecordResult(
               name: '평균 페이스',
               data: userPace,
-              recordColor: BLUE_COLOR,
+              recordColor: GREEN_COLOR,
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 4.0),
               child: SizedBox(
-                width: 70.0,
+                width: size.width/2.5,
                 height: 1.0,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
@@ -81,7 +82,7 @@ class RecordResultBox extends StatelessWidget {
             RecordResult(
               name: 'KM',
               data: runningDistance,
-              recordColor: GREEN_COLOR,
+              recordColor: BLUE_COLOR,
             ),
           ],
         ),

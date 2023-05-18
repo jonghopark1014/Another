@@ -34,7 +34,6 @@ class RunningStatus extends StatefulWidget {
 
 class _RunningStatus extends State<RunningStatus> {
   final _watch = WatchConnectivity();
-
   GlobalKey captureKey = GlobalKey();
   int _userWeight = 0;
   String runDataId = '0';
@@ -57,6 +56,7 @@ class _RunningStatus extends State<RunningStatus> {
   int minutes = 0;
   int hours = 0;
   late bool isStart;
+  late bool runningStop;
 
   double _toRadians(double degrees) {
     return degrees * pi / 180;
@@ -151,6 +151,7 @@ class _RunningStatus extends State<RunningStatus> {
     // 타이머 시작
     isStart = true;
     // Isolate.spawn(timerIsolate, 'start');
+    _initWear();
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         if (isStart) {
@@ -162,8 +163,8 @@ class _RunningStatus extends State<RunningStatus> {
             hours += 1;
             minutes = 0;
           }
-          sendMessage();
           setData();
+          sendMessage();
         }
       });
     });
@@ -183,6 +184,32 @@ class _RunningStatus extends State<RunningStatus> {
   void dispose() {
     _timer.cancel();
     super.dispose();
+  }
+
+  void _initWear() {
+    _watch.messageStream.listen(
+      (message) => setState(
+        () {
+          runningStop = message['stop'];
+          if (runningStop) {
+            onStop();
+            _send({'stop': true});
+          }
+          isStart = message['isStart'];
+          if (isStart) {
+            onStart();
+            _send({'isStart': true});
+          } else {
+            onPause();
+            _send({'isStart': false});
+          }
+        },
+      ),
+    );
+  }
+
+  void _send(message) {
+    _watch.sendMessage(message);
   }
 
   @override
@@ -207,15 +234,21 @@ class _RunningStatus extends State<RunningStatus> {
               isStart
                   ? RunningCircleButton(
                       iconNamed: Icons.pause,
-                      onPressed: onPause,
+                      onPressed: () {
+                        onPause();
+                        _send({'isStart': false});
+                      },
                     )
                   : RunningCircleButton(
                       iconNamed: Icons.play_arrow,
-                      onPressed: onStart,
-                    ),
+                      onPressed: () {
+                        onStart();
+                        _send({'isStart': false});
+                      }),
               GestureDetector(
                 onLongPress: () {
                   onStop();
+                  _send({'stop': true});
                 },
                 child: RunningCircleButton(
                   iconNamed: Icons.stop,

@@ -7,14 +7,16 @@ import 'package:flutter/services.dart';
 
 import 'dart:async';
 
-
 import 'package:is_wear/is_wear.dart';
+import 'package:provider/provider.dart';
 import 'package:watch_connectivity/watch_connectivity.dart';
 
 import 'package:another/watch/wear.dart';
 import 'package:another/main.dart';
 
 late final bool isWear;
+
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,8 +38,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-
   @override
   void initState() {
     super.initState();
@@ -45,33 +45,17 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: WatchHomeScreen(),
-      theme: ThemeData(
-        platform: TargetPlatform.android,
-        scaffoldBackgroundColor: BACKGROUND_COLOR,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (c) => RunningData()),
+      ],
+      child: MaterialApp(
+        home: WatchHomeScreen(),
+        theme: ThemeData(
+          platform: TargetPlatform.android,
+          scaffoldBackgroundColor: BACKGROUND_COLOR,
+        ),
       ),
     );
   }
-
 }
-
-
-
-
-// void receiveDataFromPhone() {
-//   const messageChannel =
-//   const BasicMessageChannel<String>('com.example.another', StringCodec());
-//   // 데이터 수신
-//   messageChannel.setMessageHandler(
-//         (String? data) async {
-//       if (data != null) {
-//         final decodedData = json.decode(data);
-//         print(decodedData);
-//         return decodedData;
-//       } else {
-//         return 'ddd';
-//       }
-//     },
-//   );
-// }
