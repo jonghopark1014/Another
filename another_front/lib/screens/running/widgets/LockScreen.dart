@@ -31,7 +31,7 @@ class _LockScreenState extends State<LockScreen> {
         seconds = 0;
       }
 
-      if (seconds > 8) {
+      if (seconds > 60) {
         setState(() {
           isLocked = true;
         });
