@@ -40,6 +40,7 @@ class _RunningCarouselState extends State<RunningCarousel> {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       clipBehavior: Clip.hardEdge,
       margin: EdgeInsets.fromLTRB(15, 70, 15, 0),
@@ -96,6 +97,10 @@ class _RunningCarouselState extends State<RunningCarousel> {
       setState(
         () {
           var runCompareData = response['data'];
+          // if (runCompareData!['lastMonthDistance'] < 1) {
+          //   runCompareData!['lastMonthDistance'] * 1000;
+          // }
+          // runCompareData!['thisMonthDistance']
           _carouselPages[1] = Container(
             alignment: Alignment(0, 0.5),
             color: CONTOUR_COLOR,
@@ -108,7 +113,7 @@ class _RunningCarouselState extends State<RunningCarousel> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
-                        '${runCompareData!['lastMonthDistance'].toString()}km',
+                        '${runCompareData!['lastMonthDistance'].toStringAsFixed(3).replaceAll(RegExp(r"([.]*0)(?!.*\d)"), "")}km',
                         style: TextStyle(
                           color: WHITE_COLOR,
                           fontSize: 24,
@@ -127,7 +132,7 @@ class _RunningCarouselState extends State<RunningCarousel> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
-                        '${runCompareData!['thisMonthDistance'].toString()}km',
+                        '${runCompareData!['thisMonthDistance'].toStringAsFixed(3).replaceAll(RegExp(r"([.]*0)(?!.*\d)"), "")}km',
                         style: TextStyle(
                           color: WHITE_COLOR,
                           fontSize: 24,
