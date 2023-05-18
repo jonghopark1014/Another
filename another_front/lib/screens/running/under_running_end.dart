@@ -88,10 +88,10 @@ class UnderRunningScreenEnd extends StatelessWidget {
       saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
       // // hdfs 저장
       saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
-      Navigator.of(context).push(
+      Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (_) => UnderChallengeScreenEndFeed(captureInfo: Provider.of<RunningData>(context, listen: false).runningPic),
-          ));
+          ), (router) => false);
     }
     else {
       ScaffoldMessenger.of(context).showSnackBar(

@@ -25,6 +25,7 @@ class UnderChallengeScreenEndFeed extends StatefulWidget {
 
 class _UnderChallengeScreenEndFeedState
     extends State<UnderChallengeScreenEndFeed> {
+  bool isEnrollStarted = false;
   int pageIndex = 0;
   // api 요청용
   late int userId = Provider.of<UserInfo>(context, listen: false).userId as int;
@@ -64,7 +65,9 @@ class _UnderChallengeScreenEndFeedState
   Widget build(BuildContext context) {
     print('리빌드');
     return Scaffold(
-      appBar: GoBackAppBarStyle(),
+      appBar: GoBackAppBarStyle(
+        toHome: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
         child: SafeArea(
@@ -160,19 +163,25 @@ class _UnderChallengeScreenEndFeedState
                 child: ElevatedButton(
                   onPressed: () async {
                     // 등록 요청 하고 페이지 이동하도록?
-                    bool isComplete =
-                        await feedCreateApi(userId, runningId, feedPics);
-                    // 현재 위젯이 그대로 마운트 되어있을때
-                    if (context.mounted) {
-                      if (isComplete) {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (_) => FeedCreateComplete(
-                                      feedPics: feedPics,
-                                    )),
-                            (route) => false);
-                      } else {
-                        // 미완료 모달창
+                    if (isEnrollStarted == false) {
+                      setState(() {
+                        isEnrollStarted = true;
+                      });
+                      bool isComplete =
+                          await feedCreateApi(userId, runningId, feedPics);
+                      // 현재 위젯이 그대로 마운트 되어있을때
+                      if (context.mounted) {
+                        if (isComplete) {
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (_) => FeedCreateComplete(
+                                        feedPics: feedPics,
+                                      )),
+                              (route) => false);
+                        } else {
+                          isEnrollStarted = false;
+                          // 미완료 모달창
+                        }
                       }
                     }
                   },
@@ -192,14 +201,12 @@ class _UnderChallengeScreenEndFeedState
         ),
       ),
     );
-
-
   }
 
   // 카메라로 사진 찍기
   void _getCameraImage() async {
     final imageXFile =
-    await ImagePicker().pickImage(source: ImageSource.camera);
+        await ImagePicker().pickImage(source: ImageSource.camera);
     if (imageXFile != null) {
       File file = File(imageXFile.path);
       Uint8List imgByteList = await file.readAsBytes();
@@ -232,18 +239,19 @@ class _UnderChallengeScreenEndFeedState
     }
   }
 
-
   // 바텀 시트에서 선택지를 보여줍니다.
   void _showPicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(topRight: Radius.circular(20), topLeft:  Radius.circular(20)),
+        borderRadius: BorderRadius.only(
+            topRight: Radius.circular(20), topLeft: Radius.circular(20)),
       ),
       builder: (BuildContext context) {
         return Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(topRight: Radius.circular(20), topLeft:  Radius.circular(20)),
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20), topLeft: Radius.circular(20)),
             color: SERVEONE_COLOR,
           ),
           height: 150,
@@ -290,6 +298,4 @@ class _UnderChallengeScreenEndFeedState
       },
     );
   }
-
-
 }
