@@ -128,7 +128,15 @@ class _RunningStatus extends State<RunningStatus> {
       runningData.setCalories(userCalories);
     }
     runDataId = Provider.of<RunningData>(context, listen: false).runningId;
-    Kafka.sendTopic(latitude: current.latitude, longitude: current.longitude, runningId: runDataId, runningDistance: runningDistance, runningTime: runningTime, userCalories: userCalories, userPace: userPace, runningSec: timeToSec.toInt());
+    Kafka.sendTopic(
+        latitude: current.latitude,
+        longitude: current.longitude,
+        runningId: runDataId,
+        runningDistance: runningDistance,
+        runningTime: runningTime,
+        userCalories: userCalories,
+        userPace: userPace,
+        runningSec: timeToSec.toInt());
   }
 
   // 시간초는 거리 갱신할때도 쓰면 좋아서 그대로 흘러감
@@ -236,21 +244,18 @@ class _RunningStatus extends State<RunningStatus> {
                         onStart();
                         _send({'isStart': false});
                       }),
-              GestureDetector(
-                onLongPress: () {
+              RunningCircleButton(
+                iconNamed: Icons.stop,
+                onPressed: () {
                   onStop();
                   _send({'stop': true});
                 },
-                child: RunningCircleButton(
-                  iconNamed: Icons.stop,
-                  onPressed: onChange,
-                ),
               ),
-              ],
-            ),
-          ],
-        ),
-      );
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   // 시작 버튼을 누르면 동작 => 시간 갱신 시작

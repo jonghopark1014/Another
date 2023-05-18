@@ -11,7 +11,7 @@ class emailCheckApi {
     required Function emailDuplication
   })
   async {
-    var url = Uri.parse('${_baseUrl}/user/checkname/${email}');
+    var url = Uri.parse('$baseUrl/user/checkname/${email}');
 
     try{
       var response = await http.get(url);

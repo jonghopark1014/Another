@@ -43,14 +43,13 @@ class _WatchEndTextState extends State<WatchEndText> {
   }
 
   void _navigateToNextScreenAfterDelay() {
+    setRandomIndex();
     Future.delayed(const Duration(seconds: 5), () async {
       await Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => const WatchHomeScreen()),
         (route) => false,
       );
     });
-    setRandomIndex();
-
   }
 
   @override
