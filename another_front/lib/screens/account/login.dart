@@ -49,94 +49,97 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
       body: SafeArea(
-          child: SingleChildScrollView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IntroHeader(logoStyle: 'row',),
-                  SizedBox(height: 20.0),
-                  TextField(
-                    onChanged: (String value) {
-                      username = value;
-                    },
-                    controller: emailController,
-                    focusNode: idFocusNode,
-                    decoration: InputDecoration(
-                      labelText: '아이디(이메일)',
-                      labelStyle: TextStyle(color: SERVEONE_COLOR),
-                      prefixIcon: Opacity(
-                        opacity: idFocusNode.hasFocus ? 1 : 0.5,
-                        child: Icon(Icons.email, color: SERVEONE_COLOR),
-                      ),
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide(color: SERVEONE_COLOR),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: SERVEONE_COLOR),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: SERVEONE_COLOR),
-                      ),
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IntroHeader(
+                  logoStyle: 'row',
+                ),
+                SizedBox(height: 20.0),
+                TextField(
+                  onChanged: (String value) {
+                    username = value;
+                  },
+                  controller: emailController,
+                  focusNode: idFocusNode,
+                  decoration: InputDecoration(
+                    labelText: '아이디(이메일)',
+                    labelStyle: TextStyle(color: SERVEONE_COLOR),
+                    prefixIcon: Opacity(
+                      opacity: idFocusNode.hasFocus ? 1 : 0.5,
+                      child: Icon(Icons.email, color: SERVEONE_COLOR),
                     ),
-                    style: TextStyle(color: SERVEONE_COLOR),
-                  ),
-                  SizedBox(height: 16),
-                  TextField(
-                    controller: pwController,
-                    onChanged: (String value) {
-                      password = value;
-                    },
-                    focusNode: pwFocusNode,
-                    decoration: InputDecoration(
-                      labelText: '비밀번호',
-                      labelStyle: TextStyle(color: SERVEONE_COLOR),
-                      prefixIcon: Opacity(
-                        opacity: pwFocusNode.hasFocus ? 1 : 0.5,
-                        child: Icon(Icons.lock, color: SERVEONE_COLOR),
-                      ),
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide(color: SERVEONE_COLOR),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: SERVEONE_COLOR),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: SERVEONE_COLOR),
-                      ),
-                      // style: TextStyle(color: SERVEONE_COLOR),
+                    border: UnderlineInputBorder(
+                      borderSide: BorderSide(color: SERVEONE_COLOR),
                     ),
-                    style: TextStyle(color: SERVEONE_COLOR),
-                    obscureText: true,
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: SERVEONE_COLOR),
+                    ),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: SERVEONE_COLOR),
+                    ),
                   ),
-                  SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          // 회원가입 페이지로 이동하는 로직 작성
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SignupPage()));
-                        },
-                        child: Text(
-                          '회원가입',
-                          style: TextStyle(
-                            color: SERVEONE_COLOR,
-                          ),
+                  style: TextStyle(color: SERVEONE_COLOR),
+                ),
+                SizedBox(height: 16),
+                TextField(
+                  controller: pwController,
+                  onChanged: (String value) {
+                    password = value;
+                  },
+                  focusNode: pwFocusNode,
+                  decoration: InputDecoration(
+                    labelText: '비밀번호',
+                    labelStyle: TextStyle(color: SERVEONE_COLOR),
+                    prefixIcon: Opacity(
+                      opacity: pwFocusNode.hasFocus ? 1 : 0.5,
+                      child: Icon(Icons.lock, color: SERVEONE_COLOR),
+                    ),
+                    border: UnderlineInputBorder(
+                      borderSide: BorderSide(color: SERVEONE_COLOR),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: SERVEONE_COLOR),
+                    ),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: SERVEONE_COLOR),
+                    ),
+                    // style: TextStyle(color: SERVEONE_COLOR),
+                  ),
+                  style: TextStyle(color: SERVEONE_COLOR),
+                  obscureText: true,
+                ),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        // 회원가입 페이지로 이동하는 로직 작성
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignupPage()));
+                      },
+                      child: Text(
+                        '회원가입',
+                        style: TextStyle(
+                          color: SERVEONE_COLOR,
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  FractionallySizedBox(
-                    widthFactor: 1.0,
-                    child: ElevatedButton(
-                      onPressed: () async {
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16),
+                FractionallySizedBox(
+                  widthFactor: 1.0,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      try {
                         final resp = await dio.post(
                           '$baseUrl/user/login',
                           data: {
@@ -150,7 +153,6 @@ class _LoginPageState extends State<LoginPage> {
                         final nickname = resp.data['nickname'];
                         final weight = resp.data['weight'];
                         final height = resp.data['height'];
-
                         if (userId != null) {
                           Provider.of<UserInfo>(context, listen: false)
                               .updateUserInfo(userId, nickname, height, weight);
@@ -165,20 +167,52 @@ class _LoginPageState extends State<LoginPage> {
                               builder: (_) => HomeScreen(),
                             ),
                             (route) => false);
-                      },
-                      style: ElevatedButton.styleFrom(
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(duration: Duration(milliseconds: 1000), content: Text('로그인이 실패 했습니다.')));
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
                         backgroundColor: MAIN_COLOR,
-                        minimumSize: Size(double.infinity, 40)
-                      ),
-                      child: Text('로그인'),
-                    ),
+                        minimumSize: Size(double.infinity, 40)),
+                    child: Text('로그인'),
                   ),
-                  SizedBox(height: 16),
-                ],
-              ),
+                ),
+                SizedBox(height: 16),
+              ],
             ),
           ),
         ),
+      ),
     );
   }
 }
+// final resp = await dio.post(
+// '$baseUrl/user/login',
+// data: {
+// 'username': username,
+// 'password': password,
+// },
+// );
+// final refreshToken = resp.headers['refresh']?[0];
+// final accessToken = resp.headers['Authorization']?[0];
+// final userId = resp.data['userId'];
+// final nickname = resp.data['nickname'];
+// final weight = resp.data['weight']
+// };
+// final height = resp.data['height'];
+//
+// if (userId != null) {
+// Provider.of<UserInfo>(context, listen: false)
+//     .updateUserInfo(userId, nickname, height, weight);
+// }
+// await storage.write(
+// key: REFRESH_TOKEN_KEY, value: refreshToken);
+// await storage.write(
+// key: ACCESS_TOKEN_KEY, value: accessToken);
+//
+// Navigator.of(context).pushAndRemoveUntil(
+// MaterialPageRoute(
+// builder: (_) => HomeScreen(),
+// ),
+// (route) => false);
