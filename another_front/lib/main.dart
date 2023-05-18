@@ -13,6 +13,7 @@ import 'package:another/screens/running/under_challenge.dart';
 import 'package:another/screens/running/under_running.dart';
 import 'package:flutter/foundation.dart'
     show TargetPlatform, defaultTargetPlatform;
+import 'package:wakelock/wakelock.dart';
 
 class RunningSetting extends ChangeNotifier {
   int distance = 0;
@@ -263,6 +264,8 @@ class ForDate extends ChangeNotifier {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Wakelock.enable();
+
   await initializeDateFormatting();
   runApp(MyApp());
 }
