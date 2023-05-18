@@ -12,7 +12,7 @@ class LockScreen extends StatefulWidget {
 }
 
 class _LockScreenState extends State<LockScreen> {
-  bool isLocked = false;
+  bool isLocked = true;
   bool isPaused = false;
   var _timer;
   int seconds = 0;
