@@ -64,6 +64,9 @@ class _SignupUserInfoPageState extends State<SignupUserInfoPage> {
                           height: 170,
                           weight: 60,
                         );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('회원가입이 완료되었습니다.')),
+                        );
                         Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                             builder: (_) => LoginPage(),
@@ -75,8 +78,6 @@ class _SignupUserInfoPageState extends State<SignupUserInfoPage> {
                     CompleteButton(
                       text: '회원가입',
                       onPressed: () async {
-                        // 가입완료 버튼 클릭 시 로직
-                        // 키, 몸무게를 저장해서 데이터 보내주면 될 것 같음! (백으로 보내? store로 보내?)
                         bool signup = await SignupApi.joinUser(
                           context,
                           email: widget.email,
