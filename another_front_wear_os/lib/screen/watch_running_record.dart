@@ -131,7 +131,10 @@ class _WatchRunningRecordState extends State<WatchRunningRecord> {
                               30.0,
                             ),
                           ),
-                          onPressed: onPressed,
+                          onPressed: () {
+                            onPressed();
+                            _send({'isStart': isStart, 'stop': false});
+                          },
                           child: const Text(
                             '일시 정지',
                             style: TextStyle(
@@ -148,7 +151,10 @@ class _WatchRunningRecordState extends State<WatchRunningRecord> {
                             backgroundColor: MAIN_COLOR,
                             fixedSize: const Size(120.0, 30.0),
                           ),
-                          onPressed: onPressed,
+                          onPressed: () {
+                            onPressed();
+                            _send({'isStart': isStart, 'stop': false});
+                          },
                           child: const Text(
                             '러닝 시작',
                             style: TextStyle(
@@ -171,7 +177,10 @@ class _WatchRunningRecordState extends State<WatchRunningRecord> {
                         30.0,
                       ),
                     ),
-                    onPressed: toStop,
+                    onPressed: () {
+                      _send({'stop': true});
+                      toStop();
+                    },
                     child: const Text(
                       '러닝 종료',
                       style: TextStyle(
@@ -195,12 +204,10 @@ class _WatchRunningRecordState extends State<WatchRunningRecord> {
   void onPressed() {
     setState(() {
       isStart = !isStart;
-      _send({'isStart': isStart, 'stop': false});
     });
   }
 
   void toStop() {
-    _send({'stop': true});
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (_) => const WatchEndText(),
