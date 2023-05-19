@@ -1,77 +1,114 @@
+import 'dart:async';
+
+import 'package:another/main.dart';
+import 'package:another/widgets/get_permission.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 
-FutureBuilder<String> BeforeRunningMap(CameraPosition initialPosition) {
+class BeforeRunningMap extends StatefulWidget {
+  const BeforeRunningMap({Key? key}) : super(key: key);
+
+  @override
+  State<BeforeRunningMap> createState() => _BeforeRunningMapState();
+}
+
+class _BeforeRunningMapState extends State<BeforeRunningMap> {
+  late Timer _timer;
+  // 지도관련
   GoogleMapController? mapController;
   onMapCreated(GoogleMapController controller) {
+    print("지도 controller 및 onMapCreated");
     mapController = controller;
+    mapController?.setMapStyle(
+        '''[
+          {"featureType": "administrative.land_parcel", "elementType": "labels", "stylers": [{"visibility": "off"}]},
+          {"featureType": "poi", "elementType": "labels.text", "stylers": [{"visibility": "off"}]},
+          {"featureType": "poi", "elementType": "labels.icon", "stylers": [{"visibility": "off"}]},
+          {"featureType": "poi.business", "stylers": [{"visibility": "off"}]},
+          {"featureType": "road", "elementType": "labels.icon", "stylers": [{"visibility": "off"}]},
+          {"featureType": "road", "elementType": "labels", "stylers": [{"visibility": "off"}]},
+          {"featureType": "road.local", "elementType": "labels", "stylers": [{"visibility": "off"}]},
+          {"featureType": "transit", "stylers": [{"visibility": "off"}]},
+        ]'''
+    );
   }
-  Future<String> checkPermission() async {
-    final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+  bool isLoading = false;
+  static late CameraPosition currentPosition;
 
-    if(!isLocationEnabled) {
-      return '위치 서비스를 활성화 해주세요';
-    }
-
-    LocationPermission checkedPermission = await Geolocator.checkPermission();
-
-    if(checkedPermission == LocationPermission.denied){
-      checkedPermission = await Geolocator.requestPermission();
-
-      if(checkedPermission == LocationPermission.denied) {
-        return '위치 권한을 허가해주세요.';
+  @override
+  void initState() {
+    print("initstate");
+    super.initState();
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
+      if (mounted) {
+        getCurrentLocation();
+        print("1초마다 돈다~");
       }
-    }
+    });
 
-    if(checkedPermission == LocationPermission.deniedForever) {
-      return '앱의 위치 권한을 세팅에서 허가해주세요';
-    }
-
-    return '위치 권한이 허가 되었습니다.';
   }
+  @override
+  void dispose() {
+    print("dispose");
+    super.dispose();
+    _timer.cancel();
+    mapController!.dispose();
 
-  return FutureBuilder(
-    future: checkPermission(),
-    builder: (BuildContext context, AsyncSnapshot snapshot) {
-      if(snapshot.connectionState == ConnectionState.waiting) {
-        return Center(
-            child: CircularProgressIndicator()
-        );
+  }
+  @override
+  Widget build(BuildContext context) {
+    print("build");
+    return
+      isLoading || Provider.of<RunningData>(context, listen: false).currentPosition != CameraPosition(target: LatLng(0,0), zoom: 13) ?
+      GoogleMap(
+        initialCameraPosition: currentPosition,
+        mapType: MapType.normal,
+        zoomControlsEnabled: false,
+        myLocationEnabled: true,
+        myLocationButtonEnabled: false,
+        onMapCreated: onMapCreated,
+      )
+          : Center(child: CircularProgressIndicator());
+  }
+  void getCurrentLocation() async {
+
+    // 권한 확인 및 요청 (복붙) =====================================
+    bool permissionStatus = await getPermission();
+    if (permissionStatus == false) {
+      return;
+    }
+    // 위치 권한 완료
+    if (mounted) {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+      currentPosition = CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 17);
+      if (position != null && isLoading == false) {
+        setTrue();
       }
-      if(snapshot.data == '위치 권한이 허가 되었습니다.'){
-        return StreamBuilder<Position>(
-          stream: Geolocator.getPositionStream(),
-          builder: (context, snapshot) {
-            if (snapshot.data != null && mapController != null) {
-              print(snapshot.data!.latitude);
-              print('==========================================');
-              mapController!.animateCamera(CameraUpdate.newCameraPosition(
-                  CameraPosition(
-                      target: LatLng(
-                          snapshot.data!.latitude, snapshot.data!.longitude
-                      ), zoom: 20
-                  )
-              ));
-            }
-            print(snapshot.data);
-            print(mapController);
-            print('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
-            return GoogleMap(
-              initialCameraPosition: initialPosition,
-              mapType: MapType.normal,
-              zoomControlsEnabled: false,
-              myLocationEnabled: true,
-              myLocationButtonEnabled: false,
-              onMapCreated: onMapCreated,
-            );
-          },
-        );
-      }
-      return Center(
-        child: Text(snapshot.data),
+      changeCamera(position);
+    }
+    return ;
+  }
+  void setTrue() {
+    setState(() {
+      print("is로딩이냐?");
+      isLoading = true;
+    });
+  }
+  void changeCamera(position) {
+    print("카메라냐??");
+    currentPosition = CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 17);
+    isLoading = true;
+    if (mapController != null && currentPosition != Provider.of<RunningData>(context, listen: false).currentPosition) {
+      print("돌았다!");
+      mapController!.animateCamera(
+          CameraUpdate.newCameraPosition(currentPosition)
       );
-    },
-  );
+      Provider.of<RunningData>(context, listen: false).setCurrentPosition(currentPosition);
+    }
+  }
 }

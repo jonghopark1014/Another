@@ -1,11 +1,16 @@
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
+import 'package:another/constant/const/text_style.dart';
 import 'package:another/screens/running/widgets/distancebar_custom.dart';
 import 'package:flutter/material.dart';
 
 class DistanceBar extends StatefulWidget {
   final String name;
-  const DistanceBar({
+  final double pace;
+  final double youDistance;
+  DistanceBar({
+    required this.pace,
     required this.name,
+    required this.youDistance,
     Key? key,
   }) : super(key: key);
 
@@ -14,8 +19,9 @@ class DistanceBar extends StatefulWidget {
 }
 
 class _DistanceBarState extends State<DistanceBar> {
-  late final String name;
+  final String name;
   double _progress = 0.0;
+  double _previousValue = 0.0;
 
   _DistanceBarState({required this.name});
 
@@ -27,18 +33,15 @@ class _DistanceBarState extends State<DistanceBar> {
         Column(children: [
           Text(
             name,
-            style: TextStyle(
-                color: WHITE_COLOR,
-                fontWeight: FontWeight.w700,
-                fontSize: 14.0),
+            style: MyTextStyle.fourteenTextStyle,
             textAlign: TextAlign.start,
           ),
           SliderTheme(
             data: SliderThemeData(
               valueIndicatorTextStyle: TextStyle(
-                color: Colors.white,
+                color: WHITE_COLOR,
                 fontSize: 18,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w700,
               ),
               activeTrackColor: MAIN_COLOR,
               inactiveTrackColor: WHITE_COLOR,
@@ -50,15 +53,16 @@ class _DistanceBarState extends State<DistanceBar> {
               ),
             ),
             child: Slider(
-              value: _progress,
+              // 현재값에 지금 거리를 넣어주면 됨
+              value: widget.pace,
               min: 0,
-              max: 100,
+              // 거리 widget.distance 넣어주면 될듯 함 상대방의 거리
+              max: widget.youDistance,
               onChanged: (double value) {
-                setState(() {
-                  _progress = value;
-                });
+                  setState(() {
+                    _progress = value;
+                  });
               },
-              label: '$_progress',
             ),
           ),
         ])

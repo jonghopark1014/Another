@@ -2,7 +2,7 @@ name: another
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.1.0-12.0.dev <4.0.0'
+  sdk: ">=3.1.0-12.0.dev <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -32,19 +32,67 @@ dependencies:
     sdk: flutter
   carousel_slider: ^4.2.1
 
-
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  # 이미지 가져오는거
   image_picker: ^0.8.7+4
+
   cupertino_icons: ^1.0.2
   carousel_indicator: ^1.0.6
   numberpicker: ^2.1.2
   google_maps_flutter: ^2.2.5
   geolocator: ^9.0.2
   table_calendar: ^3.0.9
+  # 원하는데로 날짜 수정
   intl: ^0.18.1
+  # 차트(그래프)
   fl_chart: ^0.62.0
+  flutter_sensors: ^1.0.1
+  # 차트(그래프)
+  syncfusion_flutter_charts: ^21.1.41
+  # 상태관리 패키지
+  provider: ^6.0.1
+  kakao_flutter_sdk_user: ^1.4.1
+  http: ^0.13.6
+  health: ^4.6.0
+  permission_handler: ^10.2.0
+  screenshot: ^1.3.0
+  flutter_blue_plus: ^1.4.0
+  wakelock: ^0.6.2
+
+  flutter_foreground_task: ^4.1.0
+  percent_indicator: ^4.0.1
+  flutter_tts: ^3.6.3
+  flutter_background_service: ^2.4.6
+  flutter_local_notifications: ^14.0.0+2
+  background_locator_2: ^2.0.6
+  # 로그인 할때 토큰 저장소 패키지
+  flutter_secure_storage: ^8.0.0
+  # api 쉽게 가져올수 있게 하는 패키지
+  dio: ^4.0.6
+  # 워치랑 연결
+  another_front_wear_os:
+    path: ../another_front_wear_os
+  # 워치랑 연결하는 패키지
+  watch_connectivity: ^0.1.5
+  # 워치가 맞는지 아닌지
+  is_wear: ^0.0.1+1
+  # wear OS
+  wear:
+    git:
+      url: https://github.com/ju851zel/flutter_wear_plugin
+      ref: upgrade-versions
+
+#  watch_connectivity:
+#    # When depending on this package from a real application you should use:
+#    #   watch_connectivity: ^x.y.z
+#    # See https://dart.dev/tools/pub/dependencies#version-constraints
+#    # The example app is bundled with the plugin so we use a path dependency on
+#    # the parent directory to use the current plugin's version.
+#    path: ../
+#
+#  watch_connectivity_garmin:
+#    path: ../../watch_connectivity_garmin
 
 dev_dependencies:
   flutter_test:
@@ -57,13 +105,11 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

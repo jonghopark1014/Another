@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../constant/color.dart';
+import '../../../constant/const/color.dart';
 
 class RunningCircleButton extends StatelessWidget {
   final IconData iconNamed;
@@ -15,17 +15,18 @@ class RunningCircleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RawMaterialButton(
+    var width = MediaQuery.of(context).size.width * 0.15;
+    return MaterialButton(
+      color: MAIN_COLOR,
       onPressed: onPressed,
       // onPressed: () {},
       shape: CircleBorder(),
-      elevation: 2.0,
-      fillColor: MAIN_COLOR,
+      elevation: 8,
+      padding: EdgeInsets.all(30.0),
       child: Icon(
         iconNamed,
-        size: 60,
+        size: width < 60 ? width : 60,
       ),
-      padding: EdgeInsets.all(35.0),
     );
   }
 }

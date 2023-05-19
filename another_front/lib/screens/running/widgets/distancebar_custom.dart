@@ -1,10 +1,10 @@
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
 import 'package:flutter/material.dart';
 
 class CustomSliderThumbCircle extends SliderComponentShape {
   final double thumbRadius;
-  final int min;
-  final int max;
+  final double min;
+  final double max;
 
   const CustomSliderThumbCircle({
     required this.thumbRadius,

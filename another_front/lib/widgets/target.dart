@@ -1,68 +1,90 @@
+import 'package:another/constant/const/text_style.dart';
 import 'package:another/widgets/target_box.dart';
 import 'package:flutter/material.dart';
 
-import '../constant/color.dart';
+import '../constant/const/color.dart';
 
 class Target extends StatelessWidget {
   final String targetname;
+  final String runningDistance;
+  final String userCalorie;
+  final String runningTime;
+  final String userPace;
 
   const Target({
     required this.targetname,
+    required this.runningTime,
+    required this.userCalorie,
+    required this.runningDistance,
+    required this.userPace,
+
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Text(
-            targetname,
-            style: TextStyle(
-              color: WHITE_COLOR,
-              fontSize: 20.0,
-              fontWeight: FontWeight.w400
+    final Size size = MediaQuery.of(context).size;
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: BACKGROUND_COLOR,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              targetname,
+              style: MyTextStyle.twentyTextStyle,
             ),
           ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            color: BLACK_COLOR,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          constraints: BoxConstraints(
-            minHeight: 80.0,
-            minWidth: 320.0,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TargetBox(
-                name: 'km',
-                textColor: MAIN_COLOR,
-                recordColor: SERVEONE_COLOR,
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Container(
+              width: size.width * 0.95,
+              height: size.height * 0.1,
+              decoration: BoxDecoration(
+                color: BLACK_COLOR,
+                borderRadius: BorderRadius.circular(10),
               ),
-              TargetBox(
-                name: '시간',
-                textColor: MAIN_COLOR,
-                recordColor: SERVEONE_COLOR,
+              constraints: BoxConstraints(
+                minHeight: 80.0,
+                minWidth: 240.0
               ),
-              TargetBox(
-                name: 'kacl',
-                textColor: MAIN_COLOR,
-                recordColor: SERVEONE_COLOR,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TargetBox(
+                    data: runningDistance,
+                    name: 'km',
+                    textColor: MAIN_COLOR,
+                    recordColor: SERVEONE_COLOR,
+                  ),
+                  TargetBox(
+                    data: runningTime,
+                    name: '시간',
+                    textColor: MAIN_COLOR,
+                    recordColor: SERVEONE_COLOR,
+                  ),
+                  TargetBox(
+                    data: userCalorie,
+                    name: 'kcal',
+                    textColor: MAIN_COLOR,
+                    recordColor: SERVEONE_COLOR,
+                  ),
+                  TargetBox(
+                    data: userPace,
+                    name: '평균 페이스',
+                    textColor: MAIN_COLOR,
+                    recordColor: SERVEONE_COLOR,
+                  ),
+                ],
               ),
-              TargetBox(
-                name: '평균 페이스',
-                textColor: MAIN_COLOR,
-                recordColor: SERVEONE_COLOR      ,
-              ),
-            ],
-          ),
-        )
-      ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

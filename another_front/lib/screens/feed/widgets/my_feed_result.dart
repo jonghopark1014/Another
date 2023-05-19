@@ -2,23 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:another/widgets/target_box.dart';
-import '../../../constant/color.dart';
+import '../../../constant/const/color.dart';
 
 class MyRecordResult extends StatelessWidget {
-  const MyRecordResult({Key? key}) : super(key: key);
+  final List<String> walkCounts;
+  final List<String> userCalories;
+  final List<String> runningTimes;
+  final List<String> runningDistances;
+  final String profile;
+
+  const MyRecordResult({
+    required this.walkCounts,
+    required this.userCalories,
+    required this.runningTimes,
+    required this.runningDistances,
+    required this.profile,
+    Key? key,
+  }) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
+    DateTime now = DateTime.now().toLocal();
     String formattedDate = DateFormat('yyyy.MM.dd').format(now);
-    print(now);
     return Padding(
       padding: const EdgeInsets.only(
         top: 8.0,
         bottom: 16.0,
       ),
       child: Container(
-        height: 180.0,
+        height: 120.0,
         decoration: BoxDecoration(
           color: BLACK_COLOR,
           borderRadius: BorderRadius.circular(10),
@@ -30,53 +43,58 @@ class MyRecordResult extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        formattedDate,
-                        style: TextStyle(color: MAIN_COLOR, fontSize: 20.0),
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            '25,789',
-                            style: TextStyle(color: MAIN_COLOR, fontSize: 40.0),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          formattedDate,
+                          style: TextStyle(color: MAIN_COLOR, fontSize: 20.0),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              TargetBox(
+                                data: runningDistances[0],
+                                name: 'km',
+                                textColor: WHITE_COLOR,
+                                recordColor: SERVEONE_COLOR,
+                              ),
+                              TargetBox(
+                                data: userCalories[0],
+                                name: 'kcal',
+                                textColor: WHITE_COLOR,
+                                recordColor: SERVEONE_COLOR,
+                              ),
+                              TargetBox(
+                                data: runningTimes[0],
+                                name: '시간',
+                                textColor: WHITE_COLOR,
+                                recordColor: SERVEONE_COLOR,
+                              ),
+                            ],
                           ),
-                          Text('걸음',
-                              style:
-                                  TextStyle(color: MAIN_COLOR, fontSize: 20.0))
-                        ],
-                      ),
-                    ],
+                        ),
+                        // Row(
+                        //   crossAxisAlignment: CrossAxisAlignment.end,
+                        //   children: [
+                        //     Text(
+                        //       walkCounts[0],
+                        //       style: TextStyle(color: MAIN_COLOR, fontSize: 40.0),
+                        //     ),
+                        //     Text('걸음',
+                        //         style:
+                        //             TextStyle(color: MAIN_COLOR, fontSize: 20.0))
+                        //   ],
+                        // ),
+                      ],
+                    ),
                   ),
-                  ImageProfileSetting()
+                  ImageProfileSetting(profile: profile,),
                 ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    TargetBox(
-                      name: 'km',
-                      textColor: WHITE_COLOR,
-                      recordColor: SERVEONE_COLOR,
-                    ),
-                    TargetBox(
-                      name: 'kcal',
-                      textColor: WHITE_COLOR,
-                      recordColor: SERVEONE_COLOR,
-                    ),
-                    TargetBox(
-                      name: '시간',
-                      textColor: WHITE_COLOR,
-                      recordColor: SERVEONE_COLOR,
-                    ),
-                  ],
-                ),
               ),
             ],
           ),
@@ -86,13 +104,14 @@ class MyRecordResult extends StatelessWidget {
   }
 }
 
-Widget ImageProfileSetting() {
+Widget ImageProfileSetting({required profile,}) {
+
   return Center(
     child: Stack(
       children: <Widget>[
         CircleAvatar(
-          backgroundImage: AssetImage('assets/img/kazuha.jpg'),
-          radius: 45,
+          backgroundImage: NetworkImage(profile),
+          radius: 38,
         ),
         Positioned(
           bottom: 0,

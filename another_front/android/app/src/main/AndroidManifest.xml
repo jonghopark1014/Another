@@ -1,10 +1,37 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<!--    foreground service ( 백그라운드에서 실행) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+<!--    부팅 시 foreground service -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+<!--    위치 정보 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+<!--    헬스 데이터 -->
+    <queries>
+        <package android:name="com.google.android.apps.healthdata" />
+    </queries>
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
+<!--   블루투스 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<!-- 기타 권한 및 설정 -->
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
+    <uses-feature
+        android:name="android.hardware.type.watch"
+        android:required="true" />
     <application
         android:label="another"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/another_app_logo">
+        <!-- Add android:stopWithTask option only when necessary. -->
+        <service
+            android:name="com.pravera.flutter_foreground_task.service.ForegroundService"/>
+<!--    진성's api key로 받아옴-->
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCCUT-TjC1S1tajSsBgtGBrDuYqv2j4yBE"/>
         <activity
@@ -26,6 +53,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

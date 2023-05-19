@@ -1,13 +1,19 @@
 import 'dart:async';
 
-import 'package:another/screens/running/under_challenge.dart';
-import 'package:another/screens/running/under_running.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../constant/color.dart';
+import '../../constant/const/color.dart';
 
 class TimerScreen extends StatefulWidget {
-  const TimerScreen({Key? key}) : super(key: key);
+
+  final String path;
+  final CameraPosition initialPosition;
+  const TimerScreen(
+      {required this.path,
+      required this.initialPosition,
+      Key? key})
+      : super(key: key);
 
   @override
   State<TimerScreen> createState() => _TimerScreenState();
@@ -16,18 +22,22 @@ class TimerScreen extends StatefulWidget {
 class _TimerScreenState extends State<TimerScreen> {
   late Timer _timer;
   int _seconds = 3;
-  bool first = true;
 
+  @override
+  void initState() {
+    super.initState();
+    _start(widget.path, widget.initialPosition);
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
   // 3초부터 카운터 다운 시작
 
   @override
   Widget build(BuildContext context) {
-    final arguments = ModalRoute.of(context)!.settings.arguments;
-
-    if (first) {
-      _start(arguments);
-      first = false;
-    }
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -52,7 +62,7 @@ class _TimerScreenState extends State<TimerScreen> {
     );
   }
 
-  void _start(Object? arg) {
+  void _start(String path, CameraPosition initialPosition) {
     _timer = Timer.periodic(
       Duration(seconds: 1),
       (timer) {
@@ -68,7 +78,11 @@ class _TimerScreenState extends State<TimerScreen> {
           //       arguments: 'UnderRunning', <-- 요기
           //     )
           // )
-          Navigator.of(context).pushNamedAndRemoveUntil(arg.toString(), (route) => false);
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            path,
+            arguments: initialPosition,
+            (route) => route.settings.name == '/',
+          );
         }
       },
     );

@@ -2,7 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 
-import '../../../constant/color.dart';
+import '../../../constant/const/color.dart';
 
 class RunningMyHIstoryButton extends StatelessWidget {
   const RunningMyHIstoryButton({

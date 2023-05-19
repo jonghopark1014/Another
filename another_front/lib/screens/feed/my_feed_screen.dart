@@ -1,10 +1,21 @@
-import 'package:another/constant/color.dart';
 import 'package:another/screens/feed/widgets/image_box.dart';
-import 'package:another/screens/feed/widgets/my_feed_result.dart';
 import 'package:flutter/material.dart';
 
 class MyFeedScreen extends StatelessWidget {
-  const MyFeedScreen({
+  List<String> thumbnailUrls = [];
+  List<String> runningIds = [];
+  List<String> runningTimes = [];
+  List<String> runningDistances = [];
+  // List<String> walkCounts = [];
+  List<String> userCalories = [];
+
+  MyFeedScreen({
+    required this.thumbnailUrls,
+    required this.runningIds,
+    required this.runningTimes,
+    required this.runningDistances,
+    // required this.walkCounts,
+    required this.userCalories,
     Key? key,
   }) : super(key: key);
 
@@ -14,13 +25,17 @@ class MyFeedScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              ImageBox(),
-            ],
-        ),
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          ImageBox(
+            thumbnailUrls: thumbnailUrls,
+            runningIds: runningIds,
+            runningTimes: runningTimes,
+            runningDistances: runningDistances,
+            userCalories: userCalories,
+          ),
+        ],
+      ),
     );
   }
 }
-
-

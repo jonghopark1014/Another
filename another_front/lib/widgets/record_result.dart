@@ -1,15 +1,28 @@
 import 'package:another/widgets/record_result_box.dart';
 import 'package:flutter/material.dart';
 
-import '../constant/color.dart';
+import '../constant/const/color.dart';
 
 class RecordResult extends StatelessWidget {
+  final String timer;
+  final String distance;
+  final String calories;
+  final String pace;
+
   const RecordResult({
+    required this.timer,
+    required this.distance,
+    required this.calories,
+    required this.pace,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    var height = size.height /5;
+    print(height);
+    // var width = size.width * 0.95;
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: Container(
@@ -17,7 +30,8 @@ class RecordResult extends StatelessWidget {
           color: BLACK_COLOR,
           borderRadius: BorderRadius.circular(10),
         ),
-        height: 180.0,
+        height: 170,
+        // width: width,
         child: Column(
           children: [
             Flexible(
@@ -25,13 +39,13 @@ class RecordResult extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   RecordResultBox(
-                    data: '1:00:00',
+                    data: timer,
                     name: '시간',
                     textColor: YELLOW_COLOR,
                     recordColor: WHITE_COLOR,
                   ),
                   RecordResultBox(
-                    data: '8000m',
+                    data: double.parse(distance) < 1? '${(double.parse(distance) * 1000).toStringAsFixed(0)}m' : '${distance}km',
                     name: '거리',
                     textColor: BLUE_COLOR,
                     recordColor: WHITE_COLOR,
@@ -44,13 +58,13 @@ class RecordResult extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   RecordResultBox(
-                    data: '1500kcal',
+                    data: '${calories}kcal',
                     name: '총칼로리',
                     textColor: RED_COLOR,
                     recordColor: WHITE_COLOR,
                   ),
                   RecordResultBox(
-                    data: '15:6/km',
+                    data: pace,
                     name: '평균페이스',
                     textColor: GREEN_COLOR,
                     recordColor: WHITE_COLOR,

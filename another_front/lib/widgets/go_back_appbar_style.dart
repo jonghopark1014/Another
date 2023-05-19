@@ -1,23 +1,39 @@
+import 'package:another/constant/const/color.dart';
+import 'package:another/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../constant/color.dart';
 
 class GoBackAppBarStyle extends StatelessWidget implements PreferredSizeWidget {
-  const GoBackAppBarStyle({Key? key}) : super(key: key);
+  bool? toHome;
+  String? runningId;
+  String? title;
+  GoBackAppBarStyle({
+    this.toHome,
+    this.runningId,
+    this.title,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: BACKGROUND_COLOR,
+      elevation: 0,
       leading: IconButton(
         onPressed: () {
-          Navigator.pop(context);
+          if (toHome == true) {
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => HomeScreen()), (route) => false,);
+          }
+          else {
+            Navigator.of(context).pop(runningId ?? '');
+          }
         },
         icon: Icon(
           Icons.navigate_before,
           size: 40.0,
         ),
       ),
+      title: Text(title ?? ''),
     );
   }
 

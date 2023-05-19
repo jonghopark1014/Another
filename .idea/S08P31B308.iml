@@ -3,9 +3,9 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <excludeFolder url="file://$MODULE_DIR$/another_fe/build" />
-      <excludeFolder url="file://$MODULE_DIR$/another_fe/.dart_tool" />
-      <excludeFolder url="file://$MODULE_DIR$/another_fe/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/another_front/build" />
+      <excludeFolder url="file://$MODULE_DIR$/another_front/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/another_front/.pub" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

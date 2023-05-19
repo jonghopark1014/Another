@@ -1,7 +1,7 @@
 import 'package:another/screens/feed/my_feed_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../../../constant/color.dart';
+import '../../../constant/const/color.dart';
 
 class FeedSelect extends StatefulWidget {
   final ValueChanged<bool> onChanged;

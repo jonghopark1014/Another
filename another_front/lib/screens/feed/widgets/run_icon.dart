@@ -1,20 +1,28 @@
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
+import 'package:another/constant/const/text_style.dart';
 import 'package:another/screens/feed/challenge_list.dart';
 import 'package:flutter/material.dart';
 
 import '../../running/challenge_running.dart';
 
 class RunIcon extends StatelessWidget {
-  const RunIcon({Key? key}) : super(key: key);
+  String runCount;
+  String runningId;
+
+  RunIcon({required this.runCount, required this.runningId, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if (runCount == 'null') {
+      runCount = '0';
+    }
     return Row(children: [
       InkWell(
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => ChallengeList(),
+              builder: (_) => ChallengeList(runningId: runningId),
             ),
           );
         },
@@ -43,14 +51,11 @@ class RunIcon extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => ChallengeList(),
+              builder: (_) => ChallengeList(runningId: runningId),
             ),
           );
         },
-        child: Text(
-          '25',
-          style: TextStyle(color: WHITE_COLOR, fontSize: 16.0),
-        ),
+        child: Text(runCount, style: MyTextStyle.sixteenTextStyle),
       ),
       SizedBox(
         width: 10.0,
@@ -60,6 +65,7 @@ class RunIcon extends StatelessWidget {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => ChallengeRunning(),
+              settings: RouteSettings(),
             ),
           );
         },

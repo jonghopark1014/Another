@@ -1,12 +1,15 @@
+import 'package:another/constant/const/text_style.dart';
 import 'package:flutter/material.dart';
 
 class TargetBox extends StatelessWidget {
   final String name;
+  final String data;
   final Color textColor;
   final Color recordColor;
 
   const TargetBox({
     required this.name,
+    required this.data,
     required this.textColor,
     required this.recordColor,
     Key? key,
@@ -15,28 +18,20 @@ class TargetBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-      width: 80.0,
+    return SizedBox(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
             child: Text(
-              '기록',
-              style: TextStyle(
-                color: textColor,
-                fontSize: 20.0,
-                fontWeight: FontWeight.w700,
-              ),
+              data,
+              style: MyTextStyle.sixteenTextStyle.copyWith(color: textColor),
               textAlign: TextAlign.center,
             ),
           ),
           Text(
-            '${name}',
-            style: TextStyle(
-              color: recordColor,
-              fontSize: 14.0,
-              fontWeight: FontWeight.w700,
-            ),
+            name,
+            style: MyTextStyle.fourteenTextStyle.copyWith(color: recordColor),
           )
         ],
       ),

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:another/constant/color.dart';
+import 'package:another/constant/const/color.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -29,7 +29,7 @@ class _CustomImageState extends State<CustomImage> {
   }
 
   // 사진 찍기
-  void onPothoPressed() async {
+  void onPhotoPressed() async {
     final image = await ImagePicker().pickImage(
       source: ImageSource.camera,
     );
@@ -55,7 +55,7 @@ class _CustomImageState extends State<CustomImage> {
       body: Column(children: [
         _IconsTap(
           onTapPressed: onTapPressed,
-          onPhotoPressed: onPothoPressed,
+          onPhotoPressed: onPhotoPressed,
         ),
       ]),
     );

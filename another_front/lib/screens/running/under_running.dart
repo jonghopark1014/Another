@@ -1,177 +1,91 @@
-import 'package:another/constant/color.dart';
-import 'package:another/screens/running/under_running_end.dart';
+import 'package:another/constant/const/color.dart';
+import 'package:another/main.dart';
+import 'package:another/screens/running/widgets/running_map.dart';
+import 'package:another/screens/running/widgets/running_status.dart';
+import 'package:another/screens/running/widgets/set_running_status.dart';
 import 'package:flutter/material.dart';
-import 'package:another/screens/running/widgets/running_circle_button.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-import '../../widgets/record_result.dart';
+import 'widgets/LockScreen.dart';
 
 class UnderRunning extends StatefulWidget {
-  const UnderRunning({Key? key}) : super(key: key);
+  UnderRunning({Key? key}) : super(key: key);
 
   @override
   State<UnderRunning> createState() => _UnderRunningState();
 }
 
 class _UnderRunningState extends State<UnderRunning> {
-  bool isStart = false;
-  double runningId = 1;
-  // 지도에 위치 그리기
-  GoogleMapController? mapController;
-  static CameraPosition initialPosition =
-      CameraPosition(target: LatLng(37.523327, 126.921252), zoom: 30);
 
-  static late final List<Marker> markers = [];
-
-  static late final List<LatLng> polyPoints = [];
+  late bool isSet;
+  @override
+  void initState() {
+    super.initState();
+    final settingData = Provider.of<RunningSetting>(context, listen: false);
+    if (settingData.distance != 0 ||
+        settingData.min != 0 ||
+        settingData.interval[0] != 0) {
+      isSet = true;
+    } else {
+      isSet = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final runningData = Provider.of<RunningData>(context, listen: false);
+
+    final initialPosition =
+    ModalRoute.of(context)!.settings.arguments as CameraPosition;
+
     return Scaffold(
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16),
             child: SafeArea(
-              child: Center(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 282,
+              child: Column(
+                children: [
+                  // 높이가 작은 폰에서 안깨지도록 추가함
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height / 9 * 4,
                     ),
-                    RecordResult(),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          // RunningCircleButton(iconNamed: Icons.play_arrow,onPressed: ,),
-                          isStart
-                              ? RunningCircleButton(
-                                  iconNamed: Icons.play_arrow,
-                                  onPressed: onPause,
-                                )
-                              : RunningCircleButton(
-                                  iconNamed: Icons.pause,
-                                  onPressed: onPause,
-                                ),
-                          RunningCircleButton(
-                            iconNamed: Icons.stop,
-                            onPressed: onStop,
-                          ),
-                        ],
+                    child: AspectRatio(
+                      aspectRatio: 1 / 1,
+                      child: SizedBox(
+                        child: isSet
+                            ? Stack(
+                          children: [
+                            RunningMap(
+                              runningData: runningData,
+                              initialPosition: initialPosition,
+                            ),
+                            // Text('done?????'),
+                            SetRunningStatus(),
+                          ],
+                        )
+                            : RunningMap(
+                          runningData: runningData,
+                          initialPosition: initialPosition,
+                        ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  // 러닝 중 데이터 출력
+                  RunningStatus(),
+                ],
               ),
             ),
           ),
-          FutureBuilder(
-            future: checkPermission(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              }
-              if (snapshot.data == '위치 권한이 허가 되었습니다.') {
-                return StreamBuilder<Position>(
-                  stream: Geolocator.getPositionStream(),
-                  builder: (context, snapshot) {
-                    print(snapshot.data);
-                    if (snapshot.data != null && mapController != null) {
-                      print('==========================================');
-                      markers.add(Marker(
-                        markerId: MarkerId(runningId.toString()),
-                        position: LatLng(
-                            snapshot.data!.latitude, snapshot.data!.longitude),
-                        visible: false,
-                      ));
-                      print(markers.length);
-                      print(markers);
-                      runningId += 1;
-                      polyPoints.add(LatLng(
-                          snapshot.data!.latitude, snapshot.data!.longitude));
-                      mapController!.animateCamera(
-                        CameraUpdate.newCameraPosition(
-                          CameraPosition(
-                              target: LatLng(snapshot.data!.latitude,
-                                  snapshot.data!.longitude),
-                              zoom: 20),
-                        ),
-                      );
-                    }
-                    print(
-                        '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
-                    return GoogleMap(
-                      initialCameraPosition: initialPosition,
-                      mapType: MapType.normal,
-                      zoomControlsEnabled: false,
-                      myLocationEnabled: true,
-                      myLocationButtonEnabled: false,
-                      onMapCreated: onMapCreated,
-                      markers: Set.of(markers),
-                      polylines: Set.of(
-                        [
-                          Polyline(
-                            polylineId: PolylineId('temp'),
-                            points: polyPoints,
-                            color: MAIN_COLOR,
-                            // jointType: JointType.round,
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              }
-              return Center(
-                child: Text(snapshot.data),
-              );
-            },
-          ),
-        ],
+          LockScreen(),
+        ]
+
       ),
     );
   }
 
-  void onPause() {
-    isStart = !isStart;
-    setState(() {});
-  }
-
-  void onStop() {
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (_) => UnderRunningScreenEnd(),
-        ),
-        (route) => false);
-  }
-
-  onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
-
-  Future<String> checkPermission() async {
-    final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
-
-    if (!isLocationEnabled) {
-      return '위치 서비스를 활성화 해주세요';
-    }
-
-    LocationPermission checkedPermission = await Geolocator.checkPermission();
-
-    if (checkedPermission == LocationPermission.denied) {
-      checkedPermission = await Geolocator.requestPermission();
-
-      if (checkedPermission == LocationPermission.denied) {
-        return '위치 권한을 허가해주세요.';
-      }
-    }
-
-    if (checkedPermission == LocationPermission.deniedForever) {
-      return '앱의 위치 권한을 세팅에서 허가해주세요';
-    }
-
-    return '위치 권한이 허가 되었습니다.';
-  }
 }
