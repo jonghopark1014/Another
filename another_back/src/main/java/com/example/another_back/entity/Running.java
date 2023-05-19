@@ -3,9 +3,11 @@ package com.example.another_back.entity;
 import com.example.another_back.dto.RunningRequestDto;
 import com.example.another_back.entity.enums.Status;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,10 @@ public class Running {
     @Column(name = "running_id")
     @Id
     private String id;
+
+    @CreationTimestamp
+    @Column(name = "check_date")
+    private LocalDateTime checkDate;
 
     private Integer runningTime;
     private Float runningDistance;
