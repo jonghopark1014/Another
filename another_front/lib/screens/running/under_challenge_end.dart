@@ -93,7 +93,7 @@ class UnderChallengeScreenEnd extends StatelessWidget {
     if (runningData.isCap >= 3) {
       var runningData = Provider.of<RunningData>(context, listen: false);
       var userId = Provider.of<UserInfo>(context, listen: false).userId;
-      saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
+      saveRunningTime.saveRunData(userId: userId!, hostRunningId: Provider.of<ChallengeData>(context, listen: false).hostRunningId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
       // // hdfs 저장
       saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
       Navigator.of(context).pushAndRemoveUntil(
@@ -112,7 +112,7 @@ class UnderChallengeScreenEnd extends StatelessWidget {
     if (runningData.isCap >= 3) {
       var runningData = Provider.of<RunningData>(context, listen: false);
       var userId = Provider.of<UserInfo>(context, listen: false).userId;
-      saveRunningTime.saveRunData(userId: userId!, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
+      saveRunningTime.saveRunData(userId: userId!, hostRunningId: Provider.of<ChallengeData>(context, listen: false).hostRunningId, runningId: runningData.runningId, runningTime: runningData.runningTime, runningDistance: runningData.runningDistance, userCalories: runningData.userCalories, userPace: runningData.userPace, runningPic: runningData.runningPic);
       // // hdfs 저장
       saveRunningTime.sendTopic(runningId: runningData.runningId, userId: userId);
       Navigator.of(context).pushAndRemoveUntil(
