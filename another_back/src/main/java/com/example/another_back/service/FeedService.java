@@ -101,8 +101,18 @@ public class FeedService {
     public MyFeedListResponseDto getMyFeedList(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow((() -> new IllegalArgumentException("유저를 찾지 못하였습니다.")));
         List<Running> feedList = runningRepository.findRunningByUserIdAndStatusWithFeedPics(userId, Status.LIVE);
+        Integer runningTime = 0;
+        Float runningDistance = 0f;
+        Integer userCalories = 0;
+        for (Running r :
+                feedList) {
+            runningTime += r.getRunningTime();
+            runningDistance += r.getRunningDistance();
+            userCalories += r.getUserCalories();
+        }
+
         Page<MyFeedListDto> myFeedListDtos = new PageImpl<>(feedList.stream().map(MyFeedListDto::new).collect(Collectors.toList()), pageable, feedList.size());
-        MyFeedListResponseDto feedListResponseDtos = new MyFeedListResponseDto(user.getProfilePic(), myFeedListDtos);
+        MyFeedListResponseDto feedListResponseDtos = new MyFeedListResponseDto(user.getProfilePic(), runningTime, runningDistance, userCalories, myFeedListDtos);
         return feedListResponseDtos;
     }
 
