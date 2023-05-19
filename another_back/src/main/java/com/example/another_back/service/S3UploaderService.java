@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -41,18 +43,27 @@ public class S3UploaderService {
         }
     }
 
-    public String upload(MultipartFile multipartFile, String buckect, String dirName) throws IOException {
-        File uploadFile = convert(multipartFile)
-                .orElseThrow(()->new IllegalArgumentException("error : MultipartFile Convert 실패"));
+    public List<String> upload(String bucket, String dirName, MultipartFile... multipartFile) throws IOException {
+        ArrayList<File> list = new ArrayList<>();
 
-        return upload(uploadFile, buckect, dirName);
+        for (MultipartFile file : multipartFile) {
+            list.add(convert(file)
+                    .orElseThrow(()->new IllegalArgumentException("error : MultipartFile Convert 실패")));
+        }
+
+        return upload(bucket, dirName, list);
     }
 
-    private String upload(File uploadFile, String bucket, String dirName) {
-        String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();
-        String uploadImageUrl = putS3(uploadFile, bucket, fileName);
-        removeNewFile(uploadFile);
-        return uploadImageUrl;
+    public List<String> upload(String bucket, String dirName, ArrayList<File> list) {
+        ArrayList<String> lists = new ArrayList<>();
+        for (File file : list) {
+            String fileName = dirName + "/" + UUID.randomUUID() + file.getName();
+            String uploadImageUrl = putS3(file, bucket, fileName);
+            removeNewFile(file);
+
+            lists.add(uploadImageUrl);
+        }
+        return lists;
     }
 
     private String putS3(File uploadFile, String bucket, String fileName) {
@@ -74,8 +85,20 @@ public class S3UploaderService {
         String originalFileName = multipartFile.getOriginalFilename();
         String storeFileName = createStoreFileName(originalFileName);
 
+        File folder = new File(fileDir);
+
+        if (!folder.exists()) {
+            try{
+                folder.mkdir(); //폴더 생성합니다.
+            }
+            catch(Exception e){
+                e.getStackTrace();
+            }
+        }
+
         //파일 업로드
         File file = new File(fileDir + storeFileName);
+
         multipartFile.transferTo(file);
 
         return Optional.of(file);

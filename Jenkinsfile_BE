@@ -5,6 +5,11 @@ pipeline{
        BACK_NAME = "another_back"
     }
     stages {
+        stage('Create Directory') {
+            steps {
+                sh 'mkdir -p /home/ec2-user'
+            }
+        }
         stage('Clean'){
             steps{
                 script {
@@ -27,13 +32,15 @@ pipeline{
                     sh "sed -i 's/\${DB_DOMAIN}/${DB_DOMAIN}/' '${WORKSPACE}/another_back/src/main/resources/application.yml'"
                     sh "sed -i 's/\${SECRET_KEY}/${SECRET_KEY}/' '${WORKSPACE}/another_back/src/main/resources/application.yml'"
                     sh "sed -i 's/\${ACCESS_KEY}/${ACCESS_KEY}/' '${WORKSPACE}/another_back/src/main/resources/application.yml'"
+                    sh "sed -i 's/\${HDFS_URL}/${HDFS_URL}/' '${WORKSPACE}/another_back/src/main/resources/application.yml'"
+                    sh "sed -i 's/\${HDFS_PORT}/${HDFS_PORT}/' '${WORKSPACE}/another_back/src/main/resources/application.yml'"
                     sh "docker build -t ${BACK_NAME} ./another_back/."
                 }
             }
         }
         stage('Deploy'){
             steps {
-                sh "docker run -d --name=${BACK_CONTAINER_NAME} -p 1124:8080 ${BACK_NAME}"
+                sh "docker run -d --name=${BACK_CONTAINER_NAME} -v /home/ec2-user:/home/ec2-user -p 1124:8080 ${BACK_NAME}"
                 sh "docker image prune --force"
             }
         }

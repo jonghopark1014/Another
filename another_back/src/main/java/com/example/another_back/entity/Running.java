@@ -1,34 +1,35 @@
 package com.example.another_back.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.example.another_back.dto.RunningRequestDto;
+import com.example.another_back.entity.enums.Status;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Running {
 
-    @Column(name =  "running_id")
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "running_id")
+    @Id
+    private String id;
 
-    private Timestamp runningTime;
+    private Integer runningTime;
     private Float runningDistance;
     private Date createDate;
-    private Integer walkCount;
-    private Integer kcal;
+    private Integer userCalories;
     private String runningPic;
-    private Float speed;
-    private enum status{
-        LIVE, DELETE
-    }
+    private Float userPace;
+
+    @Enumerated(value = EnumType.STRING)
+    private Status status;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
     @OneToMany(mappedBy = "running", cascade = CascadeType.ALL)
     private List<FeedPic> feedPic = new ArrayList<>();
@@ -38,4 +39,17 @@ public class Running {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private WithRun withRun;
+
+    @Builder
+    public Running(RunningRequestDto runningRequestDto, String runningPic, User user) {
+        this.id = runningRequestDto.getRunningId();
+        this.user = user;
+        this.runningTime = runningRequestDto.getRunningTime();
+        this.runningDistance = runningRequestDto.getRunningDistance();
+        this.createDate = runningRequestDto.getCreateDate();
+        this.userCalories = runningRequestDto.getUserCalories();
+        this.runningPic = runningPic;
+        this.userPace = runningRequestDto.getUserPace();
+        this.status = Status.DELETE;
+    }
 }

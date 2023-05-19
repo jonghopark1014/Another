@@ -1,6 +1,7 @@
 package com.example.another_back.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,4 +23,9 @@ public class WithRun {
 
     @OneToMany(mappedBy = "withRun")
     private List<Running> runningSlaves = new ArrayList<>();
+
+    @Builder
+    public WithRun(Running running) {
+        this.runningHost = running;
+    }
 }
