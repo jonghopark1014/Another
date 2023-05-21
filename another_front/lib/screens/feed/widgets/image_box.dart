@@ -60,6 +60,7 @@ class _ImageBoxState extends State<ImageBox> {
   }
 
   Widget _buildListItem(BuildContext context, int index) {
+    Size size = MediaQuery.of(context).size;
     return Stack(
       children: [
         Image.network(
@@ -68,7 +69,7 @@ class _ImageBoxState extends State<ImageBox> {
         ),
         Positioned(
           bottom: 8.0,
-          width: 120.0,
+          width: size.width / 2.9,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

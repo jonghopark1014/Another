@@ -11,7 +11,6 @@ import 'package:is_wear/is_wear.dart';
 import 'package:provider/provider.dart';
 import 'package:watch_connectivity/watch_connectivity.dart';
 
-import 'package:another/watch/wear.dart';
 import 'package:another/main.dart';
 
 late final bool isWear;

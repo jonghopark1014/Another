@@ -189,18 +189,15 @@ class _RunningStatus extends State<RunningStatus> {
     _watch.messageStream.listen(
       (message) => setState(
         () {
-          runningStop = message['stop'];
-          if (runningStop) {
+          if (message.containsKey('stop')) {
             onStop();
-            _send({'stop': true});
           }
-          isStart = message['isStart'];
-          if (isStart) {
-            onStart();
-            _send({'isStart': true});
-          } else {
-            onPause();
-            _send({'isStart': false});
+          if (message.containsKey('isStart')) {
+            if (isStart) {
+              onStart();
+            } else {
+              onPause();
+            }
           }
         },
       ),
@@ -242,7 +239,7 @@ class _RunningStatus extends State<RunningStatus> {
                       iconNamed: Icons.play_arrow,
                       onPressed: () {
                         onStart();
-                        _send({'isStart': false});
+                        _send({'isStart': true});
                       }),
               RunningCircleButton(
                 iconNamed: Icons.stop,
