@@ -19,6 +19,7 @@ class RecordChart extends StatelessWidget {
 
     return Center(
       child: Container(
+        height: 200,
         decoration: BoxDecoration(
           border: Border.all(width: 0),
         ),
