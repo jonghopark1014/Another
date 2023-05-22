@@ -189,15 +189,16 @@ class _RunningStatus extends State<RunningStatus> {
     _watch.messageStream.listen(
       (message) => setState(
         () {
-          if (message.containsKey('stop')) {
-            onStop();
-          }
           if (message.containsKey('isStart')) {
+            isStart = message['isStart'];
             if (isStart) {
               onStart();
             } else {
               onPause();
             }
+          }
+          if (message.containsKey('stop')) {
+            onStop();
           }
         },
       ),

@@ -32,6 +32,7 @@ class _WatchHomeScreenState extends State<WatchHomeScreen> {
       (message) => setState(() {
         if (message.containsKey('start')) {
           _connected = true;
+          print(message);
           goRunning();
         }
       }),
