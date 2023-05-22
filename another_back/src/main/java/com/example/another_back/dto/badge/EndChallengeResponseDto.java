@@ -16,6 +16,6 @@ public class EndChallengeResponseDto {
     public EndChallengeResponseDto(Challenge challenge) {
         this.challengeId = challenge.getId();
         this.challengeName = challenge.getChallengeName();
-        this.challengeUrl = challenge.getChallengeGold();
+        this.challengeUrl = "https://d37je0610e60il.cloudfront.net" + challenge.getChallengeGold().split(".com")[1];
     }
 }

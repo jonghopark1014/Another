@@ -24,7 +24,7 @@ public class MyFeedListDto {
         this.runningTime = convertTime(Long.valueOf(running.getRunningTime()));
         this.runningDistance = running.getRunningDistance();
         this.userCalories = running.getUserCalories();
-        this.runningPic = running.getRunningPic();
+        this.runningPic = "https://d37je0610e60il.cloudfront.net" + running.getRunningPic().split(".com")[1];
         this.feedPic = running.getFeedPic().stream().map(FeedPicResponseDto::new).collect(Collectors.toList());
     }
 

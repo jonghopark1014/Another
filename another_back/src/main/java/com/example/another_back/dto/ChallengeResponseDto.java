@@ -17,7 +17,7 @@ public class ChallengeResponseDto {
         this.challengeId = challenge.getId();
         this.challengeName = challenge.getChallengeName();
         this.challengeTarget = challenge.getChallengeTarget();
-        this.challengeGold = challenge.getChallengeGold();
+        this.challengeGold = "https://d37je0610e60il.cloudfront.net" + challenge.getChallengeGold().split(".com")[1];
         this.challengeCategory = challenge.getChallengeCategory();
     }
 }

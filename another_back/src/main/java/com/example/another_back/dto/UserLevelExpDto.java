@@ -15,6 +15,6 @@ public class UserLevelExpDto {
         this.level = level;
         this.Exp = exp;
         this.nickname = nickname;
-        this.profilePic = profilePic;
+        this.profilePic = "https://d37je0610e60il.cloudfront.net" + profilePic.split(".com")[1];
     }
 }

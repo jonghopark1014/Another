@@ -16,6 +16,7 @@ public class WithRunResponseDto {
     public WithRunResponseDto(Running running) {
         this.userId = running.getUser().getId();
         this.nickname = running.getUser().getNickname();
-        this.profilePic = running.getUser().getProfilePic();
+        this.profilePic = "https://d37je0610e60il.cloudfront.net" + running.getUser().getProfilePic().split(".com")[1];
+
     }
 }

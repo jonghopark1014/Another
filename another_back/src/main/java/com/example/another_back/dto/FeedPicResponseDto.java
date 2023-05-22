@@ -14,6 +14,7 @@ public class FeedPicResponseDto {
     @Builder
     public FeedPicResponseDto(FeedPic feedPic) {
         this.feedPicId = feedPic.getId();
-        this.feedPic = feedPic.getFeedPic();
+        if (!feedPic.getFeedPic().equals(null))
+            this.feedPic = "https://d37je0610e60il.cloudfront.net" + feedPic.getFeedPic().split(".com")[1];
     }
 }
