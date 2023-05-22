@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 public class MyFeedListResponseDto {
     private String profilePic;
     private String runningTime;
-    private Float runningDistance;
+    private Double runningDistance;
     private Integer userCalories;
     private Page<MyFeedListDto> myFeedListDtos;
 
@@ -18,7 +18,7 @@ public class MyFeedListResponseDto {
     public MyFeedListResponseDto(String profilePic, Integer runningTime, Float runningDistance, Integer userCalories, Page<MyFeedListDto> myFeedListDtos) {
         this.profilePic = profilePic;
         this.runningTime = convertTime(Long.valueOf(runningTime));
-        this.runningDistance = runningDistance;
+        this.runningDistance = Math.round(runningDistance * 1000) / 1000.0;
         this.userCalories = userCalories;
         this.myFeedListDtos = myFeedListDtos;
     }
