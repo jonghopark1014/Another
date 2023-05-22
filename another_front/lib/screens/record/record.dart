@@ -491,8 +491,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
     Map<DateTime, List<Event>> parseMarkerDataResult = {};
 
     for (Map<String, dynamic> marker in markerList) {
-      DateTime createDate =
-          DateTime.parse(marker['createDate']).toUtc().add(Duration(hours: 9));
+      DateTime createDate = DateTime.parse(marker['createDate']).toUtc().add(Duration(hours: 9));
       Event id = Event(marker['id']);
       if (parseMarkerDataResult.containsKey(createDate)) {
         parseMarkerDataResult[createDate]!.add(id);
@@ -500,7 +499,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
         parseMarkerDataResult[createDate] = [id];
       }
     }
-    // print('parseMarkerDataResult: $parseMarkerDataResult');
+    print('parseMarkerDataResult: $parseMarkerDataResult');
     return parseMarkerDataResult;
   }
 
@@ -511,7 +510,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
 
   @override
   Widget build(BuildContext context) {
-    // print('_getEventsForDay: $_getEventsForDay');
+    print('_getEventsForDay: $_getEventsForDay');
     final forDate = Provider.of<ForDate>(context);
 
     DateTime selectDay = DateTime(
@@ -634,6 +633,139 @@ class _MyRecordContentsState extends State<MyRecordContents> {
           recordData: widget.periodData,
         ), // 조회 기간 총 기록
         SizedBox(height: 20),
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          widget.selectedIndex != 3 &&
+                  widget.selectedIndex != 4 &&
+                  widget.historyData!['content'].isNotEmpty
+              ? Container(
+                  height: 180,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: RecordChart(
+                          '평균 시간',
+                          widget.periodData!['prevAvg']['originalTime']
+                              .toDouble(),
+                          widget.periodData!['curAvg']['originalTime']
+                              .toDouble(),
+                          widget.periodData!['prevAvg']['avgTime'].toString(),
+                          widget.periodData!['curAvg']['avgTime'].toString(),
+                        ),
+                      ),
+                      Expanded(
+                        child: RecordChart(
+                          '평균 거리(km)',
+                          widget.periodData!['prevAvg']['avgDistance'],
+                          widget.periodData!['curAvg']['avgDistance'],
+                          widget.periodData!['prevAvg']['avgDistance']
+                              .toString(),
+                          widget.periodData!['curAvg']['avgDistance']
+                              .toString(),
+                        ),
+                      ),
+                      Expanded(
+                        child: RecordChart(
+                          '평균 kcal',
+                          widget.periodData!['prevAvg']['avgKcal'],
+                          widget.periodData!['curAvg']['avgKcal'],
+                          widget.periodData!['prevAvg']['avgKcal'].toString(),
+                          widget.periodData!['curAvg']['avgKcal'].toString(),
+                        ),
+                      ),
+                      Expanded(
+                        child: RecordChart(
+                          '평균 페이스',
+                          widget.periodData!['curAvg']['originalPace'] == 0 ||
+                                  widget.periodData!['prevAvg']
+                                          ['originalPace'] ==
+                                      0
+                              ? widget.periodData!['prevAvg']['originalPace']
+                              : widget.periodData!['curAvg']['originalPace'],
+                          widget.periodData!['curAvg']['originalPace'] == 0 ||
+                                  widget.periodData!['prevAvg']
+                                          ['originalPace'] ==
+                                      0
+                              ? widget.periodData!['curAvg']['originalPace']
+                              : widget.periodData!['prevAvg']['originalPace'],
+                          widget.periodData!['prevAvg']['avgPace'].toString(),
+                          widget.periodData!['curAvg']['avgPace'].toString(),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : SizedBox.shrink(),
+          widget.selectedIndex != 3 &&
+                  widget.selectedIndex != 4 &&
+                  widget.historyData!['content'].isNotEmpty
+              ? Padding(
+                  padding:
+                      EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 20),
+                  child: Center(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: CONTOUR_COLOR, width: 1),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                height: 10,
+                                width: 35,
+                                color: Color(0xFF8E8E8E).withOpacity(0.9),
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                (() {
+                                  switch (widget.selectedIndex) {
+                                    case 0:
+                                      return "어제 기록";
+                                    case 1:
+                                      return "저번주 기록";
+                                    case 2:
+                                      return "저번달 기록";
+                                    default:
+                                      return '';
+                                  }
+                                })(),
+                                style: TextStyle(color: WHITE_COLOR),
+                              ),
+                              SizedBox(width: 40),
+                              Container(
+                                height: 10,
+                                width: 35,
+                                color: Color(0xFF4AF279).withOpacity(0.8),
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                (() {
+                                  switch (widget.selectedIndex) {
+                                    case 0:
+                                      return "오늘 기록";
+                                    case 1:
+                                      return "이번주 기록";
+                                    case 2:
+                                      return "이번달 기록";
+                                    default:
+                                      return '';
+                                  }
+                                })(),
+                                style: TextStyle(color: WHITE_COLOR),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              : SizedBox.shrink(),
+        ]),
+
         widget.historyData!['content'].length == 0
             ? SizedBox.shrink()
             : Padding(
@@ -667,125 +799,6 @@ class _MyRecordContentsState extends State<MyRecordContents> {
                   runningId: widget.historyData!['content'][i]['id'])
           ],
         ),
-        widget.selectedIndex != 3 &&
-                widget.selectedIndex != 4 &&
-                widget.historyData!['content'].isNotEmpty
-            ? Row(
-                children: [
-                  Expanded(
-                    child: RecordChart(
-                      '평균 시간',
-                      widget.periodData!['prevAvg']['originalTime'].toDouble(),
-                      widget.periodData!['curAvg']['originalTime'].toDouble(),
-                      widget.periodData!['prevAvg']['avgTime'].toString(),
-                      widget.periodData!['curAvg']['avgTime'].toString(),
-                    ),
-                  ),
-                  Expanded(
-                    child: RecordChart(
-                      '평균 거리(km)',
-                      widget.periodData!['prevAvg']['avgDistance'],
-                      widget.periodData!['curAvg']['avgDistance'],
-                      widget.periodData!['prevAvg']['avgDistance'].toString(),
-                      widget.periodData!['curAvg']['avgDistance'].toString(),
-                    ),
-                  ),
-                  Expanded(
-                    child: RecordChart(
-                      '평균 kcal',
-                      widget.periodData!['prevAvg']['avgKcal'],
-                      widget.periodData!['curAvg']['avgKcal'],
-                      widget.periodData!['prevAvg']['avgKcal'].toString(),
-                      widget.periodData!['curAvg']['avgKcal'].toString(),
-                    ),
-                  ),
-                  Expanded(
-                    child: RecordChart(
-                      '평균 페이스',
-                      widget.periodData!['curAvg']['originalPace'] == 0 ||
-                              widget.periodData!['prevAvg']['originalPace'] == 0
-                          ? widget.periodData!['prevAvg']['originalPace']
-                          : widget.periodData!['curAvg']['originalPace'],
-                      widget.periodData!['curAvg']['originalPace'] == 0 ||
-                              widget.periodData!['prevAvg']['originalPace'] == 0
-                          ? widget.periodData!['curAvg']['originalPace']
-                          : widget.periodData!['prevAvg']['originalPace'],
-                      widget.periodData!['prevAvg']['avgPace'].toString(),
-                      widget.periodData!['curAvg']['avgPace'].toString(),
-                    ),
-                  ),
-                ],
-              )
-            : SizedBox.shrink(),
-        widget.selectedIndex != 3 &&
-                widget.selectedIndex != 4 &&
-                widget.historyData!['content'].isNotEmpty
-            ? Padding(
-                padding:
-                    EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 20),
-                child: Center(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: CONTOUR_COLOR, width: 1),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              height: 10,
-                              width: 35,
-                              color: Color(0xFF8E8E8E).withOpacity(0.9),
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              (() {
-                                switch (widget.selectedIndex) {
-                                  case 0:
-                                    return "어제 기록";
-                                  case 1:
-                                    return "저번주 기록";
-                                  case 2:
-                                    return "저번달 기록";
-                                  default:
-                                    return '';
-                                }
-                              })(),
-                              style: TextStyle(color: WHITE_COLOR),
-                            ),
-                            SizedBox(width: 40),
-                            Container(
-                              height: 10,
-                              width: 35,
-                              color: Color(0xFF4AF279).withOpacity(0.8),
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              (() {
-                                switch (widget.selectedIndex) {
-                                  case 0:
-                                    return "오늘 기록";
-                                  case 1:
-                                    return "이번주 기록";
-                                  case 2:
-                                    return "이번달 기록";
-                                  default:
-                                    return '';
-                                }
-                              })(),
-                              style: TextStyle(color: WHITE_COLOR),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            : SizedBox.shrink()
       ],
     );
   }
