@@ -18,12 +18,12 @@ public class BadgeResponseDto {
         this.challengeCategory = userChallenge.getChallenge().getChallengeCategory();
         this.challengeName = userChallenge.getChallenge().getChallengeName();
         if (userChallenge.getStatus().equals("SILVER")) {
-            this.challengeUrl = userChallenge.getChallenge().getChallengeSilver();
+            this.challengeUrl = "https://d37je0610e60il.cloudfront.net" + userChallenge.getChallenge().getChallengeSilver().split(".com")[1];
             this.challengeValue = Double.valueOf((double) userChallenge.getUserChallengeValue() / userChallenge.getChallenge().getChallengeTarget());
             if (challengeValue.isInfinite())
                 this.challengeValue = 0d;
         } else {
-            this.challengeUrl = userChallenge.getChallenge().getChallengeGold();
+            this.challengeUrl = "https://d37je0610e60il.cloudfront.net" + userChallenge.getChallenge().getChallengeGold().split(".com")[1];
             this.challengeValue = 1d;
         }
     }

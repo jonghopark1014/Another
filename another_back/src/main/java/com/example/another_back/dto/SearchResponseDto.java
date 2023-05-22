@@ -25,7 +25,7 @@ public class SearchResponseDto {
         this.runningDistance = running.getRunningDistance();
         this.createDate = running.getCreateDate();
         this.userCalories = running.getUserCalories();
-        this.runningPic = running.getRunningPic();
+        this.runningPic = "https://d37je0610e60il.cloudfront.net" + running.getRunningPic().split(".com")[1];
         this.userPace = running.getUserPace();
     }
 }

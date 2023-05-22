@@ -16,7 +16,8 @@ public class MyFeedListResponseDto {
 
     @Builder
     public MyFeedListResponseDto(String profilePic, Integer runningTime, Float runningDistance, Integer userCalories, Page<MyFeedListDto> myFeedListDtos) {
-        this.profilePic = profilePic;
+        if (!profilePic.equals(null))
+            this.profilePic = "https://d37je0610e60il.cloudfront.net" + profilePic.split(".com")[1];
         this.runningTime = convertTime(Long.valueOf(runningTime));
         this.runningDistance = Math.round(runningDistance * 1000) / 1000.0;
         this.userCalories = userCalories;

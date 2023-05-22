@@ -30,7 +30,7 @@ public class RunningResponseDto {
         this.runningDistance = running.getRunningDistance();
         this.createDate = running.getCreateDate();
         this.userCalories = running.getUserCalories();
-        this.runningPic = running.getRunningPic();
+        this.runningPic = "https://d37je0610e60il.cloudfront.net" + running.getRunningPic().split(".com")[1];
         this.userPace = convertPace(Double.valueOf(running.getUserPace()));
         ;
     }
@@ -51,6 +51,6 @@ public class RunningResponseDto {
     private String convertPace(Double pace) {
         String minute = Integer.toString(pace.intValue() / 60);
         String second = Integer.toString(pace.intValue() % 60);
-        return minute+"'"+second+"''";
+        return minute + "'" + second + "''";
     }
 }

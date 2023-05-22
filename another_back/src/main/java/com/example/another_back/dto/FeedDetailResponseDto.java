@@ -32,7 +32,7 @@ public class FeedDetailResponseDto {
     public FeedDetailResponseDto(Running running) {
         this.runningId = running.getId();
         this.nickname = running.getUser().getNickname();
-        this.profilePic = running.getUser().getProfilePic();
+        this.profilePic = "https://d37je0610e60il.cloudfront.net" + running.getUser().getProfilePic().split(".com")[1];
         this.runningTime = convertTime(Long.valueOf(running.getRunningTime()));
         this.runningDistance = running.getRunningDistance();
         this.createDate = running.getCreateDate();
