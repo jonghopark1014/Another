@@ -39,7 +39,7 @@ public interface RunningRepository extends JpaRepository<Running, String> {
     @Query(value = "select new com.example.another_back.dto.RunningRecordDto(avg(r.runningTime), avg(r.runningDistance), avg(r.userPace), avg(r.userCalories),sum(r.runningTime), sum(r.runningDistance), sum(r.userPace), sum(r.userCalories)) from Running r where r.user = :user and r.createDate between :date1 and :date2")
     Optional<RunningRecordDto> findRunningHistoryDtoByUserId(User user, Date date1, Date date2);
 
-    @Query(value = "select new com.example.another_back.dto.SumRunningDto(sum(r.runningTime), sum(r.userCalories), sum(r.runningDistance), avg(r.userPace), min(r.createDate), max(r.createDate)) from Running r where r.user = :user")
+    @Query(value = "select new com.example.another_back.dto.SumRunningDto(sum(r.runningTime), sum(r.userCalories), sum(r.runningDistance), avg(r.userPace), min(r.createDate)) from Running r where r.user = :user")
     Optional<SumRunningDto> findAllRunningHistoryDtoByUserId(User user);
 
     @Query("select coalesce(sum(r.runningDistance), 0) from Running r where r.user.id = :userId AND r.createDate between :startDate and :endDate")
