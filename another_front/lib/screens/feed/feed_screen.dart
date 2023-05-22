@@ -29,6 +29,9 @@ class _FeedScreenState extends State<FeedScreen> {
   late var userInfo;
   late int userId;
   late String profile = '';
+  late String runningTimeData = '';
+  late String runningDistanceData = '';
+  late String userCaloriesData = '';
 
   @override
   void initState() {
@@ -88,9 +91,10 @@ class _FeedScreenState extends State<FeedScreen> {
   Future<void> _myFeed() async {
     try {
       final response = await MyFeedApi.getFeed('$userId');
-      print(response);
+      // print(response);
       final contents = response['data']['myFeedListDtos']['content'];
-      print(contents);
+      // print(contents);
+
       List<String> feedPicUrls = [];
       List<String> runningIdsList = [];
       List<String> runningTimeList = [];
@@ -98,6 +102,7 @@ class _FeedScreenState extends State<FeedScreen> {
       // List<String> walkCountList = [];
       List<String> kcalList = [];
       String profilePic = '';
+
 
       if (contents != []) {
         for (var content in contents) {
@@ -129,6 +134,9 @@ class _FeedScreenState extends State<FeedScreen> {
       setState(
         () {
           profilePic = response['data']['profilePic'];
+          runningTimeData = response['data']['runningTime'].toString();
+          runningDistanceData = response['data']['runningDistance'].toString();
+          userCaloriesData = response['data']['userCalories'].toString();
           thumbnailUrls = feedPicUrls;
           runningIds = runningIdsList;
           runningTimes = runningTimeList;
@@ -136,6 +144,7 @@ class _FeedScreenState extends State<FeedScreen> {
           // walkCounts = walkCountList;
           userCalories = kcalList;
           profile = profilePic;
+          print('1111$runningTimeData $runningDistanceData $userCaloriesData');
         },
       );
     } catch (e) {
@@ -164,12 +173,10 @@ class _FeedScreenState extends State<FeedScreen> {
                   : MyRecordResult(
                       walkCounts: walkCounts,
                       userCalories:
-                          userCalories.isNotEmpty ? userCalories : ['0'],
+                          userCaloriesData,
                       runningTimes:
-                          runningTimes.isNotEmpty ? runningTimes : ['0'],
-                      runningDistances: runningDistances.isNotEmpty
-                          ? runningDistances
-                          : ['0'],
+                      runningTimeData,
+                      runningDistances: runningDistanceData,
                       profile: profile,
                     ),
             ),

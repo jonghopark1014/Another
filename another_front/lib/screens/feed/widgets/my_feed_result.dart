@@ -6,9 +6,9 @@ import '../../../constant/const/color.dart';
 
 class MyRecordResult extends StatelessWidget {
   final List<String> walkCounts;
-  final List<String> userCalories;
-  final List<String> runningTimes;
-  final List<String> runningDistances;
+  final String userCalories;
+  final String runningTimes;
+  final String runningDistances;
   final String profile;
 
   const MyRecordResult({
@@ -58,19 +58,19 @@ class MyRecordResult extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               TargetBox(
-                                data: runningDistances[0],
+                                data: runningDistances,
                                 name: 'km',
                                 textColor: WHITE_COLOR,
                                 recordColor: SERVEONE_COLOR,
                               ),
                               TargetBox(
-                                data: userCalories[0],
+                                data: userCalories,
                                 name: 'kcal',
                                 textColor: WHITE_COLOR,
                                 recordColor: SERVEONE_COLOR,
                               ),
                               TargetBox(
-                                data: runningTimes[0],
+                                data: runningTimes,
                                 name: '시간',
                                 textColor: WHITE_COLOR,
                                 recordColor: SERVEONE_COLOR,
