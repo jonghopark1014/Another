@@ -34,9 +34,9 @@ public interface RunningRepository extends JpaRepository<Running, String> {
     Optional<RunningRecordDto> findRunningRecordDtoByUserId(User user, Date createDate);
 
     @Query(value = "select new com.example.another_back.dto.RunningEachHistoryDto(r.id, r.runningTime, r.runningDistance,r.userPace, r.createDate, r.userCalories) from Running r where r.user = :user and r.createDate between :date1 and :date2")
-    Page<RunningEachHistoryDto> findWithDateByUserId(User user, Date date1, Date date2, Pageable pageable);
+    List<RunningEachHistoryDto> findWithDateByUserId(User user, Date date1, Date date2);
 
-    @Query(value = "select new com.example.another_back.dto.RunningRecordDto(avg(r.runningTime), avg(r.runningDistance), avg(r.userPace), avg(r.userCalories),sum(r.runningTime), sum(r.runningDistance), sum(r.userPace), sum(r.userCalories)) from Running r where r.user = :user and r.createDate between :date1 and :date2")
+    @Query(value = "select new com.example.another_back.dto.RunningRecordDto(avg(r.runningTime), avg(r.runningDistance), avg(r.userPace), avg(r.userCalories),sum(r.runningTime), sum(r.runningDistance), sum(r.userPace), sum(r.userCalories)) from Running r where r.user = :user and r.createDate between :date1 and :date2 order by r.checkDate")
     Optional<RunningRecordDto> findRunningHistoryDtoByUserId(User user, Date date1, Date date2);
 
     @Query(value = "select new com.example.another_back.dto.SumRunningDto(sum(r.runningTime), sum(r.userCalories), sum(r.runningDistance), avg(r.userPace), min(r.createDate)) from Running r where r.user = :user")
