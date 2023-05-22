@@ -263,7 +263,7 @@ public class RunningService {
                 .build();
     }
 
-    public List<RunningEachHistoryDto> getHistory(int category, Long userId) {
+    public Page<RunningEachHistoryDto> getHistory(int category, Long userId, Pageable pageable) {
         Calendar calendar1 = Calendar.getInstance();
         Date startDate, endDate;
         User user = userRepository.findById(userId)
@@ -285,7 +285,7 @@ public class RunningService {
             startDate = new Date(calendar1.getTimeInMillis());
             endDate = new Date(Calendar.getInstance().getTimeInMillis());
         }
-        return runningRepository.findWithDateByUserId(user, startDate, endDate);
+        return runningRepository.findWithDateByUserId(user, startDate, endDate, pageable);
     }
 
     /**

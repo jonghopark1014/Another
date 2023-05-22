@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,8 +36,8 @@ public class RecordController {
     }
 
     @GetMapping("/{userId}/history/today")
-    public ResponseEntity getTodayHisotry(@PathVariable("userId") Long userId) {
-        List<RunningEachHistoryDto> record = runningService.getHistory(1, userId);
+    public ResponseEntity getTodayHisotry(@PathVariable("userId") Long userId, Pageable pageable) {
+        Page<RunningEachHistoryDto> record = runningService.getHistory(1, userId, pageable);
         return Response.success(HttpStatus.OK, record);
     }
 
@@ -49,8 +48,8 @@ public class RecordController {
     }
 
     @GetMapping("/{userId}/history/week")
-    public ResponseEntity getWeekHisotry(@PathVariable("userId") Long userId) {
-        List<RunningEachHistoryDto> record = runningService.getHistory(2, userId);
+    public ResponseEntity getWeekHisotry(@PathVariable("userId") Long userId, Pageable pageable) {
+        Page<RunningEachHistoryDto> record = runningService.getHistory(2, userId, pageable);
         return Response.success(HttpStatus.OK, record);
     }
 
@@ -61,8 +60,8 @@ public class RecordController {
     }
 
     @GetMapping("/{userId}/history/month")
-    public ResponseEntity getMonthHisotry(@PathVariable("userId") Long userId) {
-        List<RunningEachHistoryDto> record = runningService.getHistory(3, userId);
+    public ResponseEntity getMonthHisotry(@PathVariable("userId") Long userId, Pageable pageable) {
+        Page<RunningEachHistoryDto> record = runningService.getHistory(3, userId, pageable);
         return Response.success(HttpStatus.OK, record);
     }
 
@@ -73,8 +72,8 @@ public class RecordController {
     }
 
     @GetMapping("/{userId}/history/all")
-    public ResponseEntity getAllHisotry(@PathVariable("userId") Long userId) {
-        List<RunningEachHistoryDto> record = runningService.getHistory(4, userId);
+    public ResponseEntity getAllHisotry(@PathVariable("userId") Long userId, Pageable pageable) {
+        Page<RunningEachHistoryDto> record = runningService.getHistory(4, userId, pageable);
         return Response.success(HttpStatus.OK, record);
     }
 
