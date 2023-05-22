@@ -185,7 +185,7 @@ public class RunningService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
 
         return runningRepository.findAllRunningHistoryDtoByUserId(user)
-                .orElse(new SumRunningDto(0L,0L,0D,0D,new Date(System.currentTimeMillis()),new Date(System.currentTimeMillis())));
+                .orElse(new SumRunningDto(0L,0L,0D,0D,new Date(System.currentTimeMillis())));
     }
 
     public RunningHistoryResponseDto getRecord(int category, Long userId) {
