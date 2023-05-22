@@ -133,7 +133,7 @@ class _WatchRunningRecordState extends State<WatchRunningRecord> {
                           ),
                           onPressed: () {
                             onPressed();
-                            _send({'isStart': isStart, 'stop': false});
+                            _send({'isStart': false});
                           },
                           child: const Text(
                             '일시 정지',
@@ -153,7 +153,7 @@ class _WatchRunningRecordState extends State<WatchRunningRecord> {
                           ),
                           onPressed: () {
                             onPressed();
-                            _send({'isStart': isStart, 'stop': false});
+                            _send({'isStart': true});
                           },
                           child: const Text(
                             '러닝 시작',
