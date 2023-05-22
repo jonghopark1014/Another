@@ -491,7 +491,7 @@ class _MyRecordContentsState extends State<MyRecordContents> {
     Map<DateTime, List<Event>> parseMarkerDataResult = {};
 
     for (Map<String, dynamic> marker in markerList) {
-      DateTime createDate = DateTime.parse(marker['createDate']).toUtc();
+      DateTime createDate = DateTime.parse(marker['createDate']).toUtc().add(Duration(hours: 9));
       Event id = Event(marker['id']);
       if (parseMarkerDataResult.containsKey(createDate)) {
         parseMarkerDataResult[createDate]!.add(id);
