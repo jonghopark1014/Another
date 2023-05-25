@@ -476,6 +476,7 @@
 </div>
 
 <br>
+<br>
 
 ## 📰 Big-Data
 
@@ -490,20 +491,37 @@
 <br>
 <br>
 
+# 💥 Data Pipeline
+
+<div width="100%">
+  <img src="https://drive.google.com/uc?export=view&id=1_F9YhpEC0klVOU-mWNMsAByFN31e-Ioh" width="100%">
+</div>
+<br>
+
+- 1초당 발생하는 사용자의 모든 러닝데이터를 Confluent 서버에 전송
+- Confluent 서버룰 통해 Kafka topic - [러닝ID]에 메시지 전송
+- 사용자 러닝 종료 시 kafka topic - [endZero / endOne / endTwo]에 메시지 전송
+- 러닝 종료 메시지 수신 시 spark에서 kafka topic - [러닝ID]에 담긴 모든 메시지(사용자 러닝 데이터)를 가져와 데이터 전처리 후 HDFS에 적재
+
+<br>
+<br>
+
 # 💻 시스템 아키텍쳐
 
 <div width="100%">
   <img src="https://drive.google.com/uc?export=download&id=1uxHD4gjUvnj5PIU99egnzzRKKmgRd7wN" width="100%">
 </div>
 
-<br>
-<br>
+  <br>
+  <br>
 
 # 기술 특이점
 
-- 실시간 크롤링 데이터를 프로듀서를 통해 Kafka, Spark에 전달 후 SparkStreaming으로 실시간 처리를 하고 foreachBatch를 이용하여 데이터를 배치 처리하여 HDFS와 DB에 적재합니다.
-- Spark에서 TF-IDF, DBSCAN를 사용하여 다양한 뉴스 사이의 군집을 파악하여 검색어와 관련된 뉴스의 흐름을 편리하게 제공합니다.
-- Spark에서 실시간으로 크롤링되는 데이터와 사용자가 읽은 뉴스 데이터 간 Cosine 유사도를 통해 연관 뉴스를 파악하여 제공합니다.
+- Confluent Server를 이용하여 수많은 사용자가 Kafka topic에 메시지를 보내더라도 안정적으로 분산병렬처리되어 작업이 진행되어 처리 속도를 빠르게 진행하였습니다.
+- Spark에서 전처리 작업을 통해 서버에서 빠르게 versus Data를 불러오도록 진행하였습니다.
+- HDFS를 사용하여 대용량 데이터를 안정적으로 적재하도록 진행하였습니다.
+- Flutter에서 Wear_Connectivity를 사용하여 웨어러블 기기와 실시간 통신을 하도록 진행하였습니다.
+- Flutter의 크로스 플랫폼의 장점을 살려 Android, ios 모두 사용 가능하도록 진행하였습니다.
 - Spring Security를 도입하여 인증/인가 처리를 진행하였습니다.
 - JWT를 이용해 Stateless한 환경을 구축하고자 하였습니다.
 
